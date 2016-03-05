@@ -1,0 +1,359 @@
+defprimitive "dup",3,dup,1
+    mov eax, [esp]
+    push eax
+    NEXT
+    
+defprimitive "over",4,over,1
+    mov eax, [esp + CELLS]
+    push eax
+    NEXT
+
+defprimitive "drop",4,drop,1
+    pop eax
+    NEXT
+
+defprimitive "swap",4,swap,1
+    pop eax
+    pop ebx
+    push eax
+    push ebx
+    NEXT
+
+defprimitive "rot",3,rot,1  // ( a b c -- b c a )
+    pop ecx
+    pop ebx
+    pop eax
+    push ebx
+    push ecx
+    push eax
+    NEXT
+
+defprimitive "2swap",5,swap2,1                                                    // ( a b c d -- c d a b )
+    pop edx
+    pop ecx
+    pop ebx
+    pop eax
+    push ecx
+    push edx
+    push eax
+    push ebx
+    NEXT
+
+defprimitive "2over",5,over2,1                                                    // ( a b c d -- a b c d a b )
+    pop edx
+    pop ecx
+    pop ebx
+    pop eax    
+    push eax
+    push ebx
+    push ecx
+    push edx
+    push eax
+    push ebx
+    NEXT
+
+defprimitive "depth",5,depth,1
+    mov eax, [STACK_ORIG]
+    sub eax, esp
+    add eax, 36                 // TODO mer pont ennyi
+    xor edx, edx
+    mov ebx, CELLS
+    div ebx
+    push eax
+    NEXT
+    
+defprimitive "+",1,plus,1
+    pop eax
+    add [esp], eax
+    NEXT    
+    
+defprimitive "-",1,minus,1
+    pop eax
+    sub [esp], eax
+    NEXT        
+    
+defprimitive "*",1,multiply,1
+    pop eax
+    pop ebx
+    imul ebx
+    push eax
+    NEXT
+
+defprimitive "/mod",4,divmod,1
+    pop ebx
+    pop eax
+    xor edx, edx
+    cdq
+    idiv ebx
+    push edx
+    push eax
+    NEXT
+    
+defprimitive "or",2,or,1
+    pop eax
+    pop ebx
+    or eax, ebx
+    push eax
+    NEXT
+    
+defprimitive "and",3,and,1
+    pop eax
+    pop ebx
+    and eax, ebx
+    push eax
+    NEXT    
+
+defprimitive "xor",3,xor,1
+    pop eax
+    pop ebx
+    xor eax, ebx
+    push eax
+    NEXT    
+
+defprimitive "emit",4,emit,1
+    mov edx, 1     // length
+    pop eax
+    mov [var0], eax
+    mov ecx, OFFSET FLAT:var0
+    mov ebx, 1      // stdout
+    mov eax, 4      // sys_write
+    int 0x80
+    NEXT
+    
+defprimitive "abort",5,abort,1
+    mov esp, [STACK_ORIG]
+    mov eax, 1
+    int 0x80
+    
+defprimitive "@",1,fetch,1
+    pop eax
+    mov ebx, [eax]
+    push ebx
+    NEXT
+    
+defprimitive "!",1,store,1
+    pop edi
+    pop eax
+    stosd
+    NEXT
+
+defprimitive "c@",2,fetchbyte,1
+    pop ebx
+    mov bl, [ebx]
+    xor eax, eax
+    mov al, bl
+    push eax
+    NEXT
+    
+defprimitive "c!",2,storebyte,1
+    pop edi
+    pop eax
+    stosb
+    NEXT
+        
+defprimitive "lit",3,lit,1    // compile only
+    lodsd
+    push eax
+    NEXT
+    
+defprimitive "=",1,eq,1
+    xor eax, eax
+    pop ebx
+    pop edx
+    cmp ebx, edx
+    jnz not_equal
+    mov eax, TRUE
+not_equal:
+    push eax
+    NEXT
+
+defprimitive "<",1,lt,1
+    xor eax, eax
+    pop ebx
+    pop edx
+    cmp edx, ebx
+    jnl not_less
+    mov eax, TRUE
+not_less:
+    push eax
+    NEXT
+        
+defprimitive ">",1,gt,1
+    xor eax, eax
+    pop ebx
+    pop edx
+    cmp edx, ebx
+    jng not_greater
+    mov eax, TRUE
+not_greater:
+    push eax
+    NEXT
+    
+defprimitive ">=",2,gte,1
+    xor eax, eax
+    pop ebx
+    pop edx
+    cmp edx, ebx
+    jl not_greatereq
+    mov eax, TRUE
+not_greatereq:
+    push eax
+    NEXT    
+    
+defprimitive "<=",2,lte,1
+    xor eax, eax
+    pop ebx
+    pop edx
+    cmp edx, ebx
+    jg not_lesseq
+    mov eax, TRUE
+not_lesseq:
+    push eax
+    NEXT    
+        
+defprimitive "invert",6,invert,1
+    pop eax
+    not eax
+    push eax
+    NEXT
+    
+defprimitive "negate",6,negate,1
+    pop eax
+    neg eax
+    push eax
+    NEXT    
+
+defprimitive "branch",6,branch,1
+    lodsd
+    add esi, eax
+    NEXT
+
+defprimitive "branch0",7,branch0,1
+    lodsd
+    pop ebx
+    test ebx, ebx
+    jnz nobranch0
+    add esi, eax
+nobranch0:
+    NEXT
+    
+defprimitive "literal",7,literal,IMMEDIATE
+    mov eax, OFFSET FLAT:xt_lit
+    mov edi, [here_var]
+    stosd
+    pop eax
+    stosd
+    mov [here_var], edi
+    NEXT
+
+defprimitive "litstring",9,litstring,1
+    lodsd
+    push esi                            // address of the string
+    push eax                            // length of the string
+    add esi, eax            // skip string
+    NEXT
+
+defprimitive "type",4,type,1            // ( a len -- )
+    pop edx
+    pop ecx
+    mov ebx, 1
+    mov eax, 4
+    int 0x80
+    NEXT
+
+defprimitive ",",1,comma,1
+    pop eax
+    mov edi, [here_var]
+    stosd
+    mov [here_var], edi
+    NEXT
+
+defprimitive "c,",2,commabyte,1
+    pop eax
+    mov edi, [here_var]
+    stosb
+    mov [here_var], edi
+    NEXT
+
+defprimitive ">r",2,rpush,1
+    pop eax
+    mov [ebp], eax
+    add ebp, CELLS
+    NEXT
+    
+defprimitive "r>",2, rpop,1
+    sub ebp, CELLS
+    mov eax, [ebp]
+    push eax
+    NEXT    
+
+defprimitive "i",1,i,1
+    mov eax, [ebp - 1 * CELLS]
+    push eax
+    NEXT    
+
+defprimitive "j",1,j,1
+    mov eax, [ebp - 3 * CELLS]
+    push eax
+    NEXT
+
+defprimitive "rswap",5,rswap,1
+    mov eax, [ebp - CELLS]
+    mov ebx, [ebp - 2 * CELLS]
+    mov [ebp - 2 * CELLS], eax
+    mov [ebp - CELLS], ebx
+    NEXT
+
+defprimitive "rdup",4,rdup,1
+    mov eax, [ebp - CELLS]
+    mov [ebp], eax
+    add ebp, CELLS    
+    NEXT
+    
+defprimitive "r2dup",5,r2dup,1
+    mov eax, [ebp - CELLS]
+    mov ebx, [ebp - 2 * CELLS]
+    mov [ebp], ebx
+    add ebp, CELLS
+    mov [ebp], eax
+    add ebp, CELLS        
+    NEXT
+
+defprimitive "execute",7,execute,1
+    pop eax
+    jmp [eax]
+
+defprimitive "exit",4,exit,1
+    sub ebp, CELLS
+    mov esi, [ebp]
+    NEXT
+
+defprimitive "key",3,key,1
+    push esi
+    mov edi, OFFSET FLAT:input_buffer    
+    add edi, [input_size]                                                       // input buffer end position    
+    mov esi, [input_index]
+    cmp esi, edi
+    jb read_one_char_from_buffer
+    prompt
+    lea ecx, [input_buffer -1]                                                  // store the input in buffer
+    mov dword ptr [input_size], 0
+refill_buffer:
+    inc ecx
+    inc dword ptr [input_size]
+    xor ebx, ebx                                                                // reads from stdin (FD 0)
+    mov eax, 3                                                                  // use syscall 3 (read) to read from stdin
+    mov edx, 1                                                                  // read one character
+    int 0x80                                                                    // invoke system call to read from stdin
+    cmp byte ptr [ecx], 10
+    jnz refill_buffer
+    mov esi, OFFSET FLAT:input_buffer    
+read_one_char_from_buffer:
+    xor eax, eax
+    lodsb
+    mov [input_index], esi
+    pop esi    
+    push eax
+    NEXT
+
+
