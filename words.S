@@ -1,3 +1,5 @@
+// Predefined words in binary (compiled) forth
+
 defword "nip",3,nip,1
     .int xt_swap
     .int xt_drop
@@ -267,11 +269,9 @@ defword "immediate",9,immediate,1
     .int xt_lit, IMMEDIATE, xt_swap, xt_store
     .int xt_exit
     
-// end of predefined words
-    
-ENTERCOL:
-    mov [ebp], esi
+ENTERCOL:                   // codeword for word (colon) definitions
+    mov [ebp], esi          // save esi (forth instruction pointer) to the return stack
     add ebp, CELLS
-    add eax, CELLS
-    mov esi, eax
+    add eax, CELLS          // eax points to the ENTERCOL, skip this cell
+    mov esi, eax            // set the instruction pointer to the beginning of this word
     NEXT
