@@ -1,3 +1,4 @@
+rm punyforth
 gcc -m32 -g -nostdlib main.S -o punyforth
 chmod +x punyforth
 ./punyforth
