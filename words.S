@@ -265,22 +265,16 @@ defword "lastword",8,lastword,1
     .int xt_lit, OFFSET FLAT:LAST_WORD, xt_fetch
     .int xt_exit
 
-defword "(does)",6,doescodeword,1
-    .int xt_lit, OFFSET FLAT:DODOES
-    .int xt_exit
-
-
 // TODO move to source
-defword "does>",6,does,IMMEDIATE
+defword "(does)",6,parendoes,1   
+    .int xt_rdup, xt_rpop, xt_lit, 1, xt_cells, xt_plus
     .int xt_lastword, xt_lit, 1, xt_cells, xt_plus
     .int xt_dup, xt_fetch, xt_plus, xt_lit, 2, xt_cells, xt_plus
-    .int xt_doescodeword, xt_swap, xt_store
-    .int xt_lit, 1, xt_state, xt_store // TODO ez igymarad
+    .int xt_store
     .int xt_exit
-// TODO move to source
-defword "constant",8,constant,1
-    .int xt_word, xt_create, xt_comma, xt_does, xt_fetch
-    .int xt_lit, 0, xt_state, xt_store // TODO ezt ne itt
+
+defword "dodoes",6,dodoes,1
+    .int xt_lit, OFFSET FLAT:DODOES 
     .int xt_exit
 
 FINAL_WORD:    
@@ -298,11 +292,11 @@ ENTERCOL:                   // codeword for word (colon) definitions
     mov esi, eax            // set the instruction pointer to the body of this word
     NEXT
 
-DODOES:                     // codeword for create does>
-    mov [ebp], esi          // save instruction pointer to the return stack
-    add ebp, CELLS  
-    add eax, CELLS          // eax pointied to DODOES, after DODOES there is the parameter field
-    push eax                // Push the parameter field to the stack. This will be used by does>
-    add eax, CELLS    
-    mov esi, eax            // TODO this only works if the parameter field is one cell long
+DODOES:
+    mov [ebp], esi          // save esi to return stack
+    add ebp, CELLS
+    mov esi, [eax]          // [eax] points to DODOES call in assembly
+    add esi, 6              // length of the embedded assembly code is 6, after that there are the forth code
+    add eax, CELLS          // eax points to the codeword of the defined word, after that there is the param. field
+    push eax
     NEXT
