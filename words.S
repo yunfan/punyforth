@@ -265,14 +265,6 @@ defword "lastword",8,lastword,1
     .int xt_lit, OFFSET FLAT:LAST_WORD, xt_fetch
     .int xt_exit
 
-// TODO move to source
-defword "(does)",6,parendoes,1   
-    .int xt_rdup, xt_rpop, xt_lit, 1, xt_cells, xt_plus
-    .int xt_lastword, xt_lit, 1, xt_cells, xt_plus
-    .int xt_dup, xt_fetch, xt_plus, xt_lit, 2, xt_cells, xt_plus
-    .int xt_store
-    .int xt_exit
-
 defword "dodoes",6,dodoes,1
     .int xt_lit, OFFSET FLAT:DODOES 
     .int xt_exit

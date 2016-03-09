@@ -15,22 +15,12 @@ LAST_WORD:    .int FINAL_WORD
 input_index:  .int 0
 input_buffer:           
               // standard library, loops and conditionals are implemented in forth
-.ascii "\n    : FALSE 0 ; : TRUE -1 ; : 0= 0 = ; : 1+ 1 + ; : 1- 1 - ;"              
+.ascii "\n    : 0= 0 = ; : 1+ 1 + ; : 1- 1 - ;"              
 .ascii "\n    : % /mod drop ; : / /mod nip ;"                                        
 .ascii "\n    : '.' [ char . ] literal ; : '\"' [ char \" ] literal ;"                   
 .ascii "\n    : 'F' [ char F ] literal ; : ')' [ char ) ] literal ;"                     
 .ascii "\n    : cr 10 emit ; : space 32 emit ; "                                         
 .ascii "\n    : [compile] word find drop , ; immediate"                                  
-
-.ascii "\n    : does>"
-.ascii "\n           lit (does) ,"
-.ascii "\n           lit exit ,"
-.ascii "\n           104 c,"
-.ascii "\n           dodoes ,"
-.ascii "\n           195 c,"
-.ascii "\n      ; immediate "
-.ascii "\n    : constant word create , does> @ ; "
-.ascii "\n    68 constant pi"
 
 .ascii "\n    : if"                                                                  
 .ascii "\n           compile_time_only"                                              
@@ -91,6 +81,21 @@ input_buffer:
 .ascii "\n           rswap r> here - 1 cells - , ; immediate"                        
 
 .ascii "\n    : ( begin key ')' = until ; immediate"                                 
+
+.ascii "\n    : (does)" 
+.ascii "\n          rdup r> 1 cells +                        ( address of the embedded assembly code )"
+.ascii "\n          lastword 1 cells + dup @ + 2 cells + ! ; ( replace codeword of the last word )"
+
+.ascii "\n    : does>"
+.ascii "\n           lit (does) ,"
+.ascii "\n           lit exit ,"
+.ascii "\n           104 c,        ( opcode of PUSH )"
+.ascii "\n           dodoes ,      ( address of dodoes )"
+.ascii "\n           195 c,        ( opcode of RETN )"
+.ascii "\n      ; immediate "
+.ascii "\n    : constant word create , does> @ ; "
+
+.ascii "\n -1 constant TRUE 0 constant FALSE"
 
 .ascii "\n    : s\""                                                                 
 .ascii "\n        compile_time_only"                                                 
