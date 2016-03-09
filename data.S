@@ -93,9 +93,17 @@ input_buffer:
 .ascii "\n           dodoes ,      ( address of dodoes )"
 .ascii "\n           195 c,        ( opcode of RETN )"
 .ascii "\n      ; immediate "
+
 .ascii "\n    : constant word create , does> @ ; "
 
-.ascii "\n -1 constant TRUE 0 constant FALSE"
+.ascii "\n    -1 constant TRUE 0 constant FALSE"
+
+.ascii "\n    : array ( size -- ) ( index -- addr )"
+.ascii "\n          word create cells allot"
+.ascii "\n          does> cells + ;"
+
+.ascii "\n    : struct 0 ;" 
+.ascii "\n    : field word create over , + does> @ + ;"
 
 .ascii "\n    : s\""                                                                 
 .ascii "\n        compile_time_only"                                                 
@@ -192,7 +200,8 @@ input_buffer:
 .ascii "\n  test_count ? .\"  OK\" cr ;"
 .ascii "\n    selftest .\" Puny FORTH ready\" cr "
 
-// TODO does>, exceptionok, stack underflow, ?-nel ne lepjen ki a repl
+// TODO exceptions, stack underflow, ?-nel ne lepjen ki a repl
+// TODO word create -> create
 
 input_size:  .int . - input_buffer
 here_var:    .int 0
