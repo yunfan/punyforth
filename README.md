@@ -75,3 +75,20 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
                                                                  +-----+---+-------+---+----+---+
 
 </pre>
+
+### Other exampels
+
+```forth
+: array ( size -- ) ( index -- addr )"
+    word create lastword . cells allot"
+    does> swap cells + ;"
+    
+10 array numbers
+
+: fill ( n array size - array )
+    0 do
+        i swap !        
+    loop ;
+    
+42 numbers 10 fill    
+```
