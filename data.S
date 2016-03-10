@@ -100,7 +100,7 @@ input_buffer:
 
 .ascii "\n    : array ( size -- ) ( index -- addr )"
 .ascii "\n          word create cells allot"
-.ascii "\n          does> cells + ;"
+.ascii "\n          does> swap cells + ;"
 
 .ascii "\n    : struct 0 ;" 
 .ascii "\n    : field word create over , + does> @ + ;"
@@ -149,6 +149,8 @@ input_buffer:
 .ascii "\n               then"                                                       
 .ascii "\n           then ;"                                                         
 
+.ascii "\n           10 array test_numbers"
+
 .ascii "\n    variable test_count"                                                   
 .ascii "\n    : assert ( bool -- )"                                                  
 .ascii "\n           test_count @ 1+ test_count ! '.' emit"                          
@@ -196,12 +198,15 @@ input_buffer:
 .ascii "\n       1 1 xor 0 = assert 0 0 xor 0 = assert"                                      
 .ascii "\n       10 2 < 3 1 > or if 1 else 0 then 1 = assert"                        
 .ascii "\n       3 10 < 3 11 > and if 1 else 0 then 0 = assert"                      
-.ascii "\n       -98 45 < 33 11 > and if 1 else 0 then 1 = assert"                           
+.ascii "\n       -98 45 < 33 11 > and if 1 else 0 then 1 = assert"
+.ascii "\n       10 0 do i i test_numbers ! loop" 
+.ascii "\n       10 0 do i test_numbers @ i = assert loop" 
 .ascii "\n  test_count ? .\"  OK\" cr ;"
 .ascii "\n    selftest .\" Puny FORTH ready\" cr "
 
 // TODO exceptions, stack underflow, ?-nel ne lepjen ki a repl
 // TODO word create -> create
+// array selftesten belul nem mukodik
 
 input_size:  .int . - input_buffer
 here_var:    .int 0
