@@ -53,7 +53,7 @@ DODOES:
 
 *(does)* modifies the codeword of the latest word to point to the embedded assembly code compiled by *does>*
 
-The embedded assembly code simply jumps to the codeword *DODOES*. *DODOES* is similar then *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
+The embedded assembly code simply jumps to the codeword *DODOES*. *DODOES* is similar than *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
 
 Here are the dictionary entries of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
 
