@@ -85,10 +85,13 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
     
 10 array numbers
 
-: fill ( size )
+: fill-numbers ( size )
     0 do
         i i numbers !        
     loop ;
     
 numbers 10 fill    
+
+: print-numbers ( size )
+    0 do i numbers @ cr ;
 ```
