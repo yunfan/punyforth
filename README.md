@@ -2,7 +2,7 @@
 
 Punyforth is a toy implementation of the FORTH programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language.
 
-The goal of this project is to develop an understanding about the internals of FORTH.
+My goal with this project is to develop an understanding about the internals of FORTH.
 
 ## Notes to myself:
 
