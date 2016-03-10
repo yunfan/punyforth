@@ -43,14 +43,14 @@ DODOES:
 
 #### How *does>* it work?
 
-CONSTANT is a defining word that creates other words like TRUE or FALSE. Here is the dictionary entry of CONSTANT and TRUE.
+The *constant* is a defining word that creates other words like TRUE or FALSE. Here is the dictionary entry of *constant* and *TRUE*.
 
 <pre>                        
                               ENTERCOL                                                        jumps to DODOES
                              /                                                               /
                             |                                                               |
 +------+---+----------+---+----------+-----------+----------+-----------+---------+----------------------+----------+
-| LINK | 8 | CONSTANT | 1 | CODEWORD | xt_create | xt_comma | xt_(does) | xt_exit | asm: push dodoes ret | xt_fetch |
+| LINK | 8 | constant | 1 | CODEWORD | xt_create | xt_comma | xt_(does) | xt_exit | asm: push dodoes ret | xt_fetch |
 +------+---+----------+---+----------+-----------+----------+-----------+---------+----------------------+----------+
                                                                                    /
                                                                                   |
