@@ -49,7 +49,7 @@ DODOES:
 
 *(does)* modifies the codeword of the latest word to point to the embedded assembly code compiled by *does>*
 
-Here is the dictionary entry of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
+Here are the dictionary entries of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
 
 <pre>                        
                               ENTERCOL                                                        jumps to DODOES
