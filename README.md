@@ -43,7 +43,7 @@ DODOES:
 
 #### How *does>* it work?
 
-The Dictionary entry of CONSTANT
+CONSTANT is a defining word that creates other words like TRUE or FALSE. Here is the dictionary entry of CONSTANT and TRUE.
 
 <pre>                        
                               ENTERCOL
