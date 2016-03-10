@@ -43,7 +43,8 @@ DODOES:
 
 #### How *does>* it work?
 
-*constant* is a defining word that creates other words like *TRUE* or *FALSE*. *does>* is an immediate word that is executed at compile time. Its compilation semantics is to compile *(does)* and an embedded assembly code that jumps to *DODOES*.
+*constant* is a defining word that creates other words like *TRUE* or *FALSE*. 
+*does>* is an immediate word that is executed at compile time. Its compilation semantics is to compile *(does)* and an embedded assembly code that jumps to *DODOES*.
 
 *(does)* modifies the codeword of the latest word to point to the embedded assembly code compiled by *does>*
 
