@@ -75,3 +75,23 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
                                                                  +-----+---+-------+---+----+---+
 
 </pre>
+
+### Other examples of create> does
+
+```forth
+: array ( size -- ) ( index -- addr )"
+    word create cells allot"
+    does> swap cells + ;"
+    
+10 array numbers
+
+: fill-numbers ( size )
+    0 do i i numbers ! loop ;
+    
+10 fill-numbers
+
+: print-numbers ( size )
+    0 do i numbers @ . cr loop ;
+    
+10 print-numbers    
+```
