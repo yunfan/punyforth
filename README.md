@@ -93,7 +93,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 10 fill-numbers
 
 : print-numbers ( size )
-    0 do i numbers @ cr loop ;
+    0 do i numbers @ . cr loop ;
     
 10 print-numbers    
 ```
