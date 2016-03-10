@@ -4,7 +4,7 @@ Punyforth is a toy implementation of the FORTH programming language. Most parts 
 
 ## Notes to myself:
 
-### Demonstration of *create> does*
+### About the implementation of *create> does*
 
 ```forth
 : constant ( n -- ) 
