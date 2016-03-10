@@ -8,7 +8,7 @@ Punyforth is a toy implementation of the FORTH programming language. Most parts 
 
 ```forth
 : constant ( n -- ) 
-    word create , 
+    create , 
     does> @ ;
     
 : does>
@@ -45,6 +45,6 @@ DODOES:
 
 The Dictionary entry of CONSTANT
 
-+----------+---+----------+---+---------+-----------+----------+-----------+---------+------------------------+----------+
-| PREVLINK | 8 | CONSTANT | 1 | xt_word | xt_create | xt_comma | xt_(does) | xt_exit | (asm) push dodoes retn | xt_fetch |
-+----------+---+----------+---+---------+-----------+----------+-----------+---------+------------------------+----------+
++------+---+----------+---+-----------+----------+-----------+---------+------------------------+----------+
+| LINK | 8 | CONSTANT | 1 | xt_create | xt_comma | xt_(does) | xt_exit | (asm) push dodoes retn | xt_fetch |
++------+---+----------+---+-----------+----------+-----------+---------+------------------------+----------+
