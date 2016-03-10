@@ -87,7 +87,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 
 : fill ( size )
     0 do
-        i i array !        
+        i i numbers !        
     loop ;
     
 numbers 10 fill    
