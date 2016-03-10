@@ -90,8 +90,10 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
         i i numbers !        
     loop ;
     
-numbers 10 fill    
+10 fill    
 
 : print-numbers ( size )
-    0 do i numbers @ cr ;
+    0 do i numbers @ cr loop ;
+    
+10 print-numbers    
 ```
