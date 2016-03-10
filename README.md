@@ -59,7 +59,7 @@ The *constant* is a defining word that creates other words like *TRUE* or *FALSE
                                                    +------+---+------+---+----------+----+         |
                                                                                                    |
                                                                        +------+---+-------+---+----------+---+
-                                                                       | LINK | 4 | FALSE | 1 | CODEWORD | 0 |
+                                                                       | LINK | 5 | FALSE | 1 | CODEWORD | 0 |
                                                                        +------+---+-------+---+----------+---+
 
 </pre>
