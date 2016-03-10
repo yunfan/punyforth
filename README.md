@@ -76,7 +76,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 
 </pre>
 
-### Other exampels
+### Other examples of create> does
 
 ```forth
 : array ( size -- ) ( index -- addr )"
@@ -86,9 +86,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 10 array numbers
 
 : fill-numbers ( size )
-    0 do
-        i i numbers !        
-    loop ;
+    0 do i i numbers ! loop ;
     
 10 fill-numbers
 
