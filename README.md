@@ -43,7 +43,8 @@ DODOES:
 
 #### How *does>* it work?
 
-The *constant* is a defining word that creates other words like *TRUE* or *FALSE*. Here is the dictionary entry of *constant* and *TRUE*.
+*constant* is a defining word that creates other words like *TRUE* or *FALSE*. *does>* is an immediate word that is executed at compile time. Its compilation semantics is to compile *(does)* and an embedded assembly code that jmps to *DODOES*.
+Here is the dictionary entry of *constant* and *TRUE*.
 
 <pre>                        
                               ENTERCOL                                                        jumps to DODOES
