@@ -9,7 +9,7 @@ Punyforth is a toy implementation of the FORTH programming language. Most parts 
 ```forth
 : constant ( n -- ) 
     word create , 
-    does> @ ; "
+    does> @ ;
     
 : does>
   lit (does) , lit exit ,
