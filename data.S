@@ -149,7 +149,7 @@ input_buffer:
 .ascii "\n               then"                                                       
 .ascii "\n           then ;"                                                         
 
-.ascii "\n    10 array test_numbers"
+.ascii "\n    5 array test_numbers"
 
 .ascii "\n    variable test_count"                                                   
 .ascii "\n    : assert ( bool -- )"                                                  
@@ -199,8 +199,8 @@ input_buffer:
 .ascii "\n       10 2 < 3 1 > or if 1 else 0 then 1 = assert"                        
 .ascii "\n       3 10 < 3 11 > and if 1 else 0 then 0 = assert"                      
 .ascii "\n       -98 45 < 33 11 > and if 1 else 0 then 1 = assert"
-.ascii "\n       10 0 do i i test_numbers ! loop" 
-.ascii "\n       10 0 do i test_numbers @ i = assert loop" 
+.ascii "\n       5 0 do i i test_numbers ! loop" 
+.ascii "\n       5 0 do i test_numbers @ i = assert loop" 
 .ascii "\n  test_count ? .\"  OK\" cr ;"
 .ascii "\n    selftest .\" Puny FORTH ready\" cr "
 

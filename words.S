@@ -117,7 +117,6 @@ defword "allot",5,allot,1
     
 defword "create",6,create,1
     .int xt_word
-    .int xt_lit, 0, xt_comma                                                      // TODO why does this needed?
     .int xt_lit, OFFSET FLAT:LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_lit, 1, xt_cells, xt_minus, xt_lit, OFFSET FLAT:LAST_WORD, xt_store      // update last word
     .int xt_swap, xt_dup, xt_comma                                                // write length
