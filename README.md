@@ -80,8 +80,8 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 
 ```forth
 : array ( size -- ) ( index -- addr )
-    word create cells allot"
-    does> swap cells + ;"
+    word create cells allot
+    does> swap cells + ;
     
 10 array numbers
 
