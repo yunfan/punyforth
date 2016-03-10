@@ -13,7 +13,7 @@ Punyforth is a toy implementation of the FORTH programming language. Most parts 
     
 : does>
   lit (does) , lit exit ,
-  104 c, dodoes , 195 c,                     ( complile embedded assembly: opcode PUSH, address DODOES, opcode RETN )
+  104 c, dodoes , 195 c,                      ( complile embedded assembly: PUSH DODOES RETN )
 ; immediate
 
 : (does)
