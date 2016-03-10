@@ -94,16 +94,16 @@ input_buffer:
 .ascii "\n           195 c,        ( opcode of RETN )"
 .ascii "\n      ; immediate "
 
-.ascii "\n    : constant word create , does> @ ; "
+.ascii "\n    : constant create , does> @ ; "
 
 .ascii "\n    -1 constant TRUE 0 constant FALSE"
 
 .ascii "\n    : array ( size -- ) ( index -- addr )"
-.ascii "\n          word create cells allot"
+.ascii "\n          create cells allot"
 .ascii "\n          does> swap cells + ;"
 
 .ascii "\n    : struct 0 ;" 
-.ascii "\n    : field word create over , + does> @ + ;"
+.ascii "\n    : field create over , + does> @ + ;"
 
 .ascii "\n    : s\""                                                                 
 .ascii "\n        compile_time_only"                                                 
@@ -149,7 +149,7 @@ input_buffer:
 .ascii "\n               then"                                                       
 .ascii "\n           then ;"                                                         
 
-.ascii "\n           10 array test_numbers"
+.ascii "\n    10 array test_numbers"
 
 .ascii "\n    variable test_count"                                                   
 .ascii "\n    : assert ( bool -- )"                                                  
@@ -205,8 +205,7 @@ input_buffer:
 .ascii "\n    selftest .\" Puny FORTH ready\" cr "
 
 // TODO exceptions, stack underflow, ?-nel ne lepjen ki a repl
-// TODO word create -> create
-// array selftesten belul nem mukodik, gforthban sem, miert
+// array selftesten belul nem mukodik, gforthban sem, miert, lehet-e []-vel?
 
 input_size:  .int . - input_buffer
 here_var:    .int 0

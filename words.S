@@ -116,6 +116,7 @@ defword "allot",5,allot,1
     .int xt_exit
     
 defword "create",6,create,1
+    .int xt_word
     .int xt_lit, 0, xt_comma                                                      // TODO why does this needed?
     .int xt_lit, OFFSET FLAT:LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_lit, 1, xt_cells, xt_minus, xt_lit, OFFSET FLAT:LAST_WORD, xt_store      // update last word
@@ -142,7 +143,7 @@ defword ";",1,semicolon,IMMEDIATE
 
 defword "variable",8,variable,1
     .int xt_lit, 1, xt_cells, xt_allot
-    .int xt_word, xt_create
+    .int xt_create
     .int xt_literal
     .int xt_lit, xt_exit, xt_comma
     .int xt_exit
@@ -244,7 +245,7 @@ word_boundary:
 
 defword ":",1,colon,1
     .int xt_lit, STATE_COMPILE, xt_lit, OFFSET FLAT:state_var, xt_store
-    .int xt_word, xt_create
+    .int xt_create
     .int xt_exit
 
 defword "char",4,char,1
