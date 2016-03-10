@@ -79,7 +79,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 ### Other examples of create> does
 
 ```forth
-: array ( size -- ) ( index -- addr )"
+: array ( size -- ) ( index -- addr )
     word create cells allot"
     does> swap cells + ;"
     
