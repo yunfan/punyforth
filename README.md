@@ -46,9 +46,9 @@ DODOES:
 CONSTANT is a defining word that creates other words like TRUE or FALSE. Here is the dictionary entry of CONSTANT and TRUE.
 
 <pre>                        
-                              ENTERCOL
-                             /
-                            |
+                              ENTERCOL                                                        jumps to DODOES
+                             /                                                               /
+                            |                                                               |
 +------+---+----------+----------+---+-----------+----------+-----------+---------+----------------------+----------+
 | LINK | 8 | CONSTANT | CODEWORD | 1 | xt_create | xt_comma | xt_(does) | xt_exit | asm: push dodoes ret | xt_fetch |
 +------+---+----------+----------+---+-----------+----------+-----------+---------+----------------------+----------+
