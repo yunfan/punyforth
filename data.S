@@ -206,7 +206,7 @@ input_buffer:
 
 // TODO exceptions, stack underflow, ?-nel ne lepjen ki a repl
 // TODO word create -> create
-// array selftesten belul nem mukodik
+// array selftesten belul nem mukodik, gforthban sem, miert
 
 input_size:  .int . - input_buffer
 here_var:    .int 0
