@@ -16,12 +16,12 @@ Punyforth is a toy implementation of the FORTH programming language. Most parts 
   104 c, dodoes , 195 c,                     ( complile embedded assembly: opcode PUSH, address dodoes, opcode RETN )
 ; immediate
 
--1 constant TRUE 
-0 constant FALSE
-
 : (does)
     rdup r> 1 cells +                         ( address of the embedded assembly code )
     lastword 1 cells + dup @ + 2 cells + ! ;  ( change lastword codeword to point to the embedded assembly code )
+
+-1 constant TRUE 
+0 constant FALSE
 
 ```
 
