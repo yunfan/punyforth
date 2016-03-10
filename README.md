@@ -85,10 +85,10 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
     
 10 array numbers
 
-: fill ( n array size - array )
+: fill ( size )
     0 do
-        i swap !        
+        i i array !        
     loop ;
     
-42 numbers 10 fill    
+numbers 10 fill    
 ```
