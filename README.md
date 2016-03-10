@@ -23,7 +23,9 @@ Punyforth is a toy implementation of the FORTH programming language. Most parts 
 -1 constant TRUE 
 0 constant FALSE
 
-( The DODOES is a similar codeword than DOCOLON /ENTERCOL in punyforth/. The main difference between DODOES and DOCOLON is that the former pushes the address of the parameter field of the word. )
+( The DODOES is a similar codeword than DOCOLON /ENTERCOL in punyforth/. 
+The main difference between DODOES and DOCOLON is that the former pushes 
+the address of the parameter field of the word. )
 
 DODOES:
     mov [ebp], esi          // save esi to return stack
