@@ -58,7 +58,7 @@ The embedded assembly code simply jumps to the codeword *DODOES*. *DODOES* is si
 Here are the dictionary entries of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
 
 <pre>                        
-                              ENTERCOL                                                        jumps to DODOES
+                             address of ENTERCOL                                            jumps to DODOES
                              /                                                               /
                             |                                                               |
 +-----+---+----------+---+----+-----------+------+-----------+---------+----------------------+------+---------+
