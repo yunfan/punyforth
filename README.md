@@ -169,7 +169,6 @@ This is not yet implemented.
 
 ```forth
 \ recent exception handler
-
 variable handler           
 
 : catch ( xt -- errcode | 0 )        
