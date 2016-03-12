@@ -172,7 +172,7 @@ This is not yet implemented.
 variable handler           
 
 : catch ( xt -- errcode | 0 )        
-    sp@ >r handler @ >r  	\ save current stack pointer and previous handler
+    sp@ >r handler @ >r  	\ save current stack pointer and previous handler (rs: sp h)
     rp@ handler !  		    \ set current handler to this
     execute        		    \ execute block that potentially throws exception
     r> handler !   		    \ block returned without throwing exception, restore previous handler
