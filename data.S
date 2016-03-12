@@ -210,7 +210,6 @@ input_buffer:
 // TODO features
 //  * exception throw/catch
 //  * detect stack under/overflow
-//  * do not abort repl on unknown word
 //  * array doesn't work inside a word in []
 
 input_size:  .int . - input_buffer
