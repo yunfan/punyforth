@@ -197,6 +197,13 @@ variable handler
 
 \ usage
 
+: div ( q d -- r ) 
+  dup 0 = if 
+    99 throw 
+  else 
+    / 
+  then ;
+
 : test-div ( q d -- r )
   ['] div catch dup 0 <> if           \ call div in a "catch block". if no exception was thrown, the error code is 0
     dup 99 = if                       \ error code is 99 indicating division by zero
