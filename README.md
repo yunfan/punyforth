@@ -115,7 +115,12 @@ Immediate words are executed at compile time. Loops and control structures are i
 
 ### Parsing words
 
-Parsing words can parse the input stream. One example of a parsing word is the comment.
+Parsing words can parse the input stream. One example of a parsing word is the comment. There are 2 types of comments.
+
+```forth
+( this is a comment )
+\ this is an other comment
+```
 
 ```forth
 : (                                 \ comments start with ( character
