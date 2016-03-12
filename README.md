@@ -14,6 +14,10 @@ FORTH is a simple and extensible stack-based language.
 
 ```
 
+2 3  3  9  2  2   4 13
+  2  3  2  9  2   9
+     2        9
+
 ### Defining words
 
 ```forth
