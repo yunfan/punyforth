@@ -57,7 +57,7 @@ defprimitive "2over",5,over2,1                                                  
 defprimitive "depth",5,depth,1
     mov eax, [STACK_ORIG]
     sub eax, esp
-    add eax, 36                 // TODO mer pont ennyi
+    add eax, 36                 // TODO 
     xor edx, edx
     mov ebx, CELLS
     div ebx

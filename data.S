@@ -19,7 +19,9 @@ input_buffer:
 .ascii "\n    : % /mod drop ; : / /mod nip ;"                                        
 .ascii "\n    : '.' [ char . ] literal ; : '\"' [ char \" ] literal ;"                   
 .ascii "\n    : 'F' [ char F ] literal ; : ')' [ char ) ] literal ;"                     
-.ascii "\n    : cr 10 emit ; : space 32 emit ; "                                         
+.ascii "\n    : 'cr' 13 ; : 'lf' 10 ; : 'space' 32 ; "
+.ascii "\n    :  cr 'cr' emit ; : space 'space' emit ; "
+
 .ascii "\n    : [compile] word find drop , ; immediate"                                  
 
 .ascii "\n    : if"                                                                  
@@ -80,18 +82,19 @@ input_buffer:
 .ascii "\n           ' branch0 ,"                                                  
 .ascii "\n           rswap r> here - 1 cells - , ; immediate"                        
 
-.ascii "\n    : ( begin key ')' = until ; immediate"                                 
+.ascii "\n    : ( begin key ')' = until ; immediate"
+.ascii "\n    : \\ begin key dup 'cr' = swap 'lf' = or until ; immediate"
 
 .ascii "\n    : (does)" 
-.ascii "\n          rdup r> 1 cells +                        ( address of the embedded assembly code )"
-.ascii "\n          lastword 1 cells + dup @ + 2 cells + ! ; ( replace codeword of the last word )"
+.ascii "\n          rdup r> 1 cells +                        \\ address of the embedded assembly code"
+.ascii "\n          lastword 1 cells + dup @ + 2 cells + ! ; \\ replace codeword of the last word"
 
 .ascii "\n    : does>"
 .ascii "\n           ' (does) ,"
 .ascii "\n           ' exit ,"
-.ascii "\n           104 c,        ( opcode of PUSH )"
-.ascii "\n           enterdoes ,   ( address of enterdoes )"
-.ascii "\n           195 c,        ( opcode of RETN )"
+.ascii "\n           104 c,        \\ opcode of PUSH"
+.ascii "\n           enterdoes ,   \\ address of enterdoes"
+.ascii "\n           195 c,        \\ opcode of RETN"
 .ascii "\n      ; immediate "
 
 .ascii "\n    : constant create , does> @ ; "
@@ -108,17 +111,17 @@ input_buffer:
 .ascii "\n    : s\""                                                                 
 .ascii "\n        compile_time_only"                                                 
 .ascii "\n        ' litstring ,"                                                   
-.ascii "\n        here                    ( length will be placed here )"            
-.ascii "\n        0 ,                     ( put a dummy length )"                    
-.ascii "\n        0                       ( length counter )"                        
+.ascii "\n        here                    \\ length will be placed here "
+.ascii "\n        0 ,                     \\ put a dummy length "
+.ascii "\n        0                       \\ length counter "                        
 .ascii "\n        key dup '\"' <> if"                                                
 .ascii "\n            begin"                                                         
-.ascii "\n                swap 1+ swap    ( increase length )"                       
-.ascii "\n                c,              ( store character as byte )"                 
+.ascii "\n                swap 1+ swap    \\ increase length "
+.ascii "\n                c,              \\ store character as byte "
 .ascii "\n            key dup '\"' = until"                                          
 .ascii "\n        then"                                                              
 .ascii "\n        drop"                                                              
-.ascii "\n        swap !  ( overwrite dummy length with the calculated one )"        
+.ascii "\n        swap !  \\ overwrite dummy length with the calculated one"
 .ascii "\n     ; immediate"                                                          
 
 .ascii "\n    : abs ( n -- |n| ) dup 0 < if -1 * then ;"                             
@@ -126,14 +129,14 @@ input_buffer:
 .ascii "\n    : min ( a b -- min ) 2dup < if drop else nip then ;"                   
 
 .ascii "\n    : .\""                                                                 
-.ascii "\n        state @ 0= if            ( interpretation mode )"                  
+.ascii "\n        state @ 0= if            \\ interpretation mode "
 .ascii "\n            begin"                                                         
 .ascii "\n                key dup 34 = if"                                           
 .ascii "\n                    drop exit"                                             
 .ascii "\n                then"                                                      
 .ascii "\n                emit"                                                      
 .ascii "\n            again"                                                         
-.ascii "\n        else                     ( compilation mode )"                     
+.ascii "\n        else                     \\ compilation mode "
 .ascii "\n            [compile] s\" ' type ,"                                                
 .ascii "\n        then ; immediate"                                                  
 .ascii "\n    : .s depth 0 do . cr loop ;"                                           
@@ -204,8 +207,11 @@ input_buffer:
 .ascii "\n  test_count ? .\"  OK\" cr ;"
 .ascii "\n    selftest .\" Puny FORTH ready\" cr "
 
-// TODO exceptions, stack underflow, ?-nel ne lepjen ki a repl
-// array selftesten belul nem mukodik, gforthban sem, miert, lehet-e []-vel?
+// TODO features
+//  * exception throw/catch
+//  * detect stack under/overflow
+//  * do not abort repl on unknown word
+//  * array doesn't work inside a word in []
 
 input_size:  .int . - input_buffer
 here_var:    .int 0
