@@ -143,7 +143,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 
 </pre>
 
-### Other examples of create> does
+### Other examples of create does>
 
 ```forth
 : array ( size -- ) ( index -- addr )
