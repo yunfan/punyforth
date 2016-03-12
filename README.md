@@ -95,3 +95,20 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
     
 10 print-numbers    
 ```
+
+### Immediate words 
+
+Immediate words are executed at compile time. Loops and control structures are implemented with immediate words that compiles the required semantics.
+
+```forth
+: begin
+    here >r rswap          \ saves the absolute address of the beginning of the loop at the return stack
+ ; immediate
+ 
+: until
+    ' branch0 ,            \ compiles a conditional branch
+    rswap r>               \ gets the address that was put on the return stack by the word begin
+    here -                 \ calculate the relative address (difference between here and begin address)
+    1 cells - ,            \ compile the relative address - 1 cell
+; immediate
+```
