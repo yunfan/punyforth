@@ -15,7 +15,7 @@ LAST_WORD:    .int FINAL_WORD
 input_index:  .int 0
 input_buffer:           
               // standard library, loops and conditionals are implemented in forth
-.ascii "\n    : 0= 0 = ; : 1+ 1 + ; : 1- 1 - ;"              
+.ascii "\n    : 0= 0 = ; : 0< 0 < ; : 1+ 1 + ; : 1- 1 - ;"              
 .ascii "\n    : % /mod drop ; : / /mod nip ;"                                        
 .ascii "\n    : '.' [ char . ] literal ; : '\"' [ char \" ] literal ;"                   
 .ascii "\n    : 'F' [ char F ] literal ; : ')' [ char ) ] literal ;"                     
@@ -157,8 +157,11 @@ input_buffer:
 .ascii "\n        then ; immediate"                                                  
 .ascii "\n    : .s depth 0 do . cr loop ;"                                           
 
-.ascii "\n    : factorial ( n -- n! )"                                               
-.ascii "\n           dup 0= if"                                                      
+.ascii "\n    : factorial ( n -- n! | err:1024 )"
+.ascii "\n           dup 0< if"
+.ascii "\n               drop 1024 throw"
+.ascii "\n           then"
+.ascii "\n           dup 0= if"
 .ascii "\n               drop 1"                                                     
 .ascii "\n           else"                                                           
 .ascii "\n               dup 1 = if"                                                 
@@ -168,15 +171,6 @@ input_buffer:
 .ascii "\n               then"                                                       
 .ascii "\n           then ;"                                                         
 
-.ascii "\n    : div dup 0 = if 99 throw else / then ;"
-.ascii "\n    : test-div"
-.ascii "\n          ' div catch dup 0 <> if"
-.ascii "\n              dup 99 = if"
-.ascii "\n                  .\" error: division by zero\""
-.ascii "\n              else" 
-.ascii "\n                  throw" 
-.ascii "\n              then"
-.ascii "\n          then drop ;"
 .ascii "\n    5 array test_numbers"
 
 .ascii "\n    variable test_count"                                                   
@@ -229,12 +223,13 @@ input_buffer:
 .ascii "\n       -98 45 < 33 11 > and if 1 else 0 then 1 = assert"
 .ascii "\n       5 0 do i i test_numbers ! loop" 
 .ascii "\n       5 0 do i test_numbers @ i = assert loop" 
-.ascii "\n  test_count ? .\"  OK\" cr ;"
-.ascii "\n    selftest .\" Puny FORTH ready\" cr "
+.ascii "\n       -1 ' factorial catch 1024 = assert" 
+.ascii "\n       .\" OK \" test_count ? cr ;"
+.ascii "\n selftest .\" Punyforth testing\" cr "
 
 // TODO features
-//  * exception throw/catch
 //  * detect stack under/overflow
+//  * fix depth
 //  * array doesn't work inside a word in []
 
 input_size:  .int . - input_buffer
