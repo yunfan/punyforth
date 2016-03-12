@@ -207,7 +207,7 @@ variable handler
 : test-div ( q d -- r )
   ' div catch dup 0 <> if             \ call div in a "catch block". if no exception was thrown, the error code is 0
       dup 99 = if                     \ error code is 99 indicating division by zero
-        ." Divide by zero error"
+        ." Error: division by zero"
       else
         throw                         \ there was an other error, rethrow it
       then
