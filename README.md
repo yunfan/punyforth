@@ -162,3 +162,34 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
     
 10 print-numbers    
 ```
+
+### Exceptions
+
+This is not yet implemented.
+
+```forth
+variable handler          \ recent exception handler
+
+: catch ( xt -- errcode | 0 )        
+    sp@ >r handler @ >r  	\ save current stack pointer and previous handler
+    rp@ handler !  		    \ set current handler to this
+    execute        		    \ execute block that potentially throws exception
+    r> handler !   		    \ block returned without throwing exception, restore previous handler
+    r> drop        		    \ drop saved stack pointer
+    0              		    \ return with 0 indicating no error
+ ;
+
+: throw ( i*x errcode -- i*x errcode | i*x errcode ) ( RS: -- sp hlr i*adr )
+    dup 0= if              \ throwing 0 means no error
+      drop
+      exit 
+    then
+    handler @ rp!          \ restore return stack, thus return to the caller of most recent catch
+    r> handler !           \ restore next handler
+    r>                     \ get the saved data stack pointer
+    swap                   \ (sp errcode)
+    >r                     \ move errcode to the returnstack
+    sp!                    \ restore data stack to the same as it was before the most recent catch
+    drop r>                \ move the errorcode to the stack
+ ;                         \ This will return to the caller of most recent catch    
+```
