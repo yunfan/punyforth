@@ -6,6 +6,50 @@ My goal with this project is to develop an understanding about the internals of 
 
 ## Random notes
 
+### Immediate words 
+
+Immediate words are executed at compile time. Loops and control structures are implemented with immediate words that compiles the required semantics.
+
+```forth
+: begin
+    here >r rswap          \ saves the absolute address of the beginning of the loop at the return stack
+ ; immediate
+ 
+: until
+    ' branch0 ,            \ compiles a conditional branch
+    rswap r>               \ gets the address that was put on the return stack by the word begin
+    here -                 \ calculate the relative address (difference between here and begin address)
+    1 cells - ,            \ compile the relative address - 1 cell
+; immediate
+```
+
+### Parsing words
+
+Parsing words can parse the input stream. One example of a parsing word is the comment. There are 2 types of comments.
+
+```forth
+( this is a comment )
+\ this is an other comment
+```
+
+```forth
+: (                                 \ comments start with ( character
+    begin                           \ consume the stream until ) character is found
+        key ')' = 
+    until 
+ ; immediate
+``` 
+
+```forth
+: \                                 \ single line comments start with \ character
+    begin                           
+        key dup 
+        'cr' = swap 
+        'lf' = or
+    until                           \ consume the stream until cr or lf character is found
+ ; immediate
+``` 
+
 ### About the implementation of *create> does*
 
 ```forth
@@ -95,48 +139,3 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
     
 10 print-numbers    
 ```
-
-### Immediate words 
-
-Immediate words are executed at compile time. Loops and control structures are implemented with immediate words that compiles the required semantics.
-
-```forth
-: begin
-    here >r rswap          \ saves the absolute address of the beginning of the loop at the return stack
- ; immediate
- 
-: until
-    ' branch0 ,            \ compiles a conditional branch
-    rswap r>               \ gets the address that was put on the return stack by the word begin
-    here -                 \ calculate the relative address (difference between here and begin address)
-    1 cells - ,            \ compile the relative address - 1 cell
-; immediate
-```
-
-### Parsing words
-
-Parsing words can parse the input stream. One example of a parsing word is the comment. There are 2 types of comments.
-
-```forth
-( this is a comment )
-\ this is an other comment
-```
-
-```forth
-: (                                 \ comments start with ( character
-    begin                           \ consume the stream until ) character is found
-        key ')' = 
-    until 
- ; immediate
-``` 
-
-```forth
-: \                                 \ single line comments start with \ character
-    begin                           
-        key dup 
-        'cr' = swap 
-        'lf' = 
-        or
-    until                           \ consume the stream until cr or lf character is found
- ; immediate
-``` 
