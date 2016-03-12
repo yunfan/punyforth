@@ -118,8 +118,8 @@ Immediate words are executed at compile time. Loops and control structures are i
 Parsing words can parse the input stream. One example of a parsing word is the comment.
 
 ```forth
-: (                                 // comments start with ( character
-    begin                           // consume the stream until ) character is found
+: (                                 / comments start with ( character
+    begin                           / consume the stream until ) character is found
         key ')' = 
     until 
  ; immediate
