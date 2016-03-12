@@ -129,3 +129,14 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     until 
  ; immediate
 ``` 
+
+```forth
+: \                                 \ single line comments start with \ character
+    begin                           
+        key dup 
+        'cr' = swap 
+        'lf' = 
+        or
+    until                           \ consume the stream until cr or lf character is found
+ ; immediate
+``` 
