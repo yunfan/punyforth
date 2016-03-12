@@ -6,6 +6,14 @@ My goal with this project is to develop an understanding about the internals of 
 
 ## Random notes
 
+FORTH is a simple and extensible stack-based language.
+
+```forth
+
+2 3 dup * swap dup * + .  \ 3 * 3 + 2 * 2 prints out 13
+
+```
+
 ### Defining words
 
 ```forth
