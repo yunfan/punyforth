@@ -15,7 +15,7 @@ My goal with this project is to develop an understanding about the internals of 
     
 : does>
   lit (does) , lit exit ,
-  104 c, dodoes , 195 c,                      ( complile embedded assembly: PUSH DODOES RETN )
+  104 c, dodoes , 195 c,                      ( complile embedded assembly: PUSH ENTERDOES RETN )
  ; immediate
 
 : (does)
@@ -30,14 +30,14 @@ My goal with this project is to develop an understanding about the internals of 
 ```
 
 ```assembly
-; The DODOES is a similar codeword than DOCOLON (ENTERCOL in punyforth). 
-; The main difference between DODOES and DOCOLON is that the former pushes 
+; The ENTERDOES is a similar codeword than ENTERCOL.
+; The main difference between ENTERDOES and ENTERCOL is that the former pushes 
 ; the address of the parameter field of the word.
 
-DODOES:
+ENTERDOES:
     mov [ebp], esi          ; save esi (forth instruction pointer) to return stack
     add ebp, CELLS
-    mov esi, [eax]          ; [eax] points to the embedded assembly that called DODOES
+    mov esi, [eax]          ; [eax] points to the embedded assembly that called ENTERDOES
     add esi, 6              ; length of the embedded assembly code is 6, after that there are the forth code
     add eax, CELLS          ; eax points to the codeword of the defined word, after that there is the param. field
     push eax                ; push the parameter field and jump to the forth code (does> clause) 
@@ -49,16 +49,16 @@ DODOES:
 
 *constant* is a defining word that creates other words like *TRUE* or *FALSE*.
 
-*does>* is an immediate word that is executed at compile time. Its compilation semantics is to compile *(does)* and an embedded assembly code that jumps to *DODOES*.
+*does>* is an immediate word that is executed at compile time. Its compilation semantics is to compile *(does)* and an embedded assembly code that jumps to *ENTERDOES*.
 
 *(does)* modifies the codeword of the latest word to point to the embedded assembly code compiled by *does>*
 
-The embedded assembly code simply jumps to the codeword *DODOES*. *DODOES* is similar then *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
+The embedded assembly code simply jumps to the codeword *ENTERDOES*. *ENTERDOES* is similar then *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
 
 Here are the dictionary entries of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
 
 <pre>                        
-                             address of ENTERCOL                                            jumps to DODOES
+                             address of ENTERCOL                                            jumps to ENTERDOES
                              /                                                               /
                             |                                                               |
 +-----+---+----------+---+----+-----------+------+-----------+---------+----------------------+------+---------+

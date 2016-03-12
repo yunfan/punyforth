@@ -264,8 +264,8 @@ defword "lastword",8,lastword,1
     .int xt_lit, OFFSET FLAT:LAST_WORD, xt_fetch
     .int xt_exit
 
-defword "dodoes",6,dodoes,1
-    .int xt_lit, OFFSET FLAT:DODOES 
+defword "enterdoes",9,enterdoes,1
+    .int xt_lit, OFFSET FLAT:ENTERDOES 
     .int xt_exit
 
 FINAL_WORD:    
@@ -283,10 +283,10 @@ ENTERCOL:                   // codeword for word (colon) definitions
     mov esi, eax            // set the instruction pointer to the body of this word
     NEXT
 
-DODOES:
+ENTERDOES:
     mov [ebp], esi          // save esi to return stack
     add ebp, CELLS
-    mov esi, [eax]          // [eax] points to DODOES call in assembly
+    mov esi, [eax]          // [eax] points to ENTERDOES call in assembly
     add esi, 6              // length of the embedded assembly code is 6, after that there are the forth code
     add eax, CELLS          // eax points to the codeword of the defined word, after that there is the param. field
     push eax

@@ -90,7 +90,7 @@ input_buffer:
 .ascii "\n           lit (does) ,"
 .ascii "\n           lit exit ,"
 .ascii "\n           104 c,        ( opcode of PUSH )"
-.ascii "\n           dodoes ,      ( address of dodoes )"
+.ascii "\n           enterdoes ,   ( address of enterdoes )"
 .ascii "\n           195 c,        ( opcode of RETN )"
 .ascii "\n      ; immediate "
 
