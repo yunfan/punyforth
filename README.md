@@ -168,7 +168,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 This is based on the idea of William Mitch Bradley.
 
 ```forth
-\ address of the recent exception handler
+\ this points to the nearest exception handler
 variable handler           
 
 : catch ( xt -- errcode | 0 )        
