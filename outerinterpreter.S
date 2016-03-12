@@ -33,7 +33,7 @@ not_found_in_dictionary:                   // word was not found in the dictiona
 end_of_input:
     .int xt_abort
 invalid_number:
-    .int xt_lit, '?', xt_emit
-    .int xt_lit, 10, xt_emit
+    .int xt_tick, '?', xt_emit
+    .int xt_tick, 10, xt_emit
     .int xt_abort
 

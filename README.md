@@ -14,7 +14,7 @@ My goal with this project is to develop an understanding about the internals of 
     does> @ ;
     
 : does>
-  lit (does) , lit exit ,
+  ' (does) , ' exit ,
   104 c, dodoes , 195 c,                      ( complile embedded assembly: PUSH ENTERDOES RETN )
  ; immediate
 
