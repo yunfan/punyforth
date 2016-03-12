@@ -97,6 +97,22 @@ input_buffer:
 .ascii "\n           195 c,        \\ opcode of RETN"
 .ascii "\n      ; immediate "
 
+.ascii "\n    variable handler \\ address of the recent exception handler"
+
+.ascii "\n    : catch ( xt -- errcode | 0 )"
+.ascii "\n          sp@ >r handler @ >r          \\ save current stack pointer and previous handler (RS: sp h)" 
+.ascii "\n          rp@ handler !                \\ set the currend handler to this"
+.ascii "\n          execute                      \\ execute word that potentially throws exception" 
+.ascii "\n          r> handler !                 \\ word returned without exception, restore previous handler" 
+.ascii "\n          r> drop 0 ;                  \\ drop the saved sp return 0 indicating no error" 
+
+.ascii "\n    : throw ( i*x errcode -- i*x errcode | 0 )"
+.ascii "\n          dup 0= if drop exit then     \\ 0 means no error, drop errorcode exit from execute" 
+.ascii "\n          handler @ rp!                \\ restore rstack, now it is the same as it was before execute" 
+.ascii "\n          r> handler !                 \\ restore next handler" 
+.ascii "\n          r> swap >r sp!               \\ restore the data stack as it was before the most recent catch" 
+.ascii "\n          drop r> ;                    \\ return to the caller of most recent catch with the errcode" 
+
 .ascii "\n    : constant create , does> @ ; "
 
 .ascii "\n    -1 constant TRUE 0 constant FALSE"
@@ -152,6 +168,15 @@ input_buffer:
 .ascii "\n               then"                                                       
 .ascii "\n           then ;"                                                         
 
+.ascii "\n    : div dup 0 = if 99 throw else / then ;"
+.ascii "\n    : test-div"
+.ascii "\n          ' div catch dup 0 <> if"
+.ascii "\n              dup 99 = if"
+.ascii "\n                  .\" error: division by zero\""
+.ascii "\n              else" 
+.ascii "\n                  throw" 
+.ascii "\n              then"
+.ascii "\n          then drop ;"
 .ascii "\n    5 array test_numbers"
 
 .ascii "\n    variable test_count"                                                   

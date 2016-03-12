@@ -330,6 +330,25 @@ defprimitive "exit",4,exit,1
     mov esi, [ebp]
     NEXT
 
+defprimitive "sp@",3,spat,1
+    mov eax, esp
+    push eax
+    NEXT
+
+defprimitive "sp!",3,spstore,1
+    pop eax
+    mov esp, eax
+    NEXT
+
+defprimitive "rp@",3,rpat,1
+    push ebp
+    NEXT
+
+defprimitive "rp!",3,rpstore,1
+    pop eax
+    mov ebp, eax
+    NEXT
+
 defprimitive "key",3,key,1
     push esi
     mov edi, OFFSET FLAT:input_buffer    
