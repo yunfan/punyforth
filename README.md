@@ -182,8 +182,8 @@ variable handler
 
 : throw ( i*x errcode -- i*x errcode | i*x errcode ) ( RS: -- sp hlr i*adr )
     dup 0= if              \ throwing 0 means no error
-      drop
-      exit 
+      drop                 \ drop error code
+      exit                 \ exit from execute
     then
     handler @ rp!          \ restore return stack, thus return to the caller of most recent catch
     r> handler !           \ restore next handler
