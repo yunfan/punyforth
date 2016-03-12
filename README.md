@@ -13,10 +13,12 @@ FORTH is a simple and extensible stack-based language.
 2 3 dup * swap dup * + .  \ 3 * 3 + 2 * 2 prints out 13
 
 ```
-
+Stack visualization:
+<pre>
 2 3  3  9  2  2   4 13
   2  3  2  9  2   9
      2        9
+</pre>     
 
 ### Defining words
 
