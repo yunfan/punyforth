@@ -6,6 +6,15 @@ My goal with this project is to develop an understanding about the internals of 
 
 ## Random notes
 
+### Defining words
+
+```forth
+: square ( n -- nsquared ) dup * ;
+
+4 square .      \ prints 16
+```
+Word definitions start with colon character and end with a semicolon. The *n -- nsquared* is the optional stack effect comment.
+
 ### Immediate words 
 
 Immediate words are executed at compile time. Loops and control structures are implemented with immediate words that compiles the required semantics.
