@@ -185,11 +185,11 @@ variable handler
       drop                 \ drop error code
       exit                 \ exit from execute
     then
-    handler @ rp!          \ restore return stack, thus return to the caller of most recent catch
+    handler @ rp!          \ restore return stack, now it is the same as it was right before the execute (RS: sp h)
     r> handler !           \ restore next handler
     r>                     \ get the saved data stack pointer
     swap                   \ (sp errcode)
-    >r                     \ move errcode to the returnstack
+    >r                     \ move errcode to the returnstack temporally
     sp!                    \ restore data stack to the same as it was before the most recent catch
     drop r>                \ move the errorcode to the stack
  ;                         \ This will return to the caller of most recent catch    
