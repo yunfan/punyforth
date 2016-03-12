@@ -165,8 +165,6 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 
 ### Exceptions
 
-This is not yet implemented.
-
 ```forth
 \ address of the recent exception handler
 variable handler           
