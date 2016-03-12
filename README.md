@@ -73,7 +73,7 @@ Parsing words can parse the input stream. One example of a parsing word is the c
  ; immediate
 ``` 
 
-### About the implementation of *create> does*
+### About the implementation of *create does>*
 
 ```forth
 : constant ( n -- ) 
