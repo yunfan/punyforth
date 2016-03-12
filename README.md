@@ -211,7 +211,7 @@ variable handler
     else
       throw                           \ there was an other error, rethrow it
     then
-  then ; 
+  then drop ; 
 ```
 
 
