@@ -197,16 +197,18 @@ variable handler
 
 \ usage
 
+99 constant division_by_zero
+
 : div ( q d -- r ) 
     dup 0 = if 
-      99 throw 
+      division_by_zero throw 
     else 
       / 
     then ;
 
 : test-div ( q d -- r )
   ' div catch dup 0 <> if             \ call div in a "catch block". if no exception was thrown, the error code is 0
-      dup 99 = if                     \ error code is 99 indicating division by zero
+      dup division_by_zero = if                     \ error code is 99 indicating division by zero
         ." Error: division by zero"
       else
         throw                         \ there was an other error, rethrow it
