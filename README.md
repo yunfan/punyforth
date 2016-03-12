@@ -112,3 +112,15 @@ Immediate words are executed at compile time. Loops and control structures are i
     1 cells - ,            \ compile the relative address - 1 cell
 ; immediate
 ```
+
+### Parsing words
+
+Parsing words can parse the input stream. One example of a parsing word is the comment.
+
+```forth
+: (                                 // comments start with ( character
+    begin                           // consume the stream until ) character is found
+        key ')' = 
+    until 
+ ; immediate
+``` 
