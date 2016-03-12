@@ -193,4 +193,18 @@ variable handler
     sp!                    \ restore data stack to the same as it was before the most recent catch
     drop r>                \ move the errorcode to the stack
  ;                         \ This will return to the caller of most recent catch    
+ 
+
+\ usage
+
+: test-div ( q d -- r )
+  ['] div catch dup 0 <> if           \ call div in a "catch block". if no exception was thrown, the error code is 0
+    dup 99 = if                       \ error code is 99 indicating division by zero
+      ." Divide by zero error"
+    else
+      throw                           \ there was an other error, rethrow it
+    then
+  then ; 
 ```
+
+
