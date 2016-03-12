@@ -20,7 +20,7 @@ input_buffer:
 .ascii "\n    : '.' [ char . ] literal ; : '\"' [ char \" ] literal ;"                   
 .ascii "\n    : 'F' [ char F ] literal ; : ')' [ char ) ] literal ;"                     
 .ascii "\n    : 'cr' 13 ; : 'lf' 10 ; : 'space' 32 ; "
-.ascii "\n    :  cr 'cr' emit ; : space 'space' emit ; "
+.ascii "\n    :  cr 'cr' emit 'lf' emit ; : space 'space' emit ; "
 
 .ascii "\n    : [compile] word find drop , ; immediate"                                  
 
@@ -97,22 +97,6 @@ input_buffer:
 .ascii "\n           195 c,        \\ opcode of RETN"
 .ascii "\n      ; immediate "
 
-.ascii "\n    variable handler \\ address of the recent exception handler"
-
-.ascii "\n    : catch ( xt -- errcode | 0 )"
-.ascii "\n          sp@ >r handler @ >r          \\ save current stack pointer and previous handler (RS: sp h)" 
-.ascii "\n          rp@ handler !                \\ set the currend handler to this"
-.ascii "\n          execute                      \\ execute word that potentially throws exception" 
-.ascii "\n          r> handler !                 \\ word returned without exception, restore previous handler" 
-.ascii "\n          r> drop 0 ;                  \\ drop the saved sp return 0 indicating no error" 
-
-.ascii "\n    : throw ( i*x errcode -- i*x errcode | 0 )"
-.ascii "\n          dup 0= if drop exit then     \\ 0 means no error, drop errorcode exit from execute" 
-.ascii "\n          handler @ rp!                \\ restore rstack, now it is the same as it was before execute" 
-.ascii "\n          r> handler !                 \\ restore next handler" 
-.ascii "\n          r> swap >r sp!               \\ restore the data stack as it was before the most recent catch" 
-.ascii "\n          drop r> ;                    \\ return to the caller of most recent catch with the errcode" 
-
 .ascii "\n    : constant create , does> @ ; "
 
 .ascii "\n    -1 constant TRUE 0 constant FALSE"
@@ -156,6 +140,28 @@ input_buffer:
 .ascii "\n            [compile] s\" ' type ,"                                                
 .ascii "\n        then ; immediate"                                                  
 .ascii "\n    : .s depth 0 do . cr loop ;"                                           
+
+.ascii "\n    variable handler 0 handler !       \\ stores the address of the nearest exception handler"
+.ascii "\n    : uncaught_exception_handler"
+.ascii "\n          .\" Uncaught exception: \" . cr abort ;"
+
+.ascii "\n    : catch ( xt -- errcode | 0 )"
+.ascii "\n          sp@ >r handler @ >r          \\ save current stack pointer and previous handler (RS: sp h)" 
+.ascii "\n          rp@ handler !                \\ set the currend handler to this"
+.ascii "\n          execute                      \\ execute word that potentially throws exception" 
+.ascii "\n          r> handler !                 \\ word returned without exception, restore previous handler" 
+.ascii "\n          r> drop 0 ;                  \\ drop the saved sp return 0 indicating no error" 
+
+.ascii "\n    : throw ( i*x errcode -- i*x errcode | 0 )"
+.ascii "\n          dup 0= if drop exit then    \\ 0 means no error, drop errorcode exit from execute" 
+.ascii "\n          handler @ 0= if             \\ this was an uncaught exception"
+.ascii "\n              uncaught_exception_handler "
+.ascii "\n              exit"
+.ascii "\n          then"
+.ascii "\n          handler @ rp!           \\ restore rstack, now it is the same as it was before execute" 
+.ascii "\n          r> handler !            \\ restore next handler" 
+.ascii "\n          r> swap >r sp!          \\ restore the data stack as it was before the most recent catch" 
+.ascii "\n          drop r> ;               \\ return to the caller of most recent catch with the errcode" 
 
 .ascii "\n    : factorial ( n -- n! | err:1024 )"
 .ascii "\n           dup 0< if"
@@ -231,6 +237,7 @@ input_buffer:
 //  * detect stack under/overflow
 //  * fix depth
 //  * array doesn't work inside a word in []
+//  tick doesn't work in interpretation mode 
 
 input_size:  .int . - input_buffer
 here_var:    .int 0
