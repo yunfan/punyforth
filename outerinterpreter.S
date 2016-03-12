@@ -35,5 +35,7 @@ end_of_input:
 invalid_number:
     .int xt_tick, '?', xt_emit
     .int xt_tick, 10, xt_emit
-    .int xt_abort
+    .int xt_inputbuf, xt_inputlen, xt_fetch, xt_plus, xt_tib, xt_store // skip rest of the inputbuffer
+    .int xt_branch
+    .int outer_interpreter - . - CELLS
 

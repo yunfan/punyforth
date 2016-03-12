@@ -275,7 +275,9 @@ defword "immediate",9,immediate,1
     .int xt_tick, 1, xt_cells, xt_plus
     .int xt_tick, IMMEDIATE, xt_swap, xt_store
     .int xt_exit
-    
+   
+// Different types of code words
+
 ENTERCOL:                   // codeword for word (colon) definitions
     mov [ebp], esi          // save esi (forth instruction pointer) to the return stack
     add ebp, CELLS
