@@ -165,6 +165,8 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 
 ### Exceptions
 
+This is based on the idea of William Mitch Bradley.
+
 ```forth
 \ address of the recent exception handler
 variable handler           
