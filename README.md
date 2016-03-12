@@ -4,7 +4,7 @@ Punyforth is a toy implementation of the FORTH programming language. Most parts 
 
 My goal with this project is to develop an understanding about the internals of FORTH.
 
-## Notes to myself:
+## Random notes
 
 ### About the implementation of *create> does*
 
