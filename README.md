@@ -25,7 +25,7 @@ Word definitions start with colon character and end with a semicolon. The *n -- 
 
 ### Immediate words 
 
-Immediate words are executed at compile time. Loops and control structures are implemented with immediate words that compiles the required semantics.
+Immediate words are executed at compile time. Loops and control structures are implemented with immediate words that compile the required semantics.
 
 ```forth
 : begin
