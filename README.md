@@ -168,7 +168,7 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 This is not yet implemented.
 
 ```forth
-variable handler          \ recent exception handler
+variable handler           \ recent exception handler
 
 : catch ( xt -- errcode | 0 )        
     sp@ >r handler @ >r  	\ save current stack pointer and previous handler
