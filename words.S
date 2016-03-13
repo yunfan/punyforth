@@ -25,6 +25,25 @@ defword "tuck",4,tuck,1 /* ( a b -- b a b ) */
     .int xt_swap, xt_over
     .int xt_exit
 
+defword "rdup",4,rdup,1
+    .int xt_rpop                                    // because this is a word there is a return address
+    .int xt_rpop, xt_dup, xt_rpush, xt_rpush
+    .int xt_rpush                                   // keep the return address
+    .int xt_exit
+
+defword "r2dup",5,r2dup,1
+    .int xt_rpop                                    // return address
+    .int xt_rpop, xt_rpop, xt_dup2
+    .int xt_rpush, xt_rpush, xt_rpush, xt_rpush
+    .int xt_rpush                                   // restore the return address
+    .int xt_exit
+
+defword "rswap",5,rswap,1                           
+    .int xt_rpop                                    // careful about the return address
+    .int xt_rpop, xt_rpop, xt_swap
+    .int xt_rpush, xt_rpush, xt_rpush
+    .int xt_exit
+
 defword ">",1,gt,1
     .int xt_swap, xt_lt
     .int xt_exit

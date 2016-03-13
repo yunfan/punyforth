@@ -236,28 +236,6 @@ defprimitive "j",1,j,1
     push eax
     NEXT
 
-defprimitive "rswap",5,rswap,1
-    mov eax, [ebp - CELLS]
-    mov ebx, [ebp - 2 * CELLS]
-    mov [ebp - 2 * CELLS], eax
-    mov [ebp - CELLS], ebx
-    NEXT
-
-defprimitive "rdup",4,rdup,1
-    mov eax, [ebp - CELLS]
-    mov [ebp], eax
-    add ebp, CELLS    
-    NEXT
-    
-defprimitive "r2dup",5,r2dup,1
-    mov eax, [ebp - CELLS]
-    mov ebx, [ebp - 2 * CELLS]
-    mov [ebp], ebx
-    add ebp, CELLS
-    mov [ebp], eax
-    add ebp, CELLS        
-    NEXT
-
 defprimitive "execute",7,execute,1
     pop eax
     jmp [eax]
