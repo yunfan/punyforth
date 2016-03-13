@@ -124,7 +124,7 @@ defword "create",6,create,1
     .int xt_word
     .int xt_btick, OFFSET FLAT:LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_cell, xt_minus, xt_btick, OFFSET FLAT:LAST_WORD, xt_store      // update last word
-    .int xt_swap, xt_dup, xt_comma                                                // write length
+    .int xt_swap, xt_dup, xt_comma                                                  // write length
 create_write_next_char:    
     .int xt_dup, xt_branch0
     .int create_name_done - . - CELLS
@@ -145,55 +145,48 @@ defword ";",1,semicolon,IMMEDIATE
     .int xt_btick, xt_exit, xt_comma
     .int xt_exit
 
-defword "variable",8,variable,1
-    .int xt_cell, xt_allot
-    .int xt_create
-    .int xt_literal
-    .int xt_btick, xt_exit, xt_comma
-    .int xt_exit
-
 defword ">number",7,tonumber,1                                                    //( len a -- num bool )
     .int xt_swap                                                                  
     .int xt_dup, xt_branch0
     .int tonum_empty - . - CELLS
-    .int xt_swap, xt_dup, xt_fetchbyte, xt_btick, 45, xt_eq                         // check sign
+    .int xt_swap, xt_dup, xt_fetchbyte, xt_btick, 45, xt_eq                       // check sign
     .int xt_branch0
     .int tonum_positive - . - CELLS
     .int xt_swap
-    .int xt_btick, 1, xt_minus                                                      // decrement length
+    .int xt_btick, 1, xt_minus                                                    // decrement length
     .int xt_dup, xt_rpush                                                         // move length to return stack
     .int xt_plus                                                                  // move to the last char of the number string
     .int xt_btick, 0                                                                
-    .int xt_btick, -1                                                               // ( a res mul )
-    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                   // decrement length once more because of the negative sign
+    .int xt_btick, -1                                                             // ( a res mul )
+    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                 // decrement length once more because of the negative sign
     .int xt_branch
     .int tonum_loop - . - CELLS    
 tonum_positive:
     .int xt_swap
-    .int xt_btick, 1, xt_minus                                                      // decrement length
+    .int xt_btick, 1, xt_minus                                                    // decrement length
     .int xt_dup, xt_rpush                                                         // move length to return stack
     .int xt_plus                                                                  // move to the last char of the number string
     .int xt_btick, 0                                                                
-    .int xt_btick, 1                                                                // ( a res mul )
+    .int xt_btick, 1                                                              // ( a res mul )
 tonum_loop:    
     .int xt_rot                                                                   // ( res mul a ) 
     .int xt_dup, xt_fetchbyte
-    .int xt_dup, xt_btick, 47, xt_gt, xt_branch0                                    // check range
+    .int xt_dup, xt_btick, 47, xt_gt, xt_branch0                                  // check range
     .int tonum_invalid_digit - . - CELLS
     .int xt_dup, xt_btick, 58, xt_lt, xt_branch0
     .int tonum_invalid_digit - . - CELLS
-    .int xt_btick, 48, xt_minus                                                     // ( res mul a digit )
-    .int xt_swap, xt_btick, 1, xt_minus, xt_swap                                    // decrement a
+    .int xt_btick, 48, xt_minus                                                   // ( res mul a digit )
+    .int xt_swap, xt_btick, 1, xt_minus, xt_swap                                  // decrement a
     .int xt_swap2                                                                 // ( a digit res mul )
     .int xt_rot                                                                   // ( a res mul digit)
     .int xt_over                                                                  // ( a res mul digit mul )
     .int xt_multiply                                                              // ( a res mul digit*mul )
     .int xt_rot                                                                   // ( a mul digit*mul res )
     .int xt_plus                                                                  // ( a mul res )
-    .int xt_swap, xt_btick, 10, xt_multiply                                         // ( a res mul )
+    .int xt_swap, xt_btick, 10, xt_multiply                                       // ( a res mul )
     .int xt_rdup, xt_rpop, xt_branch0
     .int tonum_done - . - CELLS
-    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                   // decrement length on return stack    
+    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                 // decrement length on return stack    
     .int xt_branch
     .int tonum_loop - . - CELLS
 tonum_done:

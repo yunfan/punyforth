@@ -57,7 +57,7 @@ defprimitive "2over",5,over2,1                                                  
 defprimitive "depth",5,depth,1
     mov eax, [STACK_ORIG]
     sub eax, esp
-    add eax, 36                 // TODO 
+    add eax, 40                 // TODO 
     xor edx, edx
     mov ebx, CELLS
     div ebx
@@ -351,21 +351,21 @@ defprimitive "rp!",3,rpstore,1
 
 defprimitive "key",3,key,1
     push esi
-    mov edi, OFFSET FLAT:input_buffer    
-    add edi, [input_size]                                                       // input buffer end position    
+    mov edi, OFFSET FLAT:input_buffer   
+    add edi, [input_size]                                               // input buffer end position   
     mov esi, [input_index]
     cmp esi, edi
     jb read_one_char_from_buffer
     prompt
-    lea ecx, [input_buffer -1]                                                  // store the input in buffer
+    lea ecx, [input_buffer -1]                                          // store the input in buffer
     mov dword ptr [input_size], 0
 refill_buffer:
     inc ecx
     inc dword ptr [input_size]
-    xor ebx, ebx                                                                // reads from stdin (FD 0)
-    mov eax, 3                                                                  // use syscall 3 (read) to read from stdin
-    mov edx, 1                                                                  // read one character
-    int 0x80                                                                    // invoke system call to read from stdin
+    xor ebx, ebx                                                        // reads from stdin (FD 0)
+    mov eax, 3                                                          // use syscall 3 (read) to read from stdin
+    mov edx, 1                                                          // read one character
+    int 0x80                                                            // invoke system call to read from stdin
     cmp byte ptr [ecx], 10
     jnz refill_buffer
     mov esi, OFFSET FLAT:input_buffer    

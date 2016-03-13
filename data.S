@@ -100,6 +100,7 @@ input_buffer:
 .ascii "\n      ; immediate "
 
 .ascii "\n    : constant create , does> @ ; "
+.ascii "\n    : variable create 0 , does> ; "
 
 .ascii "\n    -1 constant TRUE 0 constant FALSE"
 
@@ -185,7 +186,7 @@ input_buffer:
 .ascii "\n    variable test_var1 variable test_var2"
 .ascii "\n    : assert ( bool -- )"                                                  
 .ascii "\n           test_count @ 1+ test_count ! '.' emit"                          
-.ascii "\n           TRUE <> if 'F' emit test_count ? then ;"                        
+.ascii "\n           TRUE <> if 'F' emit test_count ? then ;"
 .ascii "\n    : selftest ( -- )"                                                     
 .ascii "\n       .\" testing\""                                                     
 .ascii "\n       0 test_count !"                                                     
@@ -243,7 +244,6 @@ input_buffer:
 // TODO features
 //  * detect stack under/overflow
 //  * fix depth
-//  * array doesn't work inside a word in []
 //  * add error handling to [compile] and '
 //  * show depth in prompt
 
