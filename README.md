@@ -39,10 +39,10 @@ Immediate words are executed at compile time. Loops and control structures are i
  ; immediate
  
 : until
-    ['] branch0 ,            \ compiles a conditional branch
+    ['] branch0 ,          \ compiles a conditional branch
     rswap r>               \ gets the address that was put on the return stack by the word begin
     here -                 \ calculate the relative address (difference between here and begin address)
-    1 cells - ,            \ compile the relative address - 1 cell
+    cell - ,               \ compile the relative address - 1 cell
 ; immediate
 ```
 
@@ -82,7 +82,7 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     
 : does>
   ['] (does) , ['] exit ,
-  104 c, enterdoes , 195 c,                      \ complile embedded assembly: PUSH ENTERDOES RETN
+  104 c, enterdoes , 195 c,                   \ complile embedded assembly: PUSH ENTERDOES RETN
  ; immediate
 
 : (does)
@@ -207,7 +207,7 @@ variable handler
     then ;
 
 : test-div ( q d -- r )
-  ['] div catch dup 0 <> if             \ call div in a "catch block". if no exception was thrown, the error code is 0
+  ['] div catch dup 0 <> if           \ call div in a "catch block". if no exception was thrown, the error code is 0
       dup division_by_zero = if       \ error code is 99 indicating division by zero
         ." Error: division by zero"
       else
