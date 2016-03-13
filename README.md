@@ -163,6 +163,27 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 10 print-numbers    
 ```
 
+```forth
+struct 
+  cell field width 
+  cell field height
+constant Rect
+
+: new-rect
+  Rect create allot does> ;
+  
+: area ( rect -- area ) 
+  x @ swap y @ * ;  
+  
+new-rect r1
+  
+3 r1 width !
+5 r1 height !  
+  
+r1 area .  
+  
+```
+
 ### Exceptions
 
 This is based on the idea of William Mitch Bradley.
