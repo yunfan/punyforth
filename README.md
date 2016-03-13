@@ -173,7 +173,7 @@ constant Rect
   Rect create allot does> ;
   
 : area ( rect -- area ) 
-  x @ swap y @ * ;  
+  width @ swap height @ * ;  
   
 new-rect r1
   
