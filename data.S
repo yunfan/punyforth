@@ -148,7 +148,7 @@ input_buffer:
 .ascii "\n          .\" Uncaught exception: \" . cr abort ;"
 
 .ascii "\n    : catch ( xt -- errcode | 0 )"
-.ascii "\n          sp@ >r handler @ >r          \\ save current stack pointer and previous handler (RS: sp h)" 
+.ascii "\n          sp@ cell + >r handler @ >r   \\ save current stack pointer and previous handler (RS: sp h)" 
 .ascii "\n          rp@ handler !                \\ set the currend handler to this"
 .ascii "\n          execute                      \\ execute word that potentially throws exception" 
 .ascii "\n          r> handler !                 \\ word returned without exception, restore previous handler" 
@@ -182,6 +182,7 @@ input_buffer:
 .ascii "\n    5 array test_numbers"
 
 .ascii "\n    variable test_count"                                                   
+.ascii "\n    variable test_var1 variable test_var2"
 .ascii "\n    : assert ( bool -- )"                                                  
 .ascii "\n           test_count @ 1+ test_count ! '.' emit"                          
 .ascii "\n           TRUE <> if 'F' emit test_count ? then ;"                        
@@ -231,8 +232,12 @@ input_buffer:
 .ascii "\n       -98 45 < 33 11 > and if 1 else 0 then 1 = assert"
 .ascii "\n       5 0 do i i test_numbers ! loop" 
 .ascii "\n       5 0 do i test_numbers @ i = assert loop" 
-.ascii "\n       -1 ['] factorial catch 1024 = assert" 
-.ascii "\n       .\" OK \" test_count ? cr ;"
+.ascii "\n       sp@ test_var1 !"
+.ascii "\n       -1 ['] factorial catch 1024 = assert"
+.ascii "\n       sp@ test_var2 !"
+.ascii "\n       test_var1 @ test_var2 @ = assert" 
+.ascii "\n       .\" OK \" test_count ? cr ; "
+
 .ascii "\n ' selftest execute .\" Punyforth testing\" cr "
 
 // TODO features
@@ -240,19 +245,10 @@ input_buffer:
 //  * fix depth
 //  * array doesn't work inside a word in []
 //  * add error handling to [compile] and '
-
-/*
-fix:
-    : HELLO    ." Hello " ;
-    : GOODBYE  ." Goodbye " ;
-    variable 'aloha
-    ' HELLO 'aloha !
-    : ALOHA 'aloha @ execute ;
-    ALOHA 
-*/
+//  * show depth in prompt
 
 input_size:  .int . - input_buffer
 here_var:    .int 0
-dictionary:  .space 8192
-rstack:      .space 256
+dictionary:  .space 262144
+rstack:      .space 1024
 prompt_str:  .ascii "\n % " 

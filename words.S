@@ -116,7 +116,8 @@ defword "here",4,here,1
     .int xt_exit
     
 defword "allot",5,allot,1
-    .int xt_here, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
+    .int xt_here
+    .int xt_swap, xt_here, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
     .int xt_exit
     
 defword "create",6,create,1
