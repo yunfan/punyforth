@@ -135,7 +135,7 @@ defprimitive "[']",3,btick,1    // compile only
     push eax
     NEXT
    
-defprimitive "<",1,lt,1
+defprimitive "<",1,lt,1         // only need to define this, all other comparisions are implemented in terms of lt
     xor eax, eax
     pop ebx
     pop edx
@@ -145,7 +145,7 @@ defprimitive "<",1,lt,1
 not_less:
     push eax
     NEXT
-        
+
 defprimitive "invert",6,invert,1
     pop eax
     not eax
@@ -259,4 +259,20 @@ read_one_char_from_buffer:
     push eax
     NEXT
 
+// Different types of code words
 
+ENTERCOL:                   // codeword for word (colon) definitions
+    mov [ebp], esi          // save esi (forth instruction pointer) to the return stack
+    add ebp, CELLS
+    add eax, CELLS          // eax points to the ENTERCOL, skip this cell
+    mov esi, eax            // set the instruction pointer to the body of this word
+    NEXT
+
+ENTERDOES:
+    mov [ebp], esi          // save esi to return stack
+    add ebp, CELLS
+    mov esi, [eax]          // [eax] points to ENTERDOES call in assembly
+    add esi, 6              // length of the embedded assembly code is 6, after that there are the forth code
+    add eax, CELLS          // eax points to the codeword of the defined word, after that there is the param. field
+    push eax
+    NEXT

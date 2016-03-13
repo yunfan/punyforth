@@ -4,13 +4,15 @@ defword "nip",3,nip,1
     .int xt_swap
     .int xt_drop
     .int xt_exit
-    
+
+.ifndef xt_over
 defword "over",4,over,1 /* ( a b -- a b a ) */
     .int xt_swap
     .int xt_dup
     .int xt_rot
     .int xt_swap
     .int xt_exit
+.endif
 
 defword "2dup",4,dup2,1
     .int xt_over
@@ -51,23 +53,31 @@ defword "depth",5,depth,1
     .int xt_cell, xt_divmod, xt_nip
     .int xt_exit
 
+.ifndef xt_gt
 defword ">",1,gt,1
     .int xt_swap, xt_lt
     .int xt_exit
+.endif
 
+.ifndef xt_eq
 defword "=",1,eq,1
     .int xt_dup2
     .int xt_lt, xt_invert, xt_mrot
     .int xt_swap, xt_lt, xt_invert, xt_and          // !(a < b) and !(b < a)
     .int xt_exit
+.endif
 
+.ifndef xt_gte
 defword ">=",2,gte,1
     .int xt_lt, xt_invert
     .int xt_exit
+.endif
 
+.ifndef xt_lte
 defword "<=",2,lte,1
     .int xt_swap, xt_lt, xt_invert
     .int xt_exit
+.endif
 
 defword "cells",5,cells,1
     .int xt_cell, xt_multiply
@@ -350,20 +360,3 @@ defword "immediate",9,immediate,1
     .int xt_btick, IMMEDIATE, xt_swap, xt_store
     .int xt_exit
    
-// Different types of code words
-
-ENTERCOL:                   // codeword for word (colon) definitions
-    mov [ebp], esi          // save esi (forth instruction pointer) to the return stack
-    add ebp, CELLS
-    add eax, CELLS          // eax points to the ENTERCOL, skip this cell
-    mov esi, eax            // set the instruction pointer to the body of this word
-    NEXT
-
-ENTERDOES:
-    mov [ebp], esi          // save esi to return stack
-    add ebp, CELLS
-    mov esi, [eax]          // [eax] points to ENTERDOES call in assembly
-    add esi, 6              // length of the embedded assembly code is 6, after that there are the forth code
-    add eax, CELLS          // eax points to the codeword of the defined word, after that there is the param. field
-    push eax
-    NEXT

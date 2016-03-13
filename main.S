@@ -4,6 +4,7 @@
 #include "outerinterpreter.S"
 #include "macros.S"
 #include "primitives.S"
+#include "ext.S"
 #include "words.S"
 
 .global _start
