@@ -33,8 +33,8 @@ not_found_in_dictionary:                   // word was not found in the dictiona
 end_of_input:
     .int xt_abort
 invalid_number:
-    .int xt_tick, '?', xt_emit
-    .int xt_tick, 10, xt_emit
+    .int xt_btick, '?', xt_emit
+    .int xt_btick, 10, xt_emit
     .int xt_inputbuf, xt_inputlen, xt_fetch, xt_plus, xt_tib, xt_store // skip rest of the inputbuffer
     .int xt_branch
     .int outer_interpreter - . - CELLS

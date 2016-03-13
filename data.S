@@ -22,18 +22,19 @@ input_buffer:
 .ascii "\n    : 'cr' 13 ; : 'lf' 10 ; : 'space' 32 ; "
 .ascii "\n    :  cr 'cr' emit 'lf' emit ; : space 'space' emit ; "
 
+
 .ascii "\n    : [compile] word find drop , ; immediate"                                  
 
 .ascii "\n    : if"                                                                  
 .ascii "\n           compile_time_only"                                              
-.ascii "\n           ' branch0 ,"                                                  
+.ascii "\n           ['] branch0 ,"                                                  
 .ascii "\n           here >r"                                                        
 .ascii "\n           0 ,"                                                            
 .ascii "\n           rswap ; immediate"                                              
 .ascii "\n    : else"                                                                
 .ascii "\n           compile_time_only"                                              
 .ascii "\n           rswap"                                                          
-.ascii "\n           ' branch , here >r , 0 ,"                                     
+.ascii "\n           ['] branch , here >r , 0 ,"                                     
 .ascii "\n           rswap"                                                          
 .ascii "\n           r> dup"                                                         
 .ascii "\n           here swap - cell -"
@@ -58,16 +59,16 @@ input_buffer:
 
 .ascii "\n    : do"                                                                  
 .ascii "\n           compile_time_only"                                              
-.ascii "\n           ' >r , ' >r , ' rswap ,"                                  
+.ascii "\n           ['] >r , ['] >r , ['] rswap ,"                                  
 .ascii "\n           here >r rswap"                                                  
 .ascii "\n       ; immediate"                                                            
 .ascii "\n    : loop"                                                                
 .ascii "\n           compile_time_only"                                              
-.ascii "\n           ' r> , ' 1+ , ' >r ,"                                     
-.ascii "\n           ' r2dup , ' r> , ' r> ,"                                  
-.ascii "\n           ' < , ' invert , ' branch0 ,"                             
+.ascii "\n           ['] r> , ['] 1+ , ['] >r ,"                                     
+.ascii "\n           ['] r2dup , ['] r> , ['] r> ,"                                  
+.ascii "\n           ['] < , ['] invert , ['] branch0 ,"                             
 .ascii "\n           rswap r> here - cell - ,"                                    
-.ascii "\n           ' r> , ' r> , ' drop , ' drop ,"                                
+.ascii "\n           ['] r> , ['] r> , ['] drop , ['] drop ,"                                
 .ascii "\n       ; immediate"                                                                    
 
 .ascii "\n    : begin"                                                               
@@ -75,23 +76,24 @@ input_buffer:
 .ascii "\n           here >r rswap ; immediate"                                      
 .ascii "\n    : again"                                                               
 .ascii "\n           compile_time_only"                                              
-.ascii "\n           ' branch ,"                                                   
+.ascii "\n           ['] branch ,"                                                   
 .ascii "\n           rswap r> here - cell - , ; immediate"                        
 .ascii "\n    : until"                                                               
 .ascii "\n           compile_time_only"                                              
-.ascii "\n           ' branch0 ,"                                                  
+.ascii "\n           ['] branch0 ,"                                                  
 .ascii "\n           rswap r> here - cell - , ; immediate"                        
 
 .ascii "\n    : ( begin key ')' = until ; immediate"
 .ascii "\n    : \\ begin key dup 'cr' = swap 'lf' = or until ; immediate"
 
+.ascii "\n    : ' ( -- addr ) word find drop ; \\ find the xt of the next word in the inputstream"
 .ascii "\n    : (does)" 
 .ascii "\n          rdup r> cell +                        \\ address of the embedded assembly code"
 .ascii "\n          lastword cell + dup @ + 2 cells + ! ; \\ replace codeword of the last word"
 
 .ascii "\n    : does>"
-.ascii "\n           ' (does) ,"
-.ascii "\n           ' exit ,"
+.ascii "\n           ['] (does) ,"
+.ascii "\n           ['] exit ,"
 .ascii "\n           104 c,        \\ opcode of PUSH"
 .ascii "\n           enterdoes ,   \\ address of enterdoes"
 .ascii "\n           195 c,        \\ opcode of RETN"
@@ -110,7 +112,7 @@ input_buffer:
 
 .ascii "\n    : s\""                                                                 
 .ascii "\n        compile_time_only"                                                 
-.ascii "\n        ' litstring ,"                                                   
+.ascii "\n        ['] litstring ,"                                                   
 .ascii "\n        here                    \\ length will be placed here "
 .ascii "\n        0 ,                     \\ put a dummy length "
 .ascii "\n        0                       \\ length counter "                        
@@ -137,7 +139,7 @@ input_buffer:
 .ascii "\n                emit"                                                      
 .ascii "\n            again"                                                         
 .ascii "\n        else                     \\ compilation mode "
-.ascii "\n            [compile] s\" ' type ,"                                                
+.ascii "\n            [compile] s\" ['] type ,"                                                
 .ascii "\n        then ; immediate"                                                  
 .ascii "\n    : .s depth 0 do . cr loop ;"                                           
 
@@ -229,15 +231,25 @@ input_buffer:
 .ascii "\n       -98 45 < 33 11 > and if 1 else 0 then 1 = assert"
 .ascii "\n       5 0 do i i test_numbers ! loop" 
 .ascii "\n       5 0 do i test_numbers @ i = assert loop" 
-.ascii "\n       -1 ' factorial catch 1024 = assert" 
+.ascii "\n       -1 ['] factorial catch 1024 = assert" 
 .ascii "\n       .\" OK \" test_count ? cr ;"
-.ascii "\n selftest .\" Punyforth testing\" cr "
+.ascii "\n ' selftest execute .\" Punyforth testing\" cr "
 
 // TODO features
 //  * detect stack under/overflow
 //  * fix depth
 //  * array doesn't work inside a word in []
-//  tick doesn't work in interpretation mode 
+//  * add error handling to [compile] and '
+
+/*
+fix:
+    : HELLO    ." Hello " ;
+    : GOODBYE  ." Goodbye " ;
+    variable 'aloha
+    ' HELLO 'aloha !
+    : ALOHA 'aloha @ execute ;
+    ALOHA 
+*/
 
 input_size:  .int . - input_buffer
 here_var:    .int 0

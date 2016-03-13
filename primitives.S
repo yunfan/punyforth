@@ -153,7 +153,7 @@ defprimitive "c!",2,storebyte,1
     stosb
     NEXT
         
-defprimitive "p'",2,ptick,1    // compile only
+defprimitive "[']",3,btick,1    // compile only
     lodsd
     push eax
     NEXT
@@ -240,7 +240,7 @@ nobranch0:
     NEXT
     
 defprimitive "literal",7,literal,IMMEDIATE
-    mov eax, OFFSET FLAT:xt_tick
+    mov eax, OFFSET FLAT:xt_btick
     mov edi, [here_var]
     stosd
     pop eax

@@ -19,7 +19,7 @@ defword "cells",5,cells,1
     .int xt_exit
    
 defword "cell",4,cell,1
-    .int xt_ptick, CELLS
+    .int xt_btick, CELLS
     .int xt_exit
 
 defword "<>",2,noteq,1
@@ -27,38 +27,27 @@ defword "<>",2,noteq,1
     .int xt_exit
     
 defword ">in",3,inputbuf,1
-    .int xt_ptick, OFFSET FLAT:input_buffer
+    .int xt_btick, OFFSET FLAT:input_buffer
     .int xt_exit
     
-defword "'",1,tick,1
-    .int xt_state, xt_fetch, xt_branch0
-    .int tick_interpret - . - CELLS
-    .int xt_rdup, xt_rpop, xt_fetch
-    .int xt_rpop, xt_cell, xt_plus, xt_rpush
-    .int xt_exit
-tick_interpret:
-    .int xt_rdup, xt_rpop, xt_fetch
-    .int xt_rpop, xt_cell, xt_plus, xt_rpush
-    .int xt_exit
-
 defword "#tib",4,inputlen,1
-    .int xt_ptick, OFFSET FLAT:input_size
+    .int xt_btick, OFFSET FLAT:input_size
     .int xt_exit
 
 defword "tib",3,tib,1
-    .int xt_ptick, OFFSET FLAT:input_index
+    .int xt_btick, OFFSET FLAT:input_index
     .int xt_exit
 
 defword "state",5,state,1
-    .int xt_ptick, OFFSET FLAT:state_var
+    .int xt_btick, OFFSET FLAT:state_var
     .int xt_exit
 
 defword "[",1,openbracket,IMMEDIATE
-    .int xt_ptick, STATE_INTERPRET, xt_ptick, state_var, xt_store
+    .int xt_btick, STATE_INTERPRET, xt_btick, state_var, xt_store
     .int xt_exit
     
 defword "]",1,closebracket,1
-    .int xt_ptick, STATE_COMPILE, xt_ptick, state_var, xt_store
+    .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
     .int xt_exit    
 
 defword "compare",7,compare,1                                                     // ( a1 len1 a2 len2 - bool )
@@ -74,22 +63,22 @@ compare_next_char:
     .int xt_fetchbyte, xt_swap, xt_fetchbyte, xt_eq                               // check if next characters are equal
     .int xt_branch0
     .int compare_not_equal - . - CELLS
-    .int xt_ptick, 1, xt_plus, xt_swap, xt_ptick, 1, xt_plus, xt_swap
+    .int xt_btick, 1, xt_plus, xt_swap, xt_btick, 1, xt_plus, xt_swap
     .int xt_rot
-    .int xt_ptick, 1, xt_minus
+    .int xt_btick, 1, xt_minus
     .int xt_branch
     .int compare_next_char - . - CELLS
 compare_equal:    
     .int xt_drop, xt_drop, xt_drop
-    .int xt_ptick, TRUE
+    .int xt_btick, TRUE
     .int xt_exit
 compare_not_equal:
     .int xt_drop, xt_drop, xt_drop
-    .int xt_ptick, FALSE
+    .int xt_btick, FALSE
     .int xt_exit
 compare_length_mismatch:    
     .int xt_drop, xt_drop, xt_drop, xt_drop
-    .int xt_ptick, FALSE
+    .int xt_btick, FALSE
     .int xt_exit
 
 defword "find",4,find,1                                                          // ( len a -- xt, mode or 0 )                            
@@ -113,152 +102,152 @@ find_try_next_word:                                                             
     .int find_try_next_word - . - CELLS
 find_found:                                                                     // found matching word, return its mode and xt
     .int xt_nip                                                                   // (link len)
-    .int xt_plus, xt_ptick, 2, xt_cells, xt_plus
+    .int xt_plus, xt_btick, 2, xt_cells, xt_plus
     .int xt_dup, xt_fetch, xt_swap, xt_cell, xt_plus
     .int xt_swap                                                                  // (xt, mode)
     .int xt_exit
 find_not_found:
     .int xt_drop, xt_drop, xt_drop
-    .int xt_ptick, 0
+    .int xt_btick, 0
     .int xt_exit
 
 defword "here",4,here,1
-    .int xt_ptick, OFFSET FLAT:here_var, xt_fetch
+    .int xt_btick, OFFSET FLAT:here_var, xt_fetch
     .int xt_exit
     
 defword "allot",5,allot,1
-    .int xt_here, xt_plus, xt_ptick, OFFSET FLAT:here_var, xt_store
+    .int xt_here, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
     .int xt_exit
     
 defword "create",6,create,1
     .int xt_word
-    .int xt_ptick, OFFSET FLAT:LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
-    .int xt_here, xt_cell, xt_minus, xt_ptick, OFFSET FLAT:LAST_WORD, xt_store      // update last word
+    .int xt_btick, OFFSET FLAT:LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
+    .int xt_here, xt_cell, xt_minus, xt_btick, OFFSET FLAT:LAST_WORD, xt_store      // update last word
     .int xt_swap, xt_dup, xt_comma                                                // write length
 create_write_next_char:    
     .int xt_dup, xt_branch0
     .int create_name_done - . - CELLS
     .int xt_swap, xt_dup, xt_fetchbyte, xt_here, xt_storebyte
-    .int xt_here, xt_ptick, 1, xt_plus, xt_ptick, OFFSET FLAT:here_var, xt_store
-    .int xt_ptick, 1, xt_plus                                                       // increment name address
-    .int xt_swap, xt_ptick, 1, xt_minus                                             // decrement length
+    .int xt_here, xt_btick, 1, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
+    .int xt_btick, 1, xt_plus                                                       // increment name address
+    .int xt_swap, xt_btick, 1, xt_minus                                             // decrement length
     .int xt_branch
     .int create_write_next_char - . - CELLS
 create_name_done:
     .int xt_drop, xt_drop
-    .int xt_ptick, 1, xt_comma                                                      // write mode
-    .int xt_ptick, OFFSET FLAT:ENTERCOL, xt_comma                                   // write codeword
+    .int xt_btick, 1, xt_comma                                                      // write mode
+    .int xt_btick, OFFSET FLAT:ENTERCOL, xt_comma                                   // write codeword
     .int xt_exit
 
 defword ";",1,semicolon,IMMEDIATE
-    .int xt_ptick, STATE_INTERPRET, xt_ptick, state_var, xt_store
-    .int xt_ptick, xt_exit, xt_comma
+    .int xt_openbracket
+    .int xt_btick, xt_exit, xt_comma
     .int xt_exit
 
 defword "variable",8,variable,1
     .int xt_cell, xt_allot
     .int xt_create
     .int xt_literal
-    .int xt_ptick, xt_exit, xt_comma
+    .int xt_btick, xt_exit, xt_comma
     .int xt_exit
 
 defword ">number",7,tonumber,1                                                    //( len a -- num bool )
     .int xt_swap                                                                  
     .int xt_dup, xt_branch0
     .int tonum_empty - . - CELLS
-    .int xt_swap, xt_dup, xt_fetchbyte, xt_ptick, 45, xt_eq                         // check sign
+    .int xt_swap, xt_dup, xt_fetchbyte, xt_btick, 45, xt_eq                         // check sign
     .int xt_branch0
     .int tonum_positive - . - CELLS
     .int xt_swap
-    .int xt_ptick, 1, xt_minus                                                      // decrement length
+    .int xt_btick, 1, xt_minus                                                      // decrement length
     .int xt_dup, xt_rpush                                                         // move length to return stack
     .int xt_plus                                                                  // move to the last char of the number string
-    .int xt_ptick, 0                                                                
-    .int xt_ptick, -1                                                               // ( a res mul )
-    .int xt_rpop, xt_ptick, 1, xt_minus, xt_rpush                                   // decrement length once more because of the negative sign
+    .int xt_btick, 0                                                                
+    .int xt_btick, -1                                                               // ( a res mul )
+    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                   // decrement length once more because of the negative sign
     .int xt_branch
     .int tonum_loop - . - CELLS    
 tonum_positive:
     .int xt_swap
-    .int xt_ptick, 1, xt_minus                                                      // decrement length
+    .int xt_btick, 1, xt_minus                                                      // decrement length
     .int xt_dup, xt_rpush                                                         // move length to return stack
     .int xt_plus                                                                  // move to the last char of the number string
-    .int xt_ptick, 0                                                                
-    .int xt_ptick, 1                                                                // ( a res mul )
+    .int xt_btick, 0                                                                
+    .int xt_btick, 1                                                                // ( a res mul )
 tonum_loop:    
     .int xt_rot                                                                   // ( res mul a ) 
     .int xt_dup, xt_fetchbyte
-    .int xt_dup, xt_ptick, 47, xt_gt, xt_branch0                                    // check range
+    .int xt_dup, xt_btick, 47, xt_gt, xt_branch0                                    // check range
     .int tonum_invalid_digit - . - CELLS
-    .int xt_dup, xt_ptick, 58, xt_lt, xt_branch0
+    .int xt_dup, xt_btick, 58, xt_lt, xt_branch0
     .int tonum_invalid_digit - . - CELLS
-    .int xt_ptick, 48, xt_minus                                                     // ( res mul a digit )
-    .int xt_swap, xt_ptick, 1, xt_minus, xt_swap                                    // decrement a
+    .int xt_btick, 48, xt_minus                                                     // ( res mul a digit )
+    .int xt_swap, xt_btick, 1, xt_minus, xt_swap                                    // decrement a
     .int xt_swap2                                                                 // ( a digit res mul )
     .int xt_rot                                                                   // ( a res mul digit)
     .int xt_over                                                                  // ( a res mul digit mul )
     .int xt_multiply                                                              // ( a res mul digit*mul )
     .int xt_rot                                                                   // ( a mul digit*mul res )
     .int xt_plus                                                                  // ( a mul res )
-    .int xt_swap, xt_ptick, 10, xt_multiply                                         // ( a res mul )
+    .int xt_swap, xt_btick, 10, xt_multiply                                         // ( a res mul )
     .int xt_rdup, xt_rpop, xt_branch0
     .int tonum_done - . - CELLS
-    .int xt_rpop, xt_ptick, 1, xt_minus, xt_rpush                                   // decrement length on return stack    
+    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                   // decrement length on return stack    
     .int xt_branch
     .int tonum_loop - . - CELLS
 tonum_done:
     .int xt_rpop, xt_drop
     .int xt_drop, xt_nip
-    .int xt_ptick, TRUE
+    .int xt_btick, TRUE
     .int xt_exit
 tonum_invalid_digit:                                                            // TODO emit string
-    .int xt_tib, xt_fetch, xt_ptick, 20, xt_type
+    .int xt_tib, xt_fetch, xt_btick, 20, xt_type
     .int xt_rpop, xt_drop
     .int xt_drop, xt_drop
-    .int xt_ptick, FALSE
+    .int xt_btick, FALSE
     .int xt_exit
 tonum_empty:
     .int xt_drop
-    .int xt_ptick, FALSE
+    .int xt_btick, FALSE
     .int xt_exit
 
 defword "word",4,word,1
-    .int xt_ptick, 0
+    .int xt_btick, 0
 word_trim:
     .int xt_drop
     .int xt_key
-    .int xt_dup, xt_ptick, 32, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 32, xt_noteq, xt_branch0
     .int word_trim - . - CELLS
-    .int xt_dup, xt_ptick, 10, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 10, xt_noteq, xt_branch0
     .int word_trim - . - CELLS
-    .int xt_dup, xt_ptick, 13, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 13, xt_noteq, xt_branch0
     .int word_trim - . - CELLS
-    .int xt_dup, xt_ptick, 9, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 9, xt_noteq, xt_branch0
     .int word_trim - . - CELLS
     .int xt_drop
-    .int xt_tib, xt_fetch, xt_ptick, 1, xt_minus                                    // word start
-    .int xt_ptick, 0
+    .int xt_tib, xt_fetch, xt_btick, 1, xt_minus                                    // word start
+    .int xt_btick, 0
 word_next_char:
     .int xt_drop
     .int xt_key
-    .int xt_dup, xt_ptick, 32, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 32, xt_noteq, xt_branch0
     .int word_boundary - . - CELLS
-    .int xt_dup, xt_ptick, 10, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 10, xt_noteq, xt_branch0
     .int word_boundary - . - CELLS
-    .int xt_dup, xt_ptick, 13, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 13, xt_noteq, xt_branch0
     .int word_boundary - . - CELLS
-    .int xt_dup, xt_ptick, 19, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 19, xt_noteq, xt_branch0
     .int word_boundary - . - CELLS
     .int xt_branch
     .int word_next_char - . - CELLS
 word_boundary:
     .int xt_drop
-    .int xt_dup, xt_tib, xt_fetch, xt_swap, xt_minus, xt_ptick, 1, xt_minus         // word length
+    .int xt_dup, xt_tib, xt_fetch, xt_swap, xt_minus, xt_btick, 1, xt_minus         // word length
     .int xt_swap
     .int xt_exit
 
 defword ":",1,colon,1
-    .int xt_ptick, STATE_COMPILE, xt_ptick, OFFSET FLAT:state_var, xt_store
+    .int xt_closebracket 
     .int xt_create
     .int xt_exit
 
@@ -267,20 +256,20 @@ defword "char",4,char,1
     .int xt_exit
 
 defword "compile_time_only",17,compile_time_only,1    
-    .int xt_state, xt_fetch, xt_ptick, STATE_COMPILE, xt_eq
+    .int xt_state, xt_fetch, xt_btick, STATE_COMPILE, xt_eq
     .int xt_branch0
     .int cannot_interpret_compile_only_word - . - CELLS
     .int xt_exit
 cannot_interpret_compile_only_word:
-    .int xt_ptick, 'I', xt_emit
+    .int xt_btick, 'I', xt_emit
     .int xt_exit
 
 defword "lastword",8,lastword,1
-    .int xt_ptick, OFFSET FLAT:LAST_WORD, xt_fetch
+    .int xt_btick, OFFSET FLAT:LAST_WORD, xt_fetch
     .int xt_exit
 
 defword "enterdoes",9,enterdoes,1
-    .int xt_ptick, OFFSET FLAT:ENTERDOES 
+    .int xt_btick, OFFSET FLAT:ENTERDOES 
     .int xt_exit
 
 FINAL_WORD:    
@@ -288,7 +277,7 @@ defword "immediate",9,immediate,1
     .int xt_lastword, xt_cell, xt_plus
     .int xt_dup, xt_fetch, xt_plus                                                // add name length
     .int xt_cell, xt_plus
-    .int xt_ptick, IMMEDIATE, xt_swap, xt_store
+    .int xt_btick, IMMEDIATE, xt_swap, xt_store
     .int xt_exit
    
 // Different types of code words
