@@ -25,6 +25,24 @@ defword "tuck",4,tuck,1 /* ( a b -- b a b ) */
     .int xt_swap, xt_over
     .int xt_exit
 
+defword ">",1,gt,1
+    .int xt_swap, xt_lt
+    .int xt_exit
+
+defword "=",1,eq,1
+    .int xt_dup2
+    .int xt_lt, xt_invert, xt_mrot
+    .int xt_swap, xt_lt, xt_invert, xt_and          // !(a < b) and !(b < a)
+    .int xt_exit
+
+defword ">=",2,gte,1
+    .int xt_lt, xt_invert
+    .int xt_exit
+
+defword "<=",2,lte,1
+    .int xt_swap, xt_lt, xt_invert
+    .int xt_exit
+
 defword "cells",5,cells,1
     .int xt_cell, xt_multiply
     .int xt_exit

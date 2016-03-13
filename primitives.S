@@ -152,18 +152,7 @@ defprimitive "[']",3,btick,1    // compile only
     lodsd
     push eax
     NEXT
-    
-defprimitive "=",1,eq,1
-    xor eax, eax
-    pop ebx
-    pop edx
-    cmp ebx, edx
-    jnz not_equal
-    mov eax, TRUE
-not_equal:
-    push eax
-    NEXT
-
+   
 defprimitive "<",1,lt,1
     xor eax, eax
     pop ebx
@@ -174,39 +163,6 @@ defprimitive "<",1,lt,1
 not_less:
     push eax
     NEXT
-        
-defprimitive ">",1,gt,1
-    xor eax, eax
-    pop ebx
-    pop edx
-    cmp edx, ebx
-    jng not_greater
-    mov eax, TRUE
-not_greater:
-    push eax
-    NEXT
-    
-defprimitive ">=",2,gte,1
-    xor eax, eax
-    pop ebx
-    pop edx
-    cmp edx, ebx
-    jl not_greatereq
-    mov eax, TRUE
-not_greatereq:
-    push eax
-    NEXT    
-    
-defprimitive "<=",2,lte,1
-    xor eax, eax
-    pop ebx
-    pop edx
-    cmp edx, ebx
-    jg not_lesseq
-    mov eax, TRUE
-not_lesseq:
-    push eax
-    NEXT    
         
 defprimitive "invert",6,invert,1
     pop eax
