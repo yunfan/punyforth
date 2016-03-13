@@ -22,7 +22,6 @@ input_buffer:
 .ascii "\n    : 'cr' 13 ; : 'lf' 10 ; : 'space' 32 ; "
 .ascii "\n    :  cr 'cr' emit 'lf' emit ; : space 'space' emit ; "
 
-
 .ascii "\n    : [compile] word find drop , ; immediate"                                  
 
 .ascii "\n    : if"                                                                  
@@ -265,3 +264,4 @@ here_var:    .int 0
 dictionary:  .space 262144
 rstack:      .space 1024
 prompt_str:  .ascii "\n % " 
+compile_only_warning:  .ascii "\nCompile time only word cannot be used in interpretation mode.\n" 

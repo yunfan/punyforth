@@ -341,7 +341,7 @@ defword "compile_time_only",17,compile_time_only,1
     .int cannot_interpret_compile_only_word - . - CELLS
     .int xt_exit
 cannot_interpret_compile_only_word:
-    .int xt_btick, 'I', xt_emit
+    .int xt_btick, OFFSET FLAT:compile_only_warning, xt_btick, 63, xt_type
     .int xt_exit
 
 defword "lastword",8,lastword,1
