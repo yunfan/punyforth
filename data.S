@@ -182,6 +182,15 @@ input_buffer:
 
 .ascii "\n    5 array test_numbers"
 
+.ascii "\n    struct"
+.ascii "\n      cell field width"
+.ascii "\n      cell field height"
+.ascii "\n    constant Rect"
+
+.ascii "\n    : new-rect Rect create allot drop does> ;"
+.ascii "\n    : area ( rect -- area ) dup width @ swap height @ * ;"
+.ascii "\n    new-rect r1"
+
 .ascii "\n    variable test_count"                                                   
 .ascii "\n    variable test_var1 variable test_var2"
 .ascii "\n    : assert ( bool -- )"                                                  
@@ -204,6 +213,7 @@ input_buffer:
 .ascii "\n       -24 -212 > assert"                                                  
 .ascii "\n       24 -2 > assert"                                                     
 .ascii "\n       -12 2 / 6 + 0 = assert"                                             
+.ascii "\n       1 2 tuck 2 = assert 1 = assert 2 = assert"                                             
 .ascii "\n       -123 abs 123 = assert 32 abs 32 = assert 0 abs 0 = assert"          
 .ascii "\n       -42 abs 42 abs = assert"                                            
 .ascii "\n       -12 -3 * 36 = assert -3 4 * -12 = assert 2 -4 * -8 = assert"        
@@ -233,10 +243,13 @@ input_buffer:
 .ascii "\n       -98 45 < 33 11 > and if 1 else 0 then 1 = assert"
 .ascii "\n       5 0 do i i test_numbers ! loop" 
 .ascii "\n       5 0 do i test_numbers @ i = assert loop" 
+.ascii "\n       3 r1 width ! 5 r1 height !" 
+.ascii "\n       r1 area 15 = assert"
 .ascii "\n       sp@ test_var1 !"
 .ascii "\n       -1 ['] factorial catch 1024 = assert"
 .ascii "\n       sp@ test_var2 !"
 .ascii "\n       test_var1 @ test_var2 @ = assert" 
+.ascii "\n       depth 0= assert" 
 .ascii "\n       .\" OK \" test_count ? cr ; "
 
 .ascii "\n ' selftest execute .\" Punyforth testing\" cr "

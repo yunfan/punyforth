@@ -1,27 +1,22 @@
 // Primitives are implemented in assembly language
 
-defprimitive "dup",3,dup,1
+defprimitive "dup",3,dup,1 /* ( a -- a a ) */
     mov eax, [esp]
     push eax
     NEXT
     
-defprimitive "over",4,over,1
-    mov eax, [esp + CELLS]
-    push eax
-    NEXT
-
-defprimitive "drop",4,drop,1
+defprimitive "drop",4,drop,1 /* ( a -- ) */
     pop eax
     NEXT
 
-defprimitive "swap",4,swap,1
+defprimitive "swap",4,swap,1 /* ( a b -- b a ) */
     pop eax
     pop ebx
     push eax
     push ebx
     NEXT
 
-defprimitive "rot",3,rot,1  // ( a b c -- b c a )
+defprimitive "rot",3,rot,1 /* ( a b c -- b c a ) */
     pop ecx
     pop ebx
     pop eax
@@ -30,7 +25,7 @@ defprimitive "rot",3,rot,1  // ( a b c -- b c a )
     push eax
     NEXT
 
-defprimitive "2swap",5,swap2,1                                                    // ( a b c d -- c d a b )
+defprimitive "2swap",5,swap2,1 /* ( a b c d -- c d a b ) */
     pop edx
     pop ecx
     pop ebx
@@ -41,7 +36,7 @@ defprimitive "2swap",5,swap2,1                                                  
     push ebx
     NEXT
 
-defprimitive "2over",5,over2,1                                                    // ( a b c d -- a b c d a b )
+defprimitive "2over",5,over2,1 /* ( a b c d -- a b c d a b ) */
     pop edx
     pop ecx
     pop ebx
@@ -261,20 +256,6 @@ defprimitive "type",4,type,1            // ( a len -- )
     mov ebx, 1
     mov eax, 4
     int 0x80
-    NEXT
-
-defprimitive ",",1,comma,1
-    pop eax
-    mov edi, [here_var]
-    stosd
-    mov [here_var], edi
-    NEXT
-
-defprimitive "c,",2,commabyte,1
-    pop eax
-    mov edi, [here_var]
-    stosb
-    mov [here_var], edi
     NEXT
 
 defprimitive ">r",2,rpush,1

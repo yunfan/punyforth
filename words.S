@@ -5,21 +5,44 @@ defword "nip",3,nip,1
     .int xt_drop
     .int xt_exit
     
+defword "over",4,over,1 /* ( a b -- a b a ) */
+    .int xt_swap
+    .int xt_dup
+    .int xt_rot
+    .int xt_swap
+    .int xt_exit
+
 defword "2dup",4,dup2,1
     .int xt_over
     .int xt_over
     .int xt_exit    
     
-defword "-rot",4,mrot,1                                                           //  ( a b c -- c a b )
+defword "-rot",4,mrot,1 /*( a b c -- c a b ) */
     .int xt_rot, xt_rot
     .int xt_exit
-    
+
+defword "tuck",4,tuck,1 /* ( a b -- b a b ) */
+    .int xt_swap, xt_over
+    .int xt_exit
+
 defword "cells",5,cells,1
     .int xt_cell, xt_multiply
     .int xt_exit
    
 defword "cell",4,cell,1
     .int xt_btick, CELLS
+    .int xt_exit
+
+defword ",",1,comma,1
+    .int xt_here, xt_store
+    .int xt_here, xt_cell, xt_plus    
+    .int xt_btick, OFFSET FLAT:here_var, xt_store   
+    .int xt_exit
+
+defword "c,",2,commabyte,1
+    .int xt_here, xt_store
+    .int xt_here, xt_btick, 1, xt_plus    
+    .int xt_btick, OFFSET FLAT:here_var, xt_store   
     .int xt_exit
 
 defword "<>",2,noteq,1
@@ -50,7 +73,7 @@ defword "]",1,closebracket,1
     .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
     .int xt_exit    
 
-defword "compare",7,compare,1                                                     // ( a1 len1 a2 len2 - bool )
+defword "compare",7,compare,1 /*( a1 len1 a2 len2 - bool ) */
     .int xt_rot, xt_swap                                                          // (a1 a2 len1 len2)
     .int xt_dup2, xt_eq, xt_branch0
     .int compare_length_mismatch - . - CELLS
@@ -81,7 +104,7 @@ compare_length_mismatch:
     .int xt_btick, FALSE
     .int xt_exit
 
-defword "find",4,find,1                                                          // ( len a -- xt, mode or 0 )                            
+defword "find",4,find,1 /* ( len a -- xt, mode or 0 ) */
     .int xt_swap
     .int xt_lastword
 find_try_next_word:                                                               // (a1 len1 link)    
