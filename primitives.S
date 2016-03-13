@@ -124,14 +124,6 @@ defprimitive "!",1,store,1
     stosd
     NEXT
 
-defprimitive "c@",2,fetchbyte,1
-    pop ebx
-    mov bl, [ebx]
-    xor eax, eax
-    mov al, bl
-    push eax
-    NEXT
-    
 defprimitive "c!",2,storebyte,1
     pop edi
     pop eax
@@ -160,12 +152,6 @@ defprimitive "invert",6,invert,1
     push eax
     NEXT
     
-defprimitive "negate",6,negate,1
-    pop eax
-    neg eax
-    push eax
-    NEXT    
-
 defprimitive "branch",6,branch,1
     lodsd
     add esi, eax

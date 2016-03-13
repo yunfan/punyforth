@@ -89,6 +89,10 @@ defword "c,",2,commabyte,1
     .int xt_btick, OFFSET FLAT:here_var, xt_store   
     .int xt_exit
 
+defword "c@",2,fetchbyte,1
+    .int xt_fetch, xt_btick, 255, xt_and
+    .int xt_exit
+
 defword "<>",2,noteq,1
     .int xt_eq, xt_invert
     .int xt_exit
