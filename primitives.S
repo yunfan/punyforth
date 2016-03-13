@@ -49,16 +49,6 @@ defprimitive "2over",5,over2,1 /* ( a b c d -- a b c d a b ) */
     push ebx
     NEXT
 
-defprimitive "depth",5,depth,1
-    mov eax, [STACK_ORIG]
-    sub eax, esp
-    add eax, 40                 // TODO 
-    xor edx, edx
-    mov ebx, CELLS
-    div ebx
-    push eax
-    NEXT
-    
 defprimitive "+",1,plus,1
     pop eax
     add [esp], eax
@@ -76,7 +66,7 @@ defprimitive "*",1,multiply,1
     push eax
     NEXT
 
-defprimitive "/mod",4,divmod,1
+defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
     pop ebx
     pop eax
     xor edx, edx
@@ -189,21 +179,12 @@ defprimitive "branch0",7,branch0,1
     add esi, eax
 nobranch0:
     NEXT
-    
-defprimitive "literal",7,literal,IMMEDIATE
-    mov eax, OFFSET FLAT:xt_btick
-    mov edi, [here_var]
-    stosd
-    pop eax
-    stosd
-    mov [here_var], edi
-    NEXT
 
 defprimitive "litstring",9,litstring,1
     lodsd
     push esi                            // address of the string
     push eax                            // length of the string
-    add esi, eax            // skip string
+    add esi, eax                        // skip string
     NEXT
 
 defprimitive "type",4,type,1            // ( a len -- )

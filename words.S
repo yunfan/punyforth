@@ -44,6 +44,13 @@ defword "rswap",5,rswap,1
     .int xt_rpush, xt_rpush, xt_rpush
     .int xt_exit
 
+defword "depth",5,depth,1
+    .int xt_btick, OFFSET FLAT:STACK_ORIG, xt_fetch
+    .int xt_spat, xt_minus
+    .int xt_btick, 36, xt_plus
+    .int xt_cell, xt_divmod, xt_nip
+    .int xt_exit
+
 defword ">",1,gt,1
     .int xt_swap, xt_lt
     .int xt_exit
@@ -109,6 +116,11 @@ defword "[",1,openbracket,IMMEDIATE
 defword "]",1,closebracket,1
     .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
     .int xt_exit    
+
+defword "literal",7,literal,IMMEDIATE
+    .int xt_btick, xt_btick, xt_comma
+    .int xt_comma
+    .int xt_exit
 
 defword "compare",7,compare,1 /*( a1 len1 a2 len2 - bool ) */
     .int xt_rot, xt_swap                                                          // (a1 a2 len1 len2)
