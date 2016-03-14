@@ -48,8 +48,7 @@ defword "rswap",5,rswap,1
 
 defword "depth",5,depth,1
     .int xt_btick, OFFSET FLAT:STACK_ORIG, xt_fetch
-    .int xt_spat, xt_minus
-    .int xt_btick, 36, xt_plus
+    .int xt_spat, xt_minus, xt_dec
     .int xt_cell, xt_divmod, xt_nip
     .int xt_exit
 
@@ -237,9 +236,8 @@ defword "here",4,here,1
     .int xt_btick, OFFSET FLAT:here_var, xt_fetch
     .int xt_exit
     
-defword "allot",5,allot,1
-    .int xt_here
-    .int xt_swap, xt_here, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
+defword "allot",5,allot,1 /* ( n -- ) */
+    .int xt_here, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
     .int xt_exit
     
 defword "create",6,create,1

@@ -32,7 +32,7 @@ input_buffer:
 .ascii "\n    : else"                                                                
 .ascii "\n           compile_time_only"                                              
 .ascii "\n           rswap"                                                          
-.ascii "\n           ['] branch , here >r , 0 ,"                                     
+.ascii "\n           ['] branch , here >r 0 ,"
 .ascii "\n           rswap"                                                          
 .ascii "\n           r> dup"                                                         
 .ascii "\n           here swap - cell -"
@@ -126,7 +126,7 @@ input_buffer:
 .ascii "\n     ; immediate"                                                          
 
 .ascii "\n    : abs ( n -- |n| ) dup 0< if -1 * then ;"                             
-.ascii "\n    : max ( a b -- max ) 2dup < if nip else drop then ;"                   
+.ascii "\n    : max ( a b -- max ) 2dup < if nip else drop then ;"
 .ascii "\n    : min ( a b -- min ) 2dup < if drop else nip then ;"                   
 
 .ascii "\n    : .\""                                                                 
@@ -185,9 +185,17 @@ input_buffer:
 .ascii "\n      cell field height"
 .ascii "\n    constant Rect"
 
-.ascii "\n    : new-rect Rect create allot drop does> ;"
+.ascii "\n    : new-rect Rect create allot does> ;"
 .ascii "\n    : area ( rect -- area ) dup width @ swap height @ * ;"
 .ascii "\n    new-rect r1"
+
+.ascii "\n    : nested-throw1 1= if 10 throw then ;"
+.ascii "\n    : nested-throw2"
+.ascii "\n           ['] nested-throw1 catch dup 10 = if"
+.ascii "\n              drop 20 throw"
+.ascii "\n           else"
+.ascii "\n              throw"
+.ascii "\n           then drop ;"
 
 .ascii "\n    : bench ( ntimes -- sec )"
 .ascii "\n           time swap" 
@@ -200,6 +208,7 @@ input_buffer:
 .ascii "\n           TRUE <> if 'F' emit test_count ? then ;"
 .ascii "\n    : selftest ( -- )"                                                     
 .ascii "\n       .\" testing\""                                                     
+.ascii "\n       depth 0= assert"
 .ascii "\n       0 test_count !"                                                     
 .ascii "\n       12 3 min 3 = assert"                                                
 .ascii "\n       -3 7 min -3 = assert"                                               
