@@ -136,13 +136,12 @@ defprimitive "[']",3,btick,1    // compile only
     NEXT
    
 defprimitive "<",1,lt,1         // only need to define this, all other comparisions are implemented in terms of lt
-    xor eax, eax
+    pop eax
     pop ebx
-    pop edx
-    cmp edx, ebx
-    jnl not_less
-    mov eax, TRUE
-not_less:
+    cmp ebx, eax
+    setl al
+    movzbd eax, al
+    neg eax
     push eax
     NEXT
 
