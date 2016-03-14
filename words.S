@@ -79,6 +79,42 @@ defword "<=",2,lte,1
     .int xt_exit
 .endif
 
+.ifndef xt_eq0
+defword "0=",2,eq0,1
+    .int xt_btick, 0, xt_eq
+    .int xt_exit
+.endif
+
+.ifndef xt_eq1
+defword "1=",2,eq1,1
+    .int xt_btick, 1, xt_eq
+    .int xt_exit
+.endif
+
+.ifndef xt_lt0
+defword "0<",2,lt0,1
+    .int xt_btick, 0, xt_lt
+    .int xt_exit
+.endif
+
+.ifndef xt_gt0
+defword "0>",2,gt0,1
+    .int xt_btick, 0, xt_gt
+    .int xt_exit
+.endif
+
+.ifndef xt_inc
+defword "1+",2,inc,1
+    .int xt_btick, 1, xt_plus
+    .int xt_exit
+.endif
+
+.ifndef xt_dec
+defword "1-",2,dec,1
+    .int xt_btick, 1, xt_minus
+    .int xt_exit
+.endif
+
 defword "cells",5,cells,1
     .int xt_cell, xt_multiply
     .int xt_exit
@@ -95,7 +131,7 @@ defword ",",1,comma,1
 
 defword "c,",2,commabyte,1
     .int xt_here, xt_store
-    .int xt_here, xt_btick, 1, xt_plus    
+    .int xt_here, xt_inc 
     .int xt_btick, OFFSET FLAT:here_var, xt_store   
     .int xt_exit
 
@@ -149,9 +185,9 @@ compare_next_char:
     .int xt_fetchbyte, xt_swap, xt_fetchbyte, xt_eq                               // check if next characters are equal
     .int xt_branch0
     .int compare_not_equal - . - CELLS
-    .int xt_btick, 1, xt_plus, xt_swap, xt_btick, 1, xt_plus, xt_swap
+    .int xt_inc, xt_swap, xt_inc, xt_swap
     .int xt_rot
-    .int xt_btick, 1, xt_minus
+    .int xt_dec
     .int xt_branch
     .int compare_next_char - . - CELLS
 compare_equal:    
@@ -215,9 +251,9 @@ create_write_next_char:
     .int xt_dup, xt_branch0
     .int create_name_done - . - CELLS
     .int xt_swap, xt_dup, xt_fetchbyte, xt_here, xt_storebyte
-    .int xt_here, xt_btick, 1, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
-    .int xt_btick, 1, xt_plus                                                       // increment name address
-    .int xt_swap, xt_btick, 1, xt_minus                                             // decrement length
+    .int xt_here, xt_inc, xt_btick, OFFSET FLAT:here_var, xt_store
+    .int xt_inc                                                                     // increment name address
+    .int xt_swap, xt_dec                                                            // decrement length
     .int xt_branch
     .int create_write_next_char - . - CELLS
 create_name_done:
@@ -239,17 +275,17 @@ defword ">number",7,tonumber,1                                                  
     .int xt_branch0
     .int tonum_positive - . - CELLS
     .int xt_swap
-    .int xt_btick, 1, xt_minus                                                    // decrement length
+    .int xt_dec                                                                   // decrement length
     .int xt_dup, xt_rpush                                                         // move length to return stack
     .int xt_plus                                                                  // move to the last char of the number string
     .int xt_btick, 0                                                                
     .int xt_btick, -1                                                             // ( a res mul )
-    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                 // decrement length once more because of the negative sign
+    .int xt_rpop, xt_dec, xt_rpush                                                // decrement length once more because of the negative sign
     .int xt_branch
     .int tonum_loop - . - CELLS    
 tonum_positive:
     .int xt_swap
-    .int xt_btick, 1, xt_minus                                                    // decrement length
+    .int xt_dec                                                                   // decrement length
     .int xt_dup, xt_rpush                                                         // move length to return stack
     .int xt_plus                                                                  // move to the last char of the number string
     .int xt_btick, 0                                                                
@@ -262,7 +298,7 @@ tonum_loop:
     .int xt_dup, xt_btick, 58, xt_lt, xt_branch0
     .int tonum_invalid_digit - . - CELLS
     .int xt_btick, 48, xt_minus                                                   // ( res mul a digit )
-    .int xt_swap, xt_btick, 1, xt_minus, xt_swap                                  // decrement a
+    .int xt_swap, xt_dec, xt_swap                                                 // decrement a
     .int xt_swap2                                                                 // ( a digit res mul )
     .int xt_rot                                                                   // ( a res mul digit)
     .int xt_over                                                                  // ( a res mul digit mul )
@@ -272,7 +308,7 @@ tonum_loop:
     .int xt_swap, xt_btick, 10, xt_multiply                                       // ( a res mul )
     .int xt_rdup, xt_rpop, xt_branch0
     .int tonum_done - . - CELLS
-    .int xt_rpop, xt_btick, 1, xt_minus, xt_rpush                                 // decrement length on return stack    
+    .int xt_rpop, xt_dec, xt_rpush                                                // decrement length on return stack    
     .int xt_branch
     .int tonum_loop - . - CELLS
 tonum_done:
@@ -305,7 +341,7 @@ word_trim:
     .int xt_dup, xt_btick, 9, xt_noteq, xt_branch0
     .int word_trim - . - CELLS
     .int xt_drop
-    .int xt_tib, xt_fetch, xt_btick, 1, xt_minus                                    // word start
+    .int xt_tib, xt_fetch, xt_dec                                               // word start
     .int xt_btick, 0
 word_next_char:
     .int xt_drop
@@ -322,7 +358,7 @@ word_next_char:
     .int word_next_char - . - CELLS
 word_boundary:
     .int xt_drop
-    .int xt_dup, xt_tib, xt_fetch, xt_swap, xt_minus, xt_btick, 1, xt_minus         // word length
+    .int xt_dup, xt_tib, xt_fetch, xt_swap, xt_minus, xt_dec                    // word length
     .int xt_swap
     .int xt_exit
 

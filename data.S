@@ -15,7 +15,6 @@ LAST_WORD:    .int FINAL_WORD
 input_index:  .int 0
 input_buffer:           
               // standard library, loops and conditionals are implemented in forth
-.ascii "\n    : 0= 0 = ; : 0< 0 < ; : 1+ 1 + ; : 1- 1 - ;"              
 .ascii "\n    : % /mod drop ; : / /mod nip ;"                                        
 .ascii "\n    : '.' [ char . ] literal ; : '\"' [ char \" ] literal ;"                   
 .ascii "\n    : 'F' [ char F ] literal ; : ')' [ char ) ] literal ;"                     
@@ -47,7 +46,7 @@ input_buffer:
 .ascii "\n           swap ! ; immediate"                                             
 
 .ascii "\n    : ."                                                                   
-.ascii "\n           dup 0 < if 45 emit -1 * then"                                           
+.ascii "\n           dup 0< if 45 emit -1 * then"                                           
 .ascii "\n           10 /mod dup 0= if"                                                  
 .ascii "\n               drop 48 + emit"                                                         
 .ascii "\n           else"                                                                   
@@ -126,7 +125,7 @@ input_buffer:
 .ascii "\n        swap !  \\ overwrite dummy length with the calculated one"
 .ascii "\n     ; immediate"                                                          
 
-.ascii "\n    : abs ( n -- |n| ) dup 0 < if -1 * then ;"                             
+.ascii "\n    : abs ( n -- |n| ) dup 0< if -1 * then ;"                             
 .ascii "\n    : max ( a b -- max ) 2dup < if nip else drop then ;"                   
 .ascii "\n    : min ( a b -- min ) 2dup < if drop else nip then ;"                   
 
@@ -172,7 +171,7 @@ input_buffer:
 .ascii "\n           dup 0= if"
 .ascii "\n               drop 1"                                                     
 .ascii "\n           else"                                                           
-.ascii "\n               dup 1 = if"                                                 
+.ascii "\n               dup 1= if"                                                 
 .ascii "\n                   drop 1"                                                 
 .ascii "\n               else"                                                       
 .ascii "\n                   dup 1- factorial *"                                     
@@ -190,6 +189,10 @@ input_buffer:
 .ascii "\n    : area ( rect -- area ) dup width @ swap height @ * ;"
 .ascii "\n    new-rect r1"
 
+.ascii "\n    : bench ( ntimes -- sec )"
+.ascii "\n           time swap" 
+.ascii "\n           0 do 10 factorial drop loop" 
+.ascii "\n           time swap - ;" 
 .ascii "\n    variable test_count"                                                   
 .ascii "\n    variable test_var1 variable test_var2"
 .ascii "\n    : assert ( bool -- )"                                                  
@@ -211,6 +214,10 @@ input_buffer:
 .ascii "\n       324 12 > assert"                                                    
 .ascii "\n       -24 -212 > assert"                                                  
 .ascii "\n       24 -2 > assert"                                                     
+.ascii "\n       1 1- 0= assert"                                                     
+.ascii "\n       -1 1+ 0= assert"                                                     
+.ascii "\n       -3 0< TRUE = assert 3 0< FALSE = assert"
+.ascii "\n       3 0> TRUE = assert -3 0> FALSE = assert"
 .ascii "\n       -12 2 / 6 + 0 = assert"                                             
 .ascii "\n       1 2 tuck 2 = assert 1 = assert 2 = assert"                                             
 .ascii "\n       -123 abs 123 = assert 32 abs 32 = assert 0 abs 0 = assert"          
