@@ -264,6 +264,7 @@ input_buffer:
 .ascii "\n       -1 ['] factorial catch 1024 = assert"
 .ascii "\n       1 ['] nested-throw2 catch 30 = assert"
 .ascii "\n       2 ['] nested-throw2 catch 20 = assert"
+.ascii "\n       3 ['] nested-throw2 catch drop 42 = assert"
 .ascii "\n       3 nested-throw2 42 = assert"
 .ascii "\n       sp@ test_var2 !"
 .ascii "\n       test_var1 @ test_var2 @ = assert" 
@@ -279,7 +280,7 @@ input_buffer:
 
 input_size:  .int . - input_buffer
 here_var:    .int 0
-dictionary:  .space 262144
-rstack:      .space 1024
+dictionary:  .space 1048576
+rstack:      .space 8192
 prompt_str:  .ascii "\n % " 
 compile_only_warning:  .ascii "\nCompile time only word cannot be used in interpretation mode.\n" 

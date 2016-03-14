@@ -230,6 +230,22 @@ defprimitive "rp!",3,rpstore,1
     mov ebp, eax
     NEXT
 
+.macro prompt
+    push edx
+    push ecx
+    push ebx
+    push eax
+    mov edx, 4
+    mov ecx, OFFSET FLAT:prompt_str
+    mov ebx, 1    
+    mov eax, 4    
+    int 0x80
+    pop eax
+    pop ebx
+    pop ecx
+    pop edx
+.endm
+
 defprimitive "key",3,key,1
     push esi
     mov edi, OFFSET FLAT:input_buffer   

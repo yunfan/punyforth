@@ -1,11 +1,12 @@
 .intel_syntax noprefix
 
-#include "data.S"
-#include "outerinterpreter.S"
-#include "macros.S"
-#include "primitives.S"
-#include "ext.S"
-#include "words.S"
+#include "generic/data.S"
+#include "generic/outerinterpreter.S"
+#include "generic/macros.S"
+#include "arch/x86/innerinterpreter.S"
+#include "arch/x86/primitives.S"
+#include "arch/x86/ext.S"
+#include "generic/words.S"
 
 .global _start
 

@@ -5,6 +5,11 @@ defword "nip",3,nip,1
     .int xt_drop
     .int xt_exit
 
+defword "2drop",5,"drop2",1
+    .int xt_drop
+    .int xt_drop
+    .int xt_exit
+
 .ifndef xt_over
 defword "over",4,over,1 /* ( a b -- a b a ) */
     .int xt_swap
