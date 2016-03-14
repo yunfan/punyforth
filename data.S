@@ -189,13 +189,13 @@ input_buffer:
 .ascii "\n    : area ( rect -- area ) dup width @ swap height @ * ;"
 .ascii "\n    new-rect r1"
 
-.ascii "\n    : nested-throw1 1= if 10 throw then ;"
+.ascii "\n    : nested-throw1 dup 1= if drop 10 throw then 2 = if 20 throw then 42 ;"
 .ascii "\n    : nested-throw2"
 .ascii "\n           ['] nested-throw1 catch dup 10 = if"
-.ascii "\n              drop 20 throw"
+.ascii "\n              drop 30 throw"
 .ascii "\n           else"
 .ascii "\n              throw"
-.ascii "\n           then drop ;"
+.ascii "\n           then ;"
 
 .ascii "\n    : bench ( ntimes -- sec )"
 .ascii "\n           time swap" 
@@ -262,6 +262,9 @@ input_buffer:
 .ascii "\n       r1 area 15 = assert"
 .ascii "\n       sp@ test_var1 !"
 .ascii "\n       -1 ['] factorial catch 1024 = assert"
+.ascii "\n       1 ['] nested-throw2 catch 30 = assert"
+.ascii "\n       2 ['] nested-throw2 catch 20 = assert"
+.ascii "\n       3 nested-throw2 42 = assert"
 .ascii "\n       sp@ test_var2 !"
 .ascii "\n       test_var1 @ test_var2 @ = assert" 
 .ascii "\n       depth 0= assert" 
@@ -271,7 +274,6 @@ input_buffer:
 
 // TODO features
 //  * detect stack under/overflow
-//  * fix depth
 //  * add error handling to [compile] and '
 //  * show depth in prompt
 
