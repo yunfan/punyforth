@@ -52,7 +52,7 @@ defword "rswap",5,rswap,1
     .int xt_exit
 
 defword "depth",5,depth,1
-    .int xt_btick, OFFSET FLAT:STACK_ORIG, xt_fetch
+    .int xt_btick, _M STACK_ORIG, xt_fetch
     .int xt_spat, xt_minus, xt_dec
     .int xt_cell, xt_divmod, xt_nip
     .int xt_exit
@@ -130,13 +130,13 @@ defword "cell",4,cell,1
 defword ",",1,comma,1
     .int xt_here, xt_store
     .int xt_here, xt_cell, xt_plus    
-    .int xt_btick, OFFSET FLAT:here_var, xt_store   
+    .int xt_btick, _M here_var, xt_store   
     .int xt_exit
 
 defword "c,",2,commabyte,1
     .int xt_here, xt_store
     .int xt_here, xt_inc 
-    .int xt_btick, OFFSET FLAT:here_var, xt_store   
+    .int xt_btick, _M here_var, xt_store   
     .int xt_exit
 
 defword "c@",2,fetchbyte,1
@@ -148,19 +148,19 @@ defword "<>",2,noteq,1
     .int xt_exit
     
 defword ">in",3,inputbuf,1
-    .int xt_btick, OFFSET FLAT:input_buffer
+    .int xt_btick, _M input_buffer
     .int xt_exit
     
 defword "#tib",4,inputlen,1
-    .int xt_btick, OFFSET FLAT:input_size
+    .int xt_btick, _M input_size
     .int xt_exit
 
 defword "tib",3,tib,1
-    .int xt_btick, OFFSET FLAT:input_index
+    .int xt_btick, _M input_index
     .int xt_exit
 
 defword "state",5,state,1
-    .int xt_btick, OFFSET FLAT:state_var
+    .int xt_btick, _M state_var
     .int xt_exit
 
 defword "[",1,openbracket,IMMEDIATE
@@ -238,23 +238,23 @@ find_not_found:
     .int xt_exit
 
 defword "here",4,here,1
-    .int xt_btick, OFFSET FLAT:here_var, xt_fetch
+    .int xt_btick, _M here_var, xt_fetch
     .int xt_exit
     
 defword "allot",5,allot,1 /* ( n -- ) */
-    .int xt_here, xt_plus, xt_btick, OFFSET FLAT:here_var, xt_store
+    .int xt_here, xt_plus, xt_btick, _M here_var, xt_store
     .int xt_exit
     
 defword "create",6,create,1
     .int xt_word
-    .int xt_btick, OFFSET FLAT:LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
-    .int xt_here, xt_cell, xt_minus, xt_btick, OFFSET FLAT:LAST_WORD, xt_store      // update last word
+    .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
+    .int xt_here, xt_cell, xt_minus, xt_btick, _M LAST_WORD, xt_store      // update last word
     .int xt_swap, xt_dup, xt_comma                                                  // write length
 create_write_next_char:    
     .int xt_dup, xt_branch0
     .int create_name_done - . - CELLS
     .int xt_swap, xt_dup, xt_fetchbyte, xt_here, xt_storebyte
-    .int xt_here, xt_inc, xt_btick, OFFSET FLAT:here_var, xt_store
+    .int xt_here, xt_inc, xt_btick, _M here_var, xt_store
     .int xt_inc                                                                     // increment name address
     .int xt_swap, xt_dec                                                            // decrement length
     .int xt_branch
@@ -262,7 +262,7 @@ create_write_next_char:
 create_name_done:
     .int xt_drop, xt_drop
     .int xt_btick, 1, xt_comma                                                      // write mode
-    .int xt_btick, OFFSET FLAT:ENTERCOL, xt_comma                                   // write codeword
+    .int xt_btick, _M ENTERCOL, xt_comma                                   // write codeword
     .int xt_exit
 
 defword ";",1,semicolon,IMMEDIATE
@@ -380,15 +380,15 @@ defword "compile_time_only",17,compile_time_only,1
     .int cannot_interpret_compile_only_word - . - CELLS
     .int xt_exit
 cannot_interpret_compile_only_word:
-    .int xt_btick, OFFSET FLAT:compile_only_warning, xt_btick, 63, xt_type
+    .int xt_btick, _M compile_only_warning, xt_btick, 63, xt_type
     .int xt_exit
 
 defword "lastword",8,lastword,1
-    .int xt_btick, OFFSET FLAT:LAST_WORD, xt_fetch
+    .int xt_btick, _M LAST_WORD, xt_fetch
     .int xt_exit
 
 defword "enterdoes",9,enterdoes,1
-    .int xt_btick, OFFSET FLAT:ENTERDOES 
+    .int xt_btick, _M ENTERDOES 
     .int xt_exit
 
 FINAL_WORD:    

@@ -1,3 +1,5 @@
+#define _M OFFSET FLAT:
+
 #include "generic/data.S"
 #include "generic/outerinterpreter.S"
 #include "generic/macros.S"
