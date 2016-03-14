@@ -97,11 +97,11 @@ defprimitive "invert",6,invert,1
     NEXT
 
 defprimitive "emit",4,emit,1
-    TODO
+    // TODO
     NEXT    
 
 defprimitive "abort",5,abort,1
-    TODO
+    // TODO
     NEXT
 
 defprimitive "@",1,fetch,1
@@ -124,7 +124,7 @@ defprimitive "c!",2,storebyte,1
 
 defprimitive "[']",3,btick,1    // compile only
     ldr r0, [r7]
-    adds r7, r7, CELLS
+    adds r7, r7, #CELLS
     push {r0}
     NEXT
 
@@ -145,17 +145,17 @@ defprimitive "branch",6,branch,1
 
 defprimitive "branch0",7,branch0,1
     ldr r0, [r7]                              // load relative address to be jump
-    adds r7, r7, CELLS
+    adds r7, r7, #CELLS
     pop {r1}                                  // check condition
     cmp r1, #0                                  
-    bneq nobranch0
+    bne nobranch0
     adds r7, r7, r0                           // do jumping
-nobranch0
+nobranch0:
     NEXT
 
 defprimitive "litstring",9,litstring,1
     ldr r0, [r7]
-    adds r7, r7, CELLS
+    adds r7, r7, #CELLS
     push {r7}                                 // address of the string
     push {r0}                                 // length of the string
     add r7,r7,r0                              // skip the string
@@ -167,21 +167,21 @@ defprimitive "type",4,type,1            // ( a len -- )
 defprimitive ">r",2,rpush,1
     pop {r0}
     str r0, [r6]
-    adds r6, r6, CELLS
+    adds r6, r6, #CELLS
     NEXT
 
 defprimitive "r>",2, rpop,1
-    subs r6, r6, CELLS
+    subs r6, r6, #CELLS
     ldr r0, [r6]
     push {r0}
     NEXT
 
 defprimitive "i",1,i,1
-    ldr r0, [r6, -CELLS]
+    ldr r0, [r6, #-CELLS]
     NEXT
 
 defprimitive "j",1,j,1
-    ldr r0, [r6, -3*CELLS]
+    ldr r0, [r6, #-3*CELLS]
     NEXT
 
 defprimitive "execute",7,execute,1
@@ -198,7 +198,7 @@ defprimitive "sp@",3,spat,1
     NEXT
 
 defprimitive "sp!",3,spstore,1
-    pop r0
+    pop {r0}
     mov sp, r0
     NEXT
 
