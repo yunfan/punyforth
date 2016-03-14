@@ -215,3 +215,22 @@ defprimitive "rp!",3,rpstore,1
 
 defprimitive "key",3,key,1
     NEXT // TODO
+
+// Different types of code words
+
+ENTERCOL:                   // codeword for word (colon) definitions
+    str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
+    adds r6, r6, #CELLS
+    add r0, #CELLS          // r0 points to the ENTERCOL, skip this cell
+    mov r7, r0              // set the instruction pointer to the body of this word
+    NEXT
+
+ENTERDOES:
+    str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
+    adds r6, r6, #CELLS
+    ldr r7, [r0]            // [r0] points to ENTERDOES call in assembly
+    add r7, r7, #6          // TODO skip the embedde assembly instruction
+    add r0, r0, #CELLS      // r0 points to the codeword of the defined word, after that there is the param. field
+    push {r0}
+    NEXT
+
