@@ -1,3 +1,5 @@
+.intel_syntax noprefix
+
 // Primitives are implemented in assembly language
 
 defprimitive "dup",3,dup,1 /* ( a -- a a ) */

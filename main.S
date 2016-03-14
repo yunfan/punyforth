@@ -1,5 +1,3 @@
-.intel_syntax noprefix
-
 #include "generic/data.S"
 #include "generic/outerinterpreter.S"
 #include "generic/macros.S"
@@ -7,17 +5,9 @@
 #include "arch/x86/primitives.S"
 #include "arch/x86/ext.S"
 #include "generic/words.S"
+#include "arch/x86/init.S"
 
 .global _start
 
 .text
-_start:
-    cld
-    mov eax, OFFSET FLAT:input_buffer        
-    mov [input_index], eax                      // initialize 'input_index' to the beginning of the input_buffer
-    mov eax, OFFSET FLAT:dictionary
-    mov [here_var], eax                         // initialzie 'here' to the beginning of the dictionary
-    mov [STACK_ORIG], esp
-    mov ebp, OFFSET FLAT:rstack                 // ebp is used to track the return stack 
-    mov esi, OFFSET FLAT:outer_interpreter      // esi works as an instruction pointer 
-    NEXT                                        // start the outer interpreter (repl)
+_start: init_forth	

@@ -1,3 +1,5 @@
+.intel_syntax noprefix
+
 defprimitive "=",1,eq,1         // optional
     pop eax
     pop ebx
