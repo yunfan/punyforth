@@ -82,7 +82,7 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     
 : does>
     ['] (does) ,
-    104 c, enterdoes , 195 c,                   \ complile embedded assembly: PUSH ENTERDOES RETN
+    104 c, enterdoes , 195 c,              \ complile embedded assembly: PUSH ENTERDOES RETN
  ; immediate
 
 : (does)
