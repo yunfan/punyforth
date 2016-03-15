@@ -207,7 +207,7 @@ compare_length_mismatch:
     .int xt_btick, FALSE
     .int xt_exit
 
-defword "find",4,find,1 /* ( len a -- xt, mode or 0 ) */
+defword "find",4,find,1 /* ( len a -- xt mode | 0 ) */
     .int xt_swap
     .int xt_lastword
 find_try_next_word:                                                               // (a1 len1 link)    
@@ -216,7 +216,7 @@ find_try_next_word:                                                             
     .int find_not_found - . - CELLS
     .int xt_dup, xt_swap2, xt_rot                                                 // (link a1 len1 link)
     .int xt_cell, xt_plus                                                       
-    .int xt_dup, xt_fetch, xt_swap
+    .int xt_dup, xt_fetch, xt_swap 
     .int xt_cell, xt_plus, xt_swap                                                // (link a1 len1 a2 len2)
     .int xt_over2                                                                 // (link a1 len1 a2 len2 a1 len1)
     .int xt_compare, xt_invert                                                    // (link a1 len1 bool)    
@@ -226,15 +226,20 @@ find_try_next_word:                                                             
     .int xt_fetch
     .int xt_branch
     .int find_try_next_word - . - CELLS
-find_found:                                                                     // found matching word, return its mode and xt
-    .int xt_nip                                                                   // (link len)
+find_found:                                                         // found matching word, return its mode and xt
+    .int xt_nip                                                     // (link len)
+    .int xt_align     
     .int xt_plus, xt_btick, 2, xt_cells, xt_plus
     .int xt_dup, xt_fetch, xt_swap, xt_cell, xt_plus
-    .int xt_swap                                                                  // (xt, mode)
+    .int xt_swap                                                    // (xt, mode)
     .int xt_exit
 find_not_found:
     .int xt_drop, xt_drop, xt_drop
     .int xt_btick, 0
+    .int xt_exit
+
+defword "align",5,align,1
+    .int xt_btick, 3, xt_plus, xt_btick, 3, xt_invert, xt_and
     .int xt_exit
 
 defword "here",4,here,1
@@ -249,7 +254,8 @@ defword "create",6,create,1
     .int xt_word
     .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_cell, xt_minus, xt_btick, _M LAST_WORD, xt_store      // update last word
-    .int xt_swap, xt_dup, xt_comma                                                  // write length
+    .int xt_swap, xt_dup, xt_comma                                         // write length
+    .int xt_align
 create_write_next_char:    
     .int xt_dup, xt_branch0
     .int create_name_done - . - CELLS
@@ -262,7 +268,7 @@ create_write_next_char:
 create_name_done:
     .int xt_drop, xt_drop
     .int xt_btick, 1, xt_comma                                                      // write mode
-    .int xt_btick, _M ENTERCOL, xt_comma                                   // write codeword
+    .int xt_btick, _M ENTERCOL, xt_comma                                            // write codeword
     .int xt_exit
 
 defword ";",1,semicolon,IMMEDIATE
@@ -394,7 +400,7 @@ defword "enterdoes",9,enterdoes,1
 FINAL_WORD:    
 defword "immediate",9,immediate,1
     .int xt_lastword, xt_cell, xt_plus
-    .int xt_dup, xt_fetch, xt_plus                                                // add name length
+    .int xt_dup, xt_fetch, xt_align, xt_plus                                                // add name length
     .int xt_cell, xt_plus
     .int xt_btick, IMMEDIATE, xt_swap, xt_store
     .int xt_exit
