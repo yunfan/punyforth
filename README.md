@@ -81,12 +81,12 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     does> @ ;
     
 : does>
-    ['] (does) , ['] exit ,
+    ['] (does) ,
     104 c, enterdoes , 195 c,                   \ complile embedded assembly: PUSH ENTERDOES RETN
  ; immediate
 
 : (does)
-    rdup r> cell +                         \ address of the embedded assembly code
+    r>                                     \ address of the embedded assembly code
     lastword cell + dup @ + 2 cells + ! ;  \ change lastword codeword to point to the embedded assembly code
 
 ( Examples )
@@ -128,18 +128,18 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
                              address of ENTERCOL                                            jumps to ENTERDOES
                              /                                                             /
                             |                                                             |
-+-----+---+----------+---+----+-----------+------+-----------+---------+--------------------+------+---------+
-| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_(does) | xt_exit | asm: jmp ENTERDOES | xt_@ | xt_exit |
-+-----+---+----------+---+----+-----------+------+-----------+---------+--------------------+------+---------+
-                                                                            /            /
-                                                                           |            |
-                                                   +-----+---+------+---+----+----+     |
-                                                   | LNK | 4 | TRUE | 1 | CW | -1 |     |
-                                                   +-----+---+------+---+----+----+     |
-                                                                                        |
-                                                                +-----+---+-------+---+----+---+
-                                                                | LNK | 5 | FALSE | 1 | CW | 0 |
-                                                                +-----+---+-------+---+----+---+
++-----+---+----------+---+----+-----------+------+-----------+--------------------+------+---------+
+| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_(does) | asm: jmp ENTERDOES | xt_@ | xt_exit |
++-----+---+----------+---+----+-----------+------+-----------+--------------------+------+---------+
+                                                               /             /
+                                                               |             |
+                                        +-----+---+------+---+----+----+     |
+                                        | LNK | 4 | TRUE | 1 | CW | -1 |     |
+                                        +-----+---+------+---+----+----+     |
+                                                                             |
+                                                    +-----+---+-------+---+----+---+
+                                                    | LNK | 5 | FALSE | 1 | CW | 0 |
+                                                    +-----+---+-------+---+----+---+
 
 </pre>
 
