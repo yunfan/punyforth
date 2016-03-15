@@ -125,9 +125,9 @@ The embedded assembly code simply jumps to the codeword *ENTERDOES*. *ENTERDOES*
 Here are the dictionary entries of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
 
 <pre>                        
-                             address of ENTERCOL                                            jumps to ENTERDOES
-                             /                                                             /
-                            |                                                             |
+                             address of ENTERCOL                            jumps to ENTERDOES
+                             /                                              /
+                            |                                               |
 +-----+---+----------+---+----+-----------+------+-----------+--------------------+------+---------+
 | LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_(does) | asm: jmp ENTERDOES | xt_@ | xt_exit |
 +-----+---+----------+---+----+-----------+------+-----------+--------------------+------+---------+
