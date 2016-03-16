@@ -86,8 +86,7 @@ Parsing words can parse the input stream. One example of a parsing word is the c
  ; immediate
 
 : (does)
-    r>                                     \ address of the embedded assembly code
-    lastword link>xt ! ;                   \ change lastword codeword to point to the embedded assembly code
+    r> lastword link>xt ! ;                \ change lastword codeword to point to the embedded assembly code
 
 ( Examples )
 
