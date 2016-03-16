@@ -1,5 +1,4 @@
-#define _M 
-
+#include "arch/x86/defs.S"
 #include "generic/data.S"
 #include "generic/macros.S"
 #include "generic/outerinterpreter.S"
