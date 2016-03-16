@@ -1,2 +1,2 @@
-#define  WORD_ALIGN 2
-#define _M
+#define  WORD_ALIGN 4
+#define _M OFFSET FLAT:

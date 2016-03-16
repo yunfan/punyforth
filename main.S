@@ -1,7 +1,5 @@
-#define _M OFFSET FLAT:
-
-#include "generic/data.S"
 #include "arch/x86/defs.S"
+#include "generic/data.S"
 #include "generic/macros.S"
 #include "generic/outerinterpreter.S"
 #include "arch/x86/innerinterpreter.S"
