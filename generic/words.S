@@ -252,7 +252,7 @@ defword "allot",5,allot,1 /* ( n -- ) */
     
 defword "create",6,create,1
     .int xt_word
-    .int xt_here, xt_align, xt_btick, _M here_var, xt_store	               // align beginning of the new word	
+    .int xt_here, xt_align, xt_btick, _M here_var, xt_store                // align beginning of the new word   
     .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_cell, xt_minus, xt_btick, _M LAST_WORD, xt_store      // update last word
     .int xt_swap, xt_dup, xt_comma                                         // write length
@@ -413,11 +413,21 @@ defword "enterdoes",9,enterdoes,1
     .int xt_btick, _M ENTERDOES 
     .int xt_exit
 
+defword "link>len",8,link2len,1 /* ( a1 -- a2 ) */
+    .int xt_cell, xt_plus
+    .int xt_exit
+
+defword "link>name",9,link2name,1 /* ( a1 -- a2 ) */
+    .int xt_link2len, xt_cell, xt_plus
+    .int xt_exit
+
+defword "link>flags",10,link2flags,1 /* ( a1 -- a2 ) */
+    .int xt_dup, xt_link2name, xt_swap
+    .int xt_link2len, xt_fetch, xt_align, xt_plus 
+    .int xt_exit
+
 FINAL_WORD:    
 defword "immediate",9,immediate,1
-    .int xt_lastword, xt_cell, xt_plus
-    .int xt_dup, xt_fetch, xt_align, xt_plus                                                // add name length
-    .int xt_cell, xt_plus
-    .int xt_btick, IMMEDIATE, xt_swap, xt_store
+    .int xt_btick, IMMEDIATE, xt_lastword, xt_link2flags, xt_store
     .int xt_exit
-   
+
