@@ -8,7 +8,7 @@
 
 .macro NEXT
     ldr r0, [r7]   
-    adds r7, r7, #CELLS
+    add r7, #CELLS
     ldr r1, [r0]
     bx r1
 .endm

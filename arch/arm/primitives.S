@@ -8,8 +8,7 @@ defprimitive "drop",4,drop,1 /* ( a -- ) */
     NEXT
 
 defprimitive "swap",4,swap,1 /* ( a b -- b a ) */
-    pop {r0}
-    pop {r1}
+    pop {r0, r1}
     push {r0}
     push {r1}
     NEXT
@@ -42,21 +41,21 @@ defprimitive "2over",5,over2,1 /* ( a b c d -- a b c d a b ) */
 defprimitive "+",1,plus,1
     pop {r1}
     pop {r0}
-    adds r0, r1, r0
+    add r0, r1
     push {r0}
     NEXT
 
 defprimitive "-",1,minus,1
     pop {r1}
     pop {r0}
-    subs r0, r0, r1
+    sub r0, r1
     push {r0}
     NEXT
 
 defprimitive "*",1,multiply,1
     pop {r0}
     pop {r1}
-    muls r0, r1, r0
+    mul r0, r1
     push {r0}
     NEXT
 
@@ -72,21 +71,21 @@ defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
 defprimitive "or",2,or,1
     pop {r1}
     pop {r0}
-    orrs r0, r1, r0
+    orr r0, r1
     push {r0}
     NEXT
 
 defprimitive "and",3,and,1
     pop {r1}
     pop {r0}
-    ands r0, r1, r0
+    and r0, r1
     push {r0}
     NEXT
 
 defprimitive "xor",3,xor,1
     pop {r1}
     pop {r0}
-    eors r0, r1, r0
+    eor r0, r1
     push {r0}
     NEXT
 
@@ -134,7 +133,7 @@ defprimitive "c!",2,storebyte,1
 
 defprimitive "[']",3,btick,1    // compile only
     ldr r0, [r7]
-    adds r7, r7, #CELLS
+    add r7, #CELLS
     push {r0}
     NEXT
 
@@ -156,7 +155,7 @@ defprimitive "branch",6,branch,1
 
 defprimitive "branch0",7,branch0,1
     ldr r0, [r7]                              // load relative address to be jump
-    adds r7, r7, #CELLS
+    add r7, #CELLS
     pop {r1}                                  // check condition
     cmp r1, #0                                  
     bne nobranch0
@@ -166,7 +165,7 @@ nobranch0:
 
 defprimitive "litstring",9,litstring,1
     ldr r0, [r7]
-    adds r7, r7, #CELLS
+    add r7, #CELLS
     push {r7}                                 // address of the string
     push {r0}                                 // length of the string
     add r7,r7,r0                              // skip the string
@@ -175,11 +174,11 @@ defprimitive "litstring",9,litstring,1
 defprimitive ">r",2,rpush,1
     pop {r0}
     str r0, [r6]
-    adds r6, r6, #CELLS
+    add r6, #CELLS
     NEXT
 
 defprimitive "r>",2, rpop,1
-    subs r6, r6, #CELLS
+    sub r6, #CELLS
     ldr r0, [r6]
     push {r0}
     NEXT
@@ -276,14 +275,14 @@ read_one_char_from_buffer:
 
 ENTERCOL:                   // codeword for word (colon) definitions
     str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
-    adds r6, r6, #CELLS
+    add r6, #CELLS
     add r0, #CELLS          // r0 points to the ENTERCOL, skip this cell
     mov r7, r0              // set the instruction pointer to the body of this word
     NEXT
 
 ENTERDOES:
     str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
-    adds r6, r6, #CELLS
+    add r6, #CELLS
     ldr r7, [r0]            // [r0] points to ENTERDOES call in assembly
     add r7, r7, #8          // skip the embedded assembly instruction
     add r0, r0, #CELLS      // r0 points to the codeword of the defined word, after that there is the param. field
