@@ -1,5 +1,5 @@
 rm punyforth
-gcc -m32 -nostdlib main.S -o punyforth
+gcc -m32 -nostdlib -I. ../../main.S -o punyforth
 chmod +x punyforth
 ./punyforth
 
