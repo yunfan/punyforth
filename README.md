@@ -164,6 +164,12 @@ Here are the dictionary entries of the compiled *constant* and the words (*TRUE*
 ```
 
 ```forth
+: struct 0 ;
+
+: field 
+  create over , + 
+  does> @ + ;
+
 struct 
   cell field width 
   cell field height
