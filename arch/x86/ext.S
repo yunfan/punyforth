@@ -100,3 +100,11 @@ defprimitive "time",4,time,1 /* ( -- unixtime ) */
     mov eax, [var0]
     push eax
     NEXT
+
+defprimitive "type",4,type,1            // ( a len -- )
+    pop edx
+    pop ecx
+    mov ebx, 1
+    mov eax, 4
+    int 0x80
+    NEXT

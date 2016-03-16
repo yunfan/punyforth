@@ -173,15 +173,7 @@ defprimitive "litstring",9,litstring,1
     push eax                            // length of the string
     add esi, eax                        // skip string
     NEXT
-
-defprimitive "type",4,type,1            // ( a len -- )
-    pop edx
-    pop ecx
-    mov ebx, 1
-    mov eax, 4
-    int 0x80
-    NEXT
-
+    
 defprimitive ">r",2,rpush,1
     pop eax
     mov [ebp], eax

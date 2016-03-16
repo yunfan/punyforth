@@ -381,6 +381,21 @@ defword "char",4,char,1
     .int xt_word, xt_nip, xt_fetchbyte
     .int xt_exit
 
+.ifndef xt_type
+defword "type",4,type,1            // ( a len -- )
+type_next_char:
+    .int xt_dup, xt_eq0, xt_invert, xt_branch0
+    .int type_done - . - CELLS
+    .int xt_dec, xt_swap
+    .int xt_dup, xt_fetch, xt_emit
+    .int xt_inc, xt_swap
+    .int xt_branch
+    .int type_next_char - . - CELLS
+type_done:
+    .int xt_drop, xt_drop
+    .int xt_exit
+.endif    
+
 defword "compile_time_only",17,compile_time_only,1    
     .int xt_state, xt_fetch, xt_btick, STATE_COMPILE, xt_eq
     .int xt_branch0
