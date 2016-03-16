@@ -220,8 +220,7 @@ defprimitive "rp@",3,rpat,1
     NEXT
 
 defprimitive "rp!",3,rpstore,1
-    pop eax
-    mov ebp, eax
+    pop ebp
     NEXT
 
 .macro prompt
