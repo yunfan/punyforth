@@ -1,4 +1,4 @@
-#include "arch/x86/defs.S"
+#include "arch/arm/defs.S"
 #include "generic/data.S"
 #include "generic/macros.S"
 #include "generic/outerinterpreter.S"
