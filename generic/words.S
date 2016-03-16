@@ -227,11 +227,9 @@ find_try_next_word:                                                             
     .int xt_branch
     lbl find_try_next_word
 find_found:                                                         // found matching word, return its mode and xt
-    .int xt_nip                                                     // (link len)
-    .int xt_align     
-    .int xt_plus, xt_btick, 2, xt_cells, xt_plus
-    .int xt_dup, xt_fetch, xt_swap, xt_cell, xt_plus
-    .int xt_swap                                                    // (xt, mode)
+    .int xt_drop, xt_drop                                           // ( link )
+    .int xt_dup, xt_link2xt 
+    .int xt_swap, xt_link2flags, xt_fetch                           // ( xt flags )
     .int xt_exit
 find_not_found:
     .int xt_drop, xt_drop, xt_drop
@@ -423,7 +421,11 @@ defword "link>name",9,link2name,1 /* ( a1 -- a2 ) */
 
 defword "link>flags",10,link2flags,1 /* ( a1 -- a2 ) */
     .int xt_dup, xt_link2name, xt_swap
-    .int xt_link2len, xt_fetch, xt_align, xt_plus 
+    .int xt_link2len, xt_fetch, xt_plus, xt_align
+    .int xt_exit
+
+defword "link>xt",7,link2xt,1 /* ( a1 -- a2 ) */
+    .int xt_link2flags, xt_cell, xt_plus
     .int xt_exit
 
 FINAL_WORD:    
