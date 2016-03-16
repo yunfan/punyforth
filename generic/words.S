@@ -252,6 +252,7 @@ defword "allot",5,allot,1 /* ( n -- ) */
     
 defword "create",6,create,1
     .int xt_word
+    .int xt_here, xt_align, xt_btick, _M here_var, xt_store	               // align beginning of the new word	
     .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_cell, xt_minus, xt_btick, _M LAST_WORD, xt_store      // update last word
     .int xt_swap, xt_dup, xt_comma                                         // write length
