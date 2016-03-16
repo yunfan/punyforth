@@ -1,13 +1,13 @@
 .macro defprimitive name, namelen, label, flags
     .section .rodata
-     .align 4
+     .align 2
     .globl name_\label
 name_\label :
     .int link
     .set link,name_\label
     .int \namelen
     .ascii "\name"
-     .align 4    
+     .align 2    
     .int \flags
     .globl xt_\label
 xt_\label :
@@ -19,14 +19,14 @@ code_\label :
 
 .macro defword name, namelen, label, flags
     .section .rodata
-     .align 4    
+     .align 2    
     .globl name_\label
 name_\label :
     .int link
     .set link,name_\label
     .int \namelen
     .ascii "\name"
-     .align 4    
+     .align 2
     .int \flags
     .globl xt_\label
 xt_\label :

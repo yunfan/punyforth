@@ -1,10 +1,16 @@
 .macro init_forth
-//    mov eax, OFFSET FLAT:input_buffer        
-//    mov [input_index], eax                      // initialize 'input_index' to the beginning of the input_buffer
-//    mov eax, OFFSET FLAT:dictionary
-//    mov [here_var], eax                         // initialzie 'here' to the beginning of the dictionary
-//    mov [STACK_ORIG], esp
-//    mov ebp, OFFSET FLAT:rstack                 // ebp is used to track the return stack 
-//    mov esi, OFFSET FLAT:outer_interpreter      // esi works as an instruction pointer 
-    NEXT                                        // start the outer interpreter (repl)
+    ldr r0, =input_buffer
+    ldr r1, =input_index
+    str r0, [r1]
+
+    ldr r0, =dictionary
+    ldr r1, =here_var    
+    str r0, [r1]
+
+    ldr r1, =STACK_ORIG
+    str sp, [r1]
+
+    ldr r6, =rstack    
+    ldr r7, =outer_interpreter 
+    NEXT                         
 .endm

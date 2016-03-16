@@ -86,14 +86,13 @@ input_buffer:
 
 .ascii "\n    : ' ( -- addr ) word find drop ; \\ find the xt of the next word in the inputstream"
 .ascii "\n    : (does)" 
-.ascii "\n          r>                        \\ address of the embedded assembly code"
+.ascii "\n          r>                   \\ address of the embedded assembly code"
 .ascii "\n          lastword link>xt ! ; \\ replace codeword of the last word"
 
 .ascii "\n    : does>"
 .ascii "\n           ['] (does) ,"
-.ascii "\n           104 c,        \\ opcode of PUSH"
+.ascii "\n           3844075524 ,        \\ LDR PC, [PC, #-4]"
 .ascii "\n           enterdoes ,   \\ address of enterdoes"
-.ascii "\n           195 c,        \\ opcode of RETN"
 .ascii "\n      ; immediate "
 
 .ascii "\n    : constant create , does> @ ; "
@@ -270,7 +269,7 @@ input_buffer:
 .ascii "\n       depth 0= assert" 
 .ascii "\n       .\" OK \" test_count ? cr ; "
 
-.ascii "\n ' selftest execute .\" Punyforth testing\" cr "
+.ascii "\n ' selftest execute .\" Punyforth ready\" cr "
 
 // TODO features
 //  * debt: align abstract over dictionary fields

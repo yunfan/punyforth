@@ -1,5 +1,5 @@
 rm punyforth
-gcc-4.8 -mcpu=cortex-a7 -nostdlib main_arm.S -o punyforth
+gcc-4.8 -mcpu=cortex-a7 main_arm.S -o punyforth
 chmod +x punyforth
 ./punyforth
 

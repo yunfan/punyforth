@@ -97,11 +97,21 @@ defprimitive "invert",6,invert,1
     NEXT
 
 defprimitive "emit",4,emit,1
-    // TODO
+    pop {r0}
+    push {r6, r7}
+    ldr r1, =var0
+    str r0, [r1]
+    mov r0, #1                      // fd <- stdout
+    mov r2, #1                      // length
+    mov r7, #4                      // syscall <- sys_write
+    swi 0                           // system call
+    pop {r6, r7}
     NEXT    
 
 defprimitive "abort",5,abort,1
-    // TODO
+    mov r0, #0     // set exit code to 0
+    mov r7, #1     // syscall for exit
+    swi 0          // invoke the syscall from linux
     NEXT
 
 defprimitive "@",1,fetch,1
@@ -140,7 +150,8 @@ defprimitive "<",1,lt,1         // only need to define this, all other comparisi
 
 defprimitive "branch",6,branch,1
     ldr r0, [r7]
-    adds r7, r0
+    add r7, r7, #CELLS
+    add r7, r7, r0
     NEXT
 
 defprimitive "branch0",7,branch0,1
@@ -149,7 +160,7 @@ defprimitive "branch0",7,branch0,1
     pop {r1}                                  // check condition
     cmp r1, #0                                  
     bne nobranch0
-    adds r7, r7, r0                           // do jumping
+    add r7, r7, r0                           // do jumping
 nobranch0:
     NEXT
 
@@ -160,9 +171,6 @@ defprimitive "litstring",9,litstring,1
     push {r0}                                 // length of the string
     add r7,r7,r0                              // skip the string
     NEXT
-
-defprimitive "type",4,type,1            // ( a len -- )
-    NEXT // TODO
 
 defprimitive ">r",2,rpush,1
     pop {r0}
@@ -178,10 +186,12 @@ defprimitive "r>",2, rpop,1
 
 defprimitive "i",1,i,1
     ldr r0, [r6, #-CELLS]
+    push {r0}
     NEXT
 
 defprimitive "j",1,j,1
     ldr r0, [r6, #-3*CELLS]
+    push {r0}
     NEXT
 
 defprimitive "execute",7,execute,1
@@ -190,7 +200,9 @@ defprimitive "execute",7,execute,1
     mov pc, r1
 
 defprimitive "exit",4,exit,1
-    NEXT // TODO
+    sub r6, #CELLS
+    ldr r7, [r6]
+    NEXT
 
 defprimitive "sp@",3,spat,1
     mov r0, sp
@@ -211,10 +223,54 @@ defprimitive "rp!",3,rpstore,1
     NEXT
 
 .macro prompt
+    push {r0, r1, r2, r7}
+    ldr r1, =prompt_str
+    mov r0, #1                      // fd <- stdout
+    mov r2, #4                      // length
+    mov r7, #4                      // syscall <- sys_write
+    swi 0  
+    pop {r0, r1, r2, r7}
 .endm
 
 defprimitive "key",3,key,1
-    NEXT // TODO
+    ldr r0, =input_buffer
+    ldr r3, =input_size
+    ldr r1, [r3]
+    add r0, r1
+    ldr r2, =input_index
+    ldr r1, [r2]
+    cmp r1, r0
+    blt read_one_char_from_buffer
+    prompt
+    ldr r1, =input_buffer
+    sub r1, #1
+    mov r0, #0
+    str r0, [r3]    
+refill_buffer:
+    add r1, #1              // increment input_buffer position
+    ldr r2, [r3]            // increment input size
+    add r2, #1
+    str r2, [r3]
+    push {r7}
+    mov r0, #0              // read system call
+    mov r2, #1              // length
+    mov r7, #3
+    swi 0                   // read to input buffer position
+    pop {r7}
+    mov r0, #0
+    ldrb r0, [r1]
+    cmp r0, #10
+    bne refill_buffer
+    ldr r1, =input_buffer
+read_one_char_from_buffer:
+    mov r0, #0
+    ldrb r0, [r1]
+    add r1, #1
+    ldr r2, =input_index
+    str r1, [r2]
+    push {r0}
+    NEXT
+
 
 // Different types of code words
 
@@ -229,7 +285,7 @@ ENTERDOES:
     str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
     adds r6, r6, #CELLS
     ldr r7, [r0]            // [r0] points to ENTERDOES call in assembly
-    add r7, r7, #6          // TODO skip the embedde assembly instruction
+    add r7, r7, #8          // skip the embedded assembly instruction
     add r0, r0, #CELLS      // r0 points to the codeword of the defined word, after that there is the param. field
     push {r0}
     NEXT
