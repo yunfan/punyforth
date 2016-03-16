@@ -33,4 +33,6 @@ xt_\label :
     .int ENTERCOL
 .endm
 
-
+.macro lbl label
+    .int \label - . - CELLS
+.endm

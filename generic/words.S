@@ -178,22 +178,22 @@ defword "literal",7,literal,IMMEDIATE
 
 defword "compare",7,compare,1 /*( a1 len1 a2 len2 - bool ) */
     .int xt_rot, xt_swap                                                          // (a1 a2 len1 len2)
-    .int xt_dup2, xt_eq, xt_branch0
-    .int compare_length_mismatch - . - CELLS
+    .int xt_dup2, xt_eq, xt_branch0 
+    lbl compare_length_mismatch
     .int xt_drop                                                                  // both lengths are equal, leave only one of them  (a1 a2 len)
 compare_next_char:   
     .int xt_dup, xt_branch0
-    .int compare_equal - . - CELLS
+    lbl compare_equal
     .int xt_mrot                                                                  // (len a1 a2)
     .int xt_dup2                                                                  // (len a1 a2 a1 a2)
     .int xt_fetchbyte, xt_swap, xt_fetchbyte, xt_eq                               // check if next characters are equal
     .int xt_branch0
-    .int compare_not_equal - . - CELLS
+    lbl compare_not_equal
     .int xt_inc, xt_swap, xt_inc, xt_swap
     .int xt_rot
     .int xt_dec
     .int xt_branch
-    .int compare_next_char - . - CELLS
+    lbl compare_next_char
 compare_equal:    
     .int xt_drop, xt_drop, xt_drop
     .int xt_btick, TRUE
@@ -213,7 +213,7 @@ defword "find",4,find,1 /* ( len a -- xt mode | 0 ) */
 find_try_next_word:                                                               // (a1 len1 link)    
     .int xt_dup
     .int xt_branch0
-    .int find_not_found - . - CELLS
+    lbl find_not_found
     .int xt_dup, xt_swap2, xt_rot                                                 // (link a1 len1 link)
     .int xt_cell, xt_plus                                                       
     .int xt_dup, xt_fetch, xt_swap 
@@ -221,11 +221,11 @@ find_try_next_word:                                                             
     .int xt_over2                                                                 // (link a1 len1 a2 len2 a1 len1)
     .int xt_compare, xt_invert                                                    // (link a1 len1 bool)    
     .int xt_branch0
-    .int find_found - . - CELLS
+    lbl find_found
     .int xt_rot                                                                   // (a1 len1 link)
     .int xt_fetch
     .int xt_branch
-    .int find_try_next_word - . - CELLS
+    lbl find_try_next_word
 find_found:                                                         // found matching word, return its mode and xt
     .int xt_nip                                                     // (link len)
     .int xt_align     
@@ -259,13 +259,13 @@ defword "create",6,create,1
     .int xt_align
 create_write_next_char:    
     .int xt_dup, xt_branch0
-    .int create_name_done - . - CELLS
+    lbl create_name_done
     .int xt_swap, xt_dup, xt_fetchbyte, xt_here, xt_storebyte
     .int xt_here, xt_inc, xt_btick, _M here_var, xt_store
     .int xt_inc                                                                     // increment name address
     .int xt_swap, xt_dec                                                            // decrement length
     .int xt_branch
-    .int create_write_next_char - . - CELLS
+    lbl create_write_next_char
 create_name_done:
     .int xt_drop, xt_drop
     .int xt_btick, 1, xt_comma                                                      // write mode
@@ -280,10 +280,10 @@ defword ";",1,semicolon,IMMEDIATE
 defword ">number",7,tonumber,1                                                    //( len a -- num bool )
     .int xt_swap                                                                  
     .int xt_dup, xt_branch0
-    .int tonum_empty - . - CELLS
+    lbl tonum_empty 
     .int xt_swap, xt_dup, xt_fetchbyte, xt_btick, 45, xt_eq                       // check sign
     .int xt_branch0
-    .int tonum_positive - . - CELLS
+    lbl tonum_positive
     .int xt_swap
     .int xt_dec                                                                   // decrement length
     .int xt_dup, xt_rpush                                                         // move length to return stack
@@ -292,7 +292,7 @@ defword ">number",7,tonumber,1                                                  
     .int xt_btick, -1                                                             // ( a res mul )
     .int xt_rpop, xt_dec, xt_rpush                                                // decrement length once more because of the negative sign
     .int xt_branch
-    .int tonum_loop - . - CELLS    
+    lbl tonum_loop
 tonum_positive:
     .int xt_swap
     .int xt_dec                                                                   // decrement length
@@ -304,9 +304,9 @@ tonum_loop:
     .int xt_rot                                                                   // ( res mul a ) 
     .int xt_dup, xt_fetchbyte
     .int xt_dup, xt_btick, 47, xt_gt, xt_branch0                                  // check range
-    .int tonum_invalid_digit - . - CELLS
+    lbl tonum_invalid_digit
     .int xt_dup, xt_btick, 58, xt_lt, xt_branch0
-    .int tonum_invalid_digit - . - CELLS
+    lbl tonum_invalid_digit
     .int xt_btick, 48, xt_minus                                                   // ( res mul a digit )
     .int xt_swap, xt_dec, xt_swap                                                 // decrement a
     .int xt_swap2                                                                 // ( a digit res mul )
@@ -317,10 +317,10 @@ tonum_loop:
     .int xt_plus                                                                  // ( a mul res )
     .int xt_swap, xt_btick, 10, xt_multiply                                       // ( a res mul )
     .int xt_rdup, xt_rpop, xt_branch0
-    .int tonum_done - . - CELLS
+    lbl tonum_done
     .int xt_rpop, xt_dec, xt_rpush                                                // decrement length on return stack    
     .int xt_branch
-    .int tonum_loop - . - CELLS
+    lbl tonum_loop
 tonum_done:
     .int xt_rpop, xt_drop
     .int xt_drop, xt_nip
@@ -343,13 +343,13 @@ word_trim:
     .int xt_drop
     .int xt_key
     .int xt_dup, xt_btick, 32, xt_noteq, xt_branch0
-    .int word_trim - . - CELLS
+    lbl word_trim
     .int xt_dup, xt_btick, 10, xt_noteq, xt_branch0
-    .int word_trim - . - CELLS
+    lbl word_trim
     .int xt_dup, xt_btick, 13, xt_noteq, xt_branch0
-    .int word_trim - . - CELLS
+    lbl word_trim
     .int xt_dup, xt_btick, 9, xt_noteq, xt_branch0
-    .int word_trim - . - CELLS
+    lbl word_trim
     .int xt_drop
     .int xt_tib, xt_fetch, xt_dec                                               // word start
     .int xt_btick, 0
@@ -357,15 +357,15 @@ word_next_char:
     .int xt_drop
     .int xt_key
     .int xt_dup, xt_btick, 32, xt_noteq, xt_branch0
-    .int word_boundary - . - CELLS
+    lbl word_boundary
     .int xt_dup, xt_btick, 10, xt_noteq, xt_branch0
-    .int word_boundary - . - CELLS
+    lbl word_boundary
     .int xt_dup, xt_btick, 13, xt_noteq, xt_branch0
-    .int word_boundary - . - CELLS
+    lbl word_boundary
     .int xt_dup, xt_btick, 19, xt_noteq, xt_branch0
-    .int word_boundary - . - CELLS
+    lbl word_boundary
     .int xt_branch
-    .int word_next_char - . - CELLS
+    lbl word_next_char
 word_boundary:
     .int xt_drop
     .int xt_dup, xt_tib, xt_fetch, xt_swap, xt_minus, xt_dec                    // word length
@@ -385,12 +385,12 @@ defword "char",4,char,1
 defword "type",4,type,1            // ( a len -- )
 type_next_char:
     .int xt_dup, xt_eq0, xt_invert, xt_branch0
-    .int type_done - . - CELLS
+    lbl type_done
     .int xt_dec, xt_swap
     .int xt_dup, xt_fetch, xt_emit
     .int xt_inc, xt_swap
     .int xt_branch
-    .int type_next_char - . - CELLS
+    lbl type_next_char
 type_done:
     .int xt_drop, xt_drop
     .int xt_exit
@@ -399,7 +399,7 @@ type_done:
 defword "compile_time_only",17,compile_time_only,1    
     .int xt_state, xt_fetch, xt_btick, STATE_COMPILE, xt_eq
     .int xt_branch0
-    .int cannot_interpret_compile_only_word - . - CELLS
+    lbl cannot_interpret_compile_only_word
     .int xt_exit
 cannot_interpret_compile_only_word:
     .int xt_btick, _M compile_only_warning, xt_btick, 63, xt_type
