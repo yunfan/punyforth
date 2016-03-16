@@ -108,3 +108,14 @@ defprimitive "type",4,type,1            // ( a len -- )
     mov eax, 4
     int 0x80
     NEXT
+
+defword "(does)",6,doespar,1
+    .int xt_rpop, xt_lastword, xt_link2xt, xt_store
+    .int xt_exit
+
+defword "does>",5,does,IMMEDIATE
+    .int xt_btick, xt_doespar, xt_comma
+    .int xt_btick, 104, xt_commabyte     // x86 opcode PUSH
+    .int xt_enterdoes, xt_comma
+    .int xt_btick, 195, xt_commabyte     // x86 opcode RETN
+    .int xt_exit
