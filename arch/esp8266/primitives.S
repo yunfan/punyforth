@@ -234,8 +234,23 @@ defprimitive "rp!",3,rpstore,1
     NEXT
 
 defprimitive "key",3,key,1
-    NEXT
-
+    ldr a8, =input_buffer
+    ldr a9, =input_size
+    l32i a10, a9, 0
+    add a8, a10
+    ldr a11, =input_index
+    l32i a10, a11, 0
+    cmp a10, a8
+    blt read_one_char_from_buffer
+    // TODO refill
+read_one_char_from_buffer:
+    mov a8, #0
+    l8ui a8, a10, 0
+    add a10, #1
+    ldr a11, =input_index
+    s32i a10, [a11]
+    push {a8}
+    NEXT    
 
 // Different types of code words
 
