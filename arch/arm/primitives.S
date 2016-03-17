@@ -173,23 +173,23 @@ defprimitive "litstring",9,litstring,1
 
 defprimitive ">r",2,rpush,1
     pop {r0}
+    sub r6, #CELLS
     str r0, [r6]
-    add r6, #CELLS
     NEXT
 
 defprimitive "r>",2, rpop,1
-    sub r6, #CELLS
     ldr r0, [r6]
+    add r6, #CELLS
     push {r0}
     NEXT
 
 defprimitive "i",1,i,1
-    ldr r0, [r6, #-CELLS]
+    ldr r0, [r6]
     push {r0}
     NEXT
 
 defprimitive "j",1,j,1
-    ldr r0, [r6, #-3*CELLS]
+    ldr r0, [r6, #2*CELLS]
     push {r0}
     NEXT
 
@@ -199,8 +199,8 @@ defprimitive "execute",7,execute,1
     mov pc, r1
 
 defprimitive "exit",4,exit,1
-    sub r6, #CELLS
     ldr r7, [r6]
+    add r6, #CELLS
     NEXT
 
 defprimitive "sp@",3,spat,1
@@ -274,15 +274,15 @@ read_one_char_from_buffer:
 // Different types of code words
 
 ENTERCOL:                   // codeword for word (colon) definitions
+    sub r6, #CELLS
     str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
-    add r6, #CELLS
     add r0, #CELLS          // r0 points to the ENTERCOL, skip this cell
     mov r7, r0              // set the instruction pointer to the body of this word
     NEXT
 
 ENTERDOES:
+    sub r6, #CELLS
     str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
-    add r6, #CELLS
     ldr r7, [r0]            // [r0] points to ENTERDOES call in assembly
     add r7, r7, #8          // skip the embedded assembly instruction
     add r0, r0, #CELLS      // r0 points to the codeword of the defined word, after that there is the param. field
