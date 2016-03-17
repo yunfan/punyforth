@@ -237,20 +237,35 @@ defprimitive "key",3,key,1
     ldr a8, =input_buffer
     ldr a9, =input_size
     l32i a10, a9, 0
-    add a8, a10
-    ldr a11, =input_index
+    addi a8, a8, a10
+    ldr a11, =input_index    
     l32i a10, a11, 0
-    cmp a10, a8
-    blt read_one_char_from_buffer
-    // TODO refill
-read_one_char_from_buffer:
+    b a10, a8, read_one_char_from_buffer
+    prompt
+    ldr a10, =input_buffer
+    sub a10, #1
     mov a8, #0
+    s32i a8, a9, 0
+refill_buffer:
+    add a10, #1              // increment input_buffer position
+    ldr a11, [a9]            // increment input size
+    add a11, #1
+    s32i a11, a9, 0
+    
+    // syscall
+    
+    mov a8, #0
+    ldrb a8, [a10]
+    bnei a8, 10, refill_buffer
+    ldr a10, =input_buffer
+read_one_char_from_buffer:
+    movi a8, 0    
     l8ui a8, a10, 0
-    add a10, #1
+    addi a10, a10, 1
     ldr a11, =input_index
-    s32i a10, [a11]
-    push {a8}
-    NEXT    
+    s32i a10, a11, 0
+    DPUSH a8
+    NEXT
 
 // Different types of code words
 
