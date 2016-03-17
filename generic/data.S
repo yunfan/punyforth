@@ -271,6 +271,7 @@ input_buffer:
 input_size:  .int . - input_buffer
 here_var:    .int 0
 dictionary:  .space 1048576
-rstack:      .space 8192
+rstack_space: .space 8192
+rstack:
 prompt_str:  .ascii "\n % " 
 compile_only_warning:  .ascii "\nCompile time only word cannot be used in interpretation mode.\n" 

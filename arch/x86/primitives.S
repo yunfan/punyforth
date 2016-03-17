@@ -176,23 +176,23 @@ defprimitive "litstring",9,litstring,1
     
 defprimitive ">r",2,rpush,1
     pop eax
+    sub ebp, CELLS
     mov [ebp], eax
-    add ebp, CELLS
     NEXT
     
 defprimitive "r>",2, rpop,1
-    sub ebp, CELLS
     mov eax, [ebp]
+    add ebp, CELLS
     push eax
     NEXT    
 
 defprimitive "i",1,i,1
-    mov eax, [ebp - 1 * CELLS]
+    mov eax, [ebp]
     push eax
     NEXT    
 
 defprimitive "j",1,j,1
-    mov eax, [ebp - 3 * CELLS]
+    mov eax, [ebp + 2 * CELLS]
     push eax
     NEXT
 
@@ -201,8 +201,8 @@ defprimitive "execute",7,execute,1
     jmp [eax]
 
 defprimitive "exit",4,exit,1
-    sub ebp, CELLS
     mov esi, [ebp]
+    add ebp, CELLS
     NEXT
 
 defprimitive "sp@",3,spat,1
@@ -270,15 +270,15 @@ read_one_char_from_buffer:
 // Different types of code words
 
 ENTERCOL:                   // codeword for word (colon) definitions
+    sub ebp, CELLS
     mov [ebp], esi          // save esi (forth instruction pointer) to the return stack
-    add ebp, CELLS
     add eax, CELLS          // eax points to the ENTERCOL, skip this cell
     mov esi, eax            // set the instruction pointer to the body of this word
     NEXT
 
 ENTERDOES:
+    sub ebp, CELLS
     mov [ebp], esi          // save esi to return stack
-    add ebp, CELLS
     mov esi, [eax]          // [eax] points to ENTERDOES call in assembly
     add esi, 6              // length of the embedded assembly code is 6, after that there are the forth code
     add eax, CELLS          // eax points to the codeword of the defined word, after that there is the param. field
