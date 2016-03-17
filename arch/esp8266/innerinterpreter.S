@@ -1,8 +1,8 @@
 /*
     Indirect threaded inner interpreter:
         - a14 forth instruction pointer
-        - a9 working register
-        - sp stack pointer
+        - a8, a9 working registers
+        - a15 stack pointer	
         - a13 rstack pointer
 */
 
