@@ -19,7 +19,7 @@
 .endm
 
 defprimitive "dup",3,dup,1 /* ( a -- a a ) */
-    l32i a8 a15, 0
+    l32i a8, a15, 0
     DPUSH a8
     NEXT
 
@@ -148,8 +148,8 @@ defprimitive "c!",2,storebyte,1
     NEXT
 
 defprimitive "[']",3,btick,1    // compile only
-    l32i, a8, a14, 0
-    add a14, a14, CELLS
+    l32i a8, a14, 0
+    addi a14, a14, CELLS
     DPUSH a8
     NEXT
 
@@ -164,14 +164,14 @@ L4: DPUSH a10
 
 defprimitive "branch",6,branch,1
     l32i a8, a14, 0                 // read relative address as the next instruction
-    add a14, a14, CELLS             // x86 uses lodsd that increments forth PC, consider changing this
+    addi a14, a14, CELLS             // x86 uses lodsd that increments forth PC, consider changing this
     add a14, a14, a8                // advance forth PC
     NEXT
 
 defprimitive "branch0",7,branch0,1
     l32i a8, a14, 0                 // read relative address
-    add a14, a14, CELLS
-    POP a8
+    addi a14, a14, CELLS
+    DPOP a8
     bnez a8, nobranch0
     add a14, a14, a8
 nobranch0:
@@ -179,7 +179,7 @@ nobranch0:
 
 defprimitive "litstring",9,litstring,1
     l32i a8, a14, 0                           // read the length of the string as the next instruction
-    add a14, a14, CELLS
+    addi a14, a14, CELLS
     DPUSH a14                                 // after the length there is the address of the string
     DPUSH a8                                  // length of the string
     add a14, a14, a8                          // skip the string
@@ -230,10 +230,11 @@ defprimitive "rp@",3,rpat,1
 
 defprimitive "rp!",3,rpstore,1
     DPOP a8
-    movi, a13, a8
+    movi a13, a8
     NEXT
 
 defprimitive "key",3,key,1
+/*
     ldr a8, =input_buffer
     ldr a9, =input_size
     l32i a10, a9, 0
@@ -265,19 +266,20 @@ read_one_char_from_buffer:
     ldr a11, =input_index
     s32i a10, a11, 0
     DPUSH a8
+*/
     NEXT
 
 // Different types of code words
 
 ENTERCOL:                       // codeword for word (colon) definitions
     RPUSH a14                   // save program counter before entering the word
-    add a14, a8, CELLS          // a8 points to the ENTERCOL, skip this cell    
+    addi a14, a8, CELLS          // a8 points to the ENTERCOL, skip this cell    
     NEXT
 
 ENTERDOES:
     RPUSH a14                   // save program counter before entering the word
-    add a14, a9, 8              // a9 points to ENTERDOES call in assembly, skip the embedded assembly instruction
-    add a8, a8, CELLS           // a8 points to the codeword of the defined word, after that there is the param. field
+    addi a14, a9, 8              // a9 points to ENTERDOES call in assembly, skip the embedded assembly instruction
+    addi a8, a8, CELLS           // a8 points to the codeword of the defined word, after that there is the param. field
     DPUSH a8
     NEXT
 
