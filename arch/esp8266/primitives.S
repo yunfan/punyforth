@@ -221,7 +221,7 @@ defprimitive "sp@",3,spat,1
 
 defprimitive "sp!",3,spstore,1
     DPOP a8
-    movi a15, a8
+    mov a15, a8
     NEXT
 
 defprimitive "rp@",3,rpat,1
@@ -230,7 +230,7 @@ defprimitive "rp@",3,rpat,1
 
 defprimitive "rp!",3,rpstore,1
     DPOP a8
-    movi a13, a8
+    mov a13, a8
     NEXT
 
 defprimitive "key",3,key,1
