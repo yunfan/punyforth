@@ -10,6 +10,9 @@
 
 .global forth_start
 
+.section .irom0.text
+.literal_position
+
 forth_start:
     l32r a8, input_buffer
     l32r a9, input_index
