@@ -234,39 +234,36 @@ defprimitive "rp!",3,rpstore,1
     NEXT
 
 defprimitive "key",3,key,1
-/*
-    ldr a8, =input_buffer
-    ldr a9, =input_size
+//    mov a8, input_buffer
+//    mov a9, input_size
     l32i a10, a9, 0
-    addi a8, a8, a10
-    ldr a11, =input_index    
+    add a8, a8, a10
+//    mov a11, =input_index    
     l32i a10, a11, 0
-    b a10, a8, read_one_char_from_buffer
-    prompt
-    ldr a10, =input_buffer
-    sub a10, #1
-    mov a8, #0
+    blt a10, a8, read_one_char_from_buffer
+//    prompt
+//    ldr a10, =input_buffer
+    addi a10, a10, -1
+    movi a8, 0
     s32i a8, a9, 0
 refill_buffer:
-    add a10, #1              // increment input_buffer position
-    ldr a11, [a9]            // increment input size
-    add a11, #1
+    addi a10, a10, 1              // increment input_buffer position
+    l32i a11, a9, 0          // increment input size
+    addi a11, a11, 1
     s32i a11, a9, 0
     
     // syscall
-    
-    mov a8, #0
-    ldrb a8, [a10]
+    movi a8, 0
+    l8ui a8, a10, 0
     bnei a8, 10, refill_buffer
-    ldr a10, =input_buffer
+//    mov a10, =input_buffer
 read_one_char_from_buffer:
     movi a8, 0    
     l8ui a8, a10, 0
     addi a10, a10, 1
-    ldr a11, =input_index
+//    mov a11, =input_index
     s32i a10, a11, 0
     DPUSH a8
-*/
     NEXT
 
 // Different types of code words
