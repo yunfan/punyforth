@@ -1,3 +1,0 @@
-rm punyforth
-xtensa-lx106-elf-gcc -nostdlib -I. ../../main.S -o punyforth
-chmod +x punyforth
