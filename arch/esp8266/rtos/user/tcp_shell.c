@@ -28,8 +28,9 @@ int ICACHE_FLASH_ATTR tcp_shell_is_connected() {
 
 char ICACHE_FLASH_ATTR tcp_shell_read_char() {
     char ch;
-    xQueueReceive(tcp_shell_stdin, &ch, portMAX_DELAY);
-    return ch;
+    if (xQueueReceive(tcp_shell_stdin, &ch, 10) == pdTRUE)
+        return ch;
+    taskYIELD();
 }
 
 LOCAL void ICACHE_FLASH_ATTR disconnected(void *arg) {

@@ -20,7 +20,6 @@ void ICACHE_FLASH_ATTR tcp_shell_put_char(char ch);
 
 void ICACHE_FLASH_ATTR tcp_shell_put_chars(char* buffer, int bufsize);
 
-int ICACHE_FLASH_ATTR tcp_shell_read_chars( char* buffer, int bufsize );
 char ICACHE_FLASH_ATTR tcp_shell_read_char();
 
 #ifdef __cplusplus
