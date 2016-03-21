@@ -2,6 +2,7 @@
 #include "../../defs.S"
 #include "../../../../generic/data.S"
 #include "../../../../generic/macros.S"
+#include "../../cinterop.S"
 #include "../../../../generic/outerinterpreter.S"
 #include "../../innerinterpreter.S"
 #include "../../primitives.S"
@@ -19,7 +20,7 @@ forth_start:
     s32i a8, a9, 0
 
     movi a8, dictionary
-    movi a9, here_var
+    movi a9, var_dp
     s32i a8, a9, 0
 
     movi a15, stack

@@ -16,9 +16,7 @@ void ICACHE_FLASH_ATTR tcp_shell_init();
 
 int ICACHE_FLASH_ATTR tcp_shell_is_connected();
 
-void ICACHE_FLASH_ATTR tcp_shell_put_char(char ch);
-
-void ICACHE_FLASH_ATTR tcp_shell_put_chars(char* buffer, int bufsize);
+void ICACHE_FLASH_ATTR tcp_shell_write_char(char ch);
 
 char ICACHE_FLASH_ATTR tcp_shell_read_char();
 

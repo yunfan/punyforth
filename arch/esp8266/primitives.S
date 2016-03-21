@@ -18,24 +18,6 @@
     addi a13, a13, CELLS
 .endm
 
-.macro CALL_C label
-    addi sp, sp, -32    // adjust stack pointer
-    s32i a0, sp, 28     // save return address
-    s32i a8, sp, 20     // save a8
-    s32i a12, sp, 16    // save a12
-    s32i a13, sp, 12    // save a13
-    s32i a14, sp, 8     // save a14
-    s32i a15, sp, 4     // save a15
-    call0 \label        // call C
-    l32i a15, sp, 4     // get saved a15
-    l32i a14, sp, 8     // get saved a14
-    l32i a13, sp, 12    // get saved a13
-    l32i a12, sp, 16    // get saved a12
-    l32i a8, sp, 20     // get saved a8
-    l32i a0, sp, 28     // get the saved return address
-    addi sp, sp, 32     // restore stack pointer
-.endm
-
 defprimitive "dup",3,dup,1 /* ( a -- a a ) */
     l32i a8, a15, 0
     DPUSH a8
@@ -112,11 +94,11 @@ defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
     DPOP a9            // numer
     mov a3, a8        // parameter denom
     mov a2, a9        // parameter numer
-    CALL_C forth_mod
+    CCALL forth_mod
     DPUSH a2           // remainder
     mov a3, a8        // parameter denom
     mov a2, a9        // parameter numer
-    CALL_C forth_div
+    CCALL forth_div
     DPUSH a2           // quotient
     NEXT
 
@@ -151,7 +133,7 @@ defprimitive "invert",6,invert,1
 .literal_position
 defprimitive "emit",4,emit,1
     DPOP a2
-    CALL_C forth_putchar
+    CCALL forth_putchar
     NEXT    
 
 defprimitive "abort",5,abort,1
@@ -274,7 +256,7 @@ defprimitive "rp!",3,rpstore,1
     NEXT
 
 defprimitive "readchar",8,readchar,1
-    CALL_C forth_getchar
+    CCALL forth_getchar
     DPUSH a2
     NEXT    
 
@@ -295,5 +277,4 @@ ENTERDOES:
     addi a8, a8, CELLS          // after the behaviour there is the data
     DPUSH a8                    // invoke behavour with the data pointer on the stack
     NEXT
-
 

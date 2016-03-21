@@ -28,9 +28,16 @@ int ICACHE_FLASH_ATTR tcp_shell_is_connected() {
 
 char ICACHE_FLASH_ATTR tcp_shell_read_char() {
     char ch;
-    if (xQueueReceive(tcp_shell_stdin, &ch, 10) == pdTRUE)
-        return ch;
+    if (xQueueReceive(tcp_shell_stdin, &ch, portMAX_DELAY) == pdTRUE)
+	return ch;
     taskYIELD();
+//    if (xQueueReceive(tcp_shell_stdin, &ch, 10) == pdTRUE)
+//        return ch;
+//    taskYIELD();
+}
+
+void ICACHE_FLASH_ATTR tcp_shell_write_char(char ch) {
+    espconn_send(pespconn, &ch, 1);
 }
 
 LOCAL void ICACHE_FLASH_ATTR disconnected(void *arg) {
@@ -46,30 +53,23 @@ LOCAL void ICACHE_FLASH_ATTR received(void *arg, char *pusrdata, unsigned short 
         xQueueSend(tcp_shell_stdin, (void*) &pusrdata[i], portMAX_DELAY);
 }
 
-LOCAL void ICACHE_FLASH_ATTR sent( void* arg ){
-    printf("[Shell] data sent\n");
-}
+LOCAL void ICACHE_FLASH_ATTR sent(void* arg) {}
 
-LOCAL void ICACHE_FLASH_ATTR write_finished(void *arg) {
-    printf("[Shell] write finished\n");
-}
+LOCAL void ICACHE_FLASH_ATTR write_finished(void *arg) {}
 
-LOCAL void ICACHE_FLASH_ATTR connected(void *arg)
-{
+LOCAL void ICACHE_FLASH_ATTR connected(void *arg) {
     pespconn = (struct espconn *)arg;
     printf("Establishng TCP Shell..\n");
     espconn_regist_recvcb(pespconn, received);
     espconn_regist_disconcb(pespconn, disconnected);
-    espconn_regist_sentcb( pespconn, sent );
-    espconn_regist_write_finish( pespconn, write_finished );
+    espconn_regist_sentcb(pespconn, sent);
+    espconn_regist_write_finish(pespconn, write_finished);
     is_connected = TRUE;
     printf("TCP Shell connected\n");
 }
 
-void ICACHE_FLASH_ATTR tcp_shell_init(void)
-{
+void ICACHE_FLASH_ATTR tcp_shell_init(void) {
     tcp_shell_stdin = xQueueCreate(128, sizeof( char));
-
     masterconn.type = ESPCONN_TCP;
     masterconn.state = ESPCONN_NONE;
     masterconn.proto.tcp = (esp_tcp *)os_zalloc(sizeof(esp_tcp));
@@ -78,7 +78,6 @@ void ICACHE_FLASH_ATTR tcp_shell_init(void)
     espconn_regist_disconcb(&masterconn, disconnected);
     espconn_accept(&masterconn);
     espconn_regist_time(&masterconn, shell_timeout, 0);
-
     printf("TCP Shell initialized\n");
 }
 

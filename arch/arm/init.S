@@ -4,7 +4,7 @@
     str r0, [r1]
 
     ldr r0, =dictionary
-    ldr r1, =here_var    
+    ldr r1, =var_dp 
     str r0, [r1]
 
     ldr r1, =STACK_ORIG
