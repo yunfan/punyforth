@@ -19,21 +19,21 @@
 .endm
 
 .macro CALL_C label
-    addi sp, sp, -32		// adjust stack pointer
-    s32i a0, sp, 28		// save return address
-    s32i a8, sp, 20		// save a8
-    s32i a12, sp, 16		// save a12
-    s32i a13, sp, 12		// save a13
-    s32i a14, sp, 8		// save a14
-    s32i a15, sp, 4		// save a15
-    call0 \label		// call C
-    l32i a15, sp, 4		// get saved a15
-    l32i a14, sp, 8		// get saved a14
-    l32i a13, sp, 12		// get saved a13
-    l32i a12, sp, 16		// get saved a12
-    l32i a8, sp, 20		// get saved a8
-    l32i a0, sp, 28		// get the saved return address
-    addi sp, sp, 32		// restore stack pointer
+    addi sp, sp, -32    // adjust stack pointer
+    s32i a0, sp, 28     // save return address
+    s32i a8, sp, 20     // save a8
+    s32i a12, sp, 16    // save a12
+    s32i a13, sp, 12    // save a13
+    s32i a14, sp, 8     // save a14
+    s32i a15, sp, 4     // save a15
+    call0 \label        // call C
+    l32i a15, sp, 4     // get saved a15
+    l32i a14, sp, 8     // get saved a14
+    l32i a13, sp, 12    // get saved a13
+    l32i a12, sp, 16    // get saved a12
+    l32i a8, sp, 20     // get saved a8
+    l32i a0, sp, 28     // get the saved return address
+    addi sp, sp, 32     // restore stack pointer
 .endm
 
 defprimitive "dup",3,dup,1 /* ( a -- a a ) */
@@ -218,6 +218,11 @@ defprimitive "litstring",9,litstring,1
     DPUSH a14                                 // after the length there is the address of the string
     DPUSH a8                                  // length of the string
     add a14, a14, a8                          // skip the string
+    movi a8, 3                                // alignation
+    add a14, a14, a8
+    movi a9, TRUE                             // invert a8
+    xor a8, a8, a9
+    and a14, a14, a8
     NEXT
 
 defprimitive ">r",2,rpush,1
@@ -271,7 +276,7 @@ defprimitive "rp!",3,rpstore,1
 defprimitive "readchar",8,readchar,1
     CALL_C forth_getchar
     DPUSH a2
-    NEXT	
+    NEXT    
 
 // Different types of code words
 
@@ -285,9 +290,10 @@ ENTERCOL:                       // codeword for word (colon) definitions
 
 ENTERDOES:
     RPUSH a14                   // save program counter before entering the word
-    addi a14, a9, 8             // a9 points to ENTERDOES call in assembly, skip the embedded assembly instruction
-    addi a8, a8, CELLS          // a8 points to the codeword of the defined word, after that there is the param. field
-    DPUSH a8
+    addi a8, a8, CELLS          // a8 is on the codeword after there is the behaviour pointer
+    l32i a14, a8, 0     // set the FORTH PC to the behaviour
+    addi a8, a8, CELLS          // after the behaviour there is the data
+    DPUSH a8                    // invoke behavour with the data pointer on the stack
     NEXT
 
 

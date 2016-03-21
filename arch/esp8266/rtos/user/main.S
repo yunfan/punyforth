@@ -25,5 +25,8 @@ forth_start:
     movi a15, stack
     movi a13, rstack
 
+    movi a8, STACK_ORIG
+    s32i a15, a8, 0
+
     movi a14, outer_interpreter
     NEXT
