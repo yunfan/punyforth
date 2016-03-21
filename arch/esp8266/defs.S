@@ -1,3 +1,3 @@
-#define  WORD_ALIGN 2
+#define  WORD_ALIGN 4
 #define _M
 
