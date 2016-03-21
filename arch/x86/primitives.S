@@ -8,7 +8,7 @@ defprimitive "dup",3,dup,1 /* ( a -- a a ) */
     NEXT
     
 defprimitive "drop",4,drop,1 /* ( a -- ) */
-    pop eax
+    add esp, CELLS	
     NEXT
 
 defprimitive "swap",4,swap,1 /* ( a b -- b a ) */
@@ -80,23 +80,17 @@ defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
     
 defprimitive "or",2,or,1
     pop eax
-    pop ebx
-    or eax, ebx
-    push eax
+    or [esp], eax
     NEXT
     
 defprimitive "and",3,and,1
     pop eax
-    pop ebx
-    and eax, ebx
-    push eax
+    and [esp], eax
     NEXT    
 
 defprimitive "xor",3,xor,1
     pop eax
-    pop ebx
-    xor eax, ebx
-    push eax
+    xor [esp], eax
     NEXT    
 
 defprimitive "emit",4,emit,1
@@ -148,9 +142,7 @@ defprimitive "<",1,lt,1         // only need to define this, all other comparisi
     NEXT
 
 defprimitive "invert",6,invert,1
-    pop eax
-    not eax
-    push eax
+    not dword ptr [esp]
     NEXT
     
 defprimitive "branch",6,branch,1
@@ -206,13 +198,11 @@ defprimitive "exit",4,exit,1
     NEXT
 
 defprimitive "sp@",3,spat,1
-    mov eax, esp
-    push eax
+    push esp
     NEXT
 
 defprimitive "sp!",3,spstore,1
-    pop eax
-    mov esp, eax
+    pop esp
     NEXT
 
 defprimitive "rp@",3,rpat,1
