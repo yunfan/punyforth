@@ -12,7 +12,8 @@ name_\label :
     .globl xt_\label
 xt_\label :
     .int code_\label
-    .text
+    .section .irom0.text
+    .align WORD_ALIGN
     .globl code_\label
 code_\label :
 .endm

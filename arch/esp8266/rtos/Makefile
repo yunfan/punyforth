@@ -16,6 +16,7 @@ TARGET = eagle
 FLAVOR = debug
 
 #EXTRA_CCFLAGS += -u
+EXTRA_CCFLAGS += -mlongcalls
 
 ifndef PDIR # {
 GEN_IMAGES= eagle.app.v6.out
@@ -59,13 +60,13 @@ LINKFLAGS_eagle.app.v6 = \
 	-Wl,-static						\
 	-Wl,--start-group					\
 	-lcirom \
-	-lcrypto	\
+  	-lcrypto	\
 	-lespconn	\
 	-lespnow	\
 	-lfreertos	\
 	-lgcc					\
 	-lhal					\
-	-ljson	\
+        -ljson	\
 	-llwip	\
 	-lmain	\
 	-lmesh	\

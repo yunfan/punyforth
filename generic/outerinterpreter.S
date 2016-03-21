@@ -1,5 +1,8 @@
 // This is the outer text interpreter (REPL) implemented in binary forth.
 
+.section .rodata
+.align 4
+
 outer_interpreter:
     .int xt_word, xt_dup, xt_branch0       // read next word, check end of input    
     lbl end_of_input

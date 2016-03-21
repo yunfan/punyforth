@@ -1,4 +1,4 @@
-.output/eagle/debug/obj/user_main.o .output/eagle/debug/obj/user_main.d : user_main.c \
+.output/eagle/debug/obj/user_main.o .output/eagle/debug/obj/user_main.d : user_main.c ../include/user_config.h \
  /home/zeroflag/ESP8266_RTOS_SDK/include/espressif/esp_common.h \
  /home/zeroflag/ESP8266_RTOS_SDK/include/espressif/c_types.h \
  /home/zeroflag/forthright/arch/esp8266/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/stdint.h \
@@ -84,4 +84,4 @@
  /home/zeroflag/ESP8266_RTOS_SDK/include/espressif/spi_flash.h \
  /home/zeroflag/ESP8266_RTOS_SDK/include/espressif/pwm.h \
  /home/zeroflag/ESP8266_RTOS_SDK/include/espressif/esp_softap.h \
- ../include/punyforth.h
+ ../include/uart.h ../include/tcp_shell.h ../include/punyforth.h

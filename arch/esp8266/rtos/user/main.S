@@ -11,19 +11,19 @@
 .global forth_start
 
 .section .irom0.text
-.literal_position
+.align 4
 
 forth_start:
-    l32r a8, input_buffer
-    l32r a9, input_index
+    movi a8, input_buffer
+    movi a9, input_index
     s32i a8, a9, 0
 
-    l32r a8, dictionary
-    l32r a9, here_var
+    movi a8, dictionary
+    movi a9, here_var
     s32i a8, a9, 0
 
-    l32r a15, stack
-    l32r a13, rstack
+    movi a15, stack
+    movi a13, rstack
 
-    l32r a14, outer_interpreter
+    movi a14, outer_interpreter
     NEXT
