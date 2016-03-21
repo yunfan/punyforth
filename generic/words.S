@@ -134,7 +134,7 @@ defword ",",1,comma,1
     .int xt_exit
 
 defword "c,",2,commabyte,1
-    .int xt_here, xt_store
+    .int xt_here, xt_storebyte
     .int xt_here, xt_inc 
     .int xt_btick, _M here_var, xt_store   
     .int xt_exit
@@ -385,7 +385,7 @@ type_next_char:
     .int xt_dup, xt_eq0, xt_invert, xt_branch0
     lbl type_done
     .int xt_dec, xt_swap
-    .int xt_dup, xt_fetch, xt_emit
+    .int xt_dup, xt_fetchbyte, xt_emit
     .int xt_inc, xt_swap
     .int xt_branch
     lbl type_next_char
