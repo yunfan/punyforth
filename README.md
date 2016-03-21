@@ -79,12 +79,7 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     does> @ ;
     
 : does>
-    ['] (does) ,
-    104 c, enterdoes , 195 c,              \ complile embedded assembly: PUSH ENTERDOES RETN
- ; immediate
-
-: (does)
-    r> lastword link>xt ! ;                \ change lastword codeword to point to the embedded assembly code
+    r> lastword link>body ! ;                \ store the pointer to the behavior into the body of the lastword
 
 ( Examples )
 
@@ -93,52 +88,44 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 
 ```
 
-```assembly
-; The ENTERDOES is a similar codeword than ENTERCOL.
-; The main difference between ENTERDOES and ENTERCOL is that the former pushes 
-; the address of the parameter field of the word.
-
-ENTERDOES:
-    mov [ebp], esi          ; save esi (forth instruction pointer) to return stack
-    add ebp, CELLS
-    mov esi, [eax]          ; [eax] points to the embedded assembly that called ENTERDOES
-    add esi, 6              ; length of the embedded assembly code is 6, after that there are the forth code
-    add eax, CELLS          ; eax points to the codeword of the defined word, after that there is the param. field
-    push eax                ; push the parameter field and jump to the forth code (does> clause) 
-    NEXT
-
-```
-
 #### How *does>* it work?
 
 *constant* is a defining word that creates other words like *TRUE* or *FALSE*.
 
-*does>* is an immediate word that is executed at compile time. Its compilation semantics is to compile *(does)* and an embedded assembly code that jumps to *ENTERDOES*.
+The word *does>* writes the pointer to the behavior (e.g. @) into the first cell of the recently defined word (e.g. TRUE).
 
-*(does)* modifies the codeword of the latest word to point to the embedded assembly code compiled by *does>*
+*ENTERDOES* is similar than *ENTERCOL*. It pushes the data field (e.g. -1) to the stack before invoking the behavior.
 
-The embedded assembly code simply jumps to the codeword *ENTERDOES*. *ENTERDOES* is similar than *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
+Here are the dictionary entries of the compiled *constant* and the word *TRUE* created by constant.
 
-Here are the dictionary entries of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
-
-<pre>                        
-                             address of ENTERCOL                            jumps to ENTERDOES
-                             /                                              /
-                            |                                               |
-+-----+---+----------+---+----+-----------+------+-----------+--------------------+------+---------+
-| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_(does) | asm: jmp ENTERDOES | xt_@ | xt_exit |
-+-----+---+----------+---+----+-----------+------+-----------+--------------------+------+---------+
-                                                               /             /
-                                                               |             |
-                                        +-----+---+------+---+----+----+     |
-                                        | LNK | 4 | TRUE | 1 | CW | -1 |     |
-                                        +-----+---+------+---+----+----+     |
-                                                                             |
-                                                    +-----+---+-------+---+----+---+
-                                                    | LNK | 5 | FALSE | 1 | CW | 0 |
-                                                    +-----+---+-------+---+----+---+
-
+<pre>                
+                             address of ENTERCOL                
+                             /                                  
+                            |                                                                behavior
++-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
+| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_r> | xt_lastword | xt_link>body | xt_! | xt_@ | xt_exit |
++-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
+                                                                                               /
+                                             behavior pointer  /```````````````````````````````
+                                                              |    
+                                  +-----+---+------+---+----+----+----+     
+                                  | LNK | 4 | TRUE | 1 | CW | bp | -1 |     
+                                  +-----+---+------+---+----+----+----+     
+                                                         /        data       
+                                                        |
+                                              address of ENTERDOES
 </pre>
+
+```assembly
+ENTERDOES:
+    sub ebp, CELLS
+    mov [ebp], esi          // save esi to return stack
+    add eax, CELLS          // eax points to the codeword field, skip this
+    mov esi, [eax]          // after the codeword there is the behavior pointer
+    add eax, CELLS          // after the behavior pointer there is the data field
+    push eax               
+    NEXT                    // jump to behavour
+```
 
 ### Other examples of create does>
 
