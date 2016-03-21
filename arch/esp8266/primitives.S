@@ -18,6 +18,24 @@
     addi a13, a13, CELLS
 .endm
 
+.macro CALL_C label
+    addi sp, sp, -32		// adjust stack pointer
+    s32i a0, sp, 28		// save return address
+    s32i a8, sp, 20		// save a8
+    s32i a12, sp, 16		// save a12
+    s32i a13, sp, 12		// save a13
+    s32i a14, sp, 8		// save a14
+    s32i a15, sp, 4		// save a15
+    call0 \label		// call C
+    l32i a15, sp, 4		// get saved a15
+    l32i a14, sp, 8		// get saved a14
+    l32i a13, sp, 12		// get saved a13
+    l32i a12, sp, 16		// get saved a12
+    l32i a8, sp, 20		// get saved a8
+    l32i a0, sp, 28		// get the saved return address
+    addi sp, sp, 32		// restore stack pointer
+.endm
+
 defprimitive "dup",3,dup,1 /* ( a -- a a ) */
     l32i a8, a15, 0
     DPUSH a8
@@ -88,8 +106,18 @@ defprimitive "*",1,multiply,1
     DPUSH a8
     NEXT
 
-defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
-    // TODO
+.literal_position
+defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */    
+    DPOP a8            // denom
+    DPOP a9            // numer
+    mov a3, a8        // parameter denom
+    mov a2, a9        // parameter numer
+    CALL_C forth_mod
+    DPUSH a2           // remainder
+    mov a3, a8        // parameter denom
+    mov a2, a9        // parameter numer
+    CALL_C forth_div
+    DPUSH a2           // quotient
     NEXT
 
 defprimitive "or",2,or,1
@@ -115,14 +143,15 @@ defprimitive "xor",3,xor,1
 
 defprimitive "invert",6,invert,1
     DPOP a8
-    movi a9, 0
-    addi a9, a9, -1
+    movi a9, TRUE
     xor a8, a8, a9
     DPUSH a8
     NEXT
 
+.literal_position
 defprimitive "emit",4,emit,1
-    // TODO
+    DPOP a2
+    CALL_C forth_putchar
     NEXT    
 
 defprimitive "abort",5,abort,1
@@ -132,6 +161,12 @@ defprimitive "abort",5,abort,1
 defprimitive "@",1,fetch,1
     DPOP a8
     l32i a9, a8, 0
+    DPUSH a9
+    NEXT
+
+defprimitive "c@",1,fetchbyte,1
+    DPOP a8
+    l8ui a9, a8, 0
     DPUSH a9
     NEXT
 
@@ -171,8 +206,8 @@ defprimitive "branch",6,branch,1
 defprimitive "branch0",7,branch0,1
     l32i a8, a14, 0                 // read relative address
     addi a14, a14, CELLS
-    DPOP a8
-    bnez a8, nobranch0
+    DPOP a9
+    bnez a9, nobranch0
     add a14, a14, a8
 nobranch0:
     NEXT
@@ -207,8 +242,8 @@ defprimitive "j",1,j,1
 
 defprimitive "execute",7,execute,1    
     DPOP a8                             // xt
-    l32i a8, a8, 0                      // fetch codeword
-    jx a8  
+    l32i a9, a8, 0                      // fetch codeword the same way as the inner interpreter does
+    jx a9  
 
 defprimitive "exit",4,exit,1
     RPOP a14                            // pop forth PC from the return stack
@@ -233,40 +268,15 @@ defprimitive "rp!",3,rpstore,1
     mov a13, a8
     NEXT
 
-defprimitive "key",3,key,1
-//    mov a8, input_buffer
-//    mov a9, input_size
-    l32i a10, a9, 0
-    add a8, a8, a10
-//    mov a11, =input_index    
-    l32i a10, a11, 0
-    blt a10, a8, read_one_char_from_buffer
-//    prompt
-//    ldr a10, =input_buffer
-    addi a10, a10, -1
-    movi a8, 0
-    s32i a8, a9, 0
-refill_buffer:
-    addi a10, a10, 1              // increment input_buffer position
-    l32i a11, a9, 0          // increment input size
-    addi a11, a11, 1
-    s32i a11, a9, 0
-    
-    // syscall
-    movi a8, 0
-    l8ui a8, a10, 0
-    bnei a8, 10, refill_buffer
-//    mov a10, =input_buffer
-read_one_char_from_buffer:
-    movi a8, 0    
-    l8ui a8, a10, 0
-    addi a10, a10, 1
-//    mov a11, =input_index
-    s32i a10, a11, 0
-    DPUSH a8
-    NEXT
+defprimitive "readchar",8,readchar,1
+    CALL_C forth_getchar
+    DPUSH a2
+    NEXT	
 
 // Different types of code words
+
+.section .irom0.text
+.align 4
 
 ENTERCOL:                       // codeword for word (colon) definitions
     RPUSH a14                   // save program counter before entering the word
@@ -279,4 +289,5 @@ ENTERDOES:
     addi a8, a8, CELLS           // a8 points to the codeword of the defined word, after that there is the param. field
     DPUSH a8
     NEXT
+
 
