@@ -1,6 +1,4 @@
 // TODO
-defprimitive "time",4,time,1 /* ( -- unixtime ) */
-    NEXT
 
 defword "(does)",6,doespar,1
     .int xt_rpop, xt_lastword, xt_link2xt, xt_store
