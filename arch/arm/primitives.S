@@ -230,6 +230,8 @@ defprimitive "readchar",8,readchar,1
     mov r2, #1              // length
     mov r7, #3
     swi 0
+    cmp r0, #0
+    ble code_abort
     pop {r7}
     ldr r0, [r1]
     push {r0}

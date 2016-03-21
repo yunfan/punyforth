@@ -81,7 +81,7 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     does> @ ;
 
 : create 
-    createheader enterdoes , 0 , ;"    \ write enterdoes to the code field and store a dummy addres for the behavior
+    createheader enterdoes , 0 , ;     \ write enterdoes to the code field and store a dummy addres for the behavior
     
 : does>
     r> lastword link>body ! ;          \ store the pointer to the behavior into the body of the lastword
