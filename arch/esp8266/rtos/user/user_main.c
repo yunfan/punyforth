@@ -47,9 +47,22 @@ char ICACHE_FLASH_ATTR forth_getchar() {
 int ICACHE_FLASH_ATTR forth_time() { 
     return xTaskGetTickCount();
 }
+
+void ICACHE_FLASH_ATTR forth_abort() { 
+    printf("Restarting ESP ..");
+//    sdk_system_restart();
+}
+
+void ICACHE_FLASH_ATTR forth_type(char* text, int len) { 
+    printf("%.*s", len, text);
+    if (tcp_shell_is_connected()) {
+        tcp_shell_write_string(text, len);
+    }
+}
+
 void ICACHE_FLASH_ATTR user_init(void) {
     tcp_shell_init();
-    printf("Starting PunyForth task...\n");
+    printf("Starting PunyForth task ..\n");
     xTaskCreate(forth_init, "punyforth", 256, NULL, 2, &tasks[0]); 
     printf("PunyForth started\n");
 }

@@ -40,6 +40,10 @@ void ICACHE_FLASH_ATTR tcp_shell_write_char(char ch) {
     espconn_send(pespconn, &ch, 1);
 }
 
+void ICACHE_FLASH_ATTR tcp_shell_write_string(char* text, int len) {
+    espconn_send(pespconn, text, len);
+}
+
 LOCAL void ICACHE_FLASH_ATTR disconnected(void *arg) {
     pespconn = (struct espconn *) arg;
     is_connected = FALSE;

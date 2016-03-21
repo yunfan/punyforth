@@ -137,7 +137,7 @@ defprimitive "emit",4,emit,1
     NEXT    
 
 defprimitive "abort",5,abort,1
-    // TODO
+    CCALL forth_abort
     NEXT
 
 defprimitive "@",1,fetch,1
