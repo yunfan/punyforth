@@ -4,7 +4,7 @@ defprimitive "dup",3,dup,1 /* ( a -- a a ) */
     NEXT
 
 defprimitive "drop",4,drop,1 /* ( a -- ) */
-    add sp, CELLS	
+    add sp, #CELLS
     NEXT
 
 defprimitive "swap",4,swap,1 /* ( a b -- b a ) */
