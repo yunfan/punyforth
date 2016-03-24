@@ -140,17 +140,16 @@ defprimitive "[']",3,btick,1    // compile only
 defprimitive "<",1,lt,1         // only need to define this, all other comparisions are implemented in terms of lt
     pop {r1}
     pop {r0}
-    movs r2, #0
+    mov r2, #0
     cmp r0, r1
-    bge 1f
-    mvns r2, r2
-1:  push {r2}
+    movlt r2, #TRUE
+    push {r2}
     NEXT
 
 defprimitive "branch",6,branch,1
     ldr r0, [r7]
-    add r7, r7, #CELLS
-    add r7, r7, r0
+    add r7, #CELLS
+    add r7, r0
     NEXT
 
 defprimitive "branch0",7,branch0,1
@@ -158,9 +157,7 @@ defprimitive "branch0",7,branch0,1
     add r7, #CELLS
     pop {r1}                                  // check condition
     cmp r1, #0                                  
-    bne nobranch0
-    add r7, r7, r0                           // do jumping
-nobranch0:
+    addeq r7, r0                              // advance pc if condition was satisfied
     NEXT
 
 defprimitive "litstring",9,litstring,1
