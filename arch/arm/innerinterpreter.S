@@ -1,7 +1,7 @@
 /*
     Indirect threaded inner interpreter:
         - r7 forth instruction pointer
-        - r0 working register
+        - r0, r1 working registers
         - sp stack pointer
         - r6 rstack pointer
 */    
