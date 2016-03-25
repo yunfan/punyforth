@@ -216,6 +216,7 @@ defprimitive "rp!",3,rpstore,1
 defprimitive "readchar",8,readchar,1
     mov ecx, OFFSET FLAT:var0                                           // buffer for one character
     xor ebx, ebx                                                        // reads from stdin (FD 0)
+    mov [ecx], ebx
     mov eax, 3                                                          // use syscall 3 (read) to read from stdin
     mov edx, 1                                                          // read one character
     int 0x80                                                            // invoke system call to read from stdin
