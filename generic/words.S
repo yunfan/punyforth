@@ -394,25 +394,32 @@ type_done:
     .int xt_exit
 .endif    
 
-defword "key",3,key,1
-    .int xt_inputbuf, xt_inputlen, xt_fetch, xt_plus
-    .int xt_tib, xt_fetch, xt_swap, xt_lt, xt_invert
-    .int xt_branch0
-    lbl read_one_char_from_buffer    
-    .int xt_btick, 0, xt_inputlen, xt_store
-    .int xt_inputbuf, xt_tib, xt_store
-    .int xt_btick, _M prompt_str, xt_btick, 4, xt_type
-refill_buffer:
-    .int xt_readchar, xt_dup
-    .int xt_tib, xt_fetch, xt_storebyte
+defword "chr>in",6,char_toin /* (chr -- ) */
+    .int xt_tib, xt_fetch, xt_storebyte                          // store one char in inputbuffer
     .int xt_tib, xt_fetch, xt_inc, xt_tib, xt_store              // increment input index
     .int xt_inputlen, xt_fetch, xt_inc, xt_inputlen, xt_store    // incrment input size
+    .int xt_exit
+
+defword "in>char",7,char_fromin /* (chr -- ) */
+    .int xt_tib, xt_fetch, xt_fetchbyte                          // fetch next character from inputbuffer
+    .int xt_tib, xt_fetch, xt_inc, xt_tib, xt_store              // increment input index
+    .int xt_exit
+
+defword "key",3,key,1
+    .int xt_inputbuf, xt_inputlen, xt_fetch, xt_plus
+    .int xt_tib, xt_fetch, xt_swap, xt_gte   
+    .int xt_branch0
+    lbl read_one_char_from_buffer    
+    .int xt_btick, 0, xt_inputlen, xt_store                      // reset inputlen
+    .int xt_inputbuf, xt_tib, xt_store                           // reset inputbuffer
+    .int xt_btick, _M prompt_str, xt_btick, 4, xt_type           // show prompt
+refill_buffer:
+    .int xt_readchar, xt_dup, xt_char_toin
     .int xt_btick, 10, xt_eq, xt_branch0
     lbl refill_buffer
     .int xt_inputbuf, xt_tib, xt_store
 read_one_char_from_buffer:
-    .int xt_tib, xt_fetch, xt_fetchbyte                          // fetch next character at input index
-    .int xt_tib, xt_fetch, xt_inc, xt_tib, xt_store              // increment input index
+    .int xt_char_fromin
     .int xt_exit
 
 defword "compile_time_only",17,compile_time_only,1    
