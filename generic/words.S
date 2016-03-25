@@ -400,7 +400,7 @@ defword "chr>in",6,char_toin /* (chr -- ) */
     .int xt_inputlen, xt_fetch, xt_inc, xt_inputlen, xt_store    // incrment input size
     .int xt_exit
 
-defword "in>char",7,char_fromin /* (chr -- ) */
+defword "in>char",7,char_fromin /* ( -- chr ) */
     .int xt_tib, xt_fetch, xt_fetchbyte                          // fetch next character from inputbuffer
     .int xt_tib, xt_fetch, xt_inc, xt_tib, xt_store              // increment input index
     .int xt_exit
