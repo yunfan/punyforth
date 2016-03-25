@@ -147,8 +147,8 @@ defword "<>",2,noteq,1
     .int xt_eq, xt_invert
     .int xt_exit
     
-defword ">in",3,inputbuf,1
-    .int xt_btick, _M input_buffer
+defword ">in",3,toin,1
+    .int xt_btick, _M input_index
     .int xt_exit
     
 defword "#tib",4,inputlen,1
@@ -156,7 +156,7 @@ defword "#tib",4,inputlen,1
     .int xt_exit
 
 defword "tib",3,tib,1
-    .int xt_btick, _M input_index
+    .int xt_btick, _M input_buffer
     .int xt_exit
 
 defword "state",5,state,1
@@ -325,7 +325,7 @@ tonum_done:
     .int xt_btick, TRUE
     .int xt_exit
 tonum_invalid_digit:                                                            // TODO emit string
-    .int xt_tib, xt_fetch, xt_btick, 20, xt_type
+    .int xt_toin, xt_fetch, xt_btick, 20, xt_type
     .int xt_rpop, xt_drop
     .int xt_drop, xt_drop
     .int xt_btick, FALSE
@@ -349,7 +349,7 @@ word_trim:
     .int xt_dup, xt_btick, 9, xt_noteq, xt_branch0
     lbl word_trim
     .int xt_drop
-    .int xt_tib, xt_fetch, xt_dec                                               // word start
+    .int xt_toin, xt_fetch, xt_dec                                               // word start
     .int xt_btick, 0
 word_next_char:
     .int xt_drop
@@ -366,7 +366,7 @@ word_next_char:
     lbl word_next_char
 word_boundary:
     .int xt_drop
-    .int xt_dup, xt_tib, xt_fetch, xt_swap, xt_minus, xt_dec                    // word length
+    .int xt_dup, xt_toin, xt_fetch, xt_swap, xt_minus, xt_dec                    // word length
     .int xt_swap
     .int xt_exit
 
@@ -395,29 +395,29 @@ type_done:
 .endif    
 
 defword "chr>in",6,char_toin /* (chr -- ) */
-    .int xt_tib, xt_fetch, xt_storebyte                          // store one char in inputbuffer
-    .int xt_tib, xt_fetch, xt_inc, xt_tib, xt_store              // increment input index
+    .int xt_toin, xt_fetch, xt_storebyte                          // store one char in inputbuffer
+    .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store              // increment input index
     .int xt_inputlen, xt_fetch, xt_inc, xt_inputlen, xt_store    // incrment input size
     .int xt_exit
 
 defword "in>char",7,char_fromin /* ( -- chr ) */
-    .int xt_tib, xt_fetch, xt_fetchbyte                          // fetch next character from inputbuffer
-    .int xt_tib, xt_fetch, xt_inc, xt_tib, xt_store              // increment input index
+    .int xt_toin, xt_fetch, xt_fetchbyte                          // fetch next character from inputbuffer
+    .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store              // increment input index
     .int xt_exit
 
 defword "key",3,key,1
-    .int xt_inputbuf, xt_inputlen, xt_fetch, xt_plus
-    .int xt_tib, xt_fetch, xt_swap, xt_gte   
+    .int xt_tib, xt_inputlen, xt_fetch, xt_plus
+    .int xt_toin, xt_fetch, xt_swap, xt_gte   
     .int xt_branch0
     lbl read_one_char_from_buffer    
     .int xt_btick, 0, xt_inputlen, xt_store                      // reset inputlen
-    .int xt_inputbuf, xt_tib, xt_store                           // reset inputbuffer
+    .int xt_tib, xt_toin, xt_store                           // reset inputbuffer
     .int xt_btick, _M prompt_str, xt_btick, 4, xt_type           // show prompt
 refill_buffer:
     .int xt_readchar, xt_dup, xt_char_toin
     .int xt_btick, 10, xt_eq, xt_branch0
     lbl refill_buffer
-    .int xt_inputbuf, xt_tib, xt_store
+    .int xt_tib, xt_toin, xt_store
 read_one_char_from_buffer:
     .int xt_char_fromin
     .int xt_exit

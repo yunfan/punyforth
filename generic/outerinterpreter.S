@@ -35,7 +35,7 @@ end_of_input:
 invalid_number:
     .int xt_btick, '?', xt_emit
     .int xt_btick, 10, xt_emit
-    .int xt_inputbuf, xt_inputlen, xt_fetch, xt_plus, xt_tib, xt_store // skip rest of the inputbuffer
+    .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
     .int xt_branch
     lbl outer_interpreter
 
