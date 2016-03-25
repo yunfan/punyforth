@@ -228,45 +228,15 @@ defprimitive "rp!",3,rpstore,1
     pop {r0, r1, r2, r7}
 .endm
 
-defprimitive "key",3,key,1
-    ldr r0, =input_buffer
-    ldr r3, =input_size
-    ldr r1, [r3]
-    add r0, r1
-    ldr r2, =input_index
-    ldr r1, [r2]
-    cmp r1, r0
-    blt read_one_char_from_buffer
-    prompt
-    ldr r1, =input_buffer
-    sub r1, #1
-    mov r0, #0
-    str r0, [r3]    
-refill_buffer:
-    add r1, #1              // increment input_buffer position
-    ldr r2, [r3]            // increment input size
-    add r2, #1
-    str r2, [r3]
+defprimitive "readchar",8,readchar,1
     push {r7}
+    ldr r1, =var0           // buffer for one character
     mov r0, #0              // read system call
     mov r2, #1              // length
     mov r7, #3
     swi 0                   // read to input buffer position
     pop {r7}
-    mov r0, #0
-    ldrb r0, [r1]
-    cmp r0, #10
-    bne refill_buffer
-    ldr r1, =input_buffer
-read_one_char_from_buffer:
-    mov r0, #0
-    ldrb r0, [r1]
-    add r1, #1
-    ldr r2, =input_index
-    str r1, [r2]
-    push {r0}
     NEXT
-
 
 // Different types of code words
 
