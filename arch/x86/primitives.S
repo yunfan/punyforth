@@ -213,22 +213,6 @@ defprimitive "rp!",3,rpstore,1
     pop ebp
     NEXT
 
-.macro prompt
-    push edx
-    push ecx
-    push ebx
-    push eax
-    mov edx, 4
-    mov ecx, OFFSET FLAT:prompt_str
-    mov ebx, 1    
-    mov eax, 4    
-    int 0x80
-    pop eax
-    pop ebx
-    pop ecx
-    pop edx
-.endm
-
 defprimitive "readchar",8,readchar,1
     mov ecx, OFFSET FLAT:var0                                           // buffer for one character
     xor ebx, ebx                                                        // reads from stdin (FD 0)

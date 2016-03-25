@@ -218,16 +218,6 @@ defprimitive "rp!",3,rpstore,1
     pop {r6}
     NEXT
 
-.macro prompt
-    push {r0, r1, r2, r7}
-    ldr r1, =prompt_str
-    mov r0, #1                      // fd <- stdout
-    mov r2, #4                      // length
-    mov r7, #4                      // syscall <- sys_write
-    swi 0  
-    pop {r0, r1, r2, r7}
-.endm
-
 defprimitive "readchar",8,readchar,1
     push {r7}
     ldr r1, =var0           // buffer for one character
