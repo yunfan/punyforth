@@ -222,10 +222,13 @@ defprimitive "readchar",8,readchar,1
     push {r7}
     ldr r1, =var0           // buffer for one character
     mov r0, #0              // read system call
+    str r0, [r1]
     mov r2, #1              // length
     mov r7, #3
-    swi 0                   // read to input buffer position
+    swi 0
     pop {r7}
+    ldr r0, [r1]
+    push {r0}
     NEXT
 
 // Different types of code words
