@@ -134,7 +134,7 @@ defword ",",1,comma,1
     .int xt_exit
 
 defword "c,",2,commabyte,1
-    .int xt_here, xt_store
+    .int xt_here, xt_storebyte
     .int xt_here, xt_inc 
     .int xt_btick, _M here_var, xt_store   
     .int xt_exit
