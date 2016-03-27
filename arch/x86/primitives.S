@@ -164,6 +164,10 @@ defprimitive "litstring",9,litstring,1
     push esi                            // address of the string
     push eax                            // length of the string
     add esi, eax                        // skip string
+    mov ebx, 3                          // alignation
+    add esi, ebx
+    not ebx
+    and esi, ebx
     NEXT
     
 defprimitive ">r",2,rpush,1

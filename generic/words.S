@@ -134,8 +134,8 @@ defword ",",1,comma,1
     .int xt_exit
 
 defword "c,",2,commabyte,1
-    .int xt_here, xt_storebyte
-    .int xt_here, xt_inc 
+    .int xt_dp, xt_storebyte
+    .int xt_dp, xt_inc 
     .int xt_btick, _M here_var, xt_store   
     .int xt_exit
 
@@ -243,16 +243,19 @@ defword "align",5,align,1
     .int xt_exit
 
 defword "here",4,here,1
-    .int xt_btick, _M here_var, xt_fetch
+    .int xt_dp, xt_align
     .int xt_exit
     
+defword "dp",2,dp,1
+    .int xt_btick, _M here_var, xt_fetch
+    .int xt_exit
+
 defword "allot",5,allot,1 /* ( n -- ) */
-    .int xt_here, xt_plus, xt_btick, _M here_var, xt_store
+    .int xt_here, xt_plus, xt_align, xt_btick, _M here_var, xt_store
     .int xt_exit
     
 defword "createheader",12,createheader,1
     .int xt_word
-    .int xt_here, xt_align, xt_btick, _M here_var, xt_store                // align beginning of the new word   
     .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_cell, xt_minus, xt_btick, _M LAST_WORD, xt_store      // update last word
     .int xt_swap, xt_dup, xt_comma                                         // write length
@@ -260,8 +263,8 @@ defword "createheader",12,createheader,1
 create_write_next_char:    
     .int xt_dup, xt_branch0
     lbl create_name_done
-    .int xt_swap, xt_dup, xt_fetchbyte, xt_here, xt_storebyte
-    .int xt_here, xt_inc, xt_btick, _M here_var, xt_store
+    .int xt_swap, xt_dup, xt_fetchbyte, xt_dp, xt_storebyte
+    .int xt_dp, xt_inc, xt_btick, _M here_var, xt_store
     .int xt_inc                                                            // increment name address
     .int xt_swap, xt_dec                                                   // decrement length
     .int xt_branch
