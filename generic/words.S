@@ -139,7 +139,7 @@ defword "c,",2,commabyte,1
     .int xt_btick, _M here_var, xt_store   
     .int xt_exit
 
-.ifndef xt_over
+.ifndef xt_fetchbyte
 defword "c@",2,fetchbyte,1
     .int xt_fetch, xt_btick, 255, xt_and
     .int xt_exit
