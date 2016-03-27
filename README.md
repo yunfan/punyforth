@@ -88,21 +88,6 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 
 ```
 
-```assembly
-; The ENTERDOES is a similar codeword than ENTERCOL.
-; The main difference between ENTERDOES and ENTERCOL is that the former pushes 
-; the address of the parameter field of the word.
-
-ENTERDOES:
-    sub ebp, CELLS
-    mov [ebp], esi          // save esi to return stack
-    add eax, CELLS          // eax points to the codeword field, skip this
-    mov esi, [eax]          // after the codeword there is the behavior pointer
-    add eax, CELLS          // after the behavior pointer there is the data field
-    push eax               
-    NEXT                    // jump to behavour
-```
-
 #### How *does>* it work?
 
 *constant* is a defining word that creates other words like *TRUE* or *FALSE*.
@@ -130,6 +115,17 @@ Here are the dictionary entries of the compiled *constant* and the word *TRUE* c
                                                         |
                                               address of ENTERDOES
 </pre>
+
+```assembly
+ENTERDOES:
+    sub ebp, CELLS
+    mov [ebp], esi          // save esi to return stack
+    add eax, CELLS          // eax points to the codeword field, skip this
+    mov esi, [eax]          // after the codeword there is the behavior pointer
+    add eax, CELLS          // after the behavior pointer there is the data field
+    push eax               
+    NEXT                    // jump to behavour
+```
 
 ### Other examples of create does>
 
