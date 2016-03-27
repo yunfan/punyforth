@@ -111,13 +111,11 @@ ENTERDOES:
 
 *constant* is a defining word that creates other words like *TRUE* or *FALSE*.
 
-*does>* is an immediate word that is executed at compile time. Its compilation semantics is to compile *(does)* and an embedded assembly code that jumps to *ENTERDOES*.
+[..]
 
-*(does)* modifies the codeword of the latest word to point to the embedded assembly code compiled by *does>*
+*ENTERDOES* is similar than *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
 
-The embedded assembly code simply jumps to the codeword *ENTERDOES*. *ENTERDOES* is similar than *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
-
-Here are the dictionary entries of the compiled *constant* and the words (*TRUE* and *FALSE*) created by constant.
+Here are the dictionary entries of the compiled *constant* and the word *TRUE* created by constant.
 
 <pre>                        
                              address of ENTERCOL                
