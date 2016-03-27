@@ -242,8 +242,9 @@ ENTERCOL:                   // codeword for word (colon) definitions
 ENTERDOES:
     sub r6, #CELLS
     str r7, [r6]            // save r7 (forth instruction pointer) to the return stack
-    add r7, r1, #8          // r1 points to the ENTERDOES call in assembly skip the embedded assembly instruction
-    add r0, r0, #CELLS      // r0 points to the codeword of the defined word, after that there is the param. field
-    push {r0}
+    add r0, #CELLS         
+    ldr r7, [r0]            // load the behaviour pointer to FORTH PC
+    add r0, #CELLS          // after the behaviour pointer there is the data
+    push {r0}               // invoke behaviour with data pointer on the stack
     NEXT
 
