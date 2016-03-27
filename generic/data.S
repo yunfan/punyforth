@@ -262,8 +262,8 @@ input_buffer:
 //  * add error handling to [compile] and '
 //  * show depth in prompt
 
-.align 4
 input_size:  .int . - input_buffer
+.align 4
 here_var:    .int 0
 dictionary:  .space 8192
 rstack_space: .space 128
