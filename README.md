@@ -79,10 +79,6 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     does> @ ;
     
 : does>
-    ['] (does) ,
- ; immediate
-
-: (does)
     r> lastword link>body ! ;                \ store the pointer to the behavior into the body of the lastword
 
 ( Examples )
@@ -117,15 +113,15 @@ ENTERDOES:
 
 Here are the dictionary entries of the compiled *constant* and the word *TRUE* created by constant.
 
-<pre>                        
+<pre>                
                              address of ENTERCOL                
                              /                                  
                             |                                behavior
-+-----+---+----------+---+----+-----------+------+-----------+------+---------+
-| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_(does) | xt_@ | xt_exit |
-+-----+---+----------+---+----+-----------+------+-----------+------+---------+
-                                                              /   
-                                                              | behavior pointer                
++-----+---+----------+---+----+-----------+------+---------+-------------+--------------+----------+------+---------+
+| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_rpop | xt_lastword | xt_link2body | xt_store | xt_@ | xt_exit |
++-----+---+----------+---+----+-----------+------+---------+-------------+--------------+----------+------+---------+
+                                                               _______________________________________/
+                                             behavior pointer /
                                                               |    
                                   +-----+---+------+---+----+----+----+     
                                   | LNK | 4 | TRUE | 1 | CW | bp | -1 |     
