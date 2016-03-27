@@ -78,6 +78,9 @@ input_buffer:
 
 .ascii "\n    : ' ( -- addr ) word find drop ; \\ find the xt of the next word in the inputstream"
 
+.ascii "\n    : create createheader enterdoes , 0 , ;"
+.ascii "\n    : (does) r> lastword link>body ! ;"
+.ascii "\n    : does> ['] (does) , ; immediate"
 .ascii "\n    : constant create , does> @ ; "
 .ascii "\n    : variable create 0 , does> ; "
 

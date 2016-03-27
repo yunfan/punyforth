@@ -236,8 +236,8 @@ ENTERCOL:                   // codeword for word (colon) definitions
 ENTERDOES:
     sub ebp, CELLS
     mov [ebp], esi          // save esi to return stack
-    mov esi, [eax]          // [eax] points to ENTERDOES call in assembly
-    add esi, 6              // length of the embedded assembly code is 6, after that there are the forth code
-    add eax, CELLS          // eax points to the codeword of the defined word, after that there is the param. field
-    push eax
-    NEXT
+    add eax, CELLS          // eax points to the codeword field, skip tshi
+    mov esi, [eax]          // after the codeword there is the behaviour pointer
+    add eax, CELLS          // after the behaviour pointer there is the data field
+    push eax               
+    NEXT                    // jump to behavour

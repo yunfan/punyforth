@@ -250,7 +250,7 @@ defword "allot",5,allot,1 /* ( n -- ) */
     .int xt_here, xt_plus, xt_btick, _M here_var, xt_store
     .int xt_exit
     
-defword "create",6,create,1
+defword "createheader",12,createheader,1
     .int xt_word
     .int xt_here, xt_align, xt_btick, _M here_var, xt_store                // align beginning of the new word   
     .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
@@ -262,14 +262,13 @@ create_write_next_char:
     lbl create_name_done
     .int xt_swap, xt_dup, xt_fetchbyte, xt_here, xt_storebyte
     .int xt_here, xt_inc, xt_btick, _M here_var, xt_store
-    .int xt_inc                                                                     // increment name address
-    .int xt_swap, xt_dec                                                            // decrement length
+    .int xt_inc                                                            // increment name address
+    .int xt_swap, xt_dec                                                   // decrement length
     .int xt_branch
     lbl create_write_next_char
 create_name_done:
     .int xt_drop, xt_drop
-    .int xt_btick, 1, xt_comma                                                      // write mode
-    .int xt_btick, _M ENTERCOL, xt_comma                                            // write codeword
+    .int xt_btick, 1, xt_comma                                             // write mode, nonimmediate by default
     .int xt_exit
 
 defword ";",1,semicolon,IMMEDIATE
@@ -374,7 +373,8 @@ word_boundary:
 
 defword ":",1,colon,1
     .int xt_closebracket 
-    .int xt_create
+    .int xt_createheader
+    .int xt_btick, _M ENTERCOL, xt_comma                                         // codeword is ENTERCOL
     .int xt_exit
 
 defword "char",4,char,1
@@ -456,6 +456,10 @@ defword "link>flags",10,link2flags,1 /* ( a1 -- a2 ) */
 
 defword "link>xt",7,link2xt,1 /* ( a1 -- a2 ) */
     .int xt_link2flags, xt_cell, xt_plus
+    .int xt_exit
+
+defword "link>body",9,link2body,1 /* ( a1 -- a2 ) */
+    .int xt_link2xt, xt_cell, xt_plus
     .int xt_exit
 
 FINAL_WORD:    
