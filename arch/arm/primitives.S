@@ -165,7 +165,11 @@ defprimitive "litstring",9,litstring,1
     add r7, #CELLS
     push {r7}                                 // address of the string
     push {r0}                                 // length of the string
-    add r7,r7,r0                              // skip the string
+    add r7, r0                                // skip the string
+    mov r0, #3                                // alignation
+    add r7, r0
+    mvns r0, r0
+    and r7, r0
     NEXT
 
 defprimitive ">r",2,rpush,1
