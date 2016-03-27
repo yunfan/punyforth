@@ -109,7 +109,7 @@ ENTERDOES:
 
 The word *does>* writes the pointer to the behavior (e.g. @) into the first cell of the recently defined word (e.g. TRUE).
 
-*ENTERDOES* is similar than *ENTERCOL*. It pushes the data field (e.g. -1) to the stack before invokingt the behavior.
+*ENTERDOES* is similar than *ENTERCOL*. It pushes the data field (e.g. -1) to the stack before invoking the behavior.
 
 Here are the dictionary entries of the compiled *constant* and the word *TRUE* created by constant.
 
