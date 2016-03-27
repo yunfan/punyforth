@@ -107,21 +107,21 @@ ENTERDOES:
 
 *constant* is a defining word that creates other words like *TRUE* or *FALSE*.
 
-[..]
+The word *does>* writes the pointer to the behavior (e.g. @) into the first cell of the recently defined word (e.g. TRUE).
 
-*ENTERDOES* is similar than *ENTERCOL* but it also pushes the datafield of the word created by *create*, before executing the code defined by *does>*.
+*ENTERDOES* is similar than *ENTERCOL*. It pushes the data field (e.g. -1) to the stack before invokingt the behavior.
 
 Here are the dictionary entries of the compiled *constant* and the word *TRUE* created by constant.
 
 <pre>                
                              address of ENTERCOL                
                              /                                  
-                            |                                behavior
-+-----+---+----------+---+----+-----------+------+---------+-------------+--------------+----------+------+---------+
-| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_rpop | xt_lastword | xt_link2body | xt_store | xt_@ | xt_exit |
-+-----+---+----------+---+----+-----------+------+---------+-------------+--------------+----------+------+---------+
-                                                               _______________________________________/
-                                             behavior pointer /
+                            |                                                                behavior
++-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
+| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_r> | xt_lastword | xt_link>body | xt_! | xt_@ | xt_exit |
++-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
+                                                                                               /
+                                             behavior pointer  /```````````````````````````````
                                                               |    
                                   +-----+---+------+---+----+----+----+     
                                   | LNK | 4 | TRUE | 1 | CW | bp | -1 |     
