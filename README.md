@@ -77,6 +77,9 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 : constant ( n -- ) 
     create , 
     does> @ ;
+
+: create 
+    createheader enterdoes , 0 , ;"
     
 : does>
     r> lastword link>body ! ;                \ store the pointer to the behavior into the body of the lastword
