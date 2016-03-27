@@ -268,7 +268,7 @@ here_var:    .int 0
 dictionary:  .space 8192
 rstack_space: .space 128
 rstack:
-stack_space:  .space 1024
+stack_space:  .space 1024 // TODO used only by ESP port
 stack:
 prompt_str:  .ascii "\n % " 
 compile_only_warning:  .ascii "\nCompile time only word cannot be used in interpretation mode.\n" 

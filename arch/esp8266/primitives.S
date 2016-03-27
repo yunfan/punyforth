@@ -280,13 +280,13 @@ defprimitive "readchar",8,readchar,1
 
 ENTERCOL:                       // codeword for word (colon) definitions
     RPUSH a14                   // save program counter before entering the word
-    addi a14, a8, CELLS          // a8 points to the ENTERCOL, skip this cell    
+    addi a14, a8, CELLS         // a8 points to the ENTERCOL, skip this cell    
     NEXT
 
 ENTERDOES:
     RPUSH a14                   // save program counter before entering the word
-    addi a14, a9, 8              // a9 points to ENTERDOES call in assembly, skip the embedded assembly instruction
-    addi a8, a8, CELLS           // a8 points to the codeword of the defined word, after that there is the param. field
+    addi a14, a9, 8             // a9 points to ENTERDOES call in assembly, skip the embedded assembly instruction
+    addi a8, a8, CELLS          // a8 points to the codeword of the defined word, after that there is the param. field
     DPUSH a8
     NEXT
 
