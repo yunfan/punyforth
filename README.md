@@ -4,7 +4,7 @@ Punyforth is a simple and portable implementation of the FORTH programming langu
 
 My goal with this project is to develop an understanding about the internals of FORTH.
 
-At this stage punyforth is still incomplete.
+Please note that at this stage punyforth is still incomplete.
 
 ## Random notes
 
