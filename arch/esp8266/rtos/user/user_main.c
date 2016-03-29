@@ -1,69 +1,66 @@
-#include "user_config.h"
+#include "FreeRTOS.h"
 #include "espressif/esp_common.h"
 #include "espressif/esp_softap.h"
-#include "freertos/task.h"
-#include "freertos/FreeRTOS.h"
+#include "task.h"
 #include "espressif/esp8266/esp8266.h"
-#include "gpio.h"
-#include "tcp_shell.h"
+#include "esp/gpio.h"
 #include "punyforth.h"
 
-static xTaskHandle tasks[8];
+#define FORTH_TRUE -1
+#define FORTH_FALSE 0
 
-static void ICACHE_FLASH_ATTR forth_init(void* dummy) {
+static void forth_init(void* dummy) {
     forth_start();   
 }
 
-int ICACHE_FLASH_ATTR forth_div(int a, int b) { return a / b; }
-int ICACHE_FLASH_ATTR forth_mod(int a, int b) { return a % b; }
+int forth_div(int a, int b) { return a / b; }
+int forth_mod(int a, int b) { return a % b; }
 
-/*
-void ICACHE_FLASH_ATTR forth_gpio_enable(int num, int dir) { 
+int forth_gpio_enable(int num, int dir) { 
     gpio_direction_t d;
     switch (dir) {
         case 1: d = GPIO_INPUT; break;
         case 2: d = GPIO_OUTPUT; break;
-        case 3: d = GPIO_OUT_OPEN_DRAIN; break
+        case 3: d = GPIO_OUT_OPEN_DRAIN; break;
+        default: return FORTH_FALSE;
     }
+    printf("Enabling GPIO %d: %d\n", num, dir);
     gpio_enable(num, d); 
+    return FORTH_TRUE;
 }
 
-void ICACHE_FLASH_ATTR forth_gpio_write(int num, int value) { 
-    gpio_write(num, value == 0 ? false : true); 
+void forth_gpio_write(int num, int value) { 
+    printf("Writing GPIO %d <- %d\n", num, value);
+    gpio_write(num, value == FORTH_TRUE ? true : false); 
 }
-*/
 
-void ICACHE_FLASH_ATTR forth_putchar(char c) { 
+void forth_delay(int millis) {
+    vTaskDelay(millis / portTICK_RATE_MS);    
+}
+
+void forth_putchar(char c) { 
     printf("%c", c);
-    if (tcp_shell_is_connected()) {
-        tcp_shell_write_char(c);
-    }
 }
 
-char ICACHE_FLASH_ATTR forth_getchar() { 
-    return tcp_shell_read_char();
+char forth_getchar() { 
+    return getchar();	
 }
 
-int ICACHE_FLASH_ATTR forth_time() { 
+int forth_time() { 
     return xTaskGetTickCount();
 }
 
-void ICACHE_FLASH_ATTR forth_abort() { 
-    printf("Restarting ESP ..");
-//    sdk_system_restart();
+void forth_abort() { 
+    printf("Restarting ESP ..\n");
+    sdk_system_restart();
 }
 
-void ICACHE_FLASH_ATTR forth_type(char* text, int len) { 
+void forth_type(char* text, int len) { 
     printf("%.*s", len, text);
-    if (tcp_shell_is_connected()) {
-        tcp_shell_write_string(text, len);
-    }
 }
 
-void ICACHE_FLASH_ATTR user_init(void) {
-    tcp_shell_init();
+void user_init(void) {
     printf("Starting PunyForth task ..\n");
-    xTaskCreate(forth_init, "punyforth", 256, NULL, 2, &tasks[0]); 
-    printf("PunyForth started\n");
+    xTaskCreate(forth_init, (signed char*) "punyforth", 256, NULL, 2, NULL); 
+    printf("PunyForth started.\n");
 }
-
