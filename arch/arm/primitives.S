@@ -232,6 +232,7 @@ defprimitive "readchar",8,readchar,1
     swi 0
     pop {r7}
     ldr r0, [r1]
+//    ble r0, #0, code_abort  // TODO check number of bytes read
     push {r0}
     NEXT
 
