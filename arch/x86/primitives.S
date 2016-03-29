@@ -224,10 +224,11 @@ defprimitive "readchar",8,readchar,1
     mov eax, 3                                                          // use syscall 3 (read) to read from stdin
     mov edx, 1                                                          // read one character
     int 0x80                                                            // invoke system call to read from stdin
-    // TODO eax will contain the number of bytes read. If this number is < 0, there was a read error 
+    cmp eax, 0                                                          // number bytes read
+    jbe code_abort 
     mov eax, [var0]
     push eax
-    NEXT	        
+    NEXT
 
 // Different types of code words
 
