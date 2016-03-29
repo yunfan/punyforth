@@ -1,4 +1,4 @@
 rm punyforth
 gcc-4.8 -nostdlib -mcpu=cortex-a7 -I. ../../main.S -o punyforth
 chmod +x punyforth
-cat ../../generic/forth/stdlib.f ../../generic/forth/test.f | ./punyforth
+cat ../../generic/forth/stdlib.f ../../generic/forth/test.f /dev/stdin | ./punyforth
