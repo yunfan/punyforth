@@ -22,7 +22,7 @@
 
 : '.' [ char . ] literal ; 
 : '"' [ char " ] literal ;
-: 'F' [ char F ] literal ; 
+: "'" [ char ' ] literal ;
 
 : 'space' ( -- n ) 32 ;
 : cr ( -- ) 'cr' emit 'lf' emit ;
@@ -108,6 +108,52 @@
     drop
     swap !  \ overwrite dummy length with the calculated one
  ; immediate
+
+' ['] constant XT_LIT
+
+: lit-zstring-start ( -- address-to-fill-in )
+    XT_LIT , here 3 cells + ,       \ compile return value: address of string
+    ['] branch ,                    \ compile branch that will skip the string
+    here                            \ address of the dummy address 
+    0 , ;                           \ dummy address
+
+: lit-zstring-end ( address-to-fill-in -- )
+    0 c,                            \ terminate string
+    dup here swap - cell - swap ! ; \ calculate and store relative address    
+
+: lit-zstring-body ( separator -- )
+    dup
+    key dup rot <> if
+        begin 
+        c, dup
+        key dup rot = until
+    then
+    2drop ;                          \ drop last key and separator
+
+: z"
+    compile_time_only
+    lit-zstring-start
+    '"' lit-zstring-body
+    lit-zstring-end
+ ; immediate
+
+: z'
+    compile_time_only
+    lit-zstring-start
+    "'" lit-zstring-body
+    lit-zstring-end
+ ; immediate
+
+: strlen ( zstring -- len )
+    dup c@ 0= if 
+        drop 
+        0 exit 
+    then
+    0 
+    begin
+        1+
+    2dup + c@ 0= until 
+    nip ;
 
 : abs ( n -- n ) dup 0< if -1 * then ;
 : max ( a b -- max ) 2dup < if nip else drop then ;
