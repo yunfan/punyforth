@@ -146,7 +146,7 @@ defprimitive "@",1,fetch,1
     DPUSH a9
     NEXT
 
-defprimitive "c@",1,fetchbyte,1
+defprimitive "c@",2,fetchbyte,1
     DPOP a8
     l8ui a9, a8, 0
     DPUSH a9
