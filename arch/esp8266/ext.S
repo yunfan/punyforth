@@ -3,9 +3,8 @@ defprimitive "time",4,time,1
     DPUSH a2
     NEXT
 
-defprimitive "type",4,type,1            // ( a len -- )
-    DPOP a3			// string
-    DPOP a2			// length
+defprimitive "type",4,type,1            // ( a -- )
+    DPOP a2			// string
     CCALL forth_type
     NEXT
 
