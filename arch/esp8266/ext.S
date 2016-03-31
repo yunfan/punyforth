@@ -86,8 +86,32 @@ defprimitive "netconn-recvinto",16,netconn_recvinto,1
     DPUSH a2                   // err_t
     NEXT
 
+defprimitive "netbuf-del",10,netbuf_del,1
+    DPOP a2                    // netbuf
+    CCALL forth_netbufdel
+    NEXT
+
+defprimitive "netbuf-next",11,netbuf_next,1
+    DPOP a2                    // netbuf
+    CCALL forth_netbuf_next
+    DPUSH a2
+    NEXT
+
+defprimitive "netbuf-data",11,netbuf_data,1
+    DPOP a2                    // netbuf
+    CCALL forth_netbuf_data
+    DPUSH a3                   // buffer
+    DPUSH a2                   // size
+    NEXT
+
+defprimitive "netconn-recv",12,netconn_recv,1
+    DPOP a2                    // netconn
+    CCALL forth_netconn_recv
+    DPUSH a3                   // netbuf
+    DPUSH a2                   // err_t
+    NEXT
+
 defprimitive "netconn-dispose",15,netconn_dispose,1
     DPOP a2                    // conn
     CCALL forth_netconn_dispose
     NEXT
-

@@ -60,9 +60,34 @@ int forth_netconn_write(struct netconn* conn, void* data, int len) {
 
 struct recv_res {
     int code;
-    char *buffer;
-    int size;
+    struct netbuf* nbuf;
 };
+
+struct recv_res forth_netconn_recv(struct netconn* conn) {
+    err_t err;
+    struct netbuf *inbuf;
+    err = netconn_recv(conn, &inbuf);
+    struct recv_res result = { .code = err, .nbuf = inbuf };
+    return result;
+}
+
+struct netbuf_data_res {
+    int size;
+    char *buffer;
+};
+
+struct netbuf_data_res forth_netbuf_data(struct netbuf *nbuf) {
+    char *buf;
+    u16_t size;
+    netbuf_data(nbuf, (void **)&buf, &size);        
+    struct netbuf_data_res result = { .buffer = buf, .size = size };
+    return result;
+}
+
+int forth_netbuf_next(struct netbuf *nbuf) {
+    return netbuf_next(nbuf);
+}
+
 /*
 struct recv_res forth_netconn_recv(struct netconn* conn) {
     printf("Receiving data conn: %p\n", conn);
@@ -82,6 +107,10 @@ struct recv_res forth_netconn_recv(struct netconn* conn) {
     return result;
 }
 */
+
+void forth_netbufdel(struct netbuf* netbuf) {
+    netbuf_delete(netbuf);
+}
 
 struct recvinto_res {
     int code;
