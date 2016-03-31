@@ -3,7 +3,7 @@ defprimitive "time",4,time,1
     DPUSH a2
     NEXT
 
-defprimitive "type",4,type,1            // ( a -- )
+defprimitive "type",4,type,1    // ( a -- )
     DPOP a2			// string
     CCALL forth_type
     NEXT
@@ -114,4 +114,8 @@ defprimitive "netconn-recv",12,netconn_recv,1
 defprimitive "netconn-dispose",15,netconn_dispose,1
     DPOP a2                    // conn
     CCALL forth_netconn_dispose
+    NEXT
+
+defprimitive "task-yield",10,task_yield,1
+    CCALL forth_yield
     NEXT
