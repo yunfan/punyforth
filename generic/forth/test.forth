@@ -121,6 +121,45 @@ variable test_var1 variable test_var2
    s" 12" strlen 2 = assert
    s" 1234567" strlen 7 = assert
    s' """"' strlen 4 = assert
+   s' anystring' 
+   s' '
+   str-starts-with TRUE = assert
+   s' '
+   s' '
+   str-starts-with TRUE = assert
+   s' abc'
+   s' bc'
+   str-starts-with FALSE = assert
+   s' abc'
+   s' ab'
+   str-starts-with TRUE = assert
+   s' aabbc'
+   s' aabbc'
+   str-starts-with TRUE = assert
+   s' aabbc'
+   s' aabbcc'
+   str-starts-with FALSE = assert
+   s' abcxxxx' 
+   s' abc' 
+   str-includes TRUE = assert   
+   s' xxabcyy' 
+   s' abc' 
+   str-includes TRUE = assert   
+   s' xxabzyy' 
+   s' abc'
+   str-includes FALSE = assert
+   s' anystring' 
+   s' ' 
+   str-includes TRUE = assert   
+   s' xxx'
+   s' xxx' 
+   str-includes TRUE = assert   
+   s' abcdef'
+   s' def' 
+   str-includes TRUE = assert   
+   s' abcdef'
+   s' efg' 
+   str-includes FALSE = assert   
    depth 0= assert
    ." OK " test_count ? cr ; 
 
