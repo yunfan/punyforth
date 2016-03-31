@@ -26,3 +26,21 @@ int forth_gpio_read(int num) {
     printf("Reading GPIO %d\n", num);
     return gpio_read(num);
 }
+
+void forth_gpio_set_interrupt(int num, int int_type) {
+    printf("Setting GPIO %d interrupt %d\n", num, int_type);
+    gpio_set_interrupt(num, int_type);
+}
+
+void gpio_interrupt_handler(void) {
+    uint32_t status_reg = GPIO.STATUS;
+    GPIO.STATUS_CLEAR = status_reg;   
+    uint8_t gpio_idx;
+    while ((gpio_idx = __builtin_ffs(status_reg))) {
+        gpio_idx--;
+        status_reg &= ~BIT(gpio_idx);
+        if (FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_idx])) {
+            printf("GPIO %d FIRED\n", gpio_idx);
+        }      
+    }
+}

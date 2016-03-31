@@ -14,6 +14,12 @@ defprimitive "gpio-enable",11,gpioenable,1
     CCALL forth_gpio_enable
     NEXT
 
+defprimitive "gpio-set-interrupt",18,gpiointerrupt,1
+    DPOP a3                     // gpio interrupt type
+    DPOP a2                     // gpio num
+    CCALL forth_gpio_set_interrupt
+    NEXT
+
 defprimitive "gpio-write",10,gpiowrite,1
     DPOP a3                     // bool
     DPOP a2                     // gpio num
