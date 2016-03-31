@@ -91,7 +91,6 @@ struct recvinto_res {
 struct recvinto_res forth_netconn_recvinto(struct netconn* conn, void* buffer, int size) {
     printf("receiving buffer %p max size: %d\n", buffer, size);
     err_t err;
-    u16_t count = 0;
     struct netbuf *inbuf;
     int offset = 0;
     while ((err = netconn_recv(conn, &inbuf)) == ERR_OK && size - offset > 0) {
@@ -100,8 +99,8 @@ struct recvinto_res forth_netconn_recvinto(struct netconn* conn, void* buffer, i
         netbuf_delete(inbuf);
     }
     struct recvinto_res result = { 
-        .code = count == 0 ? err : ERR_OK, 
-        .count = count 
+        .code = offset == 0 ? err : ERR_OK, 
+        .count = offset
     };
     return result;
 }
