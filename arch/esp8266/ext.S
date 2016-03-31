@@ -62,9 +62,28 @@ defprimitive "netconn-send",12,netconn_send,1
 defprimitive "netconn-write",13,netconn_write,1
     DPOP a2                    // conn
     DPOP a3                    // data
-    DPOP a4                    // len
+    DPOP a4                    // size
     CCALL forth_netconn_write
     DPUSH a2
+    NEXT
+
+/*
+defprimitive "netconn-recv",12,netconn_recv,1
+    DPOP a2                    // conn
+    CCALL forth_netconn_recv
+    DPUSH a3                   // buffer
+    DPUSH a4                   // size
+    DPUSH a2                   // err_t
+    NEXT
+*/
+
+defprimitive "netconn-recvinto",16,netconn_recvinto,1
+    DPOP a2                    // conn
+    DPOP a3                    // buffer
+    DPOP a4                    // size
+    CCALL forth_netconn_recvinto
+    DPUSH a3                   // count read
+    DPUSH a2                   // err_t
     NEXT
 
 defprimitive "netconn-dispose",15,netconn_dispose,1

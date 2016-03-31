@@ -58,6 +58,51 @@ int forth_netconn_write(struct netconn* conn, void* data, int len) {
     return err;
 }
 
+struct recv_res {
+    int code;
+    char *buffer;
+    int size;
+};
+/*
+struct recv_res forth_netconn_recv(struct netconn* conn) {
+    printf("Receiving data conn: %p\n", conn);
+    err_t err;
+    char *buf;
+    u16_t size;
+    struct netbuf *inbuf;
+    while ((err = netconn_recv(conn, &inbuf)) == ERR_OK) {
+        do {
+            netbuf_data(inbuf, (void **)&buf, &size);        
+            printf("Data received. Size: %d. Buf: %p\n", size, buf);
+        } while (netbuf_next(inbuf) >= 0);
+    }
+    netbuf_delete(inbuf);
+    struct recv_res result = { .code = err, .size = size, .buffer = buf };
+    printf("Received: %.*s\n", size, buf);
+    return result;
+}
+*/
+
+struct recvinto_res {
+    int code;
+    int count;
+};
+
+struct recvinto_res forth_netconn_recvinto(struct netconn* conn, void* buffer, int size) {
+    printf("receiving buffer %p max size: %d\n", buffer, size);
+    err_t err;
+    u16_t count = 0;
+    struct netbuf *inbuf;
+    err = netconn_recv(conn, &inbuf);
+    if (err == ERR_OK) {
+        count = netbuf_copy(inbuf, buffer, size);
+        printf("Received: %d\n", count);
+    }
+    netbuf_delete(inbuf);
+    struct recvinto_res result = { .code = err, .count = count };
+    return result;
+}
+
 void forth_netconn_dispose(struct netconn* conn) {
     printf("Disposing connection %p\n", conn);
     netconn_close(conn);
