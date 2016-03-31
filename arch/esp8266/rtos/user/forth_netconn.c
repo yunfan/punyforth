@@ -64,6 +64,7 @@ struct recv_res {
 };
 
 struct recv_res forth_netconn_recv(struct netconn* conn) {
+    printf("Receiving from connection: %p\n", conn);
     err_t err;
     struct netbuf *inbuf;
     err = netconn_recv(conn, &inbuf);
@@ -77,6 +78,7 @@ struct netbuf_data_res {
 };
 
 struct netbuf_data_res forth_netbuf_data(struct netbuf *nbuf) {
+    printf("Data netbuf: %p\n", nbuf);
     char *buf;
     u16_t size;
     netbuf_data(nbuf, (void **)&buf, &size);        
@@ -85,6 +87,7 @@ struct netbuf_data_res forth_netbuf_data(struct netbuf *nbuf) {
 }
 
 int forth_netbuf_next(struct netbuf *nbuf) {
+    printf("Next of netbuf: %p\n", nbuf);
     return netbuf_next(nbuf);
 }
 
@@ -109,6 +112,7 @@ struct recv_res forth_netconn_recv(struct netconn* conn) {
 */
 
 void forth_netbufdel(struct netbuf* netbuf) {
+    printf("Deleting netbuf: %p\n", netbuf);
     netbuf_delete(netbuf);
 }
 
