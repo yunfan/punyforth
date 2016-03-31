@@ -1,5 +1,6 @@
 #include "esp/gpio.h"
 #include "espressif/esp_common.h"
+#include "forth_evt.h"
 
 #define FORTH_TRUE -1
 #define FORTH_FALSE 0
@@ -41,6 +42,8 @@ void gpio_interrupt_handler(void) {
         status_reg &= ~BIT(gpio_idx);
         if (FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_idx])) {
             printf("GPIO %d FIRED\n", gpio_idx);
+            int event = gpio_idx;
+            forth_add_event_isr(&event);
         }      
     }
 }

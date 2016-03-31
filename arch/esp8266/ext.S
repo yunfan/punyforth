@@ -125,3 +125,8 @@ defprimitive "netconn-dispose",15,netconn_dispose,1
 defprimitive "task-yield",10,task_yield,1
     CCALL forth_yield
     NEXT
+
+defprimitive "next-event",10,next_event,1
+    CCALL forth_next_event
+    DPUSH a2
+    NEXT
