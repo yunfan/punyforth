@@ -93,13 +93,16 @@ struct recvinto_res forth_netconn_recvinto(struct netconn* conn, void* buffer, i
     err_t err;
     u16_t count = 0;
     struct netbuf *inbuf;
-    err = netconn_recv(conn, &inbuf);
-    if (err == ERR_OK) {
-        count = netbuf_copy(inbuf, buffer, size);
-        printf("Received: %d\n", count);
+    int offset = 0;
+    while ((err = netconn_recv(conn, &inbuf)) == ERR_OK && size - offset > 0) {
+        offset += netbuf_copy(inbuf, buffer + offset, size - offset);
+        printf("offs: %d\n", offset);
+        netbuf_delete(inbuf);
     }
-    netbuf_delete(inbuf);
-    struct recvinto_res result = { .code = err, .count = count };
+    struct recvinto_res result = { 
+        .code = count == 0 ? err : ERR_OK, 
+        .count = count 
+    };
     return result;
 }
 
