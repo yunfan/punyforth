@@ -37,7 +37,7 @@
 
 : do
        compile_time_only
-       ['] >r , ['] >r , ['] rswap ,
+       ['] swap , ['] >r , ['] >r ,
        here
    ; immediate
    
@@ -45,9 +45,9 @@
        compile_time_only
        ['] r> , ['] 1+ , ['] >r ,
        ['] r2dup , ['] r> , ['] r> ,
-       ['] < , ['] invert , ['] branch0 ,
+       ['] >= , ['] branch0 , 
        here - cell - ,
-       ['] r> , ['] r> , ['] drop , ['] drop ,
+       ['] r> , ['] r> , ['] 2drop ,
    ; immediate
 
 : begin
@@ -100,7 +100,7 @@
     swap !  \ overwrite dummy length with the calculated one
  ; immediate
 
-: abs ( n -- |n| ) dup 0< if -1 * then ;
+: abs ( n -- n ) dup 0< if -1 * then ;
 : max ( a b -- max ) 2dup < if nip else drop then ;
 : min ( a b -- min ) 2dup < if drop else nip then ;
 
@@ -116,7 +116,13 @@
         [compile] s" ['] type ,
     then ; immediate
     
-: .s depth 0 do . cr loop ;
+: .s ( i*x -- i*x )   \ TODO reverse order
+    depth 0 do 
+        sp@ i cells + @ . space 
+    loop ;
+
+: clear-stack ( i*x -- ) 
+    depth 0 do . cr loop ;
 
 variable handler 0 handler !       \ stores the address of the nearest exception handler
 : uncaught_exception_handler
@@ -139,4 +145,6 @@ variable handler 0 handler !       \ stores the address of the nearest exception
       r> handler !            \ restore next handler
       r> swap >r sp!          \ restore the data stack as it was before the most recent catch
       drop r> ;               \ return to the caller of most recent catch with the errcode
+
+: default_prompt cr ." # " ;  \ FIXME must be one line because there is no smudge bit for hiding the incomplete def
 

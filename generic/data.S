@@ -24,6 +24,7 @@ rstack:
 stack_space:  .space 1024 // TODO used only by ESP port
 stack:
 prompt_str:  .ascii "\n % " 
+prompt_word_name:  .ascii "default_prompt" 
 compile_only_warning:  .ascii "\nCompile time only word cannot be used in interpretation mode.\n" 
 
 // TODO features

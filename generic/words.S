@@ -410,14 +410,18 @@ defword "in>char",7,char_fromin /* ( -- chr ) */
     .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store              // increment input index
     .int xt_exit
 
+defword "default_prompt",14,default_prompt,1
+    .int xt_btick, _M prompt_str, xt_btick, 4, xt_type
+    .int xt_exit
+
 defword "key",3,key,1
     .int xt_tib, xt_inputlen, xt_fetch, xt_plus
     .int xt_toin, xt_fetch, xt_swap, xt_gte   
     .int xt_branch0
     lbl read_one_char_from_buffer    
-    .int xt_btick, 0, xt_inputlen, xt_store                      // reset inputlen
-    .int xt_tib, xt_toin, xt_store                           // reset inputbuffer
-    .int xt_btick, _M prompt_str, xt_btick, 4, xt_type           // show prompt
+    .int xt_btick, 0, xt_inputlen, xt_store                                        // reset inputlen
+    .int xt_tib, xt_toin, xt_store                                                 // reset inputbuffer
+    .int xt_btick, 14, xt_btick, _M prompt_word_name, xt_find, xt_drop, xt_execute // show prompt
 refill_buffer:
     .int xt_readchar, xt_dup, xt_char_toin
     .int xt_btick, 10, xt_eq, xt_branch0
