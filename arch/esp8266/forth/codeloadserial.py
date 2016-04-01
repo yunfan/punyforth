@@ -23,8 +23,14 @@ def upload(path):
             port.write(line)        
             port.write('\n')
             time.sleep(0.1)
+            response_buffer = []        
             while port.inWaiting() > 0:
-                sys.stdout.write(port.read(1))
+                response_buffer.append(port.read(1))
+            response = ''.join(response_buffer)
+            sys.stdout.write(response)
+            if 'undefined word' in response.lower():
+                print 'ABORTED'
+                sys.exit()                        
 
 for path in sys.argv[1:]:
     print('Uploading %s' % path)
