@@ -97,17 +97,17 @@
 
 ' ['] constant XT_LIT
 
-: lit-zstring-start ( -- address-to-fill-in )
+: [str ( -- address-to-fill-in )
     XT_LIT , here 3 cells + ,       \ compile return value: address of string
     ['] branch ,                    \ compile branch that will skip the string
     here                            \ address of the dummy address 
     0 , ;                           \ dummy address
 
-: lit-zstring-end ( address-to-fill-in -- )
+: str] ( address-to-fill-in -- )
     0 c,                            \ terminate string
     dup here swap - cell - swap ! ; \ calculate and store relative address    
 
-: lit-zstring-body ( separator -- )
+: c,-until ( separator -- )
     dup
     key dup rot <> if
         begin 
@@ -118,19 +118,18 @@
 
 : s"
     compile_time_only
-    lit-zstring-start
-    '"' lit-zstring-body
-    lit-zstring-end
+    [str '"' c,-until str]   
  ; immediate
 
 : s'
     compile_time_only
-    lit-zstring-start
-    "'" lit-zstring-body
-    lit-zstring-end
+    [str "'" c,-until str]
  ; immediate
 
-: strlen ( zstring -- len )
+: (crlf) [str 'cr' c, 'lf' c, str] ; immediate
+: \r\n (crlf) ;
+
+: strlen ( str -- len )
     dup c@ 0= if 
         drop 
         0 exit 
