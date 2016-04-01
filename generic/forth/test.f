@@ -87,7 +87,7 @@ variable test_var1 variable test_var2
    0 11 1 do i + loop 55 = assert
    0 11 1 do i + 1 +loop 55 = assert
    0 50 0 do i + 5 +loop 225 = assert
-   0 -10 0 do i + -1 +loop -55 = assert
+   0 -10 0 do i + 1 -loop -55 = assert
    0 8 2 do 9 3 do i j + + loop loop 360 = assert
    9 factorial 362880 = assert
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 = assert

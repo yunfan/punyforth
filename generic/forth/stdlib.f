@@ -49,7 +49,7 @@
        compile_time_only
        ['] r> , ['] 1+ , ['] >r ,
        ['] r2dup , ['] r> , ['] r> ,
-       ['] = , ['] branch0 , resolve-backward-ref
+       ['] >= , ['] branch0 , resolve-backward-ref
        ['] r> , ['] r> , ['] 2drop ,
    ; immediate
 
@@ -57,7 +57,7 @@
        compile_time_only
        ['] r> , ['] + , ['] >r ,
        ['] r2dup , ['] r> , ['] r> ,
-       ['] = , ['] branch0 , resolve-backward-ref
+       ['] >= , ['] branch0 , resolve-backward-ref
        ['] r> , ['] r> , ['] 2drop ,
    ; immediate
 
