@@ -10,20 +10,21 @@
 
 : [compile] word find drop , ; immediate
 
+: prepare-forward-ref here 0 , ;
+: resolve-forward-ref dup here swap - cell - swap ! ;
+
 : if
        compile_time_only
-       ['] branch0 , here 0 , ; immediate
+       ['] branch0 , prepare-forward-ref ; immediate
 
 : else
        compile_time_only
-       ['] branch , here 0 ,
-       swap dup here swap - cell -
-       swap ! ; immediate
+       ['] branch , prepare-forward-ref swap
+       resolve-forward-ref ; immediate
 
 : then
        compile_time_only
-       dup here swap - cell -
-       swap ! ; immediate
+       resolve-forward-ref ; immediate       
 
 : .
        dup 0< if 45 emit -1 * then
@@ -35,34 +36,34 @@
 
 : ? @ . ;
 
+: prepare-backward-ref here ;
+: resolve-backward-ref here - cell - , ;
+
 : do
        compile_time_only
        ['] swap , ['] >r , ['] >r ,
-       here
+       prepare-backward-ref
    ; immediate
-   
+
 : loop
        compile_time_only
        ['] r> , ['] 1+ , ['] >r ,
        ['] r2dup , ['] r> , ['] r> ,
-       ['] >= , ['] branch0 , 
-       here - cell - ,
+       ['] >= , ['] branch0 , resolve-backward-ref
        ['] r> , ['] r> , ['] 2drop ,
    ; immediate
 
 : begin
        compile_time_only
-       here ; immediate
+       prepare-backward-ref ; immediate
 
 : again
        compile_time_only
-       ['] branch ,
-       here - cell - , ; immediate
+       ['] branch , resolve-backward-ref ; immediate
 
 : until
        compile_time_only
-       ['] branch0 ,
-       here - cell - , ; immediate
+       ['] branch0 , resolve-backward-ref ; immediate
 
 : ( begin key ')' = until ; immediate
 : \ begin key dup 'cr' = swap 'lf' = or until ; immediate
