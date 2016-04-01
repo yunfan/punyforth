@@ -18,9 +18,9 @@ int forth_gpio_enable(int num, int dir) {
     return FORTH_TRUE;
 }
 
-void forth_gpio_write(int num, int value) { 
-    printf("Writing GPIO %d <- %d\n", num, value);
-    gpio_write(num, value == FORTH_TRUE ? true : false); 
+void forth_gpio_write(int num, int bool_set) { 
+    printf("Writing GPIO %d <- %d\n", num, bool_set);
+    gpio_write(num, bool_set); 
 }
 
 int forth_gpio_read(int num) {
