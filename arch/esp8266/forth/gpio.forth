@@ -16,9 +16,9 @@ marker -gpio
     GPIO_OUT gpio-enable
     dup
     HIGH gpio-write
-    1000 delay
+    250 delay
     LOW gpio-write
-    1000 delay ;
+    250 delay ;
     
 : times-blink ( pin ntimes -- )
     0 do
