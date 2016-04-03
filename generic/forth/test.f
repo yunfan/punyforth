@@ -114,6 +114,10 @@ variable test_var1 variable test_var2
    3 nested-throw2 42 = assert
    sp@ test_var2 !
    test_var1 @ test_var2 @ = assert
+   z" " strlen 0 = assert
+   z" 1" strlen 1 = assert
+   z" 12" strlen 2 = assert
+   z" 1234567" strlen 7 = assert
    depth 0= assert
    ." OK " test_count ? cr ; 
 

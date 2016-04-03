@@ -109,6 +109,33 @@
     swap !  \ overwrite dummy length with the calculated one
  ; immediate
 
+' ['] constant ADRLIT
+
+: z"
+    compile_time_only
+    ADRLIT , here 3 cells + ,       \ compile return value: address of string
+    ['] branch ,                    \ compile branch that will skip the string
+    here                            \ reference to calculate relative address
+    0 ,                             \ dummy address
+    key dup '"' <> if
+        begin c, key dup '"' = until
+    then
+    drop                            \ drop last key
+    0 c,                            \ terminate string
+    dup here swap - cell - swap !   \ calculate and store relative address    
+ ; immediate
+
+: strlen ( zstring -- len )
+    dup c@ 0= if 
+        drop 
+        0 exit 
+    then
+    0 
+    begin
+        1+
+    2dup + c@ 0= until 
+    nip ;
+
 : abs ( n -- n ) dup 0< if -1 * then ;
 : max ( a b -- max ) 2dup < if nip else drop then ;
 : min ( a b -- min ) 2dup < if drop else nip then ;
