@@ -8,6 +8,12 @@ defprimitive "type",4,type,1    // ( a -- )
     CCALL forth_type
     NEXT
 
+defprimitive "uart-set-bps",12,uart_set_bps,1    // ( bps uart_num -- )
+    DPOP a2			// uart_num
+    DPOP a3			// bps
+    CCALL forth_uart_set_baud
+    NEXT
+
 defprimitive "gpio-enable",11,gpioenable,1
     DPOP a3                     // gpio direction
     DPOP a2                     // gpio num
@@ -72,16 +78,6 @@ defprimitive "netconn-write",13,netconn_write,1
     CCALL forth_netconn_write
     DPUSH a2
     NEXT
-
-/*
-defprimitive "netconn-recv",12,netconn_recv,1
-    DPOP a2                    // conn
-    CCALL forth_netconn_recv
-    DPUSH a3                   // buffer
-    DPUSH a4                   // size
-    DPUSH a2                   // err_t
-    NEXT
-*/
 
 defprimitive "netconn-recvinto",16,netconn_recvinto,1
     DPOP a2                    // conn
