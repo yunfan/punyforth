@@ -6,6 +6,7 @@
 #include "espressif/esp8266/esp8266.h"
 #include "punyforth.h"
 #include "forth_evt.h"
+#include "forth_io.h"
 
 static void forth_init(void* dummy) {
     forth_start();   
@@ -14,6 +15,7 @@ static void forth_init(void* dummy) {
 void user_init(void) {
     uart_set_baud(0, 115200);
     printf("Starting PunyForth task ..\n");
+    set_nextchar(&next_char_from_uart);
     xTaskCreate(forth_init, (signed char*) "punyforth", 256, NULL, 2, NULL); 
     init_event_queue();
     printf("PunyForth started.\n");

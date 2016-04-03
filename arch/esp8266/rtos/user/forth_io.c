@@ -1,12 +1,17 @@
-#include "espressif/esp_common.h"
-#include "esp/uart.h"
+#include "forth_io.h"
+
+int next_char_from_uart() { return getchar(); }
+
+void set_nextchar(CharSupplier fp) {
+    nextchar = fp;
+}
+
+int forth_getchar() { 
+    return nextchar();	
+}
 
 void forth_putchar(char c) { 
     printf("%c", c);
-}
-
-char forth_getchar() { 
-    return getchar();	
 }
 
 void forth_type(char* text) { 
