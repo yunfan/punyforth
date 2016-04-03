@@ -12,6 +12,8 @@
            then
        then ;
 
+: 'F' [ char F ] literal ; 
+
 5 array test_numbers
 
 struct
@@ -118,6 +120,7 @@ variable test_var1 variable test_var2
    z" 1" strlen 1 = assert
    z" 12" strlen 2 = assert
    z" 1234567" strlen 7 = assert
+   z' """"' strlen 4 = assert
    depth 0= assert
    ." OK " test_count ? cr ; 
 

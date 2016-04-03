@@ -18,7 +18,7 @@ input_buffer: .space 128
 .align 4,32
 input_size:  .int . - input_buffer
 var_dp:      .int 0                   // data pointer
-dictionary:  .space 8192
+dictionary:  .space 16384
 rstack_space: .space 128
 rstack:
 stack_space:  .space 1024 // TODO used only by ESP port
