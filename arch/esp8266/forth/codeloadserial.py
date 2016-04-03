@@ -4,7 +4,7 @@ import time
 
 port = serial.Serial(
     port='COM3',
-    baudrate=74880,
+    baudrate=115200,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,	
     bytesize=serial.EIGHTBITS)
@@ -22,7 +22,7 @@ def upload(path):
                 raise 'Line is too long: %s' % (line)
             port.write(line)        
             port.write('\n')
-            time.sleep(0.1)
+            time.sleep(0.05)
             response_buffer = []        
             while port.inWaiting() > 0:
                 response_buffer.append(port.read(1))
