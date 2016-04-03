@@ -36,7 +36,7 @@ int next_char_from_flash() {
     char next = buffer[buffer_offset++];
     if (next == 0 || next == 0xFF) {
         set_nextchar_supplier(&next_char_from_uart);
-        return ' ';
+        return 10;
     }
     return next;
 }
