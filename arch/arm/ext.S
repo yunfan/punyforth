@@ -83,8 +83,6 @@ defprimitive "over",4,over,1
     push {r0}
     NEXT
 
-// defprimitive "type",4,type,1            // ( a len -- )
-
 // TODO
 defprimitive "time",4,time,1 /* ( -- unixtime ) */
     push {r0}

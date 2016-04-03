@@ -194,19 +194,6 @@ defprimitive "branch0",7,branch0,1
 nobranch0:
     NEXT
 
-defprimitive "litstring",9,litstring,1
-    l32i a8, a14, 0                           // read the length of the string as the next instruction
-    addi a14, a14, CELLS
-    DPUSH a14                                 // after the length there is the address of the string
-    DPUSH a8                                  // length of the string
-    add a14, a14, a8                          // skip the string
-    movi a8, 3                                // alignation
-    add a14, a14, a8
-    movi a9, TRUE                             // invert a8
-    xor a8, a8, a9
-    and a14, a14, a8
-    NEXT
-
 defprimitive ">r",2,rpush,1
     DPOP a8
     RPUSH a8

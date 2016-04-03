@@ -93,22 +93,6 @@
 : struct 0 ;
 : field create over , + does> @ + ;
 
-: s"
-    compile_time_only
-    ['] litstring ,
-    here                    \ length will be placed here 
-    0 ,                     \ put a dummy length 
-    0                       \ length counter 
-    key dup '"' <> if
-        begin
-            swap 1+ swap    \ increase length 
-            c,              \ store character as byte 
-        key dup '"' = until
-    then
-    drop
-    swap !  \ overwrite dummy length with the calculated one
- ; immediate
-
 ' ['] constant XT_LIT
 
 : lit-zstring-start ( -- address-to-fill-in )
@@ -130,14 +114,14 @@
     then
     2drop ;                          \ drop last key and separator
 
-: z"
+: s"
     compile_time_only
     lit-zstring-start
     '"' lit-zstring-body
     lit-zstring-end
  ; immediate
 
-: z'
+: s'
     compile_time_only
     lit-zstring-start
     "'" lit-zstring-body

@@ -159,17 +159,6 @@ defprimitive "branch0",7,branch0,1
 nobranch0:
     NEXT
 
-defprimitive "litstring",9,litstring,1
-    lodsd
-    push esi                            // address of the string
-    push eax                            // length of the string
-    add esi, eax                        // skip string
-    mov ebx, 3                          // alignation
-    add esi, ebx
-    not ebx
-    and esi, ebx
-    NEXT
-    
 defprimitive ">r",2,rpush,1
     pop eax
     sub ebp, CELLS

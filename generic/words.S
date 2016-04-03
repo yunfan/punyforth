@@ -328,8 +328,8 @@ tonum_done:
     .int xt_drop, xt_nip
     .int xt_btick, TRUE
     .int xt_exit
-tonum_invalid_digit:                                                            // TODO emit string
-    .int xt_toin, xt_fetch, xt_btick, 20, xt_type
+tonum_invalid_digit:                                                            // TODO emit string correctly
+    .int xt_toin, xt_fetch, xt_type
     .int xt_rpop, xt_drop
     .int xt_drop, xt_drop
     .int xt_btick, FALSE
@@ -385,24 +385,23 @@ defword "char",4,char,1
     .int xt_exit
 
 .ifndef xt_type
-defword "type",4,type,1            // ( a len -- )
+defword "type",4,type,1            // ( zstring -- )
 type_next_char:
-    .int xt_dup, xt_eq0, xt_invert, xt_branch0
+    .int xt_dup, xt_fetchbyte, xt_eq0, xt_invert, xt_branch0
     lbl type_done
-    .int xt_dec, xt_swap
     .int xt_dup, xt_fetchbyte, xt_emit
-    .int xt_inc, xt_swap
+    .int xt_inc
     .int xt_branch
     lbl type_next_char
 type_done:
-    .int xt_drop, xt_drop
+    .int xt_drop
     .int xt_exit
 .endif    
 
 defword "chr>in",6,char_toin /* (chr -- ) */
     .int xt_toin, xt_fetch, xt_storebyte                          // store one char in inputbuffer
-    .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store              // increment input index
-    .int xt_inputlen, xt_fetch, xt_inc, xt_inputlen, xt_store    // incrment input size
+    .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store             // increment input index
+    .int xt_inputlen, xt_fetch, xt_inc, xt_inputlen, xt_store     // incrment input size
     .int xt_exit
 
 defword "in>char",7,char_fromin /* ( -- chr ) */
@@ -411,7 +410,7 @@ defword "in>char",7,char_fromin /* ( -- chr ) */
     .int xt_exit
 
 defword "default_prompt",14,default_prompt,1
-    .int xt_btick, _M prompt_str, xt_btick, 4, xt_type
+    .int xt_btick, _M prompt_str, xt_type
     .int xt_exit
 
 defword "key",3,key,1
@@ -437,7 +436,7 @@ defword "compile_time_only",17,compile_time_only,1
     lbl cannot_interpret_compile_only_word
     .int xt_exit
 cannot_interpret_compile_only_word:
-    .int xt_btick, _M compile_only_warning, xt_btick, 63, xt_type
+    .int xt_btick, _M compile_only_warning, xt_type
     .int xt_exit
 
 defword "lastword",8,lastword,1

@@ -160,18 +160,6 @@ defprimitive "branch0",7,branch0,1
     addeq r7, r0                              // advance pc if condition was satisfied
     NEXT
 
-defprimitive "litstring",9,litstring,1
-    ldr r0, [r7]
-    add r7, #CELLS
-    push {r7}                                 // address of the string
-    push {r0}                                 // length of the string
-    add r7, r0                                // skip the string
-    mov r0, #3                                // alignation
-    add r7, r0
-    mvns r0, r0
-    and r7, r0
-    NEXT
-
 defprimitive ">r",2,rpush,1
     pop {r0}
     sub r6, #CELLS
