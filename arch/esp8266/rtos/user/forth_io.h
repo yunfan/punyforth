@@ -8,7 +8,8 @@ typedef int (*CharSupplier)();
 
 CharSupplier nextchar;
 
-void set_nextchar(CharSupplier fp);
+void set_nextchar_supplier(CharSupplier fp);
 int next_char_from_uart();
+int next_char_from_flash();
 
 #endif
