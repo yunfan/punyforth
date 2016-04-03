@@ -28,7 +28,5 @@ prompt_word_name:  .ascii "default_prompt"
 compile_only_warning:  .ascii "\nCompile time only word cannot be used in interpretation mode.\n" 
 
 // TODO features
-//  * detect stack under/overflow
 //  * add error handling to [compile] and '
-//  * show depth in prompt
 

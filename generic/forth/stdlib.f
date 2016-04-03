@@ -1,12 +1,35 @@
-: % /mod drop ; : / /mod nip ;
+: prepare-backward-ref here ;
+: resolve-backward-ref here - cell - , ;
 
-: '.' [ char . ] literal ; : '"' [ char " ] literal ;
+: begin
+       compile_time_only
+       prepare-backward-ref ; immediate
 
-: 'F' [ char F ] literal ; : ')' [ char ) ] literal ;
+: again
+       compile_time_only
+       ['] branch , resolve-backward-ref ; immediate
 
-: 'cr' 13 ; : 'lf' 10 ; : 'space' 32 ;
+: until
+       compile_time_only
+       ['] branch0 , resolve-backward-ref ; immediate
 
-:  cr 'cr' emit 'lf' emit ; : space 'space' emit ;
+: ')' [ char ) ] literal ;
+: 'cr' 13 ; 
+: 'lf' 10 ; 
+
+: ( begin key ')' = until ; immediate
+: \ begin key dup 'cr' = swap 'lf' = or until ; immediate
+
+: '.' [ char . ] literal ; 
+: '"' [ char " ] literal ;
+: 'F' [ char F ] literal ; 
+
+: 'space' ( -- n ) 32 ;
+: cr ( -- ) 'cr' emit 'lf' emit ;
+: space ( -- ) 'space' emit ;
+
+: % ( n -- remainder ) /mod drop ; 
+: / ( n -- quotient ) /mod nip ;
 
 : [compile] word find drop , ; immediate
 
@@ -26,7 +49,7 @@
        compile_time_only
        resolve-forward-ref ; immediate       
 
-: .
+: . ( n -- )
        dup 0< if 45 emit -1 * then
        10 /mod dup 0= if
            drop 48 + emit
@@ -34,16 +57,16 @@
           . 48 + emit
        then ;
 
-: ? @ . ;
-
-: prepare-backward-ref here ;
-: resolve-backward-ref here - cell - , ;
+: ? ( a -- ) @ . ;
 
 : do
        compile_time_only
        ['] swap , ['] >r , ['] >r ,
        prepare-backward-ref
    ; immediate
+
+: bounds ( start len -- limit start )
+    over + swap ;
 
 : loop
        compile_time_only
@@ -52,29 +75,6 @@
        ['] >= , ['] branch0 , resolve-backward-ref
        ['] r> , ['] r> , ['] 2drop ,
    ; immediate
-
-: +loop
-       compile_time_only
-       ['] r> , ['] + , ['] >r ,
-       ['] r2dup , ['] r> , ['] r> ,
-       ['] >= , ['] branch0 , resolve-backward-ref
-       ['] r> , ['] r> , ['] 2drop ,
-   ; immediate
-
-: begin
-       compile_time_only
-       prepare-backward-ref ; immediate
-
-: again
-       compile_time_only
-       ['] branch , resolve-backward-ref ; immediate
-
-: until
-       compile_time_only
-       ['] branch0 , resolve-backward-ref ; immediate
-
-: ( begin key ')' = until ; immediate
-: \ begin key dup 'cr' = swap 'lf' = or until ; immediate
 
 : ' ( -- addr ) word find drop ; \ find the xt of the next word in the inputstream
 
@@ -134,6 +134,7 @@
     depth 0 do . cr loop ;
 
 variable handler 0 handler !       \ stores the address of the nearest exception handler
+
 : uncaught_exception_handler
       ." Uncaught exception: " . cr abort ;
 
