@@ -20,6 +20,12 @@
 : ( begin key ')' = until ; immediate
 : \ begin key dup 'cr' = swap 'lf' = or until ; immediate
 
+: dip ( a xt -- a ) swap >r execute r> ;
+: sip ( a xt -- xt.a a ) over >r execute r> ;
+: bi ( a xt1 xt2 -- xt1.a xt2.a ) ['] sip dip execute ;
+: bi* ( a b xt1 xt2 -- xt1.a xt2.b ) ['] dip dip execute ;
+: bi@ ( a b xt -- xt.a xt.b ) dup bi* ;
+
 : '"' [ char " ] literal ;
 : "'" [ char ' ] literal ;
 
@@ -86,6 +92,16 @@
     ['] branch0 , resolve-backward-ref
     ['] r> , ['] r> , ['] 2drop ,
  ; immediate
+
+: while
+    compile_time_only
+    ['] branch0 , prepare-forward-ref ; immediate
+
+: repeat
+    compile_time_only
+    swap
+    ['] branch , resolve-backward-ref 
+    resolve-forward-ref ; immediate
 
 : create createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
@@ -162,21 +178,13 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : \r\n (crlf) ;
 
 : strlen ( str -- len )
-    dup c@ 0= if 
-        drop 
-        0 exit 
-    then
-    0 
+    0 swap
     begin
-        1+
-    2dup + c@ 0= until 
-    nip ;
-
-: dip  swap >r execute r> ;
-: sip    over >r execute r> ;
-: bi  ['] sip dip execute ;
-: bi*  ['] dip dip execute ;
-: bi@ ( a b xt -- xt.a xt.b )  dup bi* ;
+        dup c@ 0 <>
+    while
+    ['] 1+ bi@
+    repeat 
+    drop ;
 
 : str-starts-with ( str substr -- bool )
     begin
@@ -226,7 +234,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     ." stack["
     0 depth 2 - do 
         sp@ i cells + @ .
-	i 0 <> if space then
+    i 0 <> if space then
     -1 +loop 
     ." ] ";
 
@@ -242,8 +250,20 @@ variable handler 0 handler !       \ stores the address of the nearest exception
         lastword ,
     does>
         @ dup 
-	@ var-lastword !
-	var-dp ! ;
+    @ var-lastword !
+    var-dp ! ;
+
+: print-words ( -- )
+    lastword
+    begin
+       dup 0<>
+    while
+       dup
+       ['] link>name ['] link>len bi 
+       @ type-counted cr
+       @
+    repeat 
+    drop ;   
 
 : default_prompt cr .s ." % " ;  \ FIXME must be one line because there is no smudge bit
 

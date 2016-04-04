@@ -16,6 +16,17 @@ marker -tests
            then
        then ;
 
+: ifactorial ( n -- n! )
+    1 2 rot
+    begin
+        2dup <=
+    while
+        -rot tuck
+        * swap
+        1+ rot
+    repeat
+    2drop ;
+
 : 'F' [ char F ] literal ; 
 
 5 array test_numbers
@@ -109,6 +120,7 @@ marker -test-test
 
    0 8 2 do 9 3 do i j + + loop loop 360 = assert
    9 factorial 362880 = assert
+   8 factorial 8 ifactorial = assert
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 = assert
    1 0 or 1 = assert 0 1 or 1 = assert
    1 1 or 1 = assert 0 0 or 0 = assert

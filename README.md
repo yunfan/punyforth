@@ -1,26 +1,173 @@
-# punyforth
+# Punyforth
 
-Punyforth is a simple and portable implementation of the FORTH programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266).
-
-My goal with this project is to develop an understanding about the internals of FORTH.
+Punyforth is a simple and portable implementation of the Forth programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266). This latter one is the primary supported target.
 
 Please note that at this stage punyforth is still incomplete.
 
-## Random notes
+## About the language
 
-FORTH is a simple and extensible stack-based language.
+Punyforth is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
+
+The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
+
+Punyforth does not have local variables, instead values are kept on a stack. This stack is used only for storing data. There is a separate return stack that stores information about nested subroutin calls. Both stacks are first-class in the language.
+
+As a consequence of the stack, Punyforth uses a form of syntax known as Reverse Polish or Postfix Notation.
+
+If you type the following code in the REPL:
 
 ```forth
 
-2 3 dup * swap dup * + .  \ 3 * 3 + 2 * 2 prints out 13
+1 2 +
 
 ```
+
+The interpreter pushes the number 1 then the number 2 onto the data stack. It executes the word *+*, which removes the two top level items from the stack, calculates their sum, and pushes the result to the stack.
+
+
+The following code calculates *3 * 3 + 2 * 2* and prints out *13*.
+
+```forth
+
+2 3 dup * swap dup * + .
+
+```
+
+The word *dup* duplicates the top level item of the stack. The word *swap* xchanges the two top level items of the stack.
+
 Stack visualization:
 <pre>
 2 3  3  9  2   2 4 13
   2  3  2  9   2 9
      2         9
 </pre>     
+
+### Programming
+
+During programming, the user uses the REPL to write and test small piece of codes or to extend the languge with new words (which are called subroutines or functions in other languages). 
+
+The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. In interpretation mode, it immediately executes the words that the user typed in. In compilation mode (when you start a new word definition), its action depends on the compilation semantic of the current word. In most cases it compiles the execution token (pointer to the word) into the word to be defined. However, if the current word is flagged as immediate, the compiler executes the word at compile time so the word can define its own compilation semantic. This is a bit similar than Lisp macros. Control structures are implemented as immediate words in Forth.
+
+### The syntax
+
+Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number. Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
+
+### Control structures
+
+Punyforth supports the regular Forth conditional and loop words.
+
+#### Conditionals
+
+General form of *if else then*.
+
+```forth
+<bool> if <consequent> else <alternative> then
+```
+
+For example:
+```forth
+: max ( a b -- max ) 
+  2dup < if nip else drop then ;
+  
+10 100 max . \ prints 100
+```
+
+The else part can be omitted.
+
+```forth
+: abs ( n -- absn ) 
+  dup 0< if -1 * then ;
+  
+-10 abs . \ prints 10  
+```
+
+#### Count-controlled loops
+
+The *limit* and *start* before the word *do* defines the number of times the loop will run.
+
+```forth
+<limit> <start> do <loop-body> loop
+```
+
+*Do* loops iterate through integers by starting at *start* and incrementing until you reach the *limit*. The word "i" pushes the loop index onto the stack.
+
+For example:
+```forth
+5 0 do i . loop \ prints 01234
+```
+
+There is an other version of the *do* loop where you can define the increment (which can be negative as well).
+
+```forth
+<limit> <start> do <loop-body> <increment> +loop
+```
+
+For example:
+
+```forth
+10 0 do i . 2 +loop \ prints 02468
+```
+
+If the increment is negative then *limit* is inclusive.
+
+```forth
+0 8 do i . -2 +loop \ prints 86420
+```
+
+#### Condition-controlled loops
+
+##### until loop
+
+```forth
+begin <loop-body> <bool> until
+```
+The *begin*...*until* loop repeats until a condition is true. This loop always executes at least one time.
+
+For example:
+
+```forth
+: countdown ( n -- )
+  begin 
+    dup .
+    1- dup
+  0 < until
+  drop ;
+  
+5 countdown \ prints 543210
+```
+
+If you replace *until* with *again* and omit the condition then the loop will run indefinitely.
+
+```forth
+begin <loop-body> again
+```
+
+##### while loop
+
+```forth
+begin .. <bool> while <loop-body> repeat
+```
+For example:
+```forth
+: countdown ( n -- )
+  begin
+    dup 0 >=
+  while
+    dup . 1-
+  repeat
+  drop ;
+  
+5 countdown \ prints 543210
+```
+
+
+You can use the *exit* word to exit from the current word as well from the loop.
+
+Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
+
+### Exceptions
+
+TODO
 
 ### Defining words
 
@@ -72,6 +219,17 @@ Parsing words can parse the input stream. One example of a parsing word is the c
     until                           \ consume the stream until cr or lf character is found
  ; immediate
 ``` 
+
+### Factor style combinators
+
+Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
+
+* dip ( a xt -- a )
+* sip ( a xt -- xt.a a )
+* bi ( a xt1 xt2 -- xt1.a xt2.a )
+* bi* ( a b xt1 xt2 -- xt1.a xt2.b )
+* bi@ ( a b xt -- xt.a xt.b )
+
 
 ### About the implementation of *create does>*
 
@@ -232,4 +390,14 @@ variable handler
     then drop ; 
 ```
 
+### ESP8266 specific things
 
+#### GPIO
+
+#### Netconn
+
+#### Flash
+
+#### Storing code in flash
+
+#### Misc
