@@ -127,6 +127,11 @@ defprimitive "next-event",10,next_event,1
     DPUSH a2
     NEXT
 
+defprimitive "random",6,random,1
+    CCALL forth_random
+    DPUSH a2
+    NEXT
+
 defprimitive "erase-flash",11,erase_flash,1
     DPOP a2                    // sector
     CCALL forth_flash_erase_sector
@@ -146,5 +151,23 @@ defprimitive "write-flash",11,write_flash,1
     DPOP a3                    // buffer
     DPOP a4                    // size
     CCALL forth_flash_write
+    DPUSH a2
+    NEXT
+
+defprimitive "spi-init",8,spi_init,1
+    DPOP a2                    // bus
+    DPOP a3                    // mode
+    DPOP a4                    // freq_div
+    DPOP a5                    // msb
+    DPOP a6                    // endianness
+    DPOP a7                    // minimal_pins
+    CCALL forth_spi_init
+    DPUSH a2
+    NEXT
+
+defprimitive "spi-send8",9,spi_send8,1
+    DPOP a2                    // bus
+    DPOP a3                    // data
+    CCALL forth_spi_send8
     DPUSH a2
     NEXT
