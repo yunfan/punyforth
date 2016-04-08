@@ -93,6 +93,8 @@
 : struct 0 ;
 : field create over , + does> @ + ;
 
+: 4drop ( a b c d -- ) 2drop 2drop ;
+
 ' ['] constant XT_LIT
 
 : lit-zstring-start ( -- address-to-fill-in )
@@ -138,6 +140,39 @@
         1+
     2dup + c@ 0= until 
     nip ;
+
+: dip  swap >r execute r> ;
+: sip    over >r execute r> ;
+: bi  ['] sip dip execute ;
+: bi*  ['] dip dip execute ;
+: bi@ ( a b xt -- xt.a xt.b )  dup bi* ;
+
+: str-starts-with ( str substr -- bool )
+    begin
+        2dup ['] c@ bi@
+        dup 0= if                       \ end of substr
+            4drop TRUE exit
+        then
+        swap
+        dup 0= if                       \ end of str
+            4drop FALSE exit 
+        then
+        <> if                           \ character mismatch
+            2drop FALSE exit 
+        then
+        ['] 1+ bi@
+    again ;
+
+: str-includes ( str substr -- bool )
+    begin
+        2dup str-starts-with if
+            2drop TRUE exit
+        then
+        swap dup c@ 0= if
+            2drop FALSE exit 
+        then
+        1+ swap
+    again ;
 
 : abs ( n -- n ) dup 0< if -1 * then ;
 : max ( a b -- max ) 2dup < if nip else drop then ;
