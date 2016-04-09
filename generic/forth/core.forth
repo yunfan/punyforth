@@ -129,7 +129,7 @@
 : (crlf) [str 'cr' c, 'lf' c, str] ; immediate
 : \r\n (crlf) ;
 
-: strlen ( zstring -- len )
+: strlen ( str -- len )
     dup c@ 0= if 
         drop 
         0 exit 
