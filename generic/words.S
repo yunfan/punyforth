@@ -328,10 +328,8 @@ tonum_done:
     .int xt_drop, xt_nip
     .int xt_btick, TRUE
     .int xt_exit
-tonum_invalid_digit:                                                            // TODO emit string correctly
-    .int xt_toin, xt_fetch, xt_type
-    .int xt_rpop, xt_drop
-    .int xt_drop, xt_drop
+tonum_invalid_digit:
+    .int xt_rpop, xt_drop2, xt_drop2
     .int xt_btick, FALSE
     .int xt_exit
 tonum_empty:
@@ -371,7 +369,7 @@ word_next_char:
 word_boundary:
     .int xt_drop
     .int xt_dup, xt_toin, xt_fetch, xt_swap, xt_minus, xt_dec                    // word length
-    .int xt_swap
+    .int xt_swap                                                                 // (len a)
     .int xt_exit
 
 defword ":",1,colon,1
@@ -395,6 +393,23 @@ type_next_char:
     lbl type_next_char
 type_done:
     .int xt_drop
+    .int xt_exit
+.endif    
+
+.ifndef xt_typecounted
+defword "type-counted",12,typecounted,1            // ( addr count -- )
+type_counted_next_char:
+    .int xt_dup, xt_branch0
+    lbl type_counted_done
+    .int xt_dec
+    .int xt_swap, xt_dup
+    .int xt_fetchbyte, xt_emit
+    .int xt_inc
+    .int xt_swap
+    .int xt_branch
+    lbl type_counted_next_char
+type_counted_done:
+    .int xt_drop2
     .int xt_exit
 .endif    
 

@@ -25,9 +25,11 @@ interpret:
     lbl outer_interpreter
 not_found_in_dictionary:                   // word was not found in the dictionary try to convert it to number
     .int xt_drop
+    .int xt_dup2                           // save (len wordadr) for printing if error occurs during conversion
     .int xt_tonumber
     .int xt_branch0
     lbl invalid_number
+    .int xt_nip, xt_nip                    // drop saved word 
     .int xt_state, xt_fetch, xt_branch0    // depending on state compile number literal or push number to the stack
     lbl outer_interpreter                  // we're in interpret mode, number is already on the stack
     .int xt_literal                        // we're in compile mode, compile a literal number
@@ -36,7 +38,9 @@ not_found_in_dictionary:                   // word was not found in the dictiona
 end_of_input:
     .int xt_abort
 invalid_number:
-    .int xt_btick, '?', xt_emit
+    .int xt_btick, undef_word_error, xt_type
+    .int xt_drop                             // drop converted number
+    .int xt_swap, xt_typecounted
     .int xt_btick, 10, xt_emit
     .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
     .int xt_branch

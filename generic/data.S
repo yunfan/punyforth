@@ -26,6 +26,7 @@ stack:
 prompt_str:   .asciz "\n % "
 prompt_word_name:      .asciz "default_prompt"
 compile_only_warning:  .asciz "\nCompile time only word cannot be used in interpretation mode.\n"
+undef_word_error:      .asciz "\nUndefined word: "
 
 // TODO features
 //  * add error handling to [compile] and '
