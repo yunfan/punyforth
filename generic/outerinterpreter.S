@@ -4,8 +4,7 @@
 .align 4
 
 outer_interpreter:
-    .int xt_word, xt_dup, xt_branch0       // read next word, check end of input    
-    lbl end_of_input
+    .int xt_word
     .int xt_dup2
     .int xt_find, xt_dup, xt_branch0       // dictionary lookup returns (xt mode) or 0 if not found    
     lbl not_found_in_dictionary
@@ -35,8 +34,6 @@ not_found_in_dictionary:                   // word was not found in the dictiona
     .int xt_literal                        // we're in compile mode, compile a literal number
     .int xt_branch
     lbl outer_interpreter
-end_of_input:
-    .int xt_abort
 invalid_number:
     .int xt_btick, undef_word_error, xt_type
     .int xt_swap, xt_typecounted
