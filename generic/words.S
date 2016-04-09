@@ -214,8 +214,7 @@ compare_length_mismatch:
     .int xt_btick, FALSE
     .int xt_exit
 
-defword "find",4,find,1 /* ( len a -- xt mode | 0 ) */
-    .int xt_swap
+defword "find",4,find,1 /* ( a len -- xt mode | 0 ) */
     .int xt_lastword
 find_try_next_word:                                                               // (a1 len1 link)    
     .int xt_dup
@@ -260,7 +259,7 @@ defword "allot",5,allot,1 /* ( n -- ) */
     .int xt_exit
     
 defword "createheader",12,createheader,1
-    .int xt_word
+    .int xt_word, xt_swap
     .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
     .int xt_here, xt_cell, xt_minus, xt_btick, _M LAST_WORD, xt_store      // update last word
     .int xt_swap, xt_dup, xt_comma                                         // write length
@@ -284,8 +283,7 @@ defword ";",1,semicolon,IMMEDIATE
     .int xt_btick, xt_exit, xt_comma
     .int xt_exit
 
-defword ">number",7,tonumber,1                                                    //( len a -- num bool )
-    .int xt_swap                                                                  
+defword ">number",7,tonumber,1 /* ( a len -- num bool ) */
     .int xt_dup, xt_branch0
     lbl tonum_empty 
     .int xt_swap, xt_dup, xt_fetchbyte, xt_btick, 45, xt_eq                       // check sign
@@ -342,7 +340,7 @@ tonum_empty:
     .int xt_btick, FALSE
     .int xt_exit
 
-defword "word",4,word,1
+defword "word",4,word,1 /* ( -- a len ) */
     .int xt_btick, 0
 word_trim:
     .int xt_drop
@@ -374,7 +372,6 @@ word_next_char:
 word_boundary:
     .int xt_drop
     .int xt_dup, xt_toin, xt_fetch, xt_swap, xt_minus, xt_dec                    // word length
-    .int xt_swap                                                                 // (len a)
     .int xt_exit
 
 defword ":",1,colon,1
@@ -384,7 +381,7 @@ defword ":",1,colon,1
     .int xt_exit
 
 defword "char",4,char,1
-    .int xt_word, xt_nip, xt_fetchbyte
+    .int xt_word, xt_drop, xt_fetchbyte
     .int xt_exit
 
 .ifndef xt_type
@@ -440,7 +437,7 @@ defword "key",3,key,1
     lbl read_one_char_from_buffer    
     .int xt_btick, 0, xt_inputlen, xt_store                                        // reset inputlen
     .int xt_tib, xt_toin, xt_store                                                 // reset inputbuffer
-    .int xt_btick, 14, xt_btick, _M prompt_word_name, xt_find, xt_drop, xt_execute // show prompt
+    .int xt_btick, _M prompt_word_name, xt_btick, 14, xt_find, xt_drop, xt_execute // show prompt
 refill_buffer:
     .int xt_readchar, xt_dup, xt_char_toin
     .int xt_btick, 10, xt_eq, xt_branch0
