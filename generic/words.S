@@ -10,6 +10,11 @@ defword "2drop",5,"drop2",1
     .int xt_drop
     .int xt_exit
 
+defword "4drop",5,"drop4",1
+    .int xt_drop2
+    .int xt_drop2
+    .int xt_exit
+
 .ifndef xt_over
 defword "over",4,over,1 /* ( a b -- a b a ) */
     .int xt_swap
@@ -329,11 +334,11 @@ tonum_done:
     .int xt_btick, TRUE
     .int xt_exit
 tonum_invalid_digit:
-    .int xt_rpop, xt_drop2, xt_drop2
+    .int xt_rpop, xt_drop4, xt_drop
     .int xt_btick, FALSE
     .int xt_exit
 tonum_empty:
-    .int xt_drop
+    .int xt_drop2
     .int xt_btick, FALSE
     .int xt_exit
 

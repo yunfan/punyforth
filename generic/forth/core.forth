@@ -93,8 +93,6 @@
 : struct 0 ;
 : field create over , + does> @ + ;
 
-: 4drop ( a b c d -- ) 2drop 2drop ;
-
 ' ['] constant XT_LIT
 
 : [str ( -- address-to-fill-in )

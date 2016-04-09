@@ -39,7 +39,6 @@ end_of_input:
     .int xt_abort
 invalid_number:
     .int xt_btick, undef_word_error, xt_type
-    .int xt_drop                             // drop converted number
     .int xt_swap, xt_typecounted
     .int xt_btick, 10, xt_emit
     .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
