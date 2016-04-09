@@ -4,20 +4,22 @@
 3 constant GPIO_INTTYPE_EDGE_ANY
 4 constant GPIO_INTTYPE_LEVEL_LOW
 5 constant GPIO_INTTYPE_LEVEL_HIGH
-
-2 constant PIN2       \ GPIO 2 (D4 leg on ESP devboard)
-2 constant BUTTON
 1 constant GPIO_IN
 2 constant GPIO_OUT
+1 constant HIGH
+0 constant LOW
 
-\ PIN2 GPIO_OUT gpio-enable
-
-: blink ( n -- )
-    0 do
-        PIN2 TRUE gpio-write
-        1000 delay
-        PIN2 FALSE gpio-write
-        1000 delay
-    loop ;
+: blink ( pin -- )
+    dup 
+    GPIO_OUT gpio-enable
+    dup
+    HIGH gpio-write
+    1000 delay
+    LOW gpio-write
+    1000 delay ;
     
-\ 10 blink    
+: times-blink ( pin ntimes -- )
+    0 do
+        dup blink
+    loop 
+    drop ;    
