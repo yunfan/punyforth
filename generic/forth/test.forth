@@ -1,5 +1,3 @@
-dp .
-
 marker -tests
 
 : factorial ( n -- n! | err:1024 )
