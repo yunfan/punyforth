@@ -251,7 +251,11 @@ defword "here",4,here,1
     .int xt_exit
     
 defword "dp",2,dp,1
-    .int xt_btick, _M var_dp, xt_fetch
+    .int xt_var_dp, xt_fetch
+    .int xt_exit
+
+defword "var-dp"6,var_dp,1
+    .int xt_btick, _M var_dp
     .int xt_exit
 
 defword "freemem",7,freemem,1
@@ -460,8 +464,12 @@ cannot_interpret_compile_only_word:
     .int xt_btick, _M compile_only_warning, xt_type
     .int xt_exit
 
+defword "var-lastword",12,var_lastword,1
+    .int xt_btick, _M LAST_WORD
+    .int xt_exit
+
 defword "lastword",8,lastword,1
-    .int xt_btick, _M LAST_WORD, xt_fetch
+    .int xt_var_lastword, xt_fetch
     .int xt_exit
 
 defword "enterdoes",9,enterdoes,1

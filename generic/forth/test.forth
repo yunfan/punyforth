@@ -1,3 +1,7 @@
+dp .
+
+marker -tests
+
 : factorial ( n -- n! | err:1024 )
        dup 0< if
            drop 1024 throw
@@ -42,8 +46,11 @@ new-rect r1
        time swap - ;
 
 variable test_count
-
 variable test_var1 variable test_var2
+variable stored_dp 
+dp stored_dp !
+
+marker -test-test
 
 : assert ( bool -- )
        test_count @ 1+ test_count ! '.' emit
@@ -162,6 +169,9 @@ variable test_var1 variable test_var2
    s' efg' 
    str-includes FALSE = assert   
    depth 0= assert
+   -test-test dp stored_dp @ = assert
    ." OK " test_count ? cr ; 
 
 ' selftest execute ." Punyforth ready" cr
+
+-tests

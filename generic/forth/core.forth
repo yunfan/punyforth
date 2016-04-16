@@ -218,5 +218,13 @@ variable handler 0 handler !       \ stores the address of the nearest exception
       r> swap >r sp!          \ restore the data stack as it was before the most recent catch
       drop r> ;               \ return to the caller of most recent catch with the errcode
 
+: marker
+    create
+        lastword ,
+    does>
+        @ dup 
+	@ var-lastword !
+	var-dp ! ;
+
 : default_prompt cr ." # " ;  \ FIXME must be one line because there is no smudge bit for hiding the incomplete def
 
