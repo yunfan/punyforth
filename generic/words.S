@@ -254,6 +254,10 @@ defword "dp",2,dp,1
     .int xt_btick, _M var_dp, xt_fetch
     .int xt_exit
 
+defword "freemem",7,freemem,1
+    .int xt_btick, _M end_dictionary, xt_dp, xt_minus
+    .int xt_exit
+
 defword "allot",5,allot,1 /* ( n -- ) */
     .int xt_here, xt_plus, xt_align, xt_btick, _M var_dp, xt_store
     .int xt_exit

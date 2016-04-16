@@ -116,6 +116,7 @@ variable test_var1 variable test_var2
    3 nested-throw2 42 = assert
    sp@ test_var2 !
    test_var1 @ test_var2 @ = assert
+   freemem 16 allot freemem - 16 = assert
    s" " strlen 0 = assert
    s" 1" strlen 1 = assert
    s" 12" strlen 2 = assert
