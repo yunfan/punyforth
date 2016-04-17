@@ -130,3 +130,25 @@ defprimitive "next-event",10,next_event,1
     CCALL forth_next_event
     DPUSH a2
     NEXT
+
+defprimitive "erase-flash",11,erase_flash,1
+    DPOP a2                    // sector
+    CCALL forth_flash_erase_sector
+    DPUSH a2
+    NEXT
+
+defprimitive "read-flash",10,read_flash,1
+    DPOP a2                    // sector
+    DPOP a3                    // buffer
+    DPOP a4                    // size
+    CCALL forth_flash_read
+    DPUSH a2
+    NEXT
+
+defprimitive "write-flash",11,write_flash,1
+    DPOP a2                    // sector
+    DPOP a3                    // buffer
+    DPOP a4                    // size
+    CCALL forth_flash_write
+    DPUSH a2
+    NEXT
