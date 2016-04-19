@@ -1,5 +1,7 @@
 marker -tests
 
+: '.' [ char . ] literal ; 
+
 : factorial ( n -- n! | err:1024 )
        dup 0< if
            drop 1024 throw

@@ -20,7 +20,6 @@
 : ( begin key ')' = until ; immediate
 : \ begin key dup 'cr' = swap 'lf' = or until ; immediate
 
-: '.' [ char . ] literal ; 
 : '"' [ char " ] literal ;
 : "'" [ char ' ] literal ;
 
