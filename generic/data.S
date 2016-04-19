@@ -8,13 +8,14 @@
 .set IMMEDIATE,-1
 .set TRUE,-1
 .set FALSE,0
+.set INPUT_BUFFER_SIZE,128
 
 STACK_ORIG:   .int 0
 var0:         .int 0
 state_var:    .int STATE_INTERPRET
 LAST_WORD:    .int FINAL_WORD
 input_index:  .int 0
-input_buffer: .space 128
+input_buffer: .space INPUT_BUFFER_SIZE
 .align 4,32
 input_size:   .int . - input_buffer
 var_dp:       .int 0                   // data pointer
@@ -28,6 +29,7 @@ prompt_str:   .asciz "\n % "
 prompt_word_name:      .asciz "default_prompt"
 compile_only_warning:  .asciz "\nCompile time only word cannot be used in interpretation mode.\n"
 undef_word_error:      .asciz "\nUndefined word: "
+inbuf_overflow_error:  .asciz "\nInput buffer overflow\n"
 
 // TODO features
 //  * add error handling to [compile] and '

@@ -424,14 +424,19 @@ type_counted_done:
 .endif    
 
 defword "chr>in",6,char_toin /* (chr -- ) */
+    .int xt_inputlen, xt_fetch, xt_btick, INPUT_BUFFER_SIZE, xt_lt, xt_branch0
+    lbl inbuf_overflow
     .int xt_toin, xt_fetch, xt_storebyte                          // store one char in inputbuffer
     .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store             // increment input index
     .int xt_inputlen, xt_fetch, xt_inc, xt_inputlen, xt_store     // incrment input size
     .int xt_exit
+inbuf_overflow:
+    .int xt_btick, _M inbuf_overflow_error, xt_type
+    .int xt_abort
 
 defword "in>char",7,char_fromin /* ( -- chr ) */
     .int xt_toin, xt_fetch, xt_fetchbyte                          // fetch next character from inputbuffer
-    .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store              // increment input index
+    .int xt_toin, xt_fetch, xt_inc, xt_toin, xt_store             // increment input index
     .int xt_exit
 
 defword "default_prompt",14,default_prompt,1
