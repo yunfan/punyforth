@@ -30,8 +30,6 @@
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
 
-: [compile] word find drop , ; immediate
-
 : prepare-forward-ref here 0 , ;
 : resolve-forward-ref dup here swap - cell - swap ! ;
 
@@ -75,8 +73,6 @@
        ['] r> , ['] r> , ['] 2drop ,
    ; immediate
 
-: ' ( -- addr ) word find drop ; \ find the xt of the next word in the inputstream
-
 : create createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
@@ -85,12 +81,43 @@
 
 -1 constant TRUE 0 constant FALSE
 
+variable handler 0 handler !       \ stores the address of the nearest exception handler
+
+: uncaught_exception_handler
+      [ char E ] literal emit 
+      [ char R ] literal dup emit emit 
+      space . cr abort ;
+
+: catch ( xt -- errcode | 0 )
+      sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
+      rp@ handler !                \ set the currend handler to this
+      execute                      \ execute word that potentially throws exception
+      r> handler !                 \ word returned without exception, restore previous handler
+      r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
+
+: throw ( i*x errcode -- i*x errcode | 0 )
+      dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
+      handler @ 0= if             \ this was an uncaught exception
+          uncaught_exception_handler 
+          exit
+      then
+      handler @ rp!           \ restore rstack, now it is the same as it was before execute
+      r> handler !            \ restore next handler
+      r> swap >r sp!          \ restore the data stack as it was before the most recent catch
+      drop r> ;               \ return to the caller of most recent catch with the errcode
+
 : array ( size -- ) ( index -- addr )
       create cells allot
       does> swap cells + ;
 
 : struct 0 ;
 : field create over , + does> @ + ;
+
+: [compile] ( -- | throws:10 )
+    word find 0= if 10 throw then , ; immediate
+
+: ' ( -- addr | throws:11 ) \ find the xt of the next word in the inputstream
+    word find 0= if 11 throw then ;
 
 ' ['] constant XT_LIT
 
@@ -193,29 +220,6 @@
 
 : clear-stack ( i*x -- ) 
     depth 0 do . cr loop ;
-
-variable handler 0 handler !       \ stores the address of the nearest exception handler
-
-: uncaught_exception_handler
-      ." Uncaught exception: " . cr abort ;
-
-: catch ( xt -- errcode | 0 )
-      sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
-      rp@ handler !                \ set the currend handler to this
-      execute                      \ execute word that potentially throws exception
-      r> handler !                 \ word returned without exception, restore previous handler
-      r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
-
-: throw ( i*x errcode -- i*x errcode | 0 )
-      dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
-      handler @ 0= if             \ this was an uncaught exception
-          uncaught_exception_handler 
-          exit
-      then
-      handler @ rp!           \ restore rstack, now it is the same as it was before execute
-      r> handler !            \ restore next handler
-      r> swap >r sp!          \ restore the data stack as it was before the most recent catch
-      drop r> ;               \ return to the caller of most recent catch with the errcode
 
 : marker
     create

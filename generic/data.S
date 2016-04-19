@@ -30,7 +30,3 @@ prompt_word_name:      .asciz "default_prompt"
 compile_only_warning:  .asciz "\nCompile time only word cannot be used in interpretation mode.\n"
 undef_word_error:      .asciz "\nUndefined word: "
 inbuf_overflow_error:  .asciz "\nInput buffer overflow\n"
-
-// TODO features
-//  * add error handling to [compile] and '
-
