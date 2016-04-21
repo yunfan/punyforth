@@ -83,11 +83,6 @@
 
 variable handler 0 handler !       \ stores the address of the nearest exception handler
 
-: uncaught_exception_handler
-      [ char E ] literal emit 
-      [ char R ] literal dup emit emit 
-      space . cr abort ;
-
 : catch ( xt -- errcode | 0 )
       sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
       rp@ handler !                \ set the currend handler to this
@@ -98,7 +93,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : throw ( i*x errcode -- i*x errcode | 0 )
       dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
       handler @ 0= if             \ this was an uncaught exception
-          uncaught_exception_handler 
+          uncaught-exception-occurred
           exit
       then
       handler @ rp!           \ restore rstack, now it is the same as it was before execute
@@ -113,13 +108,12 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : struct 0 ;
 : field create over , + does> @ + ;
 
-: [compile] ( -- | throws:10 )
-    word find 0= if 10 throw then , ; immediate
-
-: ' ( -- addr | throws:11 ) \ find the xt of the next word in the inputstream
-    word find 0= if 11 throw then ;
+: ' ( -- addr | throws:10 ) \ find the xt of the next word in the inputstream
+    word find 0= if 10 throw then ;
 
 ' ['] constant XT_LIT
+
+: [compile] ( -- | throws:10 ) ' , ; immediate
 
 : [str ( -- address-to-fill-in )
     XT_LIT , here 3 cells + ,       \ compile return value: address of string
@@ -220,6 +214,10 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 : clear-stack ( i*x -- ) 
     depth 0 do . cr loop ;
+
+: on-uncaught-exception ( code -- )
+    cr ." Uncaught exception: " . cr
+    abort ;
 
 : marker
     create

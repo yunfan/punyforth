@@ -502,6 +502,16 @@ defword "link>body",9,link2body,1 /* ( a1 -- a2 ) */
     .int xt_link2xt, xt_cell, xt_plus
     .int xt_exit
 
+defword "uncaught-exception-occurred",27,uncaught_exception_occurred,1 /* ( -- ) */
+    .int xt_btick, _M user_exception_handler_name, xt_btick, 21, xt_find
+    .int xt_branch0
+    lbl no_user_defined_handler
+    .int xt_execute
+    .int xt_exit
+no_user_defined_handler:
+    .int xt_btick, _M user_exception_handler_name, xt_type
+    .int xt_abort
+
 FINAL_WORD:    
 defword "immediate",9,immediate,1
     .int xt_btick, IMMEDIATE, xt_lastword, xt_link2flags, xt_store
