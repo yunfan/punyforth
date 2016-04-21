@@ -97,8 +97,16 @@ marker -test-test
    10000 5 bounds do i loop
    10004 = assert 10003 = assert 10002 = assert 10001 = assert 10000 = assert depth 0= assert
    0 11 1 do i + loop 55 = assert
-\   0 11 1 do i + 1 +loop 55 = assert
-\   0 50 0 do i + 5 +loop 225 = assert
+
+   0 11 1 do i + 1 +loop 55 = assert
+   0 50 0 do i + 5 +loop 225 = assert
+   15 0 do i 5 +loop 10 = assert 5 = assert 0 = assert depth 0= assert
+   3 0 do i 2 +loop 2 = assert 0 = assert depth 0= assert
+   1 0 do i 2 +loop 0 = assert depth 0= assert
+   -5 0 do i -2 +loop -4 = assert -2 = assert 0 = assert depth 0= assert
+   -1 0 do i -1 +loop -1 = assert 0 = assert 0= assert;
+   0 0 do i -1 +loop 0 = assert depth 0= assert
+
    0 8 2 do 9 3 do i j + + loop loop 360 = assert
    9 factorial 362880 = assert
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 = assert

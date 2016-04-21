@@ -73,6 +73,20 @@
        ['] r> , ['] r> , ['] 2drop ,
    ; immediate
 
+: +loop-terminate? ( n limit i -- bool )
+    swap 1+
+    - dup rot + xor 0 < ;          \ (index-limit) and (index-limit+n) have different sign?
+
+: +loop
+    compile_time_only     
+    ['] dup ,
+    ['] r> , ['] + , ['] >r ,
+    ['] r2dup , ['] r> , ['] r> ,
+    ['] +loop-terminate? ,
+    ['] branch0 , resolve-backward-ref
+    ['] r> , ['] r> , ['] 2drop ,
+ ; immediate
+
 : create createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
