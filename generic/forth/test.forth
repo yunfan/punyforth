@@ -104,7 +104,7 @@ marker -test-test
    3 0 do i 2 +loop 2 = assert 0 = assert depth 0= assert
    1 0 do i 2 +loop 0 = assert depth 0= assert
    -5 0 do i -2 +loop -4 = assert -2 = assert 0 = assert depth 0= assert
-   -1 0 do i -1 +loop -1 = assert 0 = assert 0= assert;
+   -1 0 do i -1 +loop -1 = assert 0 = assert depth 0= assert
    0 0 do i -1 +loop 0 = assert depth 0= assert
 
    0 8 2 do 9 3 do i j + + loop loop 360 = assert

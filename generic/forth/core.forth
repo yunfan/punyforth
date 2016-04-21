@@ -221,13 +221,14 @@ variable handler 0 handler !       \ stores the address of the nearest exception
         [compile] s" ['] type ,
     then ; immediate
     
-: .s ( i*x -- i*x )   \ TODO reverse order
-    depth 0 do 
+: .s ( i*x -- i*x )
+   depth 0= if exit then
+    0 depth 2 - do 
         sp@ i cells + @ . space 
-    loop ;
+    -1 +loop ;
 
 : clear-stack ( i*x -- ) 
-    depth 0 do . cr loop ;
+    depth 0 do drop loop ;
 
 : on-uncaught-exception ( code -- )
     cr ." Uncaught exception: " . cr
@@ -241,5 +242,5 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 	@ var-lastword !
 	var-dp ! ;
 
-: default_prompt cr ." # " ;  \ FIXME must be one line because there is no smudge bit for hiding the incomplete def
+: default_prompt cr .s ." # " ;  \ FIXME must be one line because there is no smudge bit for hiding the incomplete def
 
