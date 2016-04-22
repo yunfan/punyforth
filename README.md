@@ -50,9 +50,11 @@ The REPL (also known as the Forth Outer Interpreter) operates in 2 modes. In int
 
 ### The syntax
 
+Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number.
+
 ### Control structures
 
-TODO
+TODO 
 
 *if <consequent> else <alternative> then*
 
