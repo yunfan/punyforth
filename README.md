@@ -75,12 +75,6 @@ For example:
 The else part can be omitted.
 
 ```forth
-<bool> if <consequent> then
-```
-
-For example:
-
-```forth
 : abs ( n -- absn ) 
   dup 0< if -1 * then ;
   
