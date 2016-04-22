@@ -78,8 +78,9 @@ The *limit* and *start* before the word *do* defines the number of times the loo
 <limit> <start> do <loop-body> loop
 ```
 
-DO loops iterate through integers by starting at *start* and incrementing until you reach the *limit*. The word "i" pushes the loop index onto the stack
+*Do* loops iterate through integers by starting at *start* and incrementing until you reach the *limit*. The word "i" pushes the loop index onto the stack.
 
+For example:
 ```forth
 5 0 do i . loop \ prints 01234
 ```
@@ -89,6 +90,8 @@ There is an other version of the *do* loop where you can define the increment (w
 ```forth
 <limit> <start> do <loop-body> <increment> +loop
 ```
+
+For example:
 
 ```forth
 10 0 do i . 2 +loop \ prints 02468
@@ -100,15 +103,19 @@ If the increment is negative then *limit* is inclusive.
 0 8 do i . -2 +loop \ prints 86420
 ```
 
+#### Condition-controlled loops
+
+```forth
+begin <loop-body> <bool> until
+```
+
+If you replace *until* with *again* and omit the condition then the loop will run indefinitely.
+
 ```forth
 begin <loop-body> again
 ```
 
-#### Condition-controlled loops
-
-```forth
-begin <loop-body> until
-```
+You can use the *exit* word to exit from the current word as well from the loop.
 
 Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
 
