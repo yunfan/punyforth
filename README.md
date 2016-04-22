@@ -1,12 +1,12 @@
 # punyforth
 
-Punyforth is a simple and portable implementation of the FORTH programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266). This latter one is the primary supported target.
+Punyforth is a simple and portable implementation of the Forth programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266). This latter one is the primary supported target.
 
 Please note that at this stage punyforth is still incomplete.
 
 ## About the language
 
-FORTH is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
+Forth is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
 
 The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
 
