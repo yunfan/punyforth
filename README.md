@@ -12,9 +12,11 @@ The Forth environment combines the compiler with an interactive shell (REPL), wh
 
 Punyforth does not have local variables, instead values are kept on a stack. This stack is used only for storing data. There is a separate return stack that stores information about nested subroutin calls. Both stacks are first-class in the language.
 
+The following code calculates *3 * 3 + 2 * 2* and prints out *13*.
+
 ```forth
 
-2 3 dup * swap dup * + .  \ 3 * 3 + 2 * 2 prints out 13
+2 3 dup * swap dup * + .
 
 ```
 Stack visualization:
