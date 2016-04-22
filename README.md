@@ -48,6 +48,8 @@ During programming, the user uses the REPL to write and test small piece of code
 
 The REPL (also known as the Forth Outer Interpreter) operates in 2 modes. In interpretation mode, it immediately executes the words that the user typed in. In compilation mode (when you start a new word definition), its action depends on the compilation semantic of the current word. In most cases it compiles the execution token (pointer to the word) into the word to be defined. If the current word is flagged as immediate, the compiler executes the word at compile time so the word can define its own compilation semantic. This is a bit similar than Lisp macros. Control structures are implemented as immediate words in Forth.
 
+### The syntax
+
 ### Control structures
 
 TODO
