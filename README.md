@@ -54,17 +54,27 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 ### Control structures
 
-TODO 
+Punyforth supports the regular Forth conditional and loop words.
 
+```forth
 *if <consequent> else <alternative> then*
+```
 
+```forth
 *if <consequent> then*
+```
 
+```forth
 *do <loop-body> loop*
+```
 
+```forth
 *begin <loop-body> again*
-*begin <loop-body> until*
+```
 
+```forth
+*begin <loop-body> until*
+```
 Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
 
 ### Exceptions
