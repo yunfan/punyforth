@@ -50,7 +50,7 @@ The REPL (also known as the Forth Outer Interpreter) operates in 2 modes. In int
 
 ### The syntax
 
-Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number. Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems is case-sensitive.
+Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number. Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
 
 ### Control structures
 
