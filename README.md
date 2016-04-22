@@ -12,7 +12,7 @@ The Forth environment combines the compiler with an interactive shell (REPL), wh
 
 Punyforth does not have local variables, instead values are kept on a stack. This stack is used only for storing data. There is a separate return stack that stores information about nested subroutin calls. Both stacks are first-class in the language.
 
-As a consequence of the stack, Punyforth uses a form of syntax known as Reverse Polish Notation.
+As a consequence of the stack, Punyforth uses a form of syntax known as Reverse Polish or Postfix Notation.
 
 If you type the following code in the REPL:
 
