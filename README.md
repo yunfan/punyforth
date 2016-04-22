@@ -64,10 +64,27 @@ General form of *if else then*.
 <bool> if <consequent> else <alternative> then
 ```
 
+For example:
+```forth
+: max ( a b -- max ) 
+  2dup < if nip else drop then ;
+  
+10 100 max . \ prints 100
+```
+
 The else part can be omitted.
 
 ```forth
 <bool> if <consequent> then
+```
+
+For example:
+
+```forth
+: abs ( n -- absn ) 
+  dup 0< if -1 * then ;
+  
+-10 abs . \ prints 10  
 ```
 
 #### Count-controlled loops
