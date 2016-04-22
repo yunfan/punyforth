@@ -42,6 +42,10 @@ Stack visualization:
      2         9
 </pre>     
 
+### Programming
+
+During programming, the user uses the REPL to define and test words (which are called subroutines or functions in other languages).
+
 ### Control structures
 
 TODO
