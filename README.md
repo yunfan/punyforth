@@ -14,6 +14,17 @@ Punyforth does not have local variables, instead values are kept on a stack. Thi
 
 As a consequence of the stack, Punyforth uses a form of syntax known as Reverse Polish Notation.
 
+If you type the following code in the REPL:
+
+```forth
+
+1 2 +
+
+```
+
+The interpreter pushes the number 1 then the number 2 onto the data stack. It executes the word *+*, which removes the two top level item from the stack, calculates their sum, and pushes the result to the stack.
+
+
 The following code calculates *3 * 3 + 2 * 2* and prints out *13*.
 
 ```forth
