@@ -55,7 +55,7 @@ TODO
 *begin <loop-body> again*
 *begin <loop-body> until*
 
-Control structres are compile time words therefore they can be used only in compilation mode.
+Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
 
 ### Exceptions
 
