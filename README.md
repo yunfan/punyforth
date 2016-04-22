@@ -55,6 +55,10 @@ TODO
 *begin ... again*
 *begin ... until*
 
+### Exceptions
+
+TODO
+
 ### Defining words
 
 ```forth
