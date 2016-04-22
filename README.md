@@ -78,14 +78,26 @@ The *limit* and *start* before the word *do* defines the number of times the loo
 <limit> <start> do <loop-body> loop
 ```
 
-DO loops iterate over integers beginning with *start* and ending when the index reaches *limit*. The word "i" pushes the loop index onto the stack
+DO loops iterate through integers by starting at *start* and incrementing until you reach the *limit*. The word "i" pushes the loop index onto the stack
 
 ```forth
 5 0 do i . loop \ prints 01234
 ```
 
+There is an other version of the *do* loop where you can define the increment (which can be negative as well).
+
 ```forth
 <limit> <start> do <loop-body> <increment> +loop
+```
+
+```forth
+10 0 do i . 2 +loop \ prints 02468
+```
+
+If the increment is negative then *limit* is inclusive.
+
+```forth
+0 8 do i . -2 +loop \ prints 86420
 ```
 
 ```forth
