@@ -358,4 +358,10 @@ variable handler
     then drop ; 
 ```
 
+### ESP8266 specific things
 
+#### GPIO
+
+#### Netconn
+
+#### Misc
