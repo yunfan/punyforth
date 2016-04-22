@@ -56,25 +56,48 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 Punyforth supports the regular Forth conditional and loop words.
 
+#### Conditionals
+
+General form of *if else then*.
+
 ```forth
-*if <consequent> else <alternative> then*
+<bool> if <consequent> else <alternative> then
+```
+
+The else part can be omitted.
+
+```forth
+<bool> if <consequent> then
+```
+
+#### Count-controlled loops
+
+The *limit* and *start* before the word *do* defines the number of times the loop will run.
+
+```forth
+<limit> <start> do <loop-body> loop
+```
+
+DO loops iterate over integers beginning with *start* and ending when the index reaches *limit*. The word "i" pushes the loop index onto the stack
+
+```forth
+5 0 do i . loop \ prints 01234
 ```
 
 ```forth
-*if <consequent> then*
+<limit> <start> do <loop-body> <increment> +loop
 ```
 
 ```forth
-*do <loop-body> loop*
+begin <loop-body> again
 ```
 
-```forth
-*begin <loop-body> again*
-```
+#### Condition-controlled loops
 
 ```forth
-*begin <loop-body> until*
+begin <loop-body> until
 ```
+
 Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
 
 ### Exceptions
