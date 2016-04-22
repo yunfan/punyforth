@@ -32,6 +32,9 @@ The following code calculates *3 * 3 + 2 * 2* and prints out *13*.
 2 3 dup * swap dup * + .
 
 ```
+
+The word *dup* duplicates the top level item of the stack. The word *swap" xchanges the two top level items of the stack.
+
 Stack visualization:
 <pre>
 2 3  3  9  2   2 4 13
