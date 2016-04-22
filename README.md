@@ -8,6 +8,8 @@ Please note that at this stage punyforth is still incomplete.
 
 FORTH is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
 
+The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
+
 Punyforth does not have local variables, instead values are kept on a stack. This stack is used only for storing data. There is a separate return stack that stores information about nested subroutin calls. Both stacks are first-class in the language.
 
 ```forth
