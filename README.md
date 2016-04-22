@@ -46,14 +46,14 @@ Stack visualization:
 
 TODO
 
-*if ... else ... then*
+*if <consequent> else <alternative> then*
 
-*if ... then*
+*if <consequent> then*
 
-*do ... loop*
+*do <loop-body> loop*
 
-*begin ... again*
-*begin ... until*
+*begin <loop-body> again*
+*begin <loop-body> until*
 
 ### Exceptions
 
