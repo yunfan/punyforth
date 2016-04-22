@@ -46,6 +46,15 @@ Stack visualization:
 
 TODO
 
+*if ... else ... then*
+
+*if ... then*
+
+*do ... loop*
+
+*begin ... again*
+*begin ... until*
+
 ### Defining words
 
 ```forth
