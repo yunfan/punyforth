@@ -108,6 +108,20 @@ If the increment is negative then *limit* is inclusive.
 ```forth
 begin <loop-body> <bool> until
 ```
+The *begin*...*until* loop repeats until a condition is true. For example.
+
+```forth
+: countdown ( n -- )
+  begin 
+    dup .
+    1- dup
+  0= until
+  drop ;
+  
+5 countdown
+\ prints 54321  
+```
+
 
 If you replace *until* with *again* and omit the condition then the loop will run indefinitely.
 
