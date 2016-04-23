@@ -128,11 +128,11 @@ The *begin*...*until* loop repeats until a condition is true. For example.
   begin 
     dup .
     1- dup
-  0= until
+  0 < until
   drop ;
   
 5 countdown
-\ prints 54321  
+\ prints 543210
 ```
 
 If you replace *until* with *again* and omit the condition then the loop will run indefinitely.
