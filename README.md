@@ -121,7 +121,9 @@ If the increment is negative then *limit* is inclusive.
 ```forth
 begin <loop-body> <bool> until
 ```
-The *begin*...*until* loop repeats until a condition is true. For example.
+The *begin*...*until* loop repeats until a condition is true. This loop always executes at least one time.
+
+For example:
 
 ```forth
 : countdown ( n -- )
