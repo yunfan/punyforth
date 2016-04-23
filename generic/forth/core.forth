@@ -20,11 +20,11 @@
 : ( begin key ')' = until ; immediate
 : \ begin key dup 'cr' = swap 'lf' = or until ; immediate
 
-: dip  swap >r execute r> ;
-: sip    over >r execute r> ;
-: bi  ['] sip dip execute ;
-: bi*  ['] dip dip execute ;
-: bi@ ( a b xt -- xt.a xt.b )  dup bi* ;
+: dip ( a xt -- a ) swap >r execute r> ;
+: sip ( a xt -- xt.a a ) over >r execute r> ;
+: bi ( a xt1 xt2 -- xt1.a xt2.a ) ['] sip dip execute ;
+: bi* ( a b xt1 xt2 -- xt1.a xt2.b ) ['] dip dip execute ;
+: bi@ ( a b xt -- xt.a xt.b ) dup bi* ;
 
 : '"' [ char " ] literal ;
 : "'" [ char ' ] literal ;
@@ -182,7 +182,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     begin
         dup c@ 0 <>
     while
-	['] 1+ bi@
+    ['] 1+ bi@
     repeat 
     drop ;
 
@@ -252,6 +252,18 @@ variable handler 0 handler !       \ stores the address of the nearest exception
         @ dup 
     @ var-lastword !
     var-dp ! ;
+
+: print-words ( -- )
+    lastword
+    begin
+       dup 0 <>
+    while
+       dup
+       ['] link>name ['] link>len bi 
+       @ type-counted cr
+       @
+    repeat 
+    drop ;   
 
 : default_prompt cr .s ." % " ;  \ FIXME must be one line because there is no smudge bit
 
