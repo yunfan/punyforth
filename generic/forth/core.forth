@@ -256,7 +256,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : print-words ( -- )
     lastword
     begin
-       dup 0 <>
+       dup 0<>
     while
        dup
        ['] link>name ['] link>len bi 
