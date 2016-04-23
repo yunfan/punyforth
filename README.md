@@ -220,6 +220,17 @@ Parsing words can parse the input stream. One example of a parsing word is the c
  ; immediate
 ``` 
 
+### Factor style combinators
+
+Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
+
+* dip ( a xt -- a )
+* sip ( a xt -- xt.a a )
+* bi ( a xt1 xt2 -- xt1.a xt2.a )
+* bi* ( a b xt1 xt2 -- xt1.a xt2.b )
+* bi@ ( a b xt -- xt.a xt.b )
+
+
 ### About the implementation of *create does>*
 
 ```forth
