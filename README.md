@@ -133,12 +133,16 @@ The *begin*...*until* loop repeats until a condition is true. For example.
 \ prints 54321  
 ```
 
-
 If you replace *until* with *again* and omit the condition then the loop will run indefinitely.
 
 ```forth
 begin <loop-body> again
 ```
+
+```forth
+begin .. <bool> while <loop-body> repeat
+```
+
 
 You can use the *exit* word to exit from the current word as well from the loop.
 
