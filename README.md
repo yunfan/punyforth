@@ -131,8 +131,7 @@ The *begin*...*until* loop repeats until a condition is true. For example.
   0 < until
   drop ;
   
-5 countdown
-\ prints 543210
+5 countdown \ prints 543210
 ```
 
 If you replace *until* with *again* and omit the condition then the loop will run indefinitely.
@@ -156,8 +155,7 @@ begin .. <bool> while <loop-body> repeat
   repeat
   drop ;
   
-5 countdown
-\ prints 543210
+5 countdown \ prints 543210
 ```
 
 
