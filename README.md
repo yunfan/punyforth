@@ -147,7 +147,7 @@ begin <loop-body> again
 ```forth
 begin .. <bool> while <loop-body> repeat
 ```
-
+For example:
 ```forth
 : countdown ( n -- )
   begin
