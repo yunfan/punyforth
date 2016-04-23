@@ -6,7 +6,7 @@ Please note that at this stage punyforth is still incomplete.
 
 ## About the language
 
-Forth is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
+Punyforth is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
 
 The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
 
@@ -46,7 +46,7 @@ Stack visualization:
 
 During programming, the user uses the REPL to write and test small piece of codes or to extend the languge with new words (which are called subroutines or functions in other languages). 
 
-The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. In interpretation mode, it immediately executes the words that the user typed in. In compilation mode (when you start a new word definition), its action depends on the compilation semantic of the current word. In most cases it compiles the execution token (pointer to the word) into the word to be defined. If the current word is flagged as immediate, the compiler executes the word at compile time so the word can define its own compilation semantic. This is a bit similar than Lisp macros. Control structures are implemented as immediate words in Forth.
+The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. In interpretation mode, it immediately executes the words that the user typed in. In compilation mode (when you start a new word definition), its action depends on the compilation semantic of the current word. In most cases it compiles the execution token (pointer to the word) into the word to be defined. However, if the current word is flagged as immediate, the compiler executes the word at compile time so the word can define its own compilation semantic. This is a bit similar than Lisp macros. Control structures are implemented as immediate words in Forth.
 
 ### The syntax
 
