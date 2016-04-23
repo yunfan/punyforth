@@ -116,6 +116,8 @@ If the increment is negative then *limit* is inclusive.
 
 #### Condition-controlled loops
 
+##### until loop
+
 ```forth
 begin <loop-body> <bool> until
 ```
@@ -138,6 +140,8 @@ If you replace *until* with *again* and omit the condition then the loop will ru
 ```forth
 begin <loop-body> again
 ```
+
+##### while loop
 
 ```forth
 begin .. <bool> while <loop-body> repeat
