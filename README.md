@@ -152,8 +152,7 @@ begin .. <bool> while <loop-body> repeat
   begin
     dup 0 >=
   while
-    dup .
-    1-
+    dup . 1-
   repeat
   drop ;
   
