@@ -20,6 +20,12 @@
 : ( begin key ')' = until ; immediate
 : \ begin key dup 'cr' = swap 'lf' = or until ; immediate
 
+: dip  swap >r execute r> ;
+: sip    over >r execute r> ;
+: bi  ['] sip dip execute ;
+: bi*  ['] dip dip execute ;
+: bi@ ( a b xt -- xt.a xt.b )  dup bi* ;
+
 : '"' [ char " ] literal ;
 : "'" [ char ' ] literal ;
 
@@ -172,21 +178,13 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : \r\n (crlf) ;
 
 : strlen ( str -- len )
-    dup c@ 0= if 
-        drop 
-        0 exit 
-    then
-    0 
+    0 swap
     begin
-        1+
-    2dup + c@ 0= until 
-    nip ;
-
-: dip  swap >r execute r> ;
-: sip    over >r execute r> ;
-: bi  ['] sip dip execute ;
-: bi*  ['] dip dip execute ;
-: bi@ ( a b xt -- xt.a xt.b )  dup bi* ;
+        dup c@ 0 <>
+    while
+	['] 1+ bi@
+    repeat 
+    drop ;
 
 : str-starts-with ( str substr -- bool )
     begin
