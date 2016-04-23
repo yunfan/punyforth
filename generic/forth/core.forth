@@ -87,6 +87,16 @@
     ['] r> , ['] r> , ['] 2drop ,
  ; immediate
 
+: while
+    compile_time_only
+    ['] branch0 , prepare-forward-ref ; immediate
+
+: repeat
+    compile_time_only
+    swap
+    ['] branch , resolve-backward-ref 
+    resolve-forward-ref ; immediate
+
 : create createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
@@ -226,7 +236,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     ." stack["
     0 depth 2 - do 
         sp@ i cells + @ .
-	i 0 <> if space then
+    i 0 <> if space then
     -1 +loop 
     ." ] ";
 
@@ -242,8 +252,8 @@ variable handler 0 handler !       \ stores the address of the nearest exception
         lastword ,
     does>
         @ dup 
-	@ var-lastword !
-	var-dp ! ;
+    @ var-lastword !
+    var-dp ! ;
 
 : default_prompt cr .s ." % " ;  \ FIXME must be one line because there is no smudge bit
 
