@@ -147,6 +147,20 @@ begin <loop-body> again
 begin .. <bool> while <loop-body> repeat
 ```
 
+```forth
+: countdown ( n -- )
+  begin
+    dup 0 >=
+  while
+    dup .
+    1-
+  repeat
+  drop ;
+  
+5 countdown
+\ prints 543210
+```
+
 
 You can use the *exit* word to exit from the current word as well from the loop.
 
