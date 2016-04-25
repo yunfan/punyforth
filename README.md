@@ -6,7 +6,7 @@ Please note that at this stage punyforth is still incomplete.
 
 ## About the language
 
-Punyforth is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
+Punyforth is a simple imperative stack-based concatenative programming language and interactive environment with good metaprogramming support and extensibility.
 
 The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
 
