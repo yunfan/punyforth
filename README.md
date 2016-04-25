@@ -402,4 +402,6 @@ variable handler
 
 #### Storing code in flash
 
+#### OLED display ssd1306 through SPI
+
 #### Misc
