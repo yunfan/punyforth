@@ -22,7 +22,7 @@ If you type the following code in the REPL:
 
 ```
 
-The interpreter pushes the number 1 then the number 2 onto the data stack. It executes the word *+*, which pop the two top level items off the stack, calculates their sum, and pushes the result back to the stack.
+The interpreter pushes the number 1 then the number 2 onto the data stack. It executes the word *+*, which pops the two top level items off the stack, calculates their sum, and pushes the result back to the stack.
 
 
 The following code calculates *3 * 3 + 2 * 2* and prints out *13*.
