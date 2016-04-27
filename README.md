@@ -167,7 +167,26 @@ Control structres are compile time words therefore they can be used only in comp
 
 If a word faces an error condition it can *throw* an exception. Exceptions are represented as numbers in Punyforth. Your can provide exception handlers to catch exceptions. 
 
+For example:
 
+99 constant division_by_zero \ define a constant for the exception
+
+: div ( q d -- r | throws:division_by_zero ) \ this word throws an exception in case of division by zero
+    dup 0= if 
+      division_by_zero throw 
+    else 
+      / 
+    then ;
+
+: test-div ( q d -- r )
+  ['] div catch dup 0 <> if           \ call div in a "catch block". if no exception was thrown, the error code is 0
+      dup division_by_zero = if       \ error code is 99 indicating division by zero
+        ." Error: division by zero"
+      else
+        throw                         \ there was an other error, rethrow it
+      then
+    then drop ; 
+```
 
 #### Uncaught exception handler
 
@@ -179,6 +198,8 @@ An uncaught exception causes the program to print out the error to the standard 
     abort ;
 ```    
 You can modify this behaviour by redefining the word *on-uncaught-exception*.
+
+The implementation of exceptions is based on the idea of William Mitch Bradley.
 
 ### Defining words
 
@@ -348,59 +369,6 @@ new-rect r1
   
 r1 area .  
   
-```
-
-### Exceptions
-
-This is based on the idea of William Mitch Bradley.
-
-```forth
-\ this points to the nearest exception handler
-variable handler           
-
-: catch ( xt -- errcode | 0 )        
-    sp@ >r handler @ >r  	\ save current stack pointer and the nearest handler (RS: sp h)
-    rp@ handler !  		    \ update current handler to this
-    execute        		    \ execute word that potentially throws exception (*)
-    r> handler !   		    \ word returned without throwing exception, restore the nearest handler
-    r> drop        		    \ we don't need the saved stack pointet since there was no error
-    0              		    \ return with 0 indicating no error
- ;
-
-: throw ( i*x errcode -- i*x errcode | i*x errcode ) ( RS: -- sp hlr i*adr )
-    dup 0= if              \ throwing 0 means no error
-      drop                 \ drop error code
-      exit                 \ exit from execute (*)
-    then
-    handler @ rp!          \ restore return stack, now it is the same as it was right before the execute (*) (RS: sp h)
-    r> handler !           \ restore the previous handler
-    r>                     \ get the saved data stack pointer
-    swap                   \ (sp errcode)
-    >r                     \ move errcode to the returnstack temporally
-    sp!                    \ restore data stack to the same as it was before the most recent catch
-    drop r>                \ move the errorcode to the stack
- ;                         \ This will return to the caller of most recent catch    
- 
-
-\ usage
-
-99 constant division_by_zero
-
-: div ( q d -- r ) 
-    dup 0 = if 
-      division_by_zero throw 
-    else 
-      / 
-    then ;
-
-: test-div ( q d -- r )
-  ['] div catch dup 0 <> if           \ call div in a "catch block". if no exception was thrown, the error code is 0
-      dup division_by_zero = if       \ error code is 99 indicating division by zero
-        ." Error: division by zero"
-      else
-        throw                         \ there was an other error, rethrow it
-      then
-    then drop ; 
 ```
 
 ### ESP8266 specific things
