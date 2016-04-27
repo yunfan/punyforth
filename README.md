@@ -165,10 +165,11 @@ Control structres are compile time words therefore they can be used only in comp
 
 ### Exception handling
 
-If a word faces an error condition it can *throw* an exception. Exceptions are represented as numbers in Punyforth. Your can provide exception handlers to catch exceptions. 
+If a word faces an error condition it can *throw* an exception. Exceptions are represented as numbers in Punyforth. Your can provide exception handlers to *catch* exceptions. 
 
 For example:
 
+```forth
 99 constant division_by_zero \ define a constant for the exception
 
 : div ( q d -- r | throws:division_by_zero ) \ this word throws an exception in case of division by zero
@@ -187,6 +188,7 @@ For example:
       then
     then drop ; 
 ```
+
 
 #### Uncaught exception handler
 
