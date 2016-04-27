@@ -163,9 +163,22 @@ You can use the *exit* word to exit from the current word as well from the loop.
 
 Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
 
-### Exceptions
+### Exception handling
 
-TODO
+If a word faces an error condition it can *throw* an exception. Exceptions are represented as numbers in Punyforth. Your can provide exception handlers to catch exceptions. 
+
+
+
+#### Uncaught exception handler
+
+An uncaught exception causes the program to print out the error to the standard output then terminate.
+
+```forth
+: on-uncaught-exception ( code -- )
+    cr ." Uncaught exception: " . cr
+    abort ;
+```    
+You can modify this behaviour by redefining the word *on-uncaught-exception*.
 
 ### Defining words
 
