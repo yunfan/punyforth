@@ -206,7 +206,7 @@ The exeption mechanism in Punyforth follows the "catch everything and re-throw i
 
 #### Uncaught exception handler
 
-An uncaught exception causes the program to print out the error to the standard output then terminate.
+An uncaught exception causes the program to print out the error to the standard output and terminate.
 
 You can modify this behaviour by reassigning the variable on-uncaught-exception with an execution token of a new handler.
 
