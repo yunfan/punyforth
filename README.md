@@ -210,7 +210,7 @@ An uncaught exception causes the program to print out the error to the standard 
 ```    
 You can modify this behaviour by redefining the word *on-uncaught-exception*.
 
-The implementation of exceptions is based on the idea of William Bradley.
+The implementation of exceptions is based on the idea of [William Bradley](http://www.complang.tuwien.ac.at/anton/euroforth/ef98/milendorf98.pdf).
 
 ### Immediate words 
 
