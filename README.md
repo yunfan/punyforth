@@ -200,7 +200,7 @@ For example:
 
 The word *catch* expects an execution token of a word that potentially throws an exception.
 
-The exeption mechanism in Punyforth follows the "catch everything and re-throw if needed" semantics. The instruction *0 throw* is essentially a no-op.
+The exeption mechanism in Punyforth follows the "catch everything and re-throw if needed" semantics. The instruction *0 throw* is essentially a no-op and indicates no error.
 
 #### Uncaught exception handler
 
