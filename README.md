@@ -52,6 +52,8 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 ### Extending the dictionary
 
+
+
 ```forth
 : square ( n -- nsquared ) dup * ;
 
