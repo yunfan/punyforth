@@ -189,11 +189,11 @@ For example:
     then ;
 
 : test-div ( q d -- r )
-  ['] div catch dup 0 <> if           \ call div in a "catch block". if no exception was thrown, the error code is 0
-      dup division_by_zero = if       \ error code is 99 indicating division by zero
+  ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
+      dup division_by_zero = if     \ error code is 1099 indicating division by zero
         ." Error: division by zero"
       else
-        throw                         \ there was an other error, rethrow it
+        throw                       \ there was an other error, rethrow it
       then
     then drop ; 
 ```
