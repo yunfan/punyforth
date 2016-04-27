@@ -179,7 +179,7 @@ If a word faces an error condition it can *throw* an exception. Exceptions are r
 For example:
 
 ```forth
-99 constant division_by_zero \ define a constant for the exception
+1099 constant division_by_zero \ define a constant for the exception
 
 : div ( q d -- r | throws:division_by_zero ) \ this word throws an exception in case of division by zero
     dup 0= if 
@@ -198,6 +198,9 @@ For example:
     then drop ; 
 ```
 
+The word *catch* expects an execution token of a word that potentially throws an exception.
+
+The exeption mechanism in Punyforth follows the "catch everything and re-throw if needed" semantics. The instruction *0 throw* is essentially a no-op.
 
 #### Uncaught exception handler
 
