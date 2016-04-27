@@ -268,6 +268,10 @@ Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 * bi@ ( a b xt -- xt.a xt.b )
 
 
+### The word *create does>*
+
+TODO
+
 ### About the implementation of *create does>*
 
 TODO
