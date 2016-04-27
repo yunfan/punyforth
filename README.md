@@ -50,6 +50,15 @@ The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. I
 
 Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number. Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
 
+### Extending the dictionary
+
+```forth
+: square ( n -- nsquared ) dup * ;
+
+4 square .      \ prints 16
+```
+Word definitions start with colon character and end with a semicolon. The *n -- nsquared* is the optional stack effect comment.
+
 ### Control structures
 
 Punyforth supports the regular Forth conditional and loop words.
@@ -202,15 +211,6 @@ An uncaught exception causes the program to print out the error to the standard 
 You can modify this behaviour by redefining the word *on-uncaught-exception*.
 
 The implementation of exceptions is based on the idea of William Mitch Bradley.
-
-### Defining words
-
-```forth
-: square ( n -- nsquared ) dup * ;
-
-4 square .      \ prints 16
-```
-Word definitions start with colon character and end with a semicolon. The *n -- nsquared* is the optional stack effect comment.
 
 ### Immediate words 
 
