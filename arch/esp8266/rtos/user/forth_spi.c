@@ -14,3 +14,9 @@ bool forth_spi_init(int bus, int mode, int freq_div, int msb, int endian, int mi
 int forth_spi_send8(int bus, int data) {
     return spi_transfer_8(bus, data & 0xFF);
 }
+
+int forth_spi_send(int bus, const void* out_data, void *in_data, int size, int word_size) {
+    return spi_transfer(bus, out_data, in_data, size, (spi_word_size_t) word_size);
+}
+
+

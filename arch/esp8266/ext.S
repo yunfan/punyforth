@@ -171,3 +171,13 @@ defprimitive "spi-send8",9,spi_send8,1
     CCALL forth_spi_send8
     DPUSH a2
     NEXT
+
+defprimitive "spi-send",8,spi_send,1
+    DPOP a2                    // bus
+    DPOP a3                    // out_data
+    DPOP a4                    // in_data
+    DPOP a5                    // size_data
+    DPOP a6                    // word_size
+    CCALL forth_spi_send
+    DPUSH a2
+    NEXT

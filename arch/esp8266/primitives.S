@@ -130,6 +130,22 @@ defprimitive "invert",6,invert,1
     DPUSH a8
     NEXT
 
+defprimitive "lshift",6,lshift,1
+    DPOP a8
+    DPOP a9
+    ssl a8
+    sll a8, a9
+    DPUSH a8
+    NEXT
+
+defprimitive "rshift",6,rshift,1
+    DPOP a8
+    DPOP a9
+    ssr a8
+    srl a8, a9
+    DPUSH a8
+    NEXT
+
 .literal_position
 defprimitive "emit",4,emit,1
     DPOP a2
