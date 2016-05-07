@@ -95,6 +95,20 @@ defprimitive "invert",6,invert,1
     str r0, [sp]
     NEXT
 
+defprimitive "lshift",6,lshift,1
+    pop {r1}
+    pop {r0}
+    lsl r0, r1
+    push {r0}
+    NEXT
+
+defprimitive "rshift",6,rshift,1
+    pop {r1}
+    pop {r0}
+    lsr r0, r1
+    push {r0}
+    NEXT
+
 defprimitive "emit",4,emit,1
     pop {r0}
     push {r6, r7}
