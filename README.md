@@ -1,12 +1,10 @@
 # Punyforth
 
-Punyforth is a simple and portable implementation of the Forth programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266). This latter one is the primary supported target.
-
-Please note that at this stage punyforth is still incomplete.
+Punyforth is a simple and portable implementation of the Forth programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266/NodeMCU). This latter one is the primary supported target.
 
 ## About the language
 
-Punyforth is a simple imperative stack-based programming language and interactive environment with good metaprogramming support and extensibility.
+Punyforth is a simple imperative stack-based concatenative programming language and interactive environment with good metaprogramming support and extensibility.
 
 The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
 
@@ -22,7 +20,7 @@ If you type the following code in the REPL:
 
 ```
 
-The interpreter pushes the number 1 then the number 2 onto the data stack. It executes the word *+*, which removes the two top level items from the stack, calculates their sum, and pushes the result to the stack.
+The interpreter pushes the number 1 then the number 2 onto the data stack. It executes the word *+*, which pops the two top level items off the stack, calculates their sum, and pushes the result back to the stack.
 
 
 The following code calculates *3 * 3 + 2 * 2* and prints out *13*.
@@ -51,6 +49,17 @@ The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. I
 ### The syntax
 
 Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number. Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
+
+### Extending the dictionary
+
+
+
+```forth
+: square ( n -- nsquared ) dup * ;
+
+4 square .      \ prints 16
+```
+Word definitions start with colon character and end with a semicolon. The *n -- nsquared* is the optional stack effect comment.
 
 ### Control structures
 
@@ -165,18 +174,51 @@ You can use the *exit* word to exit from the current word as well from the loop.
 
 Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
 
-### Exceptions
+### Exception handling
 
-TODO
+If a word faces an error condition it can *throw* an exception. Exceptions are represented as numbers in Punyforth. Your can provide exception handlers to *catch* exceptions. 
 
-### Defining words
+For example:
 
 ```forth
-: square ( n -- nsquared ) dup * ;
+1099 constant division_by_zero \ define a constant for the exception
 
-4 square .      \ prints 16
+: div ( q d -- r | throws:division_by_zero ) \ this word throws an exception in case of division by zero
+    dup 0= if 
+      division_by_zero throw 
+    else 
+      / 
+    then ;
+
+: test-div ( q d -- r )
+  ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
+      dup division_by_zero = if     \ error code is 1099 indicating division by zero
+        ." Error: division by zero"
+      else
+        throw                       \ there was an other error, rethrow it
+      then
+    then drop ; 
 ```
-Word definitions start with colon character and end with a semicolon. The *n -- nsquared* is the optional stack effect comment.
+
+The word *catch* expects an execution token of a word that potentially throws an exception.
+
+The exeption mechanism in Punyforth follows the "catch everything and re-throw if needed" semantics. The instruction *0 throw* is essentially a no-op and indicates no error.
+
+#### Uncaught exception handler
+
+An uncaught exception causes the program to print out the error to the standard output and terminate.
+
+You can modify this behaviour by reassigning the variable *on-uncaught-exception* with an execution token of a new handler.
+
+```forth
+: my-uncaught-exception-handler ( code -- )
+    cr ." Uncaught exception: " . cr
+    abort ;
+    
+' my-uncaught-exception-handler on-uncaught-exception !
+```    
+
+The implementation of exceptions is based on the idea of [William Bradley](http://www.complang.tuwien.ac.at/anton/euroforth/ef98/milendorf98.pdf).
 
 ### Immediate words 
 
@@ -231,7 +273,13 @@ Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 * bi@ ( a b xt -- xt.a xt.b )
 
 
+### The word *create does>*
+
+TODO
+
 ### About the implementation of *create does>*
+
+TODO
 
 ```forth
 : constant ( n -- ) 
@@ -337,59 +385,6 @@ r1 area .
   
 ```
 
-### Exceptions
-
-This is based on the idea of William Mitch Bradley.
-
-```forth
-\ this points to the nearest exception handler
-variable handler           
-
-: catch ( xt -- errcode | 0 )        
-    sp@ >r handler @ >r  	\ save current stack pointer and the nearest handler (RS: sp h)
-    rp@ handler !  		    \ update current handler to this
-    execute        		    \ execute word that potentially throws exception (*)
-    r> handler !   		    \ word returned without throwing exception, restore the nearest handler
-    r> drop        		    \ we don't need the saved stack pointet since there was no error
-    0              		    \ return with 0 indicating no error
- ;
-
-: throw ( i*x errcode -- i*x errcode | i*x errcode ) ( RS: -- sp hlr i*adr )
-    dup 0= if              \ throwing 0 means no error
-      drop                 \ drop error code
-      exit                 \ exit from execute (*)
-    then
-    handler @ rp!          \ restore return stack, now it is the same as it was right before the execute (*) (RS: sp h)
-    r> handler !           \ restore the previous handler
-    r>                     \ get the saved data stack pointer
-    swap                   \ (sp errcode)
-    >r                     \ move errcode to the returnstack temporally
-    sp!                    \ restore data stack to the same as it was before the most recent catch
-    drop r>                \ move the errorcode to the stack
- ;                         \ This will return to the caller of most recent catch    
- 
-
-\ usage
-
-99 constant division_by_zero
-
-: div ( q d -- r ) 
-    dup 0 = if 
-      division_by_zero throw 
-    else 
-      / 
-    then ;
-
-: test-div ( q d -- r )
-  ['] div catch dup 0 <> if           \ call div in a "catch block". if no exception was thrown, the error code is 0
-      dup division_by_zero = if       \ error code is 99 indicating division by zero
-        ." Error: division by zero"
-      else
-        throw                         \ there was an other error, rethrow it
-      then
-    then drop ; 
-```
-
 ### ESP8266 specific things
 
 #### GPIO
@@ -399,5 +394,7 @@ variable handler
 #### Flash
 
 #### Storing code in flash
+
+#### OLED display ssd1306 through SPI
 
 #### Misc

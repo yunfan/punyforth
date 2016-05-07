@@ -111,6 +111,15 @@
 
 -1 constant TRUE 0 constant FALSE
 
+: default-exception-handler ( code -- )
+    cr 
+    [ char E ] literal emit
+    [ char R ] literal dup emit emit
+    space
+    . cr
+    abort ;
+
+variable on-uncaught-exception
 variable handler 0 handler !       \ stores the address of the nearest exception handler
 
 : catch ( xt -- errcode | 0 )
@@ -123,7 +132,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : throw ( i*x errcode -- i*x errcode | 0 )
       dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
       handler @ 0= if             \ this was an uncaught exception
-          uncaught-exception-occurred
+          on-uncaught-exception @ execute
           exit
       then
       handler @ rp!           \ restore rstack, now it is the same as it was before execute
@@ -142,6 +151,8 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     word find 0= if 10 throw then ;
 
 ' ['] constant XT_LIT
+
+' default-exception-handler on-uncaught-exception !
 
 : [compile] ( -- | throws:10 ) ' , ; immediate
 
@@ -241,10 +252,6 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : clear-stack ( i*x -- ) 
     depth 0 do drop loop ;
 
-: on-uncaught-exception ( code -- )
-    cr ." Uncaught exception: " . cr
-    abort ;
-
 : marker
     create
         lastword ,
@@ -256,7 +263,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : print-words ( -- )
     lastword
     begin
-       dup 0<>
+       dup 0 <>
     while
        dup
        ['] link>name ['] link>len bi 

@@ -96,6 +96,13 @@ marker -test-test
    -12 -3 + -15 = assert -3 4 + 1 = assert 2 -4 + -2 = assert
    -12 -3 - -9 = assert -3 4 - -7 = assert 2 -4 - 6 = assert
    12 -6 / -2 = assert -36 6 / -6 = assert -4 -2 / 2 = assert 
+   0 1 lshift 0 = assert
+   1 1 lshift 2 = assert
+   3 4 lshift 48 = assert
+   3 0 lshift 3 = assert
+   0 1 rshift 0 = assert
+   2 1 rshift 1 = assert
+   128 3 rshift 16 = assert
    4 4 >= assert 5 4 >= assert -4 -10 >= assert 4 5 >= invert assert
    6 6 <= assert 3 9 <= assert -9 -5 <= assert 10 2 <= invert assert
    12 3 /mod 4 = assert 0 = assert 12 4 / 3 = assert

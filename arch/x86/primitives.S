@@ -93,6 +93,20 @@ defprimitive "xor",3,xor,1
     xor [esp], eax
     NEXT    
 
+defprimitive "lshift",6,lshift,1
+    pop ecx
+    pop eax
+    shl eax, cl
+    push eax
+    NEXT
+
+defprimitive "rshift",6,rshift,1
+    pop ecx
+    pop eax
+    shr eax, cl
+    push eax
+    NEXT
+
 defprimitive "emit",4,emit,1
     mov edx, 1     // length
     pop eax
