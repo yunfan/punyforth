@@ -94,6 +94,12 @@ defword "0=",2,eq0,1
     .int xt_exit
 .endif
 
+.ifndef xt_noteq0
+defword "0<>",3,noteq0,1
+    .int xt_btick, 0, xt_noteq
+    .int xt_exit
+.endif
+
 .ifndef xt_eq1
 defword "1=",2,eq1,1
     .int xt_btick, 1, xt_eq

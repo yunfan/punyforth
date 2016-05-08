@@ -191,7 +191,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : strlen ( str -- len )
     0 swap
     begin
-        dup c@ 0 <>
+        dup c@ 0<>
     while
     ['] 1+ bi@
     repeat 
@@ -245,7 +245,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     ." stack["
     0 depth 2 - do 
         sp@ i cells + @ .
-    i 0 <> if space then
+    i 0<> if space then
     -1 +loop 
     ." ] ";
 
@@ -263,7 +263,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : print-words ( -- )
     lastword
     begin
-       dup 0 <>
+       dup 0<>
     while
        dup
        ['] link>name ['] link>len bi 

@@ -86,6 +86,8 @@ marker -test-test
    24 -2 > assert
    1 1- 0= assert
    -1 1+ 0= assert
+   15 0<> assert
+   0 0<> invert assert
    -3 0< TRUE = assert 3 0< FALSE = assert
    3 0> TRUE = assert -3 0> FALSE = assert
    -12 2 / 6 + 0 = assert
