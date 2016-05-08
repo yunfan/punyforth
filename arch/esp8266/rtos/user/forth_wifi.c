@@ -10,7 +10,7 @@ int forth_wifi_set_opmode(int mode) {
     return sdk_wifi_set_opmode(mode);
 }
 
-int forth_wifi_set_config(char* ssid, char* pass) {
+int forth_wifi_set_station_config(char* ssid, char* pass) {
     struct sdk_station_config config;
     memset(config.ssid, 0, 32);
     memset(config.password, 0, 64);

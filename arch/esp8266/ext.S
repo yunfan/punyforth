@@ -283,9 +283,9 @@ defprimitive "wifi-set-mode",13,wifi_set_mode,REGULAR
     DPUSH a2                   // c bool
     NEXT
 
-defprimitive "wifi-set-config",15,wifi_set_config,REGULAR
+defprimitive "wifi-set-station-config",23,wifi_set_config,REGULAR
     DPOP a2                    // ssid
     DPOP a3                    // password
-    CCALL forth_wifi_set_config
+    CCALL forth_wifi_set_station_config
     DPUSH a2                   // c bool
     NEXT
