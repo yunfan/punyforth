@@ -1,3 +1,8 @@
+defprimitive "over",4,over,1 /* ( a b -- a b a ) */
+    l32i a8, a15, CELLS
+    DPUSH a8
+    NEXT
+
 defprimitive ">",1,gt,1 
     DPOP a8
     DPOP a9
