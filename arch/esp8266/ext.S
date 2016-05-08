@@ -43,6 +43,51 @@ defprimitive ">=",2,gte,1
 L9: DPUSH a10
     NEXT
 
+defprimitive "1+",2,inc,1
+    DPOP a8
+    addi a8, a8, 1
+    DPUSH a8
+    NEXT
+
+defprimitive "1-",2,dec,1
+    DPOP a8
+    addi a8, a8, -1
+    DPUSH a8
+    NEXT
+
+defprimitive "0=",2,eq0,1
+    DPOP a8
+    movi a9, FALSE
+    movi a10, TRUE
+    moveqz a9, a10, a8 // move a10 to a9 if a8 is zero
+    DPUSH a9
+    NEXT
+
+defprimitive "0<>",3,noteq0,1
+    DPOP a8
+    movi a9, FALSE
+    movi a10, TRUE
+    movnez a9, a10, a8 // move a10 to a9 if a8 is not zero
+    DPUSH a9
+    NEXT
+
+defprimitive "0<",2,lt0,1
+    DPOP a8
+    movi a9, FALSE
+    movi a10, TRUE
+    movltz a9, a10, a8 // move a10 to a9 if a8 is less than zero
+    DPUSH a9
+    NEXT
+
+defprimitive "0>",2,gt0,1
+    DPOP a8
+    movi a9, TRUE
+    movi a10, FALSE
+    movltz a9, a10, a8 // move a10 to a9 if a8 is less than zero
+    moveqz a9, a10, a8 // move a10 to a9 if a8 is zero
+    DPUSH a9
+    NEXT
+
 defprimitive "time",4,time,1
     CCALL forth_time
     DPUSH a2
