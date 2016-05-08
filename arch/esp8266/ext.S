@@ -276,3 +276,16 @@ defprimitive "spi-send",8,spi_send,REGULAR
     CCALL forth_spi_send
     DPUSH a2
     NEXT
+
+defprimitive "wifi-set-mode",13,wifi_set_mode,REGULAR
+    DPOP a2                    // mode
+    CCALL forth_wifi_set_opmode
+    DPUSH a2                   // c bool
+    NEXT
+
+defprimitive "wifi-set-config",15,wifi_set_config,REGULAR
+    DPOP a2                    // ssid
+    DPOP a3                    // password
+    CCALL forth_wifi_set_config
+    DPUSH a2                   // c bool
+    NEXT
