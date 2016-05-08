@@ -1,3 +1,48 @@
+defprimitive ">",1,gt,1 
+    DPOP a8
+    DPOP a9
+    movi a10, FALSE
+    bge a8, a9, L5
+    movi a10, TRUE
+L5: DPUSH a10
+    NEXT
+
+defprimitive "=",1,eq,1 
+    DPOP a8
+    DPOP a9
+    movi a10, FALSE
+    bne a8, a9, L6
+    movi a10, TRUE
+L6: DPUSH a10
+    NEXT
+
+defprimitive "<>",2,noteq,1 
+    DPOP a8
+    DPOP a9
+    movi a10, FALSE
+    beq a8, a9, L7
+    movi a10, TRUE
+L7: DPUSH a10
+    NEXT
+
+defprimitive "<=",2,lte,1 
+    DPOP a8
+    DPOP a9
+    movi a10, FALSE
+    blt a8, a9, L8
+    movi a10, TRUE
+L8: DPUSH a10
+    NEXT
+
+defprimitive ">=",2,gte,1 
+    DPOP a8
+    DPOP a9
+    movi a10, FALSE
+    blt a9, a8, L9
+    movi a10, TRUE
+L9: DPUSH a10
+    NEXT
+
 defprimitive "time",4,time,1
     CCALL forth_time
     DPUSH a2

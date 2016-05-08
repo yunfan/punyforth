@@ -150,10 +150,12 @@ defword "c@",2,fetchbyte,1
     .int xt_exit
 .endif
 
+.ifndef xt_noteq
 defword "<>",2,noteq,1
     .int xt_eq, xt_invert
     .int xt_exit
-    
+.endif
+
 defword ">in",3,toin,1
     .int xt_btick, _M input_index
     .int xt_exit
