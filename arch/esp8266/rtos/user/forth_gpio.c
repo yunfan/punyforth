@@ -13,23 +13,19 @@ int forth_gpio_enable(int num, int dir) {
         case 3: d = GPIO_OUT_OPEN_DRAIN; break;
         default: return FORTH_FALSE;
     }
-    printf("Enabling GPIO %d: %d\n", num, dir);
     gpio_enable(num, d); 
     return FORTH_TRUE;
 }
 
 void forth_gpio_write(int num, int bool_set) { 
-    printf("Writing GPIO %d <- %d\n", num, bool_set);
     gpio_write(num, bool_set); 
 }
 
 int forth_gpio_read(int num) {
-    printf("Reading GPIO %d\n", num);
     return gpio_read(num);
 }
 
 void forth_gpio_set_interrupt(int num, int int_type) {
-    printf("Setting GPIO %d interrupt %d\n", num, int_type);
     gpio_set_interrupt(num, int_type);
 }
 
@@ -41,7 +37,6 @@ void gpio_interrupt_handler(void) {
         gpio_idx--;
         status_reg &= ~BIT(gpio_idx);
         if (FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_idx])) {
-            printf("GPIO %d FIRED\n", gpio_idx);
             int event = gpio_idx;
             forth_add_event_isr(&event);
         }      

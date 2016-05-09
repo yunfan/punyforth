@@ -10,6 +10,13 @@ int forth_getchar() {
     return nextchar();	
 }
 
+int forth_getchar_nowait() {
+   char buf[1];
+   return sdk_uart_rx_one_char(buf) != 0
+       ? -1
+       : buf[0];
+}
+
 void forth_putchar(char c) { 
     printf("%c", c);
 }

@@ -258,11 +258,6 @@ defprimitive "rp!",3,rpstore,REGULAR
     mov a13, a8
     NEXT
 
-defprimitive "readchar",8,readchar,REGULAR
-    CCALL forth_getchar
-    DPUSH a2
-    NEXT    
-
 // Different types of code words
 
 .section .irom0.text

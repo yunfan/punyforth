@@ -1,3 +1,33 @@
+defword "readchar",8,readchar,REGULAR
+    .int xt_xpause, xt_fetch, xt_branch0
+    lbl readchar_blocking
+readchar_again:
+    .int xt_readchar_nowait, xt_dup, xt_btick, -1, xt_eq, xt_branch0
+    lbl readchar_available
+    .int xt_drop
+    .int xt_xpause, xt_fetch, xt_execute
+    .int xt_branch
+    lbl readchar_again
+readchar_available:
+    .int xt_exit
+readchar_blocking:
+    .int xt_readchar_wait
+    .int xt_exit
+
+defword "xpause",6,xpause,REGULAR
+    .int xt_btick, _M var_pause_xt
+    .int xt_exit
+
+defprimitive "readchar-wait",13,readchar_wait,REGULAR
+    CCALL forth_getchar
+    DPUSH a2
+    NEXT    
+
+defprimitive "readchar-nowait",15,readchar_nowait,REGULAR /* ( -- char | -1 ) */
+    CCALL forth_getchar_nowait
+    DPUSH a2
+    NEXT
+
 defprimitive "over",4,over,REGULAR /* ( a b -- a b a ) */
     l32i a8, a15, CELLS
     DPUSH a8
