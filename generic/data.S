@@ -19,6 +19,7 @@ input_buffer: .space INPUT_BUFFER_SIZE
 .align 4,32
 input_size:   .int . - input_buffer
 var_dp:       .int 0                   // data pointer
+var_prompt_xt:.int 0
 dictionary:   .space 28672
 end_dictionary:
 rstack_space: .space 128
@@ -26,7 +27,6 @@ rstack:
 stack_space:  .space 1024 // TODO used only by ESP port
 stack:
 prompt_str:   .asciz "\n % "
-prompt_word_name:      .asciz "default_prompt"
 compile_only_warning:  .asciz "\nCompile time only word cannot be used in interpretation mode.\n"
 undef_word_error:      .asciz "\nUndefined word: "
 inbuf_overflow_error:  .asciz "\nInput buffer overflow\n"

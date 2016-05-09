@@ -272,5 +272,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     repeat 
     drop ;   
 
-: default_prompt cr .s ." % " ;  \ FIXME must be one line because there is no smudge bit
+: stack_prompt ( -- ) 
+    cr .s ." % " ;
 
+' stack_prompt prompt !
