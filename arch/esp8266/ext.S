@@ -174,6 +174,12 @@ defprimitive "ds18b20",7,ds18b20,REGULAR
     CCALL forth_ds18b20_read_all    
     NEXT
 
+defprimitive "netconn-set-recvtimeout",23,netconn_set_recvtimeout,REGULAR 
+    DPOP a2                    // conn
+    DPOP a3                    // recv timeout ms
+    CCALL forth_netconn_set_recvtimeout
+    NEXT
+
 defprimitive "netconn-new",11,netconn_new,REGULAR
     DPOP a2                    // conn type
     CCALL forth_netconn_new

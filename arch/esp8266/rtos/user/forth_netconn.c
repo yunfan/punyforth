@@ -123,3 +123,7 @@ void forth_netconn_dispose(struct netconn* conn) {
     netconn_close(conn);
     netconn_delete(conn);
 }
+
+void forth_netconn_set_recvtimeout(struct netconn* conn, int timeout) {
+    netconn_set_recvtimeout(conn, timeout);
+}
