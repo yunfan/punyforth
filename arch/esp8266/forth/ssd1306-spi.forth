@@ -1,3 +1,5 @@
+marker -ssd1306-spi
+
 \ ssd1306 SPI display driver
 
 \ define the wiring

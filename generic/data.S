@@ -17,7 +17,7 @@ var0:         .int 0
 state_var:    .int STATE_INTERPRET
 LAST_WORD:    .int FINAL_WORD
 input_index:  .int 0
-input_buffer: .space INPUT_BUFFER_SIZE
+input_buffer: .space INPUT_BUFFER_SIZE,' '
 .align 4,32
 input_size:   .int . - input_buffer
 var_dp:       .int 0                   // data pointer

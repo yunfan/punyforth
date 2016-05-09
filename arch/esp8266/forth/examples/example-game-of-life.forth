@@ -1,3 +1,5 @@
+marker -game-of-life
+
 : north      ( x y -- x' y' )  1- 63 and ;
 : north-east ( x y -- x' y' )  swap 1+ swap 1- truncate-xy ;
 : east       ( x y -- x' y' )  swap 1+ 127 and swap ;
@@ -43,7 +45,6 @@
         xchg-screen
         show-screen-buffer
     loop ;
-
 
 : place-random-cell ( -- ) 
     random DISPLAY_WIDTH 2 - %
