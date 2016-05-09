@@ -38,7 +38,14 @@ int forth_netconn_send(struct netconn* conn, void* data, int len) {
     err_t err;
     uint16_t len16 = len;
     struct netbuf* buffer = netbuf_new();
-    memcpy(netbuf_alloc(buffer, len16), data, len16);
+    if (buffer == NULL) {
+        return ERR_MEM;
+    }
+    void* memory = netbuf_alloc(buffer, len16);
+    if (memory == NULL) {
+        return ERR_MEM;
+    }
+    memcpy(memory, data, len16);
     err = netconn_send(conn, buffer);
     if (err != ERR_OK) {
         printf("Failed to send data. Conn: %p. Error: %d\n", conn, err);
@@ -64,7 +71,7 @@ struct recv_res {
 };
 
 struct recv_res forth_netconn_recv(struct netconn* conn) {
-    printf("Receiving from connection: %p\n", conn);
+    //printf("Receiving from connection: %p\n", conn);
     err_t err;
     struct netbuf *inbuf;
     err = netconn_recv(conn, &inbuf);
@@ -102,7 +109,7 @@ struct recvinto_res {
 };
 
 struct recvinto_res forth_netconn_recvinto(struct netconn* conn, void* buffer, int size) {
-    printf("receiving buffer %p max size: %d\n", buffer, size);
+    //printf("receiving buffer %p max size: %d\n", buffer, size);
     err_t err;
     struct netbuf *inbuf;
     int offset = 0;
