@@ -24,14 +24,14 @@ input_size:   .int . - input_buffer
 var_dp:       .int 0                   // data pointer
 var_prompt_xt:.int 0
 var_pause_xt: .int 0
-dictionary:   .space 29184
+dictionary:   .space 32256
 end_dictionary:
-rstack_space: .space 128
+rstack_space: .space 640
 rstack:
-stack_space:  .space 1024 // TODO used only by ESP port
+stack_space:  .space 640 // used only by ESP port
 stack:
 prompt_str:   .asciz "\n % "
 compile_only_warning:  .asciz "\nCompile time only word cannot be used in interpretation mode.\n"
 undef_word_error:      .asciz "\nUndefined word: "
-inbuf_overflow_error:  .asciz "\nInput buffer overflow\n"
-word_overflow_error:  .asciz "\nName is too long: "
+inbuf_overflow_error:  .asciz "\nInput overflow\n"
+word_overflow_error:  .asciz "\nName too long: "
