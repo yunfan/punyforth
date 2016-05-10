@@ -3,9 +3,24 @@ marker -netconn
 1 constant UDP
 2 constant TCP
 8000 constant ENETCON 
-
--3 constant ERR_TIMEOUT
 100 constant RECV_TIMEOUT_MSEC 
+
+\ netconn errors. see: src/include/lwip/err.h
+-1 constant ERR_MEM          \ Out of memory error.
+-2 constant ERR_BUF          \ Buffer error.
+-3 constant ERR_TIMEOUT      \ Timeout.
+-4 constant ERR_RTE          \ Routing problem.
+-5 constant ERR_INPROGRESS   \ Operation in progress
+-6 constant ERR_VAL          \ Illegal value.
+-7 constant ERR_WOULDBLOCK   \ Operation would block.
+-8 constant ERR_USE          \ Address in use.
+-9 constant ERR_ISCONN       \ Already connected.
+-10 constant ERR_ABRT        \ Connection aborted.
+-11 constant ERR_RST         \ Connection reset.
+-12 constant ERR_CLSD        \ Connection closed.
+-13 constant ERR_CONN        \ Not connected.
+-14 constant ERR_ARG         \ Illegal argument.
+-15 constant ERR_IF          \ Low-level netif error.
 
 : check-new-netconn ( netconn -- netconn | throws:ENETCON )
     dup 0= if ENETCON throw then ;
@@ -22,7 +37,7 @@ marker -netconn
 
 : check-netconn-error ( errcode --  | throws:ENETCON )
     dup 0<> if
-        print "NETCON error: " .
+        print "NETCON error: " . cr
         ENETCON throw 
     then 
     drop ;
@@ -48,7 +63,7 @@ marker -netconn
     begin
         pause
         3dup netconn-recvinto
-        dup ERR_TIMEOUT <> if
+        dup ERR_TIMEOUT <> if            
             rot drop rot drop rot drop
             exit
         then
