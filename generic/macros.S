@@ -5,10 +5,9 @@
 name_\label :
     .int link
     .set link,name_\label
-    .int \namelen
+    .byte \flags + \namelen
     .ascii "\name"
      .align WORD_ALIGN
-    .int \flags
     .globl xt_\label
 xt_\label :
     .int code_\label
@@ -25,10 +24,9 @@ code_\label :
 name_\label :
     .int link
     .set link,name_\label
-    .int \namelen
+    .byte \flags + \namelen
     .ascii "\name"
      .align WORD_ALIGN
-    .int \flags
     .globl xt_\label
 xt_\label :
     .int ENTERCOL

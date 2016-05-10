@@ -5,7 +5,8 @@
 .set link,0                    // points to the last defined word
 .set STATE_COMPILE,1
 .set STATE_INTERPRET,0
-.set IMMEDIATE,-1
+.set IMMEDIATE,128
+.set REGULAR,64
 .set TRUE,-1
 .set FALSE,0
 .set INPUT_BUFFER_SIZE,128

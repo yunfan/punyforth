@@ -1,6 +1,6 @@
 .intel_syntax noprefix
 
-defprimitive "=",1,eq,1         // optional
+defprimitive "=",1,eq,REGULAR         // optional
     pop eax
     pop ebx
     cmp eax, ebx
@@ -10,7 +10,7 @@ defprimitive "=",1,eq,1         // optional
     push eax
     NEXT
 
-defprimitive ">",1,gt,1         // optional
+defprimitive ">",1,gt,REGULAR         // optional
     pop eax
     pop ebx
     cmp ebx, eax
@@ -20,7 +20,7 @@ defprimitive ">",1,gt,1         // optional
     push eax
     NEXT
     
-defprimitive ">=",2,gte,1       // optional
+defprimitive ">=",2,gte,REGULAR       // optional
     pop eax
     pop ebx
     cmp ebx, eax
@@ -30,7 +30,7 @@ defprimitive ">=",2,gte,1       // optional
     push eax
     NEXT
     
-defprimitive "<=",2,lte,1       // optional
+defprimitive "<=",2,lte,REGULAR       // optional
     pop eax
     pop ebx
     cmp ebx, eax
@@ -40,7 +40,7 @@ defprimitive "<=",2,lte,1       // optional
     push eax
     NEXT
 
-defprimitive "0=",2,eq0,1
+defprimitive "0=",2,eq0,REGULAR
     pop eax
     test eax, eax
     setz al
@@ -49,7 +49,7 @@ defprimitive "0=",2,eq0,1
     push eax
     NEXT
 
-defprimitive "1=",2,eq1,1
+defprimitive "1=",2,eq1,REGULAR
     pop eax
     dec eax
     setz al
@@ -58,19 +58,19 @@ defprimitive "1=",2,eq1,1
     push eax
     NEXT
 
-defprimitive "1+",2,inc,1
+defprimitive "1+",2,inc,REGULAR
     pop eax
     inc eax
     push eax
     NEXT
 
-defprimitive "1-",2,dec,1
+defprimitive "1-",2,dec,REGULAR
     pop eax
     dec eax
     push eax
     NEXT
 
-defprimitive "0<",2,lt0,1
+defprimitive "0<",2,lt0,REGULAR
     pop eax
     cmp eax, 0
     setl al
@@ -79,7 +79,7 @@ defprimitive "0<",2,lt0,1
     push eax
     NEXT
 
-defprimitive "0>",2,gt0,1
+defprimitive "0>",2,gt0,REGULAR
     pop eax
     cmp eax, 0
     setg al
@@ -88,12 +88,12 @@ defprimitive "0>",2,gt0,1
     push eax
     NEXT
 
-defprimitive "over",4,over,1    // optional
+defprimitive "over",4,over,REGULAR    // optional
     mov eax, [esp + CELLS]
     push eax
     NEXT
 
-defprimitive "time",4,time,1 /* ( -- unixtime ) */
+defprimitive "time",4,time,REGULAR /* ( -- unixtime ) */
     mov eax, 13
     mov ebx, OFFSET FLAT:var0
     int 0x80

@@ -2,23 +2,23 @@
 
 // Primitives are implemented in assembly language
 
-defprimitive "dup",3,dup,1 /* ( a -- a a ) */
+defprimitive "dup",3,dup,REGULAR /* ( a -- a a ) */
     mov eax, [esp]
     push eax
     NEXT
     
-defprimitive "drop",4,drop,1 /* ( a -- ) */
+defprimitive "drop",4,drop,REGULAR /* ( a -- ) */
     add esp, CELLS	
     NEXT
 
-defprimitive "swap",4,swap,1 /* ( a b -- b a ) */
+defprimitive "swap",4,swap,REGULAR /* ( a b -- b a ) */
     pop eax
     pop ebx
     push eax
     push ebx
     NEXT
 
-defprimitive "rot",3,rot,1 /* ( a b c -- b c a ) */
+defprimitive "rot",3,rot,REGULAR /* ( a b c -- b c a ) */
     pop ecx
     pop ebx
     pop eax
@@ -27,7 +27,7 @@ defprimitive "rot",3,rot,1 /* ( a b c -- b c a ) */
     push eax
     NEXT
 
-defprimitive "2swap",5,swap2,1 /* ( a b c d -- c d a b ) */
+defprimitive "2swap",5,swap2,REGULAR /* ( a b c d -- c d a b ) */
     pop edx
     pop ecx
     pop ebx
@@ -38,7 +38,7 @@ defprimitive "2swap",5,swap2,1 /* ( a b c d -- c d a b ) */
     push ebx
     NEXT
 
-defprimitive "2over",5,over2,1 /* ( a b c d -- a b c d a b ) */
+defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */
     pop edx
     pop ecx
     pop ebx
@@ -51,24 +51,24 @@ defprimitive "2over",5,over2,1 /* ( a b c d -- a b c d a b ) */
     push ebx
     NEXT
 
-defprimitive "+",1,plus,1
+defprimitive "+",1,plus,REGULAR
     pop eax
     add [esp], eax
     NEXT    
     
-defprimitive "-",1,minus,1
+defprimitive "-",1,minus,REGULAR
     pop eax
     sub [esp], eax
     NEXT        
     
-defprimitive "*",1,multiply,1
+defprimitive "*",1,multiply,REGULAR
     pop eax
     pop ebx
     imul ebx
     push eax
     NEXT
 
-defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
+defprimitive "/mod",4,divmod,REGULAR /* ( n d -- m q ) */
     pop ebx
     pop eax
     xor edx, edx
@@ -78,36 +78,36 @@ defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
     push eax
     NEXT
     
-defprimitive "or",2,or,1
+defprimitive "or",2,or,REGULAR
     pop eax
     or [esp], eax
     NEXT
     
-defprimitive "and",3,and,1
+defprimitive "and",3,and,REGULAR
     pop eax
     and [esp], eax
     NEXT    
 
-defprimitive "xor",3,xor,1
+defprimitive "xor",3,xor,REGULAR
     pop eax
     xor [esp], eax
     NEXT    
 
-defprimitive "lshift",6,lshift,1
+defprimitive "lshift",6,lshift,REGULAR
     pop ecx
     pop eax
     shl eax, cl
     push eax
     NEXT
 
-defprimitive "rshift",6,rshift,1
+defprimitive "rshift",6,rshift,REGULAR
     pop ecx
     pop eax
     shr eax, cl
     push eax
     NEXT
 
-defprimitive "emit",4,emit,1
+defprimitive "emit",4,emit,REGULAR
     mov edx, 1     // length
     pop eax
     mov [var0], eax
@@ -117,35 +117,35 @@ defprimitive "emit",4,emit,1
     int 0x80
     NEXT
     
-defprimitive "abort",5,abort,1
+defprimitive "abort",5,abort,REGULAR
     mov esp, [STACK_ORIG]
     mov eax, 1
     int 0x80
     
-defprimitive "@",1,fetch,1
+defprimitive "@",1,fetch,REGULAR
     pop eax
     mov ebx, [eax]
     push ebx
     NEXT
     
-defprimitive "!",1,store,1
+defprimitive "!",1,store,REGULAR
     pop edi
     pop eax
     stosd
     NEXT
 
-defprimitive "c!",2,storebyte,1
+defprimitive "c!",2,storebyte,REGULAR
     pop edi
     pop eax
     stosb
     NEXT
         
-defprimitive "[']",3,btick,1    // compile only
+defprimitive "[']",3,btick,REGULAR    // compile only
     lodsd
     push eax
     NEXT
    
-defprimitive "<",1,lt,1         // only need to define this, all other comparisions are implemented in terms of lt
+defprimitive "<",1,lt,REGULAR         // only need to define this, all other comparisions are implemented in terms of lt
     pop eax
     pop ebx
     cmp ebx, eax
@@ -155,16 +155,16 @@ defprimitive "<",1,lt,1         // only need to define this, all other comparisi
     push eax
     NEXT
 
-defprimitive "invert",6,invert,1
+defprimitive "invert",6,invert,REGULAR
     not dword ptr [esp]
     NEXT
     
-defprimitive "branch",6,branch,1
+defprimitive "branch",6,branch,REGULAR
     lodsd
     add esi, eax
     NEXT
 
-defprimitive "branch0",7,branch0,1
+defprimitive "branch0",7,branch0,REGULAR
     lodsd
     pop ebx
     test ebx, ebx
@@ -173,54 +173,54 @@ defprimitive "branch0",7,branch0,1
 nobranch0:
     NEXT
 
-defprimitive ">r",2,rpush,1
+defprimitive ">r",2,rpush,REGULAR
     pop eax
     sub ebp, CELLS
     mov [ebp], eax
     NEXT
     
-defprimitive "r>",2, rpop,1
+defprimitive "r>",2,rpop,REGULAR
     mov eax, [ebp]
     add ebp, CELLS
     push eax
     NEXT    
 
-defprimitive "i",1,i,1
+defprimitive "i",1,i,REGULAR
     mov eax, [ebp]
     push eax
     NEXT    
 
-defprimitive "j",1,j,1
+defprimitive "j",1,j,REGULAR
     mov eax, [ebp + 2 * CELLS]
     push eax
     NEXT
 
-defprimitive "execute",7,execute,1
+defprimitive "execute",7,execute,REGULAR
     pop eax
     jmp [eax]
 
-defprimitive "exit",4,exit,1
+defprimitive "exit",4,exit,REGULAR
     mov esi, [ebp]
     add ebp, CELLS
     NEXT
 
-defprimitive "sp@",3,spat,1
+defprimitive "sp@",3,spat,REGULAR
     push esp
     NEXT
 
-defprimitive "sp!",3,spstore,1
+defprimitive "sp!",3,spstore,REGULAR
     pop esp
     NEXT
 
-defprimitive "rp@",3,rpat,1
+defprimitive "rp@",3,rpat,REGULAR
     push ebp
     NEXT
 
-defprimitive "rp!",3,rpstore,1
+defprimitive "rp!",3,rpstore,REGULAR
     pop ebp
     NEXT
 
-defprimitive "readchar",8,readchar,1
+defprimitive "readchar",8,readchar,REGULAR
     mov ecx, OFFSET FLAT:var0                                           // buffer for one character
     xor ebx, ebx                                                        // reads from stdin (FD 0)
     mov [ecx], ebx

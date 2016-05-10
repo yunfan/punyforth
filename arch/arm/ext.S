@@ -1,4 +1,4 @@
-defprimitive "=",1,eq,1
+defprimitive "=",1,eq,REGULAR
     pop {r1}
     pop {r0}
     mov r2, #FALSE
@@ -7,7 +7,7 @@ defprimitive "=",1,eq,1
     push {r2}
     NEXT
 
-defprimitive ">",1,gt,1
+defprimitive ">",1,gt,REGULAR
     pop {r1}
     pop {r0}
     mov r2, #FALSE
@@ -16,7 +16,7 @@ defprimitive ">",1,gt,1
     push {r2}
     NEXT
 
-defprimitive ">=",2,gte,1
+defprimitive ">=",2,gte,REGULAR
     pop {r1}
     pop {r0}
     mov r2, #FALSE
@@ -25,7 +25,7 @@ defprimitive ">=",2,gte,1
     push {r2}
     NEXT
 
-defprimitive "<=",2,lte,1
+defprimitive "<=",2,lte,REGULAR
     pop {r1}
     pop {r0}
     mov r2, #FALSE
@@ -34,7 +34,7 @@ defprimitive "<=",2,lte,1
     push {r2}
     NEXT
 
-defprimitive "0=",2,eq0,1
+defprimitive "0=",2,eq0,REGULAR
     pop {r0}
     mov r1, #FALSE
     cmp r0, #0
@@ -42,7 +42,7 @@ defprimitive "0=",2,eq0,1
     push {r1}
     NEXT
 
-defprimitive "1=",2,eq1,1
+defprimitive "1=",2,eq1,REGULAR
     pop {r0}
     mov r1, #FALSE
     cmp r0, #1
@@ -50,19 +50,19 @@ defprimitive "1=",2,eq1,1
     push {r1}
     NEXT
 
-defprimitive "1+",2,inc,1
+defprimitive "1+",2,inc,REGULAR
     pop {r0}
     add r0, #1
     push {r0}
     NEXT
 
-defprimitive "1-",2,dec,1
+defprimitive "1-",2,dec,REGULAR
     pop {r0}
     sub r0, #1
     push {r0}
     NEXT
 
-defprimitive "0<",2,lt0,1
+defprimitive "0<",2,lt0,REGULAR
     pop {r0}
     mov r1, #FALSE
     cmp r0, #0
@@ -70,7 +70,7 @@ defprimitive "0<",2,lt0,1
     push {r1}
     NEXT
 
-defprimitive "0>",2,gt0,1
+defprimitive "0>",2,gt0,REGULAR
     pop {r0}
     mov r1, #FALSE
     cmp r0, #0
@@ -78,12 +78,12 @@ defprimitive "0>",2,gt0,1
     push {r1}
     NEXT
 
-defprimitive "over",4,over,1 
+defprimitive "over",4,over,REGULAR 
     ldr r0, [SP, #CELLS]
     push {r0}
     NEXT
 
 // TODO
-defprimitive "time",4,time,1 /* ( -- unixtime ) */
+defprimitive "time",4,time,REGULAR /* ( -- unixtime ) */
     push {r0}
     NEXT

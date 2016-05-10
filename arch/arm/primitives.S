@@ -1,26 +1,26 @@
-defprimitive "dup",3,dup,1 /* ( a -- a a ) */
+defprimitive "dup",3,dup,REGULAR /* ( a -- a a ) */
     ldr r0, [sp]
     push {r0}
     NEXT
 
-defprimitive "drop",4,drop,1 /* ( a -- ) */
+defprimitive "drop",4,drop,REGULAR /* ( a -- ) */
     add sp, #CELLS
     NEXT
 
-defprimitive "swap",4,swap,1 /* ( a b -- b a ) */
+defprimitive "swap",4,swap,REGULAR /* ( a b -- b a ) */
     pop {r0, r1}
     push {r0}
     push {r1}
     NEXT
 
-defprimitive "rot",3,rot,1 /* ( a b c -- b c a ) */    
+defprimitive "rot",3,rot,REGULAR /* ( a b c -- b c a ) */    
     pop {r0, r1, r2}
     push {r1}
     push {r0}
     push {r2}
     NEXT
 
-defprimitive "2swap",5,swap2,1 /* ( a b c d -- c d a b ) */
+defprimitive "2swap",5,swap2,REGULAR /* ( a b c d -- c d a b ) */
     pop {r0, r1, r2, r3}
     push {r1}
     push {r0}
@@ -28,7 +28,7 @@ defprimitive "2swap",5,swap2,1 /* ( a b c d -- c d a b ) */
     push {r2}
     NEXT
 
-defprimitive "2over",5,over2,1 /* ( a b c d -- a b c d a b ) */
+defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */
     pop {r0, r1, r2, r3}
     push {r3}
     push {r2}
@@ -38,28 +38,28 @@ defprimitive "2over",5,over2,1 /* ( a b c d -- a b c d a b ) */
     push {r2}
     NEXT
 
-defprimitive "+",1,plus,1
+defprimitive "+",1,plus,REGULAR
     pop {r1}
     pop {r0}
     add r0, r1
     push {r0}
     NEXT
 
-defprimitive "-",1,minus,1
+defprimitive "-",1,minus,REGULAR
     pop {r1}
     pop {r0}
     sub r0, r1
     push {r0}
     NEXT
 
-defprimitive "*",1,multiply,1
+defprimitive "*",1,multiply,REGULAR
     pop {r0}
     pop {r1}
     mul r0, r1
     push {r0}
     NEXT
 
-defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
+defprimitive "/mod",4,divmod,REGULAR /* ( n d -- m q ) */
     pop {r1}
     pop {r0}
     sdiv r2, r0, r1
@@ -68,48 +68,48 @@ defprimitive "/mod",4,divmod,1 /* ( n d -- m q ) */
     push {r2}
     NEXT
 
-defprimitive "or",2,or,1
+defprimitive "or",2,or,REGULAR
     pop {r1}
     pop {r0}
     orr r0, r1
     push {r0}
     NEXT
 
-defprimitive "and",3,and,1
+defprimitive "and",3,and,REGULAR
     pop {r1}
     pop {r0}
     and r0, r1
     push {r0}
     NEXT
 
-defprimitive "xor",3,xor,1
+defprimitive "xor",3,xor,REGULAR
     pop {r1}
     pop {r0}
     eor r0, r1
     push {r0}
     NEXT
 
-defprimitive "invert",6,invert,1
+defprimitive "invert",6,invert,REGULAR
     ldr r0, [sp]
     mvns r0, r0
     str r0, [sp]
     NEXT
 
-defprimitive "lshift",6,lshift,1
+defprimitive "lshift",6,lshift,REGULAR
     pop {r1}
     pop {r0}
     lsl r0, r1
     push {r0}
     NEXT
 
-defprimitive "rshift",6,rshift,1
+defprimitive "rshift",6,rshift,REGULAR
     pop {r1}
     pop {r0}
     lsr r0, r1
     push {r0}
     NEXT
 
-defprimitive "emit",4,emit,1
+defprimitive "emit",4,emit,REGULAR
     pop {r0}
     push {r6, r7}
     ldr r1, =var0
@@ -121,37 +121,37 @@ defprimitive "emit",4,emit,1
     pop {r6, r7}
     NEXT    
 
-defprimitive "abort",5,abort,1
+defprimitive "abort",5,abort,REGULAR
     mov r0, #0     // set exit code to 0
     mov r7, #1     // syscall for exit
     swi 0          // invoke the syscall from linux
     NEXT
 
-defprimitive "@",1,fetch,1
+defprimitive "@",1,fetch,REGULAR
     pop {r0}
     ldr r1, [r0]
     push {r1}
     NEXT
 
-defprimitive "!",1,store,1
+defprimitive "!",1,store,REGULAR
     pop {r1}
     pop {r0}
     str r0, [r1]
     NEXT
 
-defprimitive "c!",2,storebyte,1
+defprimitive "c!",2,storebyte,REGULAR
     pop {r1}
     pop {r0}
     strb r0, [r1]
     NEXT
 
-defprimitive "[']",3,btick,1    // compile only
+defprimitive "[']",3,btick,REGULAR    // compile only
     ldr r0, [r7]
     add r7, #CELLS
     push {r0}
     NEXT
 
-defprimitive "<",1,lt,1         // only need to define this, all other comparisions are implemented in terms of lt
+defprimitive "<",1,lt,REGULAR         // only need to define this, all other comparisions are implemented in terms of lt
     pop {r1}
     pop {r0}
     mov r2, #0
@@ -160,13 +160,13 @@ defprimitive "<",1,lt,1         // only need to define this, all other comparisi
     push {r2}
     NEXT
 
-defprimitive "branch",6,branch,1
+defprimitive "branch",6,branch,REGULAR
     ldr r0, [r7]
     add r7, #CELLS
     add r7, r0
     NEXT
 
-defprimitive "branch0",7,branch0,1
+defprimitive "branch0",7,branch0,REGULAR
     ldr r0, [r7]                              // load relative address to be jump
     add r7, #CELLS
     pop {r1}                                  // check condition
@@ -174,57 +174,57 @@ defprimitive "branch0",7,branch0,1
     addeq r7, r0                              // advance pc if condition was satisfied
     NEXT
 
-defprimitive ">r",2,rpush,1
+defprimitive ">r",2,rpush,REGULAR
     pop {r0}
     sub r6, #CELLS
     str r0, [r6]
     NEXT
 
-defprimitive "r>",2, rpop,1
+defprimitive "r>",2, rpop,1,REGULAR
     ldr r0, [r6]
     add r6, #CELLS
     push {r0}
     NEXT
 
-defprimitive "i",1,i,1
+defprimitive "i",1,i,REGULAR
     ldr r0, [r6]
     push {r0}
     NEXT
 
-defprimitive "j",1,j,1
+defprimitive "j",1,j,REGULAR
     ldr r0, [r6, #2*CELLS]
     push {r0}
     NEXT
 
-defprimitive "execute",7,execute,1
+defprimitive "execute",7,execute,REGULAR
     pop {r0}
     ldr r1, [r0]
     mov pc, r1
 
-defprimitive "exit",4,exit,1
+defprimitive "exit",4,exit,REGULAR
     ldr r7, [r6]
     add r6, #CELLS
     NEXT
 
-defprimitive "sp@",3,spat,1
+defprimitive "sp@",3,spat,REGULAR
     mov r0, sp
     push {r0}
     NEXT
 
-defprimitive "sp!",3,spstore,1
+defprimitive "sp!",3,spstore,REGULAR
     pop {r0}
     mov sp, r0
     NEXT
 
-defprimitive "rp@",3,rpat,1
+defprimitive "rp@",3,rpat,REGULAR
     push {r6}
     NEXT
 
-defprimitive "rp!",3,rpstore,1
+defprimitive "rp!",3,rpstore,REGULAR
     pop {r6}
     NEXT
 
-defprimitive "readchar",8,readchar,1
+defprimitive "readchar",8,readchar,REGULAR
     push {r7}
     ldr r1, =var0           // buffer for one character
     mov r0, #0              // read system call
