@@ -6,15 +6,15 @@ str: "192.168.0.15" constant: HOST
     
 struct
     cell field: .client
-    128  field: .line
-    cell field: .position
+    \ 128  field: .line
+    \ cell field: .position
 constant: WorkerSpace
 
-: client ( -- a ) user-space .client ;
-: line ( -- a ) user-space .line ;
-: position ( -- n ) user-space .position ;
+128 stream-new: line
 
-4 mailbox.new: connections
+: client ( -- a ) user-space .client ;
+
+4 mailbox-new: connections
 0 task: server-task
 
 WorkerSpace task: worker-task1
@@ -22,11 +22,11 @@ WorkerSpace task: worker-task2
 
 : server ( task -- )       
     activate
-    PORT HOST tcp-server-new
+    PORT HOST netcon-tcp-server
     begin
         println: "Waiting for incoming connection"
-        dup accept
-        connections mailbox.send
+        dup netcon-accept
+        connections mailbox-send
     again 
     deactivate ;
 
@@ -42,6 +42,7 @@ WorkerSpace task: worker-task2
         dup str: "<h1>ESP8266 web server is working!</h1>" writeln
         dup str: "</body></html>" writeln
         drop
+        123 throw
     then 
     println: "response sent" ;
     
@@ -50,12 +51,11 @@ WorkerSpace task: worker-task2
         dup i + c@
         dup 10 = if
             drop            
-            0 line position @ + c! \ terminate with zero
-            line line-received
-            0 position !
-        else        
-            position @ line + c!
-            1 position +!
+            0 line stream-put-byte
+            line stream-buffer line-received
+            line stream-reset
+        else
+            line stream-put-byte
         then                
     loop
     drop ;
@@ -63,10 +63,10 @@ WorkerSpace task: worker-task2
 : worker ( task -- )
     activate
     begin
-        0 position !
-        connections mailbox.receive client !
+        line stream-reset
+        connections mailbox-receive client !
         print: "Client connected: " client @ . cr
-        client @ ['] data-received ['] read-all catch ENETCON = if
+        client @ ['] data-received ['] read-all catch dup ENETCON = if
             println: "Client lost: " . cr
         else
             println: "Connection closed: " . cr
@@ -78,7 +78,7 @@ WorkerSpace task: worker-task2
 : start-server ( -- )
     multi
     server-task server
-    worker-task1 worker
+    \ worker-task1 worker TODO
     worker-task2 worker ;
     
 512 var-task-stack-size !
