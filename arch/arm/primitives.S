@@ -180,7 +180,7 @@ defprimitive ">r",2,rpush,REGULAR
     str r0, [r6]
     NEXT
 
-defprimitive "r>",2, rpop,1,REGULAR
+defprimitive "r>",2,rpop,REGULAR
     ldr r0, [r6]
     add r6, #CELLS
     push {r0}
