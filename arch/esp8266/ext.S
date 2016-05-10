@@ -265,14 +265,14 @@ defprimitive "netcon-accept",13,netcon_accep,REGULAR
     DPUSH a2                   // err_t
     NEXT
 
-defprimitive "netcon-dispose",14,netcon_dispose,REGULAR
-    DPOP a2                    // conn
-    CCALL forth_netcon_dispose
-    NEXT
-
 defprimitive "netcon-close",12,netcon_close,REGULAR
     DPOP a2                    // conn
     CCALL forth_netcon_close
+    NEXT
+
+defprimitive "netcon-delete",13,netcon_delete,REGULAR
+    DPOP a2                    // conn
+    CCALL forth_netcon_delete
     NEXT
 
 defprimitive "task-yield",10,task_yield,REGULAR

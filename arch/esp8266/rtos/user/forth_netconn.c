@@ -160,15 +160,14 @@ struct accept_res forth_netcon_accept(struct netconn* conn) {
     return result;
 }
  
-void forth_netcon_dispose(struct netconn* conn) {
-    printf("Disposing connection %p\n", conn);
-    netconn_close(conn);
-    netconn_delete(conn);
-}
-
 void forth_netcon_close(struct netconn* conn) {
     printf("Closing connection %p\n", conn);
     netconn_close(conn);
+}
+
+void forth_netcon_delete(struct netconn* conn) {
+    printf("Deleting connection %p\n", conn);
+    netconn_delete(conn);
 }
 
 void forth_netcon_set_recvtimeout(struct netconn* conn, int timeout) {
