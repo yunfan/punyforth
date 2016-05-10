@@ -14,8 +14,7 @@ void forth_add_event_isr(int* event) {
     xQueueSendToBackFromISR(event_queue, event, NULL);
 }
 
-int forth_next_event() {
+int forth_next_event(int delay_ms) {
     int message;
-    xQueueReceive(event_queue, &message, portMAX_DELAY);
-    return message;
+    return xQueueReceive(event_queue, &message, delay_ms / portTICK_RATE_MS) == pdTRUE ? message : 0 ;   
 }

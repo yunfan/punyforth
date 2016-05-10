@@ -254,6 +254,7 @@ defprimitive "task-yield",10,task_yield,REGULAR
     NEXT
 
 defprimitive "next-event",10,next_event,REGULAR
+    DPOP a2                    // delay ms
     CCALL forth_next_event
     DPUSH a2
     NEXT
