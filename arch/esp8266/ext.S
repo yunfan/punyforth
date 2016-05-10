@@ -194,6 +194,20 @@ defprimitive "netconn-connect",15,netconn_connect,REGULAR
     DPUSH a2
     NEXT
 
+defprimitive "netconn-bind",12,netconn_bind,REGULAR       
+    DPOP a2                    // conn
+    DPOP a3                    // host
+    DPOP a4                    // port
+    CCALL forth_netconn_bind
+    DPUSH a2
+    NEXT
+
+defprimitive "netconn-listen",14,netconn_listen,REGULAR       
+    DPOP a2                    // netconn
+    CCALL forth_netconn_listen
+    DPUSH a2
+    NEXT
+
 defprimitive "netconn-send",12,netconn_send,REGULAR
     DPOP a2                    // conn
     DPOP a3                    // data
@@ -244,9 +258,21 @@ defprimitive "netconn-recv",12,netconn_recv,REGULAR
     DPUSH a2                   // err_t
     NEXT
 
+defprimitive "netconn-accept",14,netconn_accep,REGULAR
+    DPOP a2                    // netconn
+    CCALL forth_netconn_accept
+    DPUSH a3                   // netconn
+    DPUSH a2                   // err_t
+    NEXT
+
 defprimitive "netconn-dispose",15,netconn_dispose,REGULAR
     DPOP a2                    // conn
     CCALL forth_netconn_dispose
+    NEXT
+
+defprimitive "netconn-close",13,netconn_close,REGULAR
+    DPOP a2                    // conn
+    CCALL forth_netconn_close
     NEXT
 
 defprimitive "task-yield",10,task_yield,REGULAR

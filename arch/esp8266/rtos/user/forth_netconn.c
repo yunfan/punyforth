@@ -33,6 +33,26 @@ int forth_netconn_connect(struct netconn* conn, char* host, int port) {
     return err;
 }
 
+int forth_netconn_listen(struct netconn *conn) {
+    return netconn_listen(conn);
+}
+
+int forth_netconn_bind(struct netconn* conn, char* host, int port) {   
+    err_t err; ip_addr_t ip;
+    printf("Getting hostname: %s\n", host);
+    err = netconn_gethostbyname(host, &ip);
+    if (err != ERR_OK) {
+        printf("Failed to resolve host %s. Error: %d\n", host, err);
+        return err;
+    }
+    printf("Binding to: %s:%d conn: %p\n", host, port, conn);
+    err = netconn_bind(conn, &ip, (u16_t)(port & 0xFFFF));
+    if (err != ERR_OK) {
+        printf("Failed to connect to %s:%d. Error: %d\n", host, port, err);
+    }
+    return err;
+}
+
 int forth_netconn_send(struct netconn* conn, void* data, int len) {
     printf("Sending data len: %d conn: %p\n", len, conn);
     err_t err;
@@ -125,10 +145,30 @@ struct recvinto_res forth_netconn_recvinto(struct netconn* conn, void* buffer, i
     return result;
 }
 
+struct accept_res {
+    int code;
+    struct netconn* conn;
+};
+
+struct accept_res forth_netconn_accept(struct netconn* conn) {
+    struct netconn *new_conn;
+    err_t code = netconn_accept(conn, &new_conn);
+    struct accept_res result = {
+        .code =  code,
+        .conn = new_conn
+    };
+    return result;
+}
+ 
 void forth_netconn_dispose(struct netconn* conn) {
     printf("Disposing connection %p\n", conn);
     netconn_close(conn);
     netconn_delete(conn);
+}
+
+void forth_netconn_close(struct netconn* conn) {
+    printf("Closing connection %p\n", conn);
+    netconn_close(conn);
 }
 
 void forth_netconn_set_recvtimeout(struct netconn* conn, int timeout) {
