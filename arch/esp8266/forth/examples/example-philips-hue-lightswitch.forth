@@ -41,7 +41,7 @@ variable: last-event-time
 512 var-task-stack-size !
 256 var-task-rstack-size !
 
-task: light-switch-task
+0 task: light-switch-task
     
 : light-switch-start ( -- )
     multi

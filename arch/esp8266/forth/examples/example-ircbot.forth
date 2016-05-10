@@ -38,12 +38,12 @@ SOCKET join
         LED blink
     then ;
 
-task: ircbot-task
+0 task: ircbot-task
 
 : start-irc-task ( -- )
     multi
     ircbot-task activate
-    SOCKET ['] data-received receive
+    SOCKET ['] data-received read-all
     print: "response code: " . cr
     deactivate ;
 

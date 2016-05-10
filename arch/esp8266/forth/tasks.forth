@@ -15,8 +15,8 @@ here Task allot constant: INTERPRETER
 INTERPRETER INTERPRETER .next !
 SKIPPED INTERPRETER .status !
 
-256 init-variable: var-task-stack-size
-128 init-variable: var-task-rstack-size
+320 init-variable: var-task-stack-size
+320 init-variable: var-task-rstack-size
 INTERPRETER init-variable: var-last-task
 INTERPRETER init-variable: var-current-task
 
@@ -31,10 +31,10 @@ INTERPRETER init-variable: var-current-task
 : alloc-return-stack ( -- a )
     var-task-rstack-size @ allot here ;
 
-: task: ( "name" ) ( -- task )
+: task: ( user-space-size "name" ) ( -- task )
     create:
         here                                 \ task header begins here
-        Task allot                           \ make room for task header
+        swap Task + allot                    \ make room for task header + user space
         SKIPPED             over .status !   \ new status is SKIPPED
         last-task .next @   over .next !     \ this.next = last-task.next
         dup last-task .next !                \ last-task.next = this
@@ -64,6 +64,11 @@ INTERPRETER init-variable: var-current-task
     current-task!
     SKIPPED current-task .status !
     task-restore-context ;
+
+: task-user-space ( task -- a ) Task + ;
+
+: user-space ( -- a )
+    current-task task-user-space ;
 
 defer: pause
 
@@ -137,7 +142,7 @@ defer: pause
     
 : mailbox: ( size ) ( -- mailbox ) ringbuffer: ;
 
-: mailbox-send ( element mailbox -- )
+: send ( element mailbox -- )
     begin
         dup full? 
     while
@@ -145,7 +150,7 @@ defer: pause
     repeat
     enqueue ;
 
-: mailbox-receive ( mailbox -- element )
+: receive ( mailbox -- element )
     begin
         dup empty?
     while

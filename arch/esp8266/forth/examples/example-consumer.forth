@@ -2,13 +2,13 @@
 4 mailbox: mailbox1
 
 \ create a task for the consumer
-task: task-consumer
+0 task: task-consumer
 
 \ this word is executed by the task
 : consumer ( task -- )
-    activate                            \ actiavte task
+    activate                            \ activate task
     begin    
-        mailbox1 mailbox-receive .
+        mailbox1 receive .
         print: " received by consumer" cr
         pause                           \ allow other tasks to run
     again
@@ -16,5 +16,5 @@ task: task-consumer
 
 \ multi                                 \ switch to multitask mode
 \ task-consumer consumer                \ run the consumer
-\ 123 mailbox1 mailbox-send             \ send some numbers to the consumer
-\ 456 mailbox1 mailbox-send
+\ 123 mailbox1 send                     \ send some numbers to the consumer
+\ 456 mailbox1 send

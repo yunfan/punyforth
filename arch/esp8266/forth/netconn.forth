@@ -34,7 +34,7 @@ marker: -netconn
     UDP netconn-new
     RECV_TIMEOUT_MSEC over netconn-set-recvtimeout
     check-new-netconn ;
-
+    
 : check-netconn-error ( errcode --  | throws:ENETCON )
     dup 0<> if
         print: "NETCON error: " . cr
@@ -57,11 +57,17 @@ marker: -netconn
     netconn-listen
     check-netconn-error ;
     
+: tcp-server-new ( port host -- netconn | throws:ENETCON )
+    tcp-new
+    ['] bind sip
+    dup listen ;    
+    
 : accept ( netconn -- new-netconn | throws:ENETCONN)
     begin
         pause
         dup netconn-accept dup NC_ERR_TIMEOUT <> if
             check-netconn-error nip
+            RECV_TIMEOUT_MSEC over netconn-set-recvtimeout
             exit
         then
         2drop
@@ -77,7 +83,7 @@ marker: -netconn
     swap write 
     \r\n write ;
 
-: receive-into-responsively ( size buffer netconn -- count code )
+: read-into-responsively ( size buffer netconn -- count code )
     begin
         pause
         3dup netconn-recvinto
@@ -88,9 +94,9 @@ marker: -netconn
         2drop
     again ;
 
-: receive-into ( netconn size buffer -- count | throws:ENETCON )
+: read-into ( netconn size buffer -- count | throws:ENETCON )
     rot 
-    receive-into-responsively
+    read-into-responsively
     check-netconn-error ;
     
 : consume-next ( consumer-xt netbuf -- n )
@@ -104,7 +110,7 @@ marker: -netconn
     0 < until 
     nip ;
 
-: receive-responsively ( netconn -- netbuf code )
+: read-responsively ( netconn -- netbuf code )
     begin
         pause
         dup netconn-recv
@@ -115,10 +121,10 @@ marker: -netconn
         2drop
     again ;
 
-: receive ( netconn consumer-xt -- code )
+: read-all ( netconn consumer-xt -- code )
     begin
         2dup swap
-        receive-responsively 
+        read-responsively 
         dup 0<> if
             >r 4drop r>
             exit

@@ -15,8 +15,8 @@ str: "2" constant: BEDROOM
 : buffer>asciiz ( size -- )
     0 swap buffer-at c! ;
 
-: receive-into-buffer ( netconn -- )
-    1023 buffer receive-into buffer>asciiz ;
+: read-into-buffer ( netconn -- )
+    1023 buffer read-into buffer>asciiz ;
 
 : bridge ( -- netconn )
     BRIDGE_PORT BRIDGE_IP tcp-open ;
@@ -27,7 +27,7 @@ str: "2" constant: BEDROOM
         dup BASE_URL   write
         dup rot        writeln
         dup \r\n       write
-        dup receive-into-buffer
+        dup read-into-buffer
         dispose
     buffer str: '"on":true' str-includes ;
     
@@ -50,7 +50,7 @@ str: "2" constant: BEDROOM
         dup str: "22"                     writeln
         dup \r\n                          write
         dup str: '{"on":true,"bri": 255}' writeln
-        dup ['] type-counted              receive
+        dup ['] type-counted              read-all
         print: "response code: " . cr
         dispose ;
         
@@ -61,7 +61,7 @@ str: "2" constant: BEDROOM
         dup str: "12"               writeln
         dup \r\n                    write
         dup str: '{"on":false}'     writeln
-        dup ['] type-counted        receive
+        dup ['] type-counted        read
         print: "response code: " . cr
         dispose ;
         

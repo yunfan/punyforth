@@ -18,7 +18,8 @@ available_modules = {
     'example-consumer' : '../forth/examples/example-consumer.forth',
     'example-ircbot' : '../forth/examples/example-ircbot.forth',
     'example-philips-hue' : '../forth/examples/example-philips-hue.forth',
-    'example-philips-hue-lightswitch' : '../forth/examples/example-philips-hue-lightswitch.forth'
+    'example-philips-hue-lightswitch' : '../forth/examples/example-philips-hue-lightswitch.forth',
+    'example-http-server' : '../forth/examples/example-http-server.forth'
 }
 
 dependencies = {
@@ -36,7 +37,8 @@ dependencies = {
     'example-consumer' : ['core', 'tasks'],
     'example-ircbot' : ['core', 'netconn', 'tasks', 'gpio'],
     'example-philips-hue' : ['core', 'netconn'],
-    'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio']
+    'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio'],
+    'example-http-server' : ['core', 'netconn']
 }
 
 def print_help():
