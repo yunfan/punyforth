@@ -15,7 +15,8 @@ available_modules = {
     'example-game-of-life' : '../forth/examples/example-game-of-life.forth',
     'example-consumer' : '../forth/examples/example-consumer.forth',
     'example-ircbot' : '../forth/examples/example-ircbot.forth',
-    'example-philips-hue' : '../forth/examples/example-philips-hue.forth'
+    'example-philips-hue' : '../forth/examples/example-philips-hue.forth',
+    'example-philips-hue-lightswitch' : '../forth/examples/example-philips-hue-lightswitch.forth'
 }
 
 dependencies = {
@@ -30,7 +31,8 @@ dependencies = {
     'example-game-of-life' : ['core', 'ssd1306-spi'],
     'example-consumer' : ['core', 'tasks'],
     'example-ircbot' : ['core', 'netconn', 'tasks', 'gpio'],
-    'example-philips-hue' : ['core', 'netconn', 'gpio']
+    'example-philips-hue' : ['core', 'netconn'],
+    'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio']
 }
 
 def print_help():

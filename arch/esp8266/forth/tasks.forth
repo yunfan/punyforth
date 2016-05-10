@@ -15,8 +15,8 @@ here Task allot constant INTERPRETER
 INTERPRETER INTERPRETER .next !
 SKIPPED INTERPRETER .status !
 
-128 variable! var-task-stack-size
-64  variable! var-task-rstack-size
+256 variable! var-task-stack-size
+128 variable! var-task-rstack-size
 INTERPRETER variable! var-last-task
 INTERPRETER variable! var-current-task
 variable var-xt-pause
