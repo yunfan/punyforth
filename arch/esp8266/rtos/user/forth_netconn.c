@@ -55,12 +55,12 @@ int forth_netconn_send(struct netconn* conn, void* data, int len) {
 }
 
 int forth_netconn_write(struct netconn* conn, void* data, int len) {
-    printf("Sending data len: %d conn: %p\n", len, conn);
+    printf("Writing data len: %d conn: %p\n", len, conn);
     err_t err;
     uint16_t len16 = len;
     err = netconn_write(conn, data, len16, NETCONN_NOCOPY);
     if (err != ERR_OK) {
-        printf("Failed to send data. Conn: %p. Error: %d\n", conn, err);
+        printf("Failed to write data. Conn: %p. Error: %d\n", conn, err);
     }   
     return err;
 }
