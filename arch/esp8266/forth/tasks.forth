@@ -9,6 +9,7 @@ struct
     cell field: .sp
     cell field: .rp
     cell field: .ip
+    cell field: .handler
 constant: Task
 
 here Task allot constant: INTERPRETER
@@ -40,6 +41,7 @@ INTERPRETER init-variable: var-current-task
         dup last-task .next !                \ last-task.next = this
         alloc-data-stack    over .sp !       \ this.sp = allocated
         alloc-return-stack  over .rp !       \ this.sp = allocated
+        0                   over .handler !  \ exception handler of this thread
         last-task!                           \ last-task = this
     does> ;
 
@@ -132,11 +134,15 @@ defer: pause
     1 swap +! 
     pause ;
  
+: multi-handler ( -- a ) current-task .handler ;
+
 : multi ( -- ) \ switch to multi-task mode
+    ['] handler is: multi-handler \ each tasks should have its own exception handler
     ['] pause xpause !
     ['] pause is: pause-multi ;     
     
 : single ( -- ) \ switch to signle-task mode
+    ['] handler is: single-handler \ use global handler
     0 xpause ! 
     ['] pause is: pause-single ;     
     

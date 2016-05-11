@@ -19,9 +19,9 @@ buffer-len byte-array: buffer-at
 : read-into-buffer ( netconn -- )
     buffer-len buffer netcon-read buffer>asciiz ;
 
-: parse-http-code ( buffer -- code | throws:ECONVERSION )    
+: parse-http-code ( buffer -- code | throws:ECONVERT )
     9 + 3 >number invert if
-        ECONVERSION throw
+        ECONVERT throw
     then ;
     
 2048 constant: EHTTP
@@ -65,41 +65,35 @@ buffer-len byte-array: buffer-at
 
 : on? ( bulb -- bool )
     bridge
-        dup str: "GET " netcon-write
-        dup BASE_URL    netcon-write
-        dup rot         netcon-writeln
-        dup \r\n        netcon-write
+        dup str: "GET "     netcon-write
+        dup BASE_URL        netcon-write
+        dup rot             netcon-write
+        dup str: "\r\n\r\n" netcon-write
         consume&dispose
         buffer str: '"on":true' str-includes ;        
     
 : request-change-state ( bulb netconn -- )
-    dup str: "PUT "              netcon-write
-    dup BASE_URL                 netcon-write
-    dup rot                      netcon-write
-    dup str: "/state "           netcon-write
-    dup str: "HTTP/1.1"          netcon-writeln
-    dup str: "Content-Type: "    netcon-write
-    dup str: "application/json"  netcon-writeln
-    dup str: "Accept: */*"       netcon-writeln
-    dup str: "Connection: Close" netcon-writeln
+    dup str: "PUT "                               netcon-write
+    dup BASE_URL                                  netcon-write
+    dup rot                                       netcon-write
+    dup str: "/state HTTP/1.1\r\n"                netcon-write
+    dup str: "Content-Type: application/json\r\n" netcon-write
+    dup str: "Accept: */*\r\n"                    netcon-write
+    dup str: "Connection: Close\r\n"              netcon-write
     drop ;
 
 : on ( bulb -- ) 
     bridge
         tuck request-change-state
-        dup str: "Content-length: "       netcon-write
-        dup str: "22"                     netcon-writeln
-        dup \r\n                          netcon-write
-        dup str: '{"on":true,"bri": 255}' netcon-writeln
+        dup str: "Content-length: 22\r\n\r\n" netcon-write        
+        dup str: '{"on":true,"bri": 255}\r\n' netcon-write
         netcon-dispose ;
         
 : off ( bulb -- )
     bridge
         tuck request-change-state
-        dup str: "Content-length: " netcon-write
-        dup str: "12"               netcon-writeln
-        dup \r\n                    netcon-write
-        dup str: '{"on":false}'     netcon-writeln
+        dup str: "Content-length: 12\r\n\r\n" netcon-write        
+        dup str: '{"on":false}\r\n'           netcon-write
         netcon-dispose ;
         
 : toggle-unsafe ( bulb -- | throws:ENETCON )
@@ -110,5 +104,6 @@ buffer-len byte-array: buffer-at
     case
         0 of exit endof
         ENETCON of println: "netconn error" endof
+        EHTTP of println: "http error" endof
         throw
     endcase ;

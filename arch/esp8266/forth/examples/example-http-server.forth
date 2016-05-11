@@ -1,5 +1,4 @@
 \ work in progress
-\ TODO check line boundary
 
 str: "192.168.0.15" constant: HOST
 8080 constant: PORT
@@ -31,30 +30,15 @@ WorkerSpace task: worker-task2
 : send-response ( request-str -- )
     str: "GET /" str-starts-with if
         client @
-        dup str: "HTTP/1.0 200" netcon-writeln
-        dup str: "Content-Type: text/html" netcon-writeln
-        dup str: "Connection: close" netcon-writeln
-        dup \r\n netcon-write
+        dup str: "HTTP/1.0 200\r\n" netcon-write
+        dup str: "Content-Type: text/html\r\n" netcon-write
+        dup str: "Connection: close\r\n\r\n" netcon-write
         dup str: "<html><body>" netcon-writeln
         dup str: "<h1>ESP8266 web server is working!</h1>" netcon-writeln
         dup str: "</body></html>" netcon-writeln
         drop
         println: 'response sent for GET request'
     then ;
-    
-: data-received ( buffer size -- )
-    0 do
-        dup i + c@
-        dup 10 = if
-            drop            
-            0 line stream-put-byte
-            line stream-buffer line-received
-            line stream-reset
-        else
-            line stream-put-byte
-        then                
-    loop
-    drop ;
     
 : handle-client ( -- )    
     client @ 128 line netcon-readln    
@@ -71,7 +55,7 @@ WorkerSpace task: worker-task2
             print: ' exception: ' . cr
         else
             drop
-        then        
+        then
         client @ netcon-dispose
     again
     deactivate ;

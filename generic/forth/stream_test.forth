@@ -1,4 +1,4 @@
--marker: -stream-test
+marker: -stream-test
 
 : test:stream-initially-empty
     4 stream-new stream-empty? assert ;
@@ -39,11 +39,16 @@
     dup stream-buffer 0 + c@ 45 =assert
         stream-buffer 1 + c@ 87 =assert ;
 
-: test:stream-underflow-when-removing-empty
-    0 stream-new
-    ['] stream-next-byte catch EUNDERFLOW =assert ;
+: remove-from-empty
+    0 stream-new stream-next-byte ;
 
 : test:stream-underflow-when-removing-empty
+    ['] remove-from-empty catch EUNDERFLOW =assert ;
+
+: add-more-than-allowed
     1 stream-new
     1 over stream-put-byte
-    ['] stream-put-byte catch EOVERFLOW =assert ;
+    1 over stream-put-byte ;
+
+: test:stream-overflow-when-adding-more-than-allowed
+    ['] add-more-than-allowed catch EOVERFLOW =assert ;

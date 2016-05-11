@@ -81,7 +81,7 @@ marker: -netcon
 : netcon-writeln ( netcon str -- | throws:ENETCON )
     over 
     swap netcon-write 
-    \r\n netcon-write ;
+    str: "\r\n" netcon-write ;
 
 : read-ungreedy ( size buffer netcon -- count code )
     begin
