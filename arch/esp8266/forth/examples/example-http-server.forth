@@ -34,13 +34,13 @@ WorkerSpace task: worker-task2
     print: "line received: " dup type cr
     str: "GET /" str-starts-with if
         client @
-        dup str: "HTTP/1.0 200" writeln
-        dup str: "Content-Type: text/html" writeln
-        dup str: "Connection: close" writeln
-        dup \r\n write
-        dup str: "<html><body>" writeln
-        dup str: "<h1>ESP8266 web server is working!</h1>" writeln
-        dup str: "</body></html>" writeln
+        dup str: "HTTP/1.0 200" netcon-writeln
+        dup str: "Content-Type: text/html" netcon-writeln
+        dup str: "Connection: close" netcon-writeln
+        dup \r\n netcon-write
+        dup str: "<html><body>" netcon-writeln
+        dup str: "<h1>ESP8266 web server is working!</h1>" netcon-writeln
+        dup str: "</body></html>" netcon-writeln
         drop
         123 throw
     then 
@@ -66,12 +66,12 @@ WorkerSpace task: worker-task2
         line stream-reset
         connections mailbox-receive client !
         print: "Client connected: " client @ . cr
-        client @ ['] data-received ['] read-all catch dup ENETCON = if
+        client @ ['] data-received ['] netcon-consume catch dup ENETCON = if
             println: "Client lost: " . cr
         else
             println: "Connection closed: " . cr
         then
-        client @ dispose
+        client @ netcon-dispose
     again
     deactivate ;
 
