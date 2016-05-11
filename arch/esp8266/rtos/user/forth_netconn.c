@@ -93,7 +93,7 @@ int forth_netcon_write(struct forth_netconn* conn, void* data, int len) {
     printf("Writing data len: %d conn: %p\n", len, conn);
     err_t err;
     uint16_t len16 = len;
-    err = netconn_write(conn->conn, data, len16, NETCONN_NOCOPY | NETCONN_MORE);
+    err = netconn_write(conn->conn, data, len16, NETCONN_NOCOPY);
     if (err != ERR_OK) {
         printf("Failed to write data. Conn: %p. Error: %d\n", conn, err);
     }   
