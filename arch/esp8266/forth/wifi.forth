@@ -4,12 +4,16 @@
 3 constant: STATIONAP_MODE
 4 constant: MAX_MODE
 
-5000 constant: WIFI_ERROR
+5000 constant: EWIFI
 
-: wifi-connect ( password ssid  -- )
+: wifi-connect ( password ssid  -- | throws:EWIFI )
     STATION_MODE wifi-set-mode 1 <> if
-        WIFI_ERROR throw
+        EWIFI throw
     then
     wifi-set-station-config 1 <> if
-        WIFI_ERROR throw
+        EWIFI throw
     then ;
+
+: wifi-ip ( -- str )
+    here 16 allot
+    16 over wifi-ip-str ;
