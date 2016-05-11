@@ -358,3 +358,7 @@ defprimitive "wifi-ip-str",11,wifi_ip_str,REGULAR
     DPOP a3                    // buffer size
     CCALL forth_wifi_get_ip_str
     NEXT
+
+defprimitive "push-enter",10,push_enter,REGULAR
+    CCALL forth_push_enter
+    NEXT
