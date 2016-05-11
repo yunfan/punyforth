@@ -29,7 +29,7 @@ void forth_gpio_set_interrupt(int num, int int_type) {
     gpio_set_interrupt(num, int_type);
 }
 
-void gpio_interrupt_handler(void) {
+void __attribute__((weak)) IRAM gpio_interrupt_handler(void) {
     uint32_t status_reg = GPIO.STATUS;
     GPIO.STATUS_CLEAR = status_reg;   
     uint8_t gpio_idx;
