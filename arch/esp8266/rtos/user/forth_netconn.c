@@ -4,8 +4,6 @@
 #include "lwip/api.h"
 #include "lwip/ip_addr.h"
 
-#define CACHE_SIZE 256
-
 struct forth_netconn {
     struct netconn* conn;
     struct netbuf* nbuf;
