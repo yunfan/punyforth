@@ -1,11 +1,16 @@
 marker: -ircbot
 
+2 constant: LED    
+512 constant: buffer-size
+buffer-size byte-array: line-at
+0 line-at constant: line-buffer
+
 : connect ( -- netconn )
     6667 str: "irc.freenode.net" netcon-connect ;
     
 : register ( netconn -- )
-    dup str: "NICK hodor189"                        netcon-writeln
-        str: "USER hodor189 hodor189 bla :hodor189" netcon-writeln ;
+    dup str: "NICK hodor169"                        netcon-writeln
+        str: "USER hodor169 hodor169 bla :hodor169" netcon-writeln ;
     
 : join ( netconn -- ) 
     str: "JOIN #somechan" netcon-writeln ;
@@ -16,35 +21,36 @@ marker: -ircbot
 : quit ( netconn -- )
     str: "QUIT :hodor" netcon-writeln ;
     
-2 constant: LED
-connect constant: SOCKET
-SOCKET register
-SOCKET join
-
-: counted>asciiz ( buffer length -- a )
-    over swap +
-    0 swap c! ;
-
-: data-received ( buffer length -- )
-    counted>asciiz
+: readln ( netconn -- str )
+    buffer-size line-buffer netcon-readln
+    cr print: 'line length=' . cr
+    line-buffer ;
+        
+: processline ( netcon str -- )
     dup type
     dup str: "PING" str-starts-with if
-        SOCKET str: "PONG" netcon-writeln
+        over str: "PONG" netcon-writeln
         random 200 % 0= if
-            SOCKET greet
+            over greet
         then
     then
-    str: "PRIVMSG" str-includes if
+    dup str: "PRIVMSG" str-includes if
         LED blink
-    then ;
+    then 
+    2drop ;
 
 0 task: ircbot-task
 
-: start-irc-task ( -- )
+: start-bot ( -- )
     multi
     ircbot-task activate
-    SOCKET ['] data-received netcon-consume
-    print: "response code: " . cr
+    connect
+    dup register
+    dup join
+    begin
+        dup readln 
+        over swap processline        
+    again
     deactivate ;
 
-start-irc-task
+start-bot

@@ -6,13 +6,11 @@ str: "192.168.0.15" constant: HOST
     
 struct
     cell field: .client
-    \ 128  field: .line
-    \ cell field: .position
+    128  field: .line
 constant: WorkerSpace
 
-128 stream-new: line
-
 : client ( -- a ) user-space .client ;
+: line ( -- a ) user-space .line ;
 
 4 mailbox-new: connections
 0 task: server-task
@@ -31,7 +29,6 @@ WorkerSpace task: worker-task2
     deactivate ;
 
 : line-received ( str -- )
-    print: "line received: " dup type cr
     str: "GET /" str-starts-with if
         client @
         dup str: "HTTP/1.0 200" netcon-writeln
@@ -42,9 +39,8 @@ WorkerSpace task: worker-task2
         dup str: "<h1>ESP8266 web server is working!</h1>" netcon-writeln
         dup str: "</body></html>" netcon-writeln
         drop
-        123 throw
-    then 
-    println: "response sent" ;
+        println: 'response sent for GET request'
+    then ;
     
 : data-received ( buffer size -- )
     0 do
@@ -63,13 +59,15 @@ WorkerSpace task: worker-task2
 : worker ( task -- )
     activate
     begin
-        line stream-reset
         connections mailbox-receive client !
         print: "Client connected: " client @ . cr
-        client @ ['] data-received ['] netcon-consume catch dup ENETCON = if
-            println: "Client lost: " . cr
+        client @ 128 line ['] netcon-readln catch 
+        dup 0<> if            
+            print: "error while reading client: " . cr
         else
-            println: "Connection closed: " . cr
+            drop
+            print: 'line received: ' line type print: ' length=' . cr
+            line line-received  \ TODO catch errors here
         then
         client @ netcon-dispose
     again
@@ -78,10 +76,7 @@ WorkerSpace task: worker-task2
 : start-server ( -- )
     multi
     server-task server
-    \ worker-task1 worker TODO
+    worker-task1 worker
     worker-task2 worker ;
-    
-512 var-task-stack-size !
-256 var-task-rstack-size !
-    
+
 start-server
