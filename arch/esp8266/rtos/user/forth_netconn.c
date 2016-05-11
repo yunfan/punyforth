@@ -8,26 +8,16 @@
 
 struct forth_netconn {
     struct netconn* conn;
-    char *cache;
-    int cache_start;
-    int cache_end;
+    struct netbuf* nbuf;
+    int bufpos;
 };
-
-int cache_data_len(struct forth_netconn* conn) {
-    return conn->cache_end - conn->cache_start; 
-}
-
-int cache_free_space(struct forth_netconn* conn) {
-    return CACHE_SIZE - conn->cache_end; 
-}
 
 struct forth_netconn* make_forth_netconn(struct netconn* conn) {
     if (conn == NULL) return NULL;
     struct forth_netconn *result = malloc(sizeof(struct forth_netconn));
     result->conn = conn;
-    result->cache = (char*) malloc(CACHE_SIZE);
-    result->cache_start = 0;
-    result->cache_end = 0;
+    result->nbuf = NULL;
+    result->bufpos = 0;
     return result;
 }
 
@@ -155,48 +145,30 @@ struct recvinto_res {
     int count;
 };
 
-struct recvinto_res fillup_full(void *buffer, int size, struct forth_netconn* conn) {
-    memcpy(buffer, conn->cache + conn->cache_start, size);
-    conn->cache_start += size;
-    struct recvinto_res result = {
-        .code = ERR_OK,
-        .count = size
-    };
-    return result;
-}
-
-struct recvinto_res fillup_partial(void *buffer, int size, struct forth_netconn * conn) {
-    conn->cache_start = 0;
-    conn->cache_end = 0;
-    struct recvinto_res result = {
-        .code = ERR_OK,
-        .count = cache_data_len(conn)
-    };
-    return result;
-}
-
 struct recvinto_res forth_netcon_recvinto(struct forth_netconn* conn, void* buffer, int size) {
-//    printf("receiving buffer %p max size: %d\n", buffer, size);
-    if (size <= cache_data_len(conn)) return fillup_full(buffer, size, conn);
-    if (cache_data_len(conn) > 0) return fillup_partial(buffer, size, conn);
-    conn->cache_start = 0;
-    conn->cache_end = 0;
-    err_t err;
-    struct netbuf *inbuf;
-    while ((err = netconn_recv(conn->conn, &inbuf)) == ERR_OK && cache_free_space(conn) > 0) {
-        conn->cache_end += netbuf_copy(inbuf, conn->cache + conn->cache_end, cache_free_space(conn));
-        netbuf_delete(inbuf);
+    // printf("receiving buffer %p max size: %d. cache len=%d cache start=%d cache end=%d\n", buffer, size, cache_data_len(conn), conn->cache_start, conn->cache_end);
+    if (conn->nbuf == NULL) {
+        struct netbuf *inbuf;
+        err_t err;
+        if ((err = netconn_recv(conn->conn, &inbuf)) != ERR_OK) {
+            struct recvinto_res result = { .code = err, .count = 0 };
+            return result;
+        }
+        conn->nbuf = inbuf;
+        conn->bufpos = 0;
     }
-    if (conn->cache_end == 0) {
-        struct recvinto_res result = { 
-            .code = err,
-            .count = 0
-        };
+
+    int count = netbuf_copy_partial(conn->nbuf, buffer, size, conn->bufpos);
+    conn->bufpos += count;
+    if (count != 0) {
+        struct recvinto_res result = { .code = ERR_OK, .count = count };
         return result;
     }
-    return size <= cache_data_len(conn)
-        ? fillup_full(buffer, size, conn)
-        : fillup_partial(buffer, size, conn);
+
+    netbuf_delete(conn->nbuf);
+    conn->nbuf = NULL;
+    conn->bufpos = 0;
+    return forth_netcon_recvinto(conn, buffer, size);
 }
 
 struct accept_res {
@@ -230,7 +202,8 @@ void forth_netcon_close(struct forth_netconn* conn) {
 void forth_netcon_delete(struct forth_netconn* conn) {
     printf("Deleting connection %p\n", conn);
     netconn_delete(conn->conn);
-    free(conn->cache);
+    if (conn->nbuf != NULL)
+        netbuf_delete(conn->nbuf);
     free(conn);
 }
 
