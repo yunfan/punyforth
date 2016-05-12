@@ -32,7 +32,7 @@ rstack_space: .space 320
 rstack_top:
 stack_space:  .space 480 // used only by ESP port
 stack:
-prompt_str:   .asciz "\n % "
+prompt_str:   .asciz "\n% "
 compile_only_warning: .asciz "\nWord has no interpretation semantics\n"
 undef_word_error:     .asciz "\nUndefined word: "
 inbuf_overflow_error: .asciz "\nInput overflow\n"
