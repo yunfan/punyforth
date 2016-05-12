@@ -109,15 +109,13 @@ marker: -netcon
         2dup
         1 swap i + netcon-read 0= if
             2drop
-            r> r> 2drop \ XXX clear loop variables before exiting
-            -1 exit
+            -1 unloop exit
         then
         dup i + c@ 10 = i 1 >= and if            
             dup i + 1- c@ 13 = if
                 i + 1- 0 swap c!
                 drop i 1- 
-                r> r> 2drop \ XXX clear loop variables before exiting
-                exit
+                unloop exit
             then            
         then
     loop 
