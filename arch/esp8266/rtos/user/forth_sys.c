@@ -10,3 +10,7 @@ void forth_abort() {
 void forth_yield() { 
     taskYIELD();
 }
+
+int forth_free_heap() {
+    return (int)xPortGetFreeHeapSize();
+}

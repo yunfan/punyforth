@@ -26,14 +26,14 @@ var_prompt_xt:.int 0
 var_pause_xt: .int 0
 var_emit_xt:  .int 0
 var_type_xt:  .int 0
-dictionary:   .space 27648
+dictionary:   .space 24576
 end_dictionary:
 rstack_space: .space 320
 rstack:
 stack_space:  .space 576 // used only by ESP port
 stack:
 prompt_str:   .asciz "\n % "
-compile_only_warning:  .asciz "\nCompile time word used in interpretation mode.\n"
-undef_word_error:      .asciz "\nUndefined word: "
-inbuf_overflow_error:  .asciz "\nInput overflow\n"
+compile_only_warning: .asciz "\nWord has no interpretation semantics\n"
+undef_word_error:     .asciz "\nUndefined word: "
+inbuf_overflow_error: .asciz "\nInput overflow\n"
 word_overflow_error:  .asciz "\nName too long: "

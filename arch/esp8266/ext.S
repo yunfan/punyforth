@@ -167,13 +167,13 @@ defprimitive "delay",5,delay,REGULAR
     DPOP a2                     // millis to wait
     CCALL forth_delay
     NEXT
-
+/*
 defprimitive "ds18b20",7,ds18b20,REGULAR
     DPOP a2                    // gpio num
     DPOP a3                    // sensor num
     CCALL forth_ds18b20_read_all    
     NEXT
-
+*/
 defprimitive "netcon-set-recvtimeout",22,netcon_set_recvtimeout,REGULAR 
     DPOP a2                    // conn
     DPOP a3                    // recv timeout ms
@@ -361,4 +361,9 @@ defprimitive "wifi-ip-str",11,wifi_ip_str,REGULAR
 
 defprimitive "push-enter",10,push_enter,REGULAR
     CCALL forth_push_enter
+    NEXT
+
+defprimitive "os-free-heap",12,os_free_heap,REGULAR
+    CCALL forth_free_heap
+    DPUSH a2                   // free heap size in bytes
     NEXT
