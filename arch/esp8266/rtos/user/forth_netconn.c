@@ -21,26 +21,26 @@ struct forth_netconn* make_forth_netconn(struct netconn* conn) {
 
 struct forth_netconn* forth_netcon_new(int type) {
     enum netconn_type con_type;
-    printf("New netcon type: %d\n", type);
+    //printf("New netcon type: %d\n", type);
     switch (type) {
         case 1: con_type = NETCONN_UDP; break;
         case 2: con_type = NETCONN_TCP; break;
         default: return NULL;
     }
     struct netconn* conn = netconn_new(con_type);
-    printf("Connection ready: %p\n", conn);
+    //printf("Connection ready: %p\n", conn);
     return make_forth_netconn(conn);
 }
 
 int forth_netcon_connect(struct forth_netconn* conn, char* host, int port) {   
     err_t err; ip_addr_t ip;
-    printf("Getting hostname: %s\n", host);
+    //printf("Getting hostname: %s\n", host);
     err = netconn_gethostbyname(host, &ip);
     if (err != ERR_OK) {
         printf("Failed to resolve host %s. Error: %d\n", host, err);
         return err;
     }
-    printf("Connecting to: %s:%d conn: %p\n", host, port, conn);
+    //printf("Connecting to: %s:%d conn: %p\n", host, port, conn);
     err = netconn_connect(conn->conn, &ip, (u16_t)(port & 0xFFFF));
     if (err != ERR_OK) {
         printf("Failed to connect to %s:%d. Error: %d\n", host, port, err);
@@ -54,13 +54,13 @@ int forth_netcon_listen(struct forth_netconn *conn) {
 
 int forth_netcon_bind(struct forth_netconn* conn, char* host, int port) {   
     err_t err; ip_addr_t ip;
-    printf("Getting hostname: %s\n", host);
+    //printf("Getting hostname: %s\n", host);
     err = netconn_gethostbyname(host, &ip);
     if (err != ERR_OK) {
         printf("Failed to resolve host %s. Error: %d\n", host, err);
         return err;
     }
-    printf("Binding to: %s:%d conn: %p\n", host, port, conn);
+    //printf("Binding to: %s:%d conn: %p\n", host, port, conn);
     err = netconn_bind(conn->conn, &ip, (u16_t)(port & 0xFFFF));
     if (err != ERR_OK) {
         printf("Failed to connect to %s:%d. Error: %d\n", host, port, err);
@@ -69,7 +69,7 @@ int forth_netcon_bind(struct forth_netconn* conn, char* host, int port) {
 }
 
 int forth_netcon_send(struct forth_netconn* conn, void* data, int len) {
-    printf("Sending data len: %d conn: %p\n", len, conn);
+    //printf("Sending data len: %d conn: %p\n", len, conn);
     err_t err;
     uint16_t len16 = len;
     struct netbuf* buffer = netbuf_new();
@@ -120,7 +120,7 @@ struct netbuf_data_res {
 };
 
 struct netbuf_data_res forth_netbuf_data(struct netbuf *nbuf) {
-    printf("Data netbuf: %p\n", nbuf);
+    //printf("Data netbuf: %p\n", nbuf);
     char *buf;
     u16_t size;
     netbuf_data(nbuf, (void **)&buf, &size);        
@@ -129,12 +129,12 @@ struct netbuf_data_res forth_netbuf_data(struct netbuf *nbuf) {
 }
 
 int forth_netbuf_next(struct netbuf *nbuf) {
-    printf("Next of netbuf: %p\n", nbuf);
+    //printf("Next of netbuf: %p\n", nbuf);
     return netbuf_next(nbuf);
 }
 
 void forth_netbufdel(struct netbuf* netbuf) {
-    printf("Deleting netbuf: %p\n", netbuf);
+    //printf("Deleting netbuf: %p\n", netbuf);
     netbuf_delete(netbuf);
 }
 
@@ -193,12 +193,12 @@ struct accept_res forth_netcon_accept(struct forth_netconn* conn) {
 }
  
 void forth_netcon_close(struct forth_netconn* conn) {
-    printf("Closing connection %p\n", conn);
+    //printf("Closing connection %p\n", conn);
     netconn_close(conn->conn);
 }
 
 void forth_netcon_delete(struct forth_netconn* conn) {
-    printf("Deleting connection %p\n", conn);
+    //printf("Deleting connection %p\n", conn);
     netconn_delete(conn->conn);
     if (conn->nbuf != NULL)
         netbuf_delete(conn->nbuf);

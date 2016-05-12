@@ -30,7 +30,7 @@ dictionary:   .space 24576
 end_dictionary:
 rstack_space: .space 320
 rstack_top:
-stack_space:  .space 576 // used only by ESP port
+stack_space:  .space 480 // used only by ESP port
 stack:
 prompt_str:   .asciz "\n % "
 compile_only_warning: .asciz "\nWord has no interpretation semantics\n"
