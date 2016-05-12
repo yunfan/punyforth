@@ -5,7 +5,7 @@
 #define FORTH_TRUE -1
 #define FORTH_FALSE 0
 
-int forth_gpio_enable(int num, int dir) { 
+int forth_gpio_mode(int num, int dir) { 
     gpio_direction_t d;
     switch (dir) {
         case 1: d = GPIO_INPUT; break;
