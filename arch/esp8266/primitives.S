@@ -90,15 +90,10 @@ defprimitive "*",1,multiply,REGULAR
 
 .literal_position
 defprimitive "/mod",4,divmod,REGULAR /* ( n d -- m q ) */    
-    DPOP a8            // denom
-    DPOP a9            // numer
-    mov a3, a8        // parameter denom
-    mov a2, a9        // parameter numer
-    CCALL forth_mod
-    DPUSH a2           // remainder
-    mov a3, a8        // parameter denom
-    mov a2, a9        // parameter numer
-    CCALL forth_div
+    DPOP a3            // denom
+    DPOP a2            // numer
+    CCALL forth_divmod
+    DPUSH a3           // remainder
     DPUSH a2           // quotient
     NEXT
 
