@@ -1,6 +1,7 @@
 #include "espressif/esp_common.h"
 #include "FreeRTOS.h"
 #include "string.h"
+#include "dhcpserver.h"
 
 #ifndef MIN
 #define MIN(a,b) ((a) < (b) ? (a) : (b))
@@ -42,9 +43,9 @@ int forth_wifi_set_softap_config(char* ssid, char* pass, AUTH_MODE auth_mode, in
     return sdk_wifi_softap_set_config(&config);
 }
 
-void forth_wifi_set_ip(int addr4) {
+void forth_wifi_set_ip(int ipv4) {
     struct ip_info ip;
-    ip4_addr_set_u32(&ip.ip, addr4);
+    ip4_addr_set_u32(&ip.ip, ipv4);
     IP4_ADDR(&ip.gw, 0, 0, 0, 0);
     IP4_ADDR(&ip.netmask, 255, 255, 0, 0);
     sdk_wifi_set_ip_info(1, &ip);
@@ -56,4 +57,10 @@ void forth_wifi_get_ip_str(char * buffer, int size) {
     struct ip_addr ip = wifi_info.ip; 
     snprintf(buffer, size, IPSTR, IP2STR(&ip));
 
+}
+
+void forth_dhcp_start(int first_client_ipv4, int max_leases) {
+    ip_addr_t ip;
+    ip4_addr_set_u32(&ip, first_client_ipv4);
+    dhcpserver_start(&ip, (uint8_t)(max_leases & 0xFF));
 }

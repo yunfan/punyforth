@@ -1,3 +1,3 @@
 PROGRAM=punyforth
-# EXTRA_COMPONENTS = extras/onewire extras/ds18b20
+EXTRA_COMPONENTS = extras/dhcpserver
 include ../../../../../../common.mk
