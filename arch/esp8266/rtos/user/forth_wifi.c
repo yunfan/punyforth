@@ -64,3 +64,7 @@ void forth_dhcp_start(int first_client_ipv4, int max_leases) {
     ip4_addr_set_u32(&ip, first_client_ipv4);
     dhcpserver_start(&ip, (uint8_t)(max_leases & 0xFF));
 }
+
+void forth_dhcp_stop() {
+    dhcpserver_stop();
+}

@@ -386,6 +386,10 @@ defprimitive "dhcp-start",10,dhcp_start,REGULAR
     CCALL forth_dhcp_start
     NEXT
 
+defprimitive "dhcp-stop",9,dhcp_stop,REGULAR
+    CCALL forth_dhcp_stop
+    NEXT
+
 defprimitive "push-enter",10,push_enter,REGULAR
     CCALL forth_push_enter
     NEXT
