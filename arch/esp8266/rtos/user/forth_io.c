@@ -1,7 +1,7 @@
 #include "espressif/esp_common.h"
 #include "esp/uart.h"
 
-#define BUFFER_SIZE 1024
+#define BUFFER_SIZE 1024 // should be multiple of 4
 bool _source_read_progress = true;
 char *buffer = NULL;
 int buffer_offset = -1;
@@ -12,7 +12,7 @@ int next_char_from_flash() { // read source stored code from flash memory
 	buffer = malloc(BUFFER_SIZE);
     }
     if (buffer_offset < 0 || buffer_offset >= BUFFER_SIZE) {
-        sdk_spi_flash_read(source_code_address, buffer, BUFFER_SIZE);
+        sdk_spi_flash_read(source_code_address, (void *) buffer, BUFFER_SIZE);
         source_code_address += BUFFER_SIZE;
         buffer_offset = 0;
     }
