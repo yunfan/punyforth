@@ -395,6 +395,7 @@ defer: r0 ' r0 is: _r0
     -1 +loop ;
 
 : stack-clear ( i*x -- )
+    depth 0= if exit then
     depth 0 do drop loop ;
 
 : stack-show ( -- )

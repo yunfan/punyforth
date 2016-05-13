@@ -3,7 +3,7 @@ marker: -punit
 : assert ( bool -- | throws:EASSERT ) invert if EASSERT throw then ;
 : =assert ( n1 n2 -- | throws:EASSERT )
     2dup <> if 
-        swap print: '(' . space . print: ' <>)' space
+        swap print: '(' . space . print: ' <>)' 
         EASSERT throw 
     else
         2drop
@@ -30,17 +30,17 @@ marker: -punit
 
 : test-run ( link -- )
     dup link-type
-    link>xt ['] execute catch
+    link>xt catch
     case
         0 of 
             cr
             1 passed c+!
         endof 
         EASSERT of 
-            println: "FAIL" 
+            println: " FAIL" 
             1 failed c+!
         endof
-        print: "ERROR " . cr
+        print: " ERROR: " . cr
         1 errors c+!
     endcase ;
 
