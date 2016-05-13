@@ -7,14 +7,22 @@
 static xQueueHandle event_queue;
 
 void init_event_queue() {
-    event_queue = xQueueCreate(64, sizeof(int));
+    event_queue = xQueueCreate(8, sizeof(struct forth_event));
 }
 
-void forth_add_event_isr(int* event) {
-    xQueueSendToBackFromISR(event_queue, event, NULL);
+struct forth_event event_new(int event_type, int event_payload, int time) {
+    struct forth_event event = {
+        .event_type = event_type,
+        .event_time = time,
+        .event_payload = event_payload
+    };
+    return event;
 }
 
-int forth_next_event(int delay_ms) {
-    int message;
-    return xQueueReceive(event_queue, &message, delay_ms / portTICK_RATE_MS) == pdTRUE ? message : 0 ;   
+void forth_add_event_isr(struct forth_event event) {
+    xQueueSendToBackFromISR(event_queue, &event, NULL);
+}
+
+int forth_wait_event(int timeout_ms, void* buffer) {
+    return (xQueueReceive(event_queue, buffer, timeout_ms / portTICK_RATE_MS) == pdTRUE) ? 1 : 0;
 }
