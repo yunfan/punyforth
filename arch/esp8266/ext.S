@@ -380,14 +380,14 @@ defprimitive "wifi-station-disconnect",23,wifi_station_disconnection,REGULAR
     DPUSH a2                   // c bool
     NEXT
 
-defprimitive "dhcp-start",10,dhcp_start,REGULAR
+defprimitive "dhcpd-start",11,dhcp_start,REGULAR
     DPOP a2                    // first client ip
     DPOP a3                    // max leases 
-    CCALL forth_dhcp_start
+    CCALL forth_dhcpd_start
     NEXT
 
-defprimitive "dhcp-stop",9,dhcp_stop,REGULAR
-    CCALL forth_dhcp_stop
+defprimitive "dhcpd-stop",10,dhcp_stop,REGULAR
+    CCALL forth_dhcpd_stop
     NEXT
 
 defprimitive "push-enter",10,push_enter,REGULAR

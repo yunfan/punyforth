@@ -59,12 +59,12 @@ void forth_wifi_get_ip_str(char * buffer, int size) {
 
 }
 
-void forth_dhcp_start(int first_client_ipv4, int max_leases) {
+void forth_dhcpd_start(int first_client_ipv4, int max_leases) {
     ip_addr_t ip;
     ip4_addr_set_u32(&ip, first_client_ipv4);
     dhcpserver_start(&ip, (uint8_t)(max_leases & 0xFF));
 }
 
-void forth_dhcp_stop() {
+void forth_dhcpd_stop() {
     dhcpserver_stop();
 }
