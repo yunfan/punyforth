@@ -14,7 +14,7 @@ static void forth_init(void* dummy) {
 void user_init(void) {
     uart_set_baud(0, 115200);
     printf("Starting PunyForth task ..\n");
-    xTaskCreate(forth_init, (signed char*) "punyforth", 256, NULL, 8, NULL); 
     init_event_queue();
+    xTaskCreate(forth_init, (signed char*) "punyforth", 256, NULL, 2, NULL); 
     printf("PunyForth started.\n");
 }

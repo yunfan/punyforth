@@ -37,8 +37,12 @@ void __attribute__((weak)) IRAM gpio_interrupt_handler(void) {
         gpio_idx--;
         status_reg &= ~BIT(gpio_idx);
         if (FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_idx])) {
-            int payload = gpio_idx;
-            forth_add_event_isr(event_new(EVT_GPIO, payload, xTaskGetTickCountFromISR()));
+            struct forth_event event = {
+                .event_type = EVT_GPIO,
+                .event_time = xTaskGetTickCountFromISR(),
+                .event_payload = gpio_idx
+            };
+            forth_add_event_isr(&event);
         }
     }
 }

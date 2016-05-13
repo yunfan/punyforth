@@ -12,8 +12,7 @@ struct forth_event {
     int event_payload;
 };
 
-struct forth_event event_new(int event_type, int event_payload, int time);
 void init_event_queue();
-void forth_add_event_isr(struct forth_event event);
+void forth_add_event_isr(struct forth_event *event);
 
 #endif
