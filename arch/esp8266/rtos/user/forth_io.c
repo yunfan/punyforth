@@ -5,7 +5,7 @@
 bool _source_read_progress = true;
 char *buffer = NULL;
 int buffer_offset = -1;
-uint32_t source_code_address = 0x18000;
+uint32_t source_code_address = 0x51000;
 
 int next_char_from_flash() { // read source stored code from flash memory
     if (buffer == NULL) {
