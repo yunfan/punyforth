@@ -378,16 +378,90 @@ myword \ prints out foobar
 
 Because the usage of *override*, the *myword* in the second defintion will refer to the old *myword*. Therefore the execution of *myword* will print out foobar.
 
-### Factor style combinators
+### Quotations
+
+A quotation is an anonymous word inside an other word, similar than a lambda expression in other languages. Quotations don't act as lexical closures, because there are no locals in FORTH to close over. The word *{* starts compiling the quotation body into the current word definition. The word *}* ends the quotation by compiling an exit word into the quotation.
+
+```forth
+: a-word-definition ( -- )
+  ( .. )
+  { ( ..quotation body.. ) }
+  ( .. ) ;
+```   
+
+At runtime the quotation pushes its execution token onto the stack, therefore it can be used with execute, catch or combinators.
+
+```forth
+: demo ( -- n ) 
+  3 { 1+ 5 * } execute ;
+   
+% demo
+(stack 20)
+```   
+
+#### Quotations and exception handling
+
+```forth
+   { str: 'AF01' hex>int } catch 
+   dup ECONVERT = if 
+      println: 'invalid hex number' 
+      abort 
+   else 
+      throw 
+   then
+```
+
+#### Quotations and Factor style combinators
 
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 
-* dip ( a xt -- a )
-* keep ( a xt -- xt.a a )
-* bi ( a xt1 xt2 -- xt1.a xt2.a )
-* bi* ( a b xt1 xt2 -- xt1.a xt2.b )
-* bi@ ( a b xt -- xt.a xt.b )
+##### dip ( x quot -- x ) 
 
+Calls a quotation while temporarily hiding the top item on the stack.
+
+```forth 
+  1 2 4 { + } dip   \ Same as: 1 2 4 >r + r> 
+  (stack 3 4) 
+``` 
+ 
+##### keep ( x quot -- x ) 
+
+Calls a quotation with an item on the stack, restoring that item after the quotation returns.
+
+```forth 
+  1 2 4 { + } keep    \ Same as: 1 2 4 dup >r + r>
+  (stack 1 6 4)
+``` 
+ 
+##### bi ( x p q -- ) 
+
+Applies quotation p to x, then applies quotation q to x.
+
+```forth 
+  \ given a rectangle(width=3, height=4)
+  rectangle { .width @ } { .height @ } bi *   \ Same as: rectangle dup .width @ swap .height @ *
+  (stack 12) 
+``` 
+  
+##### bi* ( x y p q -- ) 
+
+Applies quotation p to x, then applies quotation q to y.
+
+```forth 
+  str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* =    \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
+  (stack -1)
+  
+``` 
+  
+##### bi@ ( x y quot -- )
+
+Applies the quotation to x, then to y.
+
+ ```forth
+  str: "john" str: ".doe" { strlen } bi@ =    \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
+  (stack -1)
+  
+```
 
 ### The word *create: does>*
 
