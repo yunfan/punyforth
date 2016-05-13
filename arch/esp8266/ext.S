@@ -33,6 +33,14 @@ defprimitive "over",4,over,REGULAR /* ( a b -- a b a ) */
     DPUSH a8
     NEXT
 
+defprimitive "cells",5,cells,REGULAR
+    DPOP a9
+    movi a8, 2
+    ssl a8
+    sll a8, a9
+    DPUSH a8
+    NEXT
+
 defprimitive ">",1,gt,REGULAR 
     DPOP a8
     DPOP a9
