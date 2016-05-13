@@ -341,17 +341,43 @@ defprimitive "wifi-set-mode",13,wifi_set_mode,REGULAR
     DPUSH a2                   // c bool
     NEXT
 
-defprimitive "wifi-set-station-config",23,wifi_set_config,REGULAR
+defprimitive "wifi-set-station-config",23,wifi_set_station_config,REGULAR
     DPOP a2                    // ssid
     DPOP a3                    // password
     CCALL forth_wifi_set_station_config
     DPUSH a2                   // c bool
     NEXT
 
+defprimitive "wifi-set-softap-config",22,wifi_set_softap_config,REGULAR
+    DPOP a2                    // ssid
+    DPOP a3                    // password
+    DPOP a4                    // auth_mode
+    DPOP a5                    // hidden
+    DPOP a6                    // channels
+    DPOP a7                    // max_connections
+    CCALL forth_wifi_set_softap_config
+    DPUSH a2                   // c bool
+    NEXT
+
+defprimitive "wifi-set-ip",11,wifi_set_ip,REGULAR
+    DPOP a2                    // ipv4addr
+    CCALL forth_wifi_set_ip
+    NEXT
+
 defprimitive "wifi-ip-str",11,wifi_ip_str,REGULAR
     DPOP a2                    // buffer
     DPOP a3                    // buffer size
     CCALL forth_wifi_get_ip_str
+    NEXT
+
+defprimitive "wifi-station-connect",20,wifi_station_connection,REGULAR
+    CCALL forth_wifi_station_connect
+    DPUSH a2                   // c bool
+    NEXT
+
+defprimitive "wifi-station-disconnect",23,wifi_station_disconnection,REGULAR
+    CCALL forth_wifi_station_disconnect
+    DPUSH a2                   // c bool
     NEXT
 
 defprimitive "push-enter",10,push_enter,REGULAR
