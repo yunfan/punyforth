@@ -39,7 +39,7 @@ wifi-ip constant: HOST
     activate
     PORT HOST netcon-tcp-server
     begin
-        print: 'PunyREPL server started on port ' PORT . 
+        print: 'PunyREPL started on port ' PORT . 
         print: ' on host ' HOST type cr
         dup netcon-accept
         connections mailbox-send
@@ -75,7 +75,7 @@ wifi-ip constant: HOST
     deactivate ;
 
 : repl-start ( -- )
-    println: 'Starting PunyREPL server..'
+    println: 'Starting PunyREPL..'
     multi    
     ['] type-composite xtype !
     ['] emit-composite xemit !

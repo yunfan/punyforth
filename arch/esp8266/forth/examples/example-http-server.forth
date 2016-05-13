@@ -38,16 +38,15 @@ Connection: close\r\n
 \r\n
 <html>
     <body>
-        <h1>ESP8266 web server is working!</h1>
+        <h1>Punyforth demo</h1>
     </body>
 </html>" constant: HTML
     
 : serve-client ( -- )    
     client @ 128 line netcon-readln
-    print: 'line received: ' line type print: ' length=' . cr
+    print: 'received: ' line type print: ' len=' . cr
     line str: "GET /" str-starts? if
         client @ HTML netcon-write
-        println: 'response sent'
     then ;
     
 \ worker taks receives clients from the server task then serves them with a static html    

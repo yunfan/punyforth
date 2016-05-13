@@ -30,9 +30,9 @@ buffer-len buffer: buffer
     begin
         dup buffer-len buffer netcon-readln -1 <>
     while
-        print: 'skipping header: ' buffer type cr
+        \ print: 'skipping header: ' buffer type cr
         buffer strlen 0= if
-            println: 'end of header detected'
+            \ println: 'end of header detected'
             exit
         then
     repeat
