@@ -172,8 +172,9 @@ defprimitive "gpio-read",9,gpioread,REGULAR
     NEXT
 
 defprimitive "pwm-init",8,pwminit,REGULAR
-    DPOP a2                     // pin
-    CCALL forth_pwm_init
+    DPOP a2                     // pins array
+    DPOP a3                     // number of pins in array
+    CCALL pwm_init
     NEXT
 
 defprimitive "pwm-freq",8,pwmfreq,REGULAR

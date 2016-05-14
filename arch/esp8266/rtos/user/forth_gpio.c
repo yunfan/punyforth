@@ -26,13 +26,6 @@ void forth_gpio_set_interrupt(int num, int int_type) {
     gpio_set_interrupt(num, int_type);
 }
 
-void forth_pwm_init(int pin) {
-    uint8_t pins[2]; // TODO parameters
-    pins[0] = 5;
-    pins[1] = 4;
-    pwm_init(2, pins);
-}
-
 void forth_pwm_freq(int freq) {
     pwm_set_freq((uint16_t) (freq & 0xFFFF));
 }
