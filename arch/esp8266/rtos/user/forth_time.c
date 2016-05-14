@@ -7,6 +7,6 @@ int forth_time() {
 }
 
 void forth_delay(int millis) {
-    vTaskDelay(millis / portTICK_RATE_MS);    
+    vTaskDelay(millis / portTICK_RATE_MS);
 }
 

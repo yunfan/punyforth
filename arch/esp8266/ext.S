@@ -171,6 +171,29 @@ defprimitive "gpio-read",9,gpioread,REGULAR
     DPUSH a2
     NEXT
 
+defprimitive "pwm-init",8,pwminit,REGULAR
+    DPOP a2                     // pin
+    CCALL forth_pwm_init
+    NEXT
+
+defprimitive "pwm-freq",8,pwmfreq,REGULAR
+    DPOP a2                     // freq 16b
+    CCALL forth_pwm_freq
+    NEXT
+
+defprimitive "pwm-duty",8,pwmduty,REGULAR
+    DPOP a2                     // duty 16b
+    CCALL forth_pwm_duty
+    NEXT
+
+defprimitive "pwm-start",9,pwmstart,REGULAR
+    CCALL pwm_start
+    NEXT
+
+defprimitive "pwm-stop",8,pwmstop,REGULAR
+    CCALL pwm_stop
+    NEXT
+
 defprimitive "delay",5,delay,REGULAR
     DPOP a2                     // millis to wait
     CCALL forth_delay
