@@ -44,9 +44,9 @@ void __attribute__((weak)) IRAM gpio_interrupt_handler(void) {
         if (FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_idx])) {
             struct forth_event event = {
                 .event_type = EVT_GPIO,
-                .event_time = xTaskGetTickCountFromISR() * portTICK_RATE_MS,
-                .event_payload = gpio_idx,
-                .event_time_us = sdk_system_get_time()
+                .event_time_ms = xTaskGetTickCountFromISR() * portTICK_RATE_MS,
+                .event_time_us = sdk_system_get_time(),
+                .event_payload = gpio_idx
             };
             forth_add_event_isr(&event);
         }

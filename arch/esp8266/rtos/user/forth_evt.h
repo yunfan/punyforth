@@ -8,9 +8,9 @@
 
 struct forth_event {
     int event_type;
-    int event_time;
-    int event_payload;
+    unsigned int event_time_ms;
     unsigned int event_time_us;
+    int event_payload;
 };
 
 void init_event_queue();
