@@ -1,5 +1,6 @@
 \ Detects motion using a PIR sensor and turns Philips Hue lights on/off
-\ I tested this with these mini IR PIR sensors http://www.banggood.com/3Pcs-Mini-IR-Infrared-Pyroelectric-PIR-Body-Motion-Human-Sensor-Detector-Module-p-1020422.html
+\ I tested this with these mini IR PIR sensors 
+\ http://www.banggood.com/3Pcs-Mini-IR-Infrared-Pyroelectric-PIR-Body-Motion-Human-Sensor-Detector-Module-p-1020422.html
 
 4 constant: PIR_PIN         \ D2 leg
 0 constant: MODE_MOTION
@@ -24,17 +25,17 @@ defer: motion-detected
     { .payload @ PIR_PIN = } bi and ;
 
 : recent-event? ( event -- bool )
-    ms@ swap .time @ - 80 < ;
+    ms@ swap .ms @ - 800 < ;
     
 : motion ( -- )
-    print: 'motion detected at ' event .time ? cr
+    print: 'motion detected at ' event .ms ? cr
     detect-nomotion
     ['] motion-detected catch ?dup if
         ex-type cr
     then ;
 
 : nomotion ( -- )
-    print: 'motion stopped at ' event .time ? cr
+    print: 'motion stopped at ' event .ms ? cr
     detect-motion ;
 
 : event-loop ( task -- )

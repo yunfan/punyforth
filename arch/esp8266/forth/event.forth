@@ -1,8 +1,8 @@
 struct
     cell field: .type
-    cell field: .time
+    cell field: .ms
+    cell field: .us    
     cell field: .payload
-    cell field: .time-us
 constant: Event
 
 100 constant: EVT_GPIO
