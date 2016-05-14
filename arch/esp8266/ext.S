@@ -132,7 +132,7 @@ defprimitive "0>",2,gt0,REGULAR
     NEXT
 
 defprimitive "ms@",3,msat,REGULAR
-    CCALL xTaskGetTickCount
+    CCALL forth_time_ms
     DPUSH a2
     NEXT
 

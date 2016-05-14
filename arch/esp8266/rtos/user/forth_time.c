@@ -6,6 +6,10 @@ void forth_delay_ms(int millis) {
     vTaskDelay(millis / portTICK_RATE_MS);
 }
 
+int forth_time_ms() {
+    return xTaskGetTickCount() * 10;    
+}
+
 /**
  * Delay microseconds
  *
