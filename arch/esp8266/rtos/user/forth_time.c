@@ -2,11 +2,7 @@
 #include "task.h"
 #include "espressif/esp_common.h"
 
-int forth_time() { 
-    return xTaskGetTickCount();
-}
-
-void forth_delay(int millis) {
+void forth_delay_ms(int millis) {
     vTaskDelay(millis / portTICK_RATE_MS);
 }
 
@@ -18,4 +14,3 @@ void forth_delay(int millis) {
 void forth_delay_us(unsigned int microseconds) {
     sdk_os_delay_us(microseconds & 0x0ffff);
 }
-

@@ -131,8 +131,8 @@ defprimitive "0>",2,gt0,REGULAR
     DPUSH a9
     NEXT
 
-defprimitive "time",4,time,REGULAR
-    CCALL forth_time
+defprimitive "ms@",3,msat,REGULAR
+    CCALL xTaskGetTickCount
     DPUSH a2
     NEXT
 
@@ -194,9 +194,9 @@ defprimitive "pwm-stop",8,pwmstop,REGULAR
     CCALL pwm_stop
     NEXT
 
-defprimitive "delay",5,delay,REGULAR
+defprimitive "ms",2,ms,REGULAR
     DPOP a2                     // millis to wait
-    CCALL forth_delay
+    CCALL forth_delay_ms
     NEXT
 
 defprimitive "netcon-set-recvtimeout",22,netcon_set_recvtimeout,REGULAR 
@@ -430,12 +430,12 @@ defprimitive "osfreemem",9,osfreemem,REGULAR
     DPUSH a2                   // free heap size in bytes
     NEXT
 
-defprimitive "time-us",7,timeus,REGULAR
-    CCALL forth_time_us
+defprimitive "us@",3,usat,REGULAR
+    CCALL sdk_system_get_time
     DPUSH a2 // clock time in us
     NEXT
 
-defprimitive "delay-us",8,delayus,REGULAR
+defprimitive "us",2,us,REGULAR
     DPOP a2                     // us to wait
     CCALL forth_delay_us
     NEXT
