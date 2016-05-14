@@ -14,15 +14,15 @@ BUTTON_BEDROOM GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 Event buffer: event
 
 : toggle-hall ( -- )
-    time last-hall-event @ - DEBOUNCE_TIME > if
+    ms@ last-hall-event @ - DEBOUNCE_TIME > if
         HALL toggle
-        time last-hall-event !
+        ms@ last-hall-event !
     then ;
 
 : toggle-bedroom ( -- )
-    time last-bedroom-event @ - DEBOUNCE_TIME > if
+    ms@ last-bedroom-event @ - DEBOUNCE_TIME > if
         BEDROOM toggle
-        time last-bedroom-event !
+        ms@ last-bedroom-event !
     then ;
 
 : switch-loop ( task -- )

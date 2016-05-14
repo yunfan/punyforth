@@ -46,11 +46,6 @@ constant: Rect
 : area ( rect -- area ) dup .width @ swap .height @ * ;
 new-rect r1
 
-: bench ( ntimes -- sec )
-    time swap
-    0 do 10 factorial drop loop
-    time swap - ;
-
 variable: test_var1
 variable: test_var2
 
