@@ -378,7 +378,7 @@ word_next_char:
     lbl word_boundary
     .int xt_dup, xt_btick, 13, xt_noteq, xt_branch0
     lbl word_boundary
-    .int xt_dup, xt_btick, 19, xt_noteq, xt_branch0
+    .int xt_dup, xt_btick, 9, xt_noteq, xt_branch0
     lbl word_boundary
     .int xt_branch
     lbl word_next_char
