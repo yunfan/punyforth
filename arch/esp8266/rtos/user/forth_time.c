@@ -7,7 +7,7 @@ void forth_delay_ms(int millis) {
 }
 
 int forth_time_ms() {
-    return xTaskGetTickCount() * 10;    
+    return xTaskGetTickCount() * portTICK_RATE_MS;
 }
 
 /**
