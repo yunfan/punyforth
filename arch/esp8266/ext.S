@@ -29,8 +29,32 @@ defprimitive "readchar-nowait",15,readchar_nowait,REGULAR /* ( -- char | -1 ) */
     NEXT
 
 defprimitive "over",4,over,REGULAR /* ( a b -- a b a ) */
-    l32i a8, a15, CELLS
+    READTOS2 a8
     DPUSH a8
+    NEXT
+
+defprimitive "-rot",4,mrot,REGULAR /*( a b c -- c a b ) */
+    READTOS1 a8
+    READTOS2 a9
+    READTOS3 a10
+    WRTETOS3 a8
+    WRTETOS2 a10
+    WRTETOS1 a9
+    NEXT
+
+defprimitive "2dup",4,dup2,REGULAR
+    READTOS2 a9
+    READTOS1 a8
+    DPUSH a9
+    DPUSH a8
+    NEXT
+
+defprimitive "2drop",5,"drop2",REGULAR
+    addi a15, a15, 2*CELLS
+    NEXT
+
+defprimitive "4drop",5,"drop4",REGULAR
+    addi a15, a15, 4*CELLS
     NEXT
 
 defprimitive "cells",5,cells,REGULAR
@@ -87,15 +111,15 @@ L9: DPUSH a10
     NEXT
 
 defprimitive "1+",2,inc,REGULAR
-    DPOP a8
+    READTOS1 a8
     addi a8, a8, 1
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "1-",2,dec,REGULAR
-    DPOP a8
+    READTOS1 a8
     addi a8, a8, -1
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "0=",2,eq0,REGULAR
@@ -107,28 +131,28 @@ defprimitive "0=",2,eq0,REGULAR
     NEXT
 
 defprimitive "0<>",3,noteq0,REGULAR
-    DPOP a8
+    READTOS1 a8
     movi a9, FALSE
     movi a10, TRUE
     movnez a9, a10, a8 // move a10 to a9 if a8 is not zero
-    DPUSH a9
+    WRTETOS1 a9
     NEXT
 
 defprimitive "0<",2,lt0,REGULAR
-    DPOP a8
+    READTOS1 a8
     movi a9, FALSE
     movi a10, TRUE
     movltz a9, a10, a8 // move a10 to a9 if a8 is less than zero
-    DPUSH a9
+    WRTETOS1 a9
     NEXT
 
 defprimitive "0>",2,gt0,REGULAR
-    DPOP a8
+    READTOS1 a8
     movi a9, TRUE
     movi a10, FALSE
     movltz a9, a10, a8 // move a10 to a9 if a8 is less than zero
     moveqz a9, a10, a8 // move a10 to a9 if a8 is zero
-    DPUSH a9
+    WRTETOS1 a9
     NEXT
 
 defprimitive "ms@",3,msat,REGULAR

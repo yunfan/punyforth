@@ -1,19 +1,23 @@
 // Predefined words in binary (compiled) forth
 
-defword "nip",3,nip,REGULAR
+defword "nip",3,nip,REGULAR /* ( a b -- b ) */
     .int xt_swap
     .int xt_drop
     .int xt_exit
 
+.ifndef xt_drop2
 defword "2drop",5,"drop2",REGULAR
     .int xt_drop
     .int xt_drop
     .int xt_exit
+.endif
 
+.ifndef xt_drop4
 defword "4drop",5,"drop4",REGULAR
     .int xt_drop2
     .int xt_drop2
     .int xt_exit
+.endif
 
 .ifndef xt_over
 defword "over",4,over,REGULAR /* ( a b -- a b a ) */
@@ -24,14 +28,18 @@ defword "over",4,over,REGULAR /* ( a b -- a b a ) */
     .int xt_exit
 .endif
 
+.ifndef xt_dup2
 defword "2dup",4,dup2,REGULAR
     .int xt_over
     .int xt_over
     .int xt_exit    
+.endif
     
+.ifndef xt_mrot
 defword "-rot",4,mrot,REGULAR /*( a b c -- c a b ) */
     .int xt_rot, xt_rot
     .int xt_exit
+.endif
 
 defword "tuck",4,tuck,REGULAR /* ( a b -- b a b ) */
     .int xt_swap, xt_over

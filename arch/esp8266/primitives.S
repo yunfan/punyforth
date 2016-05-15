@@ -18,29 +18,57 @@
     addi a13, a13, CELLS
 .endm
 
+.macro READTOS1 reg
+    l32i \reg, a15, 0
+.endm
+
+.macro READTOS2 reg
+    l32i \reg, a15, CELLS
+.endm
+
+.macro READTOS3 reg
+    l32i \reg, a15, 2*CELLS
+.endm
+
+.macro WRTETOS1 reg
+    s32i \reg, a15, 0
+.endm
+
+.macro WRTETOS2 reg
+    s32i \reg, a15, CELLS
+.endm
+
+.macro WRTETOS3 reg
+    s32i \reg, a15, 2*CELLS
+.endm
+
+
+defprimitive "nop",3,nop,REGULAR /* ( -- ) */
+    NEXT
+
 defprimitive "dup",3,dup,REGULAR /* ( a -- a a ) */
-    l32i a8, a15, 0
+    READTOS1 a8
     DPUSH a8
     NEXT
 
 defprimitive "drop",4,drop,REGULAR /* ( a -- ) */
-    DPOP a8
+    addi a15, a15, CELLS
     NEXT
 
 defprimitive "swap",4,swap,REGULAR /* ( a b -- b a ) */
-    DPOP a8
-    DPOP a9
-    DPUSH a8
-    DPUSH a9
+    READTOS1 a8
+    READTOS2 a9
+    WRTETOS1 a9
+    WRTETOS2 a8
     NEXT
 
 defprimitive "rot",3,rot,REGULAR /* ( a b c -- b c a ) */    
-    DPOP a8
-    DPOP a9
-    DPOP a10
-    DPUSH a9
-    DPUSH a8
-    DPUSH a10
+    READTOS1 a8
+    READTOS2 a9
+    READTOS3 a10
+    WRTETOS3 a9
+    WRTETOS2 a8
+    WRTETOS1 a10
     NEXT
 
 defprimitive "2swap",5,swap2,REGULAR /* ( a b c d -- c d a b ) */    
