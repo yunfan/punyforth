@@ -305,6 +305,14 @@ defprimitive "task-yield",10,task_yield,REGULAR
     CCALL forth_yield
     NEXT
 
+defprimitive "os-enter-critical",17,os_enter_critical,REGULAR
+    CCALL forth_enter_critical
+    NEXT
+
+defprimitive "os-exit-critical",16,os_exit_critical,REGULAR
+    CCALL forth_exit_critical
+    NEXT
+
 defprimitive "wait-event",10,wait_event,REGULAR
     DPOP a2                    // delay ms
     DPOP a3                    // event buffer
