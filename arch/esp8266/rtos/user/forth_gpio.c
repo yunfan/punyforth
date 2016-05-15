@@ -2,6 +2,9 @@
 #include "pwm.h"
 #include "espressif/esp_common.h"
 #include "forth_evt.h"
+#include "esplibs/libmain.h"
+#include "limits.h"
+#include "punycommons.h"
 
 void forth_gpio_mode(int num, int dir) { 
     gpio_direction_t d;
@@ -52,3 +55,22 @@ void __attribute__((weak)) IRAM gpio_interrupt_handler(void) {
         }
     }
 }
+
+#define WAIT_FOR_PIN_STATE(state) \
+    while (gpio_read(pin) != (state)) { \
+        if (xthal_get_ccount() - start_cycle_count > timeout_cycles) { \
+            return 0; \
+        } \
+    }
+
+// max timeout is 26 seconds at 80Mhz clock or 13 at 160Mhz
+int forth_pulse_in(int pin, int state, int timeout_us) {
+    uint32_t timeout_cycles = MIN(timeout_us * sdk_os_get_cpu_frequency(), INT_MAX / sdk_os_get_cpu_frequency());
+    uint32_t start_cycle_count = xthal_get_ccount();
+    WAIT_FOR_PIN_STATE(!state);
+    WAIT_FOR_PIN_STATE(state);
+    uint32_t pulse_start_cycle_count = xthal_get_ccount();
+    WAIT_FOR_PIN_STATE(!state);
+    return (xthal_get_ccount() - pulse_start_cycle_count) / sdk_os_get_cpu_frequency();
+}
+

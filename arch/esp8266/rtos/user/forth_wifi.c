@@ -2,10 +2,7 @@
 #include "FreeRTOS.h"
 #include "string.h"
 #include "dhcpserver.h"
-
-#ifndef MIN
-#define MIN(a,b) ((a) < (b) ? (a) : (b))
-#endif
+#include "punycommons.h"
 
 int forth_wifi_set_opmode(int mode) {
     return sdk_wifi_set_opmode(mode);

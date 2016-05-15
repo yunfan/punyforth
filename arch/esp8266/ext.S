@@ -453,3 +453,11 @@ defprimitive "deep-sleep",10,deep_sleep,REGULAR
     DPOP a2                    // time in us
     CCALL sdk_system_deep_sleep
     NEXT	
+
+defprimitive "pulse-in",8,pulse_in,REGULAR
+    DPOP a2                    // pin
+    DPOP a3                    // state
+    DPOP a4                    // timeout
+    CCALL forth_pulse_in
+    DPUSH a2                   // pulse len us
+    NEXT	
