@@ -1,25 +1,22 @@
-2 constant: PIN \ D4
 40 byte-array: bits
 5  byte-array: bytes
-exception: ETIMEOUT
+2  init-variable: var-dht-pin \ default D4, wemos d1 mini dht22 shield, use dht-pin! to override
 exception: ECHECKSUM
 
-\ TODO pin param
-
-: pulse-len ( timeout-us gpio-state gpio-pin -- us | throws:TIMEOUT )
-    pulse-in ?dup 0= if ETIMEOUT throw then ;
+: dht-pin  ( -- gpio-pin ) var-dht-pin @ ;
+: dht-pin! ( gpio-pin -- ) var-dht-pin ! ;
 
 : init ( -- )
-    PIN GPIO_LOW gpio-write
+    dht-pin GPIO_LOW gpio-write
     20000 us
-    PIN GPIO_HIGH gpio-write    
-    200 GPIO_HIGH PIN pulse-len 
+    dht-pin GPIO_HIGH gpio-write
+    200 GPIO_HIGH dht-pin pulse-len
     drop ;
    
 \ high pulse for 26-28 us is bit0, high pulse for 70 us is bit1    
 : fetch ( -- )    
     40 0 do
-        150 GPIO_HIGH PIN pulse-len
+        150 GPIO_HIGH dht-pin pulse-len
         50 > 
         i bits c!
     loop ;
@@ -27,8 +24,8 @@ exception: ECHECKSUM
 : measure ( -- )
     os-enter-critical
     { init fetch } catch 
-    os-exit-critical 
-    throw ;    
+    os-exit-critical
+    throw ;
 
 : bit-at ( i -- bit )
     bits c@ if 1 else 0 then ;
@@ -70,7 +67,7 @@ exception: ECHECKSUM
 \ measures temperature and humidity using DHT22 sensor
 \ temperature and humidity values are multiplied with 10
 : dht-measure ( -- celsius-x-10 humidity%-x-10 )
-    PIN GPIO_OUT_OPEN_DRAIN gpio-mode
+    dht-pin GPIO_OUT_OPEN_DRAIN gpio-mode
     measure
     process
     validate
