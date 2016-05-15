@@ -65,7 +65,7 @@ void __attribute__((weak)) IRAM gpio_interrupt_handler(void) {
 
 // max timeout is 26 seconds at 80Mhz clock or 13 at 160Mhz
 int forth_pulse_in(int pin, int state, int timeout_us) {
-    uint32_t timeout_cycles = MIN(timeout_us * sdk_os_get_cpu_frequency(), INT_MAX / sdk_os_get_cpu_frequency());
+    uint32_t timeout_cycles = MIN(abs(timeout_us), INT_MAX / sdk_os_get_cpu_frequency()) * sdk_os_get_cpu_frequency();
     uint32_t start_cycle_count = xthal_get_ccount();
     WAIT_FOR_PIN_STATE(!state);
     WAIT_FOR_PIN_STATE(state);
