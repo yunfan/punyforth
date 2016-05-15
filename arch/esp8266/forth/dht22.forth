@@ -4,49 +4,24 @@
 exception: ETIMEOUT
 exception: ECHECKSUM
 
-: _pulse-in ( gpio-state gpio-pin timeout-us -- bool )    
-    1 rshift 0 do
-        2 us
-        2dup gpio-read = if
-            2drop TRUE 
-            unloop exit
-        then
-    loop
-    2drop FALSE ;
-    
-: pulse-in ( gpio-state gpio-pin timeout-us -- duration TRUE | FALSE )
-    us@ ['] _pulse-in dip 
-    swap if
-        us@ swap - TRUE
-    else
-        drop FALSE
-    then ;
+\ TODO pin param
 
-: wait-for ( gpio-state gpio-pin timeout-us -- | throws:ETIMEOUT )
-    pulse-in if
-        drop
-    else
-        ETIMEOUT throw
-    then ;
-    
-: duration ( gpio-state gpio-pin timeout-us -- duration | throws:ETIMEOUT )
-    pulse-in invert if
-        ETIMEOUT throw
-    then ;
-    
+: pulse-len ( timeout-us gpio-state gpio-pin -- us | throws:TIMEOUT )
+    pulse-in ?dup 0= if ETIMEOUT throw then ;
+
 : init ( -- )
     PIN GPIO_LOW gpio-write
     20000 us
-    PIN GPIO_HIGH gpio-write
-    GPIO_LOW  PIN 40 wait-for
-    GPIO_HIGH PIN 88 wait-for
-    GPIO_LOW  PIN 88 wait-for ;
-    
+    PIN GPIO_HIGH gpio-write    
+    200 GPIO_HIGH PIN pulse-len 
+    drop ;
+   
+\ high pulse for 26-28 us is bit0, high pulse for 70 us is bit1    
 : fetch ( -- )    
     40 0 do
-        GPIO_HIGH PIN 65 duration 
-        GPIO_LOW  PIN 75 duration
-        < i bits c!
+        150 GPIO_HIGH PIN pulse-len
+        50 > 
+        i bits c!
     loop ;
 
 : measure ( -- )
