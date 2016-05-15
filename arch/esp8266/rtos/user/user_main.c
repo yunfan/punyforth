@@ -13,7 +13,7 @@ static void forth_init(void* dummy) {
 
 void user_init(void) {
     uart_set_baud(0, 115200);
-    printf("Punyforth loading ..\n");
+    printf("Punyforth loading..\n");
     init_event_queue();
     xTaskCreate(forth_init, (signed char*) "punyforth", 640, NULL, 2, NULL); 
 }
