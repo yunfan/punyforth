@@ -1,12 +1,32 @@
 \ this demo is for http://bit.ly/2bqHz58
 
-5 constant: PIN_SPEED_1 \ D1
-4 constant: PIN_SPEED_2 \ D2
-0 constant: PIN_MOTOR_1 \ D3
-2 constant: PIN_MOTOR_2 \ D4
+5  constant: PIN_SPEED_1 \ D1
+4  constant: PIN_SPEED_2 \ D2
+0  constant: PIN_MOTOR_1 \ D3
+2  constant: PIN_MOTOR_2 \ D4
+14 constant: PIN_LIGHT_1 \ D5
+15 constant: PIN_LIGHT_2 \ D8
 
 create: PWM_PINS PIN_SPEED_1 c, PIN_SPEED_2 c,
 
+FALSE init-variable: lamp-active
+
+: lamp-on ( -- )
+    PIN_LIGHT_1 GPIO_OUT gpio-mode
+    PIN_LIGHT_2 GPIO_OUT gpio-mode
+    PIN_LIGHT_1 GPIO_HIGH gpio-write
+    PIN_LIGHT_2 GPIO_HIGH gpio-write ;
+    
+: lamp-off ( -- )
+    PIN_LIGHT_1 GPIO_OUT gpio-mode
+    PIN_LIGHT_2 GPIO_OUT gpio-mode
+    PIN_LIGHT_1 GPIO_LOW gpio-write
+    PIN_LIGHT_2 GPIO_LOW gpio-write ;
+
+: lamp-toggle ( -- )
+    lamp-active @ if lamp-off else lamp-on then 
+    lamp-active @ invert lamp-active ! ;
+    
 : engine-start ( -- )
     PIN_MOTOR_1 GPIO_OUT gpio-mode
     PIN_MOTOR_2 GPIO_OUT gpio-mode
@@ -94,7 +114,10 @@ PORT wifi-ip netcon-udp-server constant: server-socket
             endof
             [ char: H ] literal of
                 engine-stop
-            endof            
+            endof
+            [ char: T ] literal of
+                lamp-toggle
+            endof
         endcase
     repeat 
     deactivate ;
@@ -104,6 +127,7 @@ PORT wifi-ip netcon-udp-server constant: server-socket
 : tank-server-start ( -- )
     multi
     engine-start
+    6 0 do lamp-toggle 200 ms loop
     tank-task command-loop ;
 
 repl-start
