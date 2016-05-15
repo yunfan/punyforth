@@ -449,3 +449,7 @@ defprimitive "us",2,us,REGULAR
     CCALL forth_delay_us
     NEXT
 
+defprimitive "deep-sleep",10,deep_sleep,REGULAR
+    DPOP a2                    // time in us
+    CCALL sdk_system_deep_sleep
+    NEXT	
