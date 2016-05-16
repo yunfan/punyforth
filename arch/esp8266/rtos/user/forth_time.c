@@ -3,11 +3,11 @@
 #include "espressif/esp_common.h"
 
 void forth_delay_ms(int millis) {
-    vTaskDelay(millis / portTICK_RATE_MS);
+    vTaskDelay(millis / portTICK_PERIOD_MS);
 }
 
 int forth_time_ms() {
-    return xTaskGetTickCount() * portTICK_RATE_MS;
+    return xTaskGetTickCount() * portTICK_PERIOD_MS;
 }
 
 /**

@@ -25,8 +25,18 @@ int forth_gpio_read(int num) {
     return gpio_read(num);
 }
 
+void IRAM gpio_interrupt_handler(uint8_t gpio_num) {
+    struct forth_event event = {
+	.event_type = EVT_GPIO,
+	.event_time_ms = xTaskGetTickCountFromISR() * portTICK_PERIOD_MS,
+	.event_time_us = sdk_system_get_time(),
+	.event_payload = gpio_num,
+    };
+    forth_add_event_isr(&event);
+}
+
 void forth_gpio_set_interrupt(int num, int int_type) {
-    gpio_set_interrupt(num, int_type);
+    gpio_set_interrupt(num, int_type, gpio_interrupt_handler);
 }
 
 void forth_pwm_freq(int freq) {
@@ -35,25 +45,6 @@ void forth_pwm_freq(int freq) {
 
 void forth_pwm_duty(int duty) {
     pwm_set_duty((uint16_t) (duty & 0xFFFF));
-}
-
-void __attribute__((weak)) IRAM gpio_interrupt_handler(void) {
-    uint32_t status_reg = GPIO.STATUS;
-    GPIO.STATUS_CLEAR = status_reg;   
-    uint8_t gpio_idx;
-    while ((gpio_idx = __builtin_ffs(status_reg))) {
-        gpio_idx--;
-        status_reg &= ~BIT(gpio_idx);
-        if (FIELD2VAL(GPIO_CONF_INTTYPE, GPIO.CONF[gpio_idx])) {
-            struct forth_event event = {
-                .event_type = EVT_GPIO,
-                .event_time_ms = xTaskGetTickCountFromISR() * portTICK_RATE_MS,
-                .event_time_us = sdk_system_get_time(),
-                .event_payload = gpio_idx
-            };
-            forth_add_event_isr(&event);
-        }
-    }
 }
 
 #define WAIT_FOR_PIN_STATE(state) \
