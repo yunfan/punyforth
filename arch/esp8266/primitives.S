@@ -97,23 +97,23 @@ defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */
 
 defprimitive "+",1,plus,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     add a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "-",1,minus,REGULAR
     DPOP a9
-    DPOP a8
+    READTOS1 a8
     sub a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "*",1,multiply,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     mull a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 .literal_position
@@ -147,10 +147,10 @@ defprimitive "xor",3,xor,REGULAR
     NEXT
 
 defprimitive "invert",6,invert,REGULAR
-    DPOP a8
+    READTOS1 a8
     movi a9, TRUE
     xor a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "lshift",6,lshift,REGULAR

@@ -123,11 +123,11 @@ defprimitive "1-",2,dec,REGULAR
     NEXT
 
 defprimitive "0=",2,eq0,REGULAR
-    DPOP a8
+    READTOS1 a8
     movi a9, FALSE
     movi a10, TRUE
     moveqz a9, a10, a8 // move a10 to a9 if a8 is zero
-    DPUSH a9
+    WRTETOS1 a9
     NEXT
 
 defprimitive "0<>",3,noteq0,REGULAR
