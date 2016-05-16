@@ -50,9 +50,6 @@
     s32i \reg, a15, 3*CELLS
 .endm
 
-defprimitive "nop",3,nop,REGULAR /* ( -- ) */
-    NEXT
-
 defprimitive "dup",3,dup,REGULAR /* ( a -- a a ) */
     READTOS1 a8
     DPUSH a8
