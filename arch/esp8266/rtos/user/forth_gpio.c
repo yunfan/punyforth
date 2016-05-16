@@ -25,18 +25,18 @@ int forth_gpio_read(int num) {
     return gpio_read(num);
 }
 
-void IRAM gpio_interrupt_handler(uint8_t gpio_num) {
+void IRAM gpio_intr_handler(uint8_t gpio_num) {
     struct forth_event event = {
 	.event_type = EVT_GPIO,
 	.event_time_ms = xTaskGetTickCountFromISR() * portTICK_PERIOD_MS,
 	.event_time_us = sdk_system_get_time(),
-	.event_payload = gpio_num,
+	.event_payload = (int) gpio_num,
     };
     forth_add_event_isr(&event);
 }
 
 void forth_gpio_set_interrupt(int num, int int_type) {
-    gpio_set_interrupt(num, int_type, gpio_interrupt_handler);
+    gpio_set_interrupt(num, int_type, gpio_intr_handler);
 }
 
 void forth_pwm_freq(int freq) {
