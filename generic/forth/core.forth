@@ -272,7 +272,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     while
        dup
        ['] link>name ['] link>len bi 
-       @ type-counted cr
+       type-counted cr
        @
     repeat 
     drop ;   
