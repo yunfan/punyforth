@@ -242,8 +242,8 @@ find_try_next_word:                                                             
     lbl find_try_next_word
 find_found:                                                         // found matching word, return its mode and xt
     .int xt_drop, xt_drop                                           // ( link )
-    .int xt_dup, xt_link2xt 
-    .int xt_swap, xt_link2flags                                     // ( xt flags )
+    .int xt_dup, xt_link2flags
+    .int xt_swap, xt_link2xt                                     // ( flags xt )
     .int xt_exit
 find_not_found:
     .int xt_drop, xt_drop, xt_drop

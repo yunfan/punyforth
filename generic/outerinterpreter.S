@@ -6,9 +6,9 @@
 outer_interpreter:
     .int xt_word                           // ( a len )
     .int xt_dup2
-    .int xt_find, xt_dup, xt_branch0       // dictionary lookup returns (xt mode) or 0 if not found
+    .int xt_find, xt_dup, xt_branch0       // dictionary lookup returns (mode xt) or 0 if not found
     lbl not_found_in_dictionary
-    .int xt_btick, IMMEDIATE, xt_noteq, xt_branch0
+    .int xt_swap, xt_btick, IMMEDIATE, xt_noteq, xt_branch0
     lbl interpret                          // if immediate word then interpet even if we're in compilation mode
     .int xt_state, xt_fetch                // if non immediate word, interpret or compile depending on state    
     .int xt_branch0

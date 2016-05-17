@@ -6,10 +6,11 @@
 .set STATE_COMPILE,1
 .set STATE_INTERPRET,0
 .set IMMEDIATE,128
-.set REGULAR,64
+.set REGULAR,0
 .set TRUE,-1
 .set FALSE,0
 .set INPUT_BUFFER_SIZE,128
+.set MAX_WORD_LEN,63
 
 STACK_ORIG:   .int 0
 var0:         .int 0
