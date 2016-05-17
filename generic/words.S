@@ -521,6 +521,10 @@ defword "link>body",9,link2body,REGULAR /* ( a1 -- a2 ) */
     .int xt_link2xt, xt_cell, xt_plus
     .int xt_exit
 
+defword "immediate?",10,is_immediate,REGULAR /* link -- bool */
+    .int xt_link2flags, xt_btick, IMMEDIATE, xt_eq
+    .int xt_exit
+
 FINAL_WORD:    
 defword "immediate",9,immediate,REGULAR
     .int xt_btick, IMMEDIATE, xt_lastword, xt_link2len, xt_or
