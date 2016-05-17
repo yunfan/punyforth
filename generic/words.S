@@ -222,7 +222,7 @@ compare_length_mismatch:
     .int xt_btick, FALSE
     .int xt_exit
 
-defword "find",4,find,REGULAR /* ( a len -- xt mode | 0 ) */
+defword "find",4,find,REGULAR /* ( a len -- link | 0 ) */
     .int xt_lastword
 find_try_next_word:                                                               // (a1 len1 link)    
     .int xt_dup
@@ -240,11 +240,9 @@ find_try_next_word:                                                             
     .int xt_fetch
     .int xt_branch
     lbl find_try_next_word
-find_found:                                                         // found matching word, return its mode and xt
-    .int xt_drop, xt_drop                                           // ( link )
-    .int xt_dup, xt_link2flags
-    .int xt_swap, xt_link2xt                                     // ( flags xt )
-    .int xt_exit
+find_found:
+    .int xt_drop, xt_drop
+    .int xt_exit                                                    // return the dictionary link
 find_not_found:
     .int xt_drop, xt_drop, xt_drop
     .int xt_btick, 0
