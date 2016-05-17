@@ -389,6 +389,7 @@ word_boundary:
     .int xt_exit
 word_too_long:
     .int xt_btick, _M word_overflow_error, xt_type
+    .int xt_typecounted, xt_btick, 10, xt_emit
     .int xt_abort
 
 defword ":",1,colon,REGULAR
