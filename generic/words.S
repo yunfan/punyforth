@@ -384,7 +384,12 @@ word_next_char:
 word_boundary:
     .int xt_drop
     .int xt_dup, xt_toin, xt_fetch, xt_swap, xt_minus, xt_dec                    // word length
+    .int xt_dup, xt_btick, MAX_WORD_LEN, xt_lte, xt_branch0
+    lbl word_too_long
     .int xt_exit
+word_too_long:
+    .int xt_btick, _M word_overflow_error, xt_type
+    .int xt_abort
 
 defword ":",1,colon,REGULAR
     .int xt_closebracket 
