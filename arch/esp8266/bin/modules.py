@@ -1,10 +1,6 @@
 import sys, os
 from compiler.ast import flatten
 
-FLASH_SPACE = 180*1024
-UBER_NAME = 'uber.forth'
-MAX_LINE_LEN = 127
-
 available_modules = {
     'core' : '../../../generic/forth/core.forth',
     'punit' : '../../../generic/forth/punit.forth',
@@ -65,13 +61,6 @@ dependencies = {
     'example-buzzer-starwars' : ['gpio'],
 }
 
-def print_help():
-    print('Usage: %s [--app /path/to/app.forth] [modul1] [modul2] .. [modulN] ' % (os.path.basename(sys.argv[0])))
-    print('Available modules:')
-    for each in available_modules.keys():
-        print('    * ' + each)
-    sys.exit()
-
 def collect_dependecies(modules):
     def _deps(modules, result=[]):
         for mod in modules:
@@ -98,40 +87,103 @@ def module_paths(modules):
         print('Module not found: ' + str(e))
         sys.exit()
       
-def uber_module(modules, app=None):
-    contents = [open(each).read() for each in module_paths(modules)]
-    if app:
-        with open(app) as f: contents.append(f.read())
-    contents.append('\nstack-show ')
-    contents.append(chr(0))
-    return '\n'.join(contents)
+class Uber:
+    def __init__(self, modules, app, block_format, max_line_len):
+        self.modules = modules
+        self.app = app
+        self.block_format = block_format
+        self.max_line_len = max_line_len
       
-def check_uber(uber):
-    if len(uber) > FLASH_SPACE:
-        print('Not enough space in flash')
+    def make(self, output_file, flash_space):
+        uber = self.generate()
+        if self.block_format: uber = self.pad(uber)
+        self.check(uber, flash_space)
+        self.save(uber, output_file)
+
+    def generate(self):
+        contents = [open(each).read() for each in module_paths(self.modules)]
+        if self.app:
+            with open(self.app) as f: contents.append(f.read())
+        contents.append('\nstack-show ')
+        contents.append(chr(0))
+        return '\n'.join(contents)
+    
+    def pad(self, uber):
+        """ This is for the block screen editor. A screen = 128 columns and 32 rows """
+        def pad_line(line):
+            return line + (' ' * (self.max_line_len - len(line)))
+        return '\n'.join([pad_line(line) for line in uber.split('\n')])
+                 
+    def check(self, uber, flash_space):
+        if len(uber) > flash_space:
+            print('Not enough space in flash')
+            sys.exit()
+        if any(len(line) > self.max_line_len for line in uber.split('\n')):
+            print('Input overflow at line: "%s"' % [line for line in uber.split('\n') if len(line) >= self.max_line_len][0])
+            sys.exit()
+
+    def save(self, uber, output_file):
+        with open(output_file, 'wt') as f: f.write(uber)
+
+class Help:
+    def __init__(self, available_modules):
+        self.available_modules = available_modules
+
+    def show(self):
+        print('Usage: modules.py [--block-format] [--app /path/to/app.forth] [modul1] [modul2] .. [modulN] ')
+        print('Available modules:')
+        for each in self.available_modules.keys():
+            print('    * ' + each)
         sys.exit()
-    if any(len(line) >= MAX_LINE_LEN for line in uber.split('\n')):
-        print('Input overflow at line: "%s"' % [line for line in uber.split('\n') if len(line) >= MAX_LINE_LEN][0])
-        sys.exit()
+    
+class CommandLine:
+    @classmethod
+    def parse(self, argv, help):
+        if len(argv) < 2: help.show()
+        block_format = self.check_block_format(argv)
+        app, chosen_modules = self.parse_params(argv)
+        return CommandLine(chosen_modules, app, block_format, help)
+    
+    @classmethod
+    def check_block_format(self, argv):
+        if '--block-format' in argv:
+            argv.remove('--block-format')
+            return True
+        else:
+            return False
+    
+    @classmethod
+    def parse_params(self, argv):
+        return (argv[2], argv[3:]) if argv[1] == '--app' else (None, argv[1:])
+    
+    def __init__(self, chosen_modules, app, block_format, help):
+        self.chosen_modules = chosen_modules
+        self.app = app
+        self.block_format = block_format
+        self.help = help
+
+    def validate(self, available_modules):
+        print(self)
+        if self.app and not os.path.isfile(self.app):
+            print('Application %s does not exist' % self.app)
+            self.help.show()    
+        if not set(self.chosen_modules).issubset(available_modules.keys()):
+            print('No such module')
+            self.help.show()
         
+    def __str__(self):
+        return 'Chosen modules %s. App: %s. Block format: %s' % (self.chosen_modules, self.app, self.block_format)
+    
+UBER_NAME = 'uber.forth'
+    
 if __name__ == '__main__':
-    if os.path.isfile(UBER_NAME): os.remove(UBER_NAME)
-    if len(sys.argv) == 1: print_help()
-    if sys.argv[1] == '--app':
-        app = sys.argv[2]        
-        if not os.path.isfile(app):
-            print('Application %s does not exist' % app)
-            print_help()
-        print("Application: %s" % app)            
-        chosen_modules = sys.argv[3:]
-    else:
-        app = None
-        chosen_modules = sys.argv[1:]
-    print('Chosen modules %s' % chosen_modules)
-    if not set(chosen_modules).issubset(available_modules.keys()):
-        print('No such module')
-        print_help()
-    uber = uber_module(collect_dependecies(chosen_modules), app=app)
-    check_uber(uber)
-    with open(UBER_NAME, 'wt') as f: f.write(uber)
+    if os.path.isfile(UBER_NAME): os.remove(UBER_NAME)    
+    command = CommandLine.parse(sys.argv, Help(available_modules))    
+    command.validate(available_modules)
+    uber = Uber(
+        collect_dependecies(command.chosen_modules), 
+        app=command.app, 
+        block_format=command.block_format,
+        max_line_len=128 - len(os.linesep))
+    uber.make(output_file=UBER_NAME, flash_space=180*1024)
     print('%s ready. Use flash <COMPORT> to install' % UBER_NAME)
