@@ -4,6 +4,10 @@
 #include "dhcpserver.h"
 #include "punycommons.h"
 
+
+// workaround see github.com/SuperHouse/esp-open-rtos/issues/140
+void sdk_hostap_handle_timer(void *cnx_node) { } 
+
 int forth_wifi_set_opmode(int mode) {
     return sdk_wifi_set_opmode(mode);
 }
