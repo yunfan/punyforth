@@ -195,6 +195,11 @@ defprimitive "gpio-read",9,gpioread,REGULAR
     DPUSH a2
     NEXT
 
+defprimitive "adc-read",8,adcread,REGULAR
+    CCALL sdk_system_adc_read
+    DPUSH a2
+    NEXT
+
 defprimitive "pwm-init",8,pwminit,REGULAR
     DPOP a2                     // pins array
     DPOP a3                     // number of pins in array
