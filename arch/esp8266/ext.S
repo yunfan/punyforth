@@ -490,3 +490,8 @@ defprimitive "pulse-in",8,pulse_in,REGULAR
     CCALL forth_pulse_in
     DPUSH a2                   // pulse len us
     NEXT	
+
+defprimitive "r@",2,rfetch,REGULAR
+    l32i a2, a13, 0 
+    DPUSH a2
+    NEXT
