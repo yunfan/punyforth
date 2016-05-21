@@ -7,7 +7,8 @@ port = serial.Serial(
     baudrate=115200,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,	
-    bytesize=serial.EIGHTBITS)
+    bytesize=serial.EIGHTBITS,
+    timeout=5)
 
 if len(sys.argv) < 2:
     print('Usage %s <file1.forth> ... [fileN.forth]' % (sys.argv[0]))
@@ -20,6 +21,7 @@ def upload(path):
             if not line: continue
             if len(line) > 128:
                 raise 'Line is too long: %s' % (line)
+            #print('sending: ' + line)
             port.write(line)        
             port.write('\n')
             time.sleep(0.05)
