@@ -144,6 +144,10 @@ variable handler 0 handler !       \ stores the address of the nearest exception
       create cells allot
       does> swap cells + ;
 
+: byte-array ( size -- ) ( index -- addr )
+    create allot
+    does> swap + ;
+    
 : struct 0 ;
 : field create over , + does> @ + ;
 
