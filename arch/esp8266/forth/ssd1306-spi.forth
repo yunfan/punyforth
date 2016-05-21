@@ -76,13 +76,13 @@
 
 127 constant DEFAULT_CONTRAST
 
-128 constant WIDTH
-64  constant HEIGHT
+128 constant DISPLAY_WIDTH
+64  constant DISPLAY_HEIGHT
 
 6000 constant SSD1306_ERROR
 6001 constant SSD1306_WRITE_ERROR
 
-WIDTH HEIGHT * 8 / constant BUFFER_SIZE
+DISPLAY_WIDTH DISPLAY_HEIGHT * 8 / constant BUFFER_SIZE
 
 \ display buffers
 BUFFER_SIZE byte-array screen-ary1
@@ -109,12 +109,12 @@ variable var-screen-ary2
         SSD1306_WRITE_ERROR throw 
     then ;
 
-: write-command ( cmd -- ) 
+: write-command ( cmd -- | SSD1306_WRITE_ERROR ) 
     DC LOW gpio-write
     BUS spi-send8 
     check-write-result ;
 
-: write-data ( data -- ) 
+: write-data ( data -- | SSD1306_WRITE_ERROR ) 
     DC HIGH gpio-write
     BUS spi-send8 
     check-write-result ;
@@ -171,7 +171,7 @@ variable var-screen-ary2
     dup 
     y>bitmask -rot
     3 rshift            \  8 /
-    7 lshift + ;        \  WIDTH * +
+    7 lshift + ;        \  DISPLAY_WIDTH * +
 
 : or! ( value addr -- )
     tuck c@ or swap c! ;
@@ -214,7 +214,7 @@ variable var-screen-ary2
     swap 127 and 
     swap 63 and ;
 
-: display-init
+: display-init ( -- | SSD1306_ERROR )
     display-setup-wiring
     TRUE SPI_BIG_ENDIAN TRUE SPI_FREQ_DIV_4M SPI_MODE0 BUS 
     spi-init 1 <> if
