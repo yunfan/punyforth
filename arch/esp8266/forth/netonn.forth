@@ -67,4 +67,4 @@ marker -netconn
     again ;    
               
 : dispose ( netconn -- )
-    netconn-dispose ;    
+    netconn-dispose ;
