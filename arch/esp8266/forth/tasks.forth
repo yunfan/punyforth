@@ -114,6 +114,59 @@ MAIN_TASK current-task!
     ['] pause xpause ! ;
 
 : single ( -- ) \ switch to signle-task mode
-    0 xpause ! ;
+    0 xpause ! 
+    \ TODO make pause NOOP
+    ;
+
+struct
+    cell field .index
+    cell field .size
+constant BlockingQueue
+
+: blocking-queue: ( size ) ( -- queue )
+    create
+        here 
+        dup BlockingQueue + allot
+          tuck .size !
+        0 over .index !        
+        drop
+    does> ;
+
+: blocking-queue-full? ( queue -- bool )
+    ['] .index ['] .size bi 
+    ['] @ bi@ >= ;
+
+: blocking-queue-empty? ( queue -- bool )
+    .index @ 0= ;
+
+: blocking-queue-slot ( index queue -- adr )
+    BlockingQueue + swap cells + ;
+
+: blocking-queue-at ( index queue -- element )
+    blocking-queue-slot @ ;
+
+: blocking-queue-at-next ( queue -- adr )
+    dup .index @     
+    swap blocking-queue-slot ;
+
+: blocking-enqueue ( element queue -- )
+    begin
+        dup blocking-queue-full? 
+    while
+        pause 
+    repeat
+    tuck
+    blocking-queue-at-next !
+    .index 1 swap +! ;
+
+: blocking-dequeue ( queue -- element )
+    begin
+        dup blocking-queue-empty?
+    while
+        pause
+    repeat
+    dup
+    .index -1 swap +! 
+    blocking-queue-at-next @ ;    
 
 multi    
