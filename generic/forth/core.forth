@@ -107,9 +107,13 @@
 : does> r> lastword link>body ! ;
 
 : constant create , does> @ ; 
-: variable create 0 , does> ; 
+: variable! create , does> ;
+: variable 0 variable! ; 
 
 -1 constant TRUE 0 constant FALSE
+
+: +! ( n var -- )
+    dup @ rot + swap ! ;
 
 : default-exception-handler ( code -- )
     cr 

@@ -56,7 +56,7 @@ new-rect r1
        0 do 10 factorial drop loop
        time swap - ;
 
-variable test_count
+0 variable! test_count
 variable test_var1 variable test_var2
 variable stored_dp 
 dp stored_dp !
@@ -144,6 +144,9 @@ marker -test-test
    5 0 do i test_numbers @ i = assert loop
    3 r1 width ! 5 r1 height !
    r1 area 15 = assert
+   12 test_var1 ! test_var1 @ 12 = assert
+   3 test_var1 +! test_var1 @ 15 = assert
+
    sp@ test_var1 !
    -1 ['] factorial catch 1024 = assert
    1 ['] nested-throw2 catch 30 = assert
