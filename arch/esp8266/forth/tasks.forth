@@ -7,8 +7,8 @@ marker -tasks
 1 constant SKIPPED
 
 \ available resources per task
-128 constant TASK_STACK_SIZE
-64  constant TASK_RSTACK_SIZE
+128 variable! task_stack_size
+64  variable! task_rstack_size
 
 variable var-last-task
 0 var-last-task !
@@ -38,10 +38,10 @@ MAIN_TASK last-task!
 MAIN_TASK current-task!
 
 : alloc-data-stack ( -- a )
-    TASK_STACK_SIZE allot here ;
+    task_stack_size @ allot here ;
 
 : alloc-return-stack ( -- a )
-    TASK_RSTACK_SIZE allot here ;
+    task_rstack_size @ allot here ;
 
 : task: ( "name" ) ( -- task )
     create
@@ -99,14 +99,21 @@ MAIN_TASK current-task!
 : semaphore: ( -- ) variable! ;
 : mutex: ( -- ) 1 semaphore: ;
 
-: lock ( var -- )
+: wait ( semaphore -- )
     begin
         pause
         dup @ 0<>
     until
     -1 swap +! ;
 
-: unlock ( var -- )
-    1 swap +! ;
+: signal ( semaphore -- )
+    1 swap +! 
+    pause ;
  
-' pause xpause !
+: multi ( -- ) \ switch to multi-task mode
+    ['] pause xpause ! ;
+
+: single ( -- ) \ switch to signle-task mode
+    0 xpause ! ;
+
+multi    
