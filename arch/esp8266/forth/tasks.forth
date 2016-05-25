@@ -93,7 +93,20 @@ MAIN_TASK current-task!
     SKIPPED swap .status ! 
     task-choose-next task-run ;
 
-: stop-active ( -- )
+: deactivate ( -- )
     current-task stop ;
 
+: semaphore: ( -- ) variable! ;
+: mutex: ( -- ) 1 semaphore: ;
+
+: lock ( var -- )
+    begin
+        pause
+        dup @ 0<>
+    until
+    -1 swap +! ;
+
+: unlock ( var -- )
+    1 swap +! ;
+ 
 ' pause xpause !
