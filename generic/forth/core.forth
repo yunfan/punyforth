@@ -153,7 +153,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     does> swap + ;
     
 : struct 0 ;
-: field create over , + does> @ + ;
+: field: create over , + does> @ + ;
 
 : ' ( -- xt | throws:10 ) \ find the xt of the next word in the inputstream
     word find dup

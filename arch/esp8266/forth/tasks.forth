@@ -2,46 +2,37 @@ marker -tasks
 
 4000 constant TASK_ERROR
 
-\ Task status
 0 constant PAUSED
 1 constant SKIPPED
 
-\ available resources per task
-128 variable! task_stack_size
-64  variable! task_rstack_size
+struct
+    cell field: .next
+    cell field: .status
+    cell field: .sp
+    cell field: .rp
+    cell field: .ip
+constant Task
 
-variable var-last-task
-0 var-last-task !
+here Task allot constant INTERPRETER
+INTERPRETER INTERPRETER .next !
+SKIPPED INTERPRETER .status !
+
+128 variable! var-task-stack-size
+64  variable! var-task-rstack-size
+INTERPRETER variable! var-last-task
+INTERPRETER variable! var-current-task
+variable var-xt-pause
 
 : last-task ( -- task ) var-last-task @ ;
 : last-task! ( task -- ) var-last-task ! ;
-
-variable var-current-task
-0 var-current-task !
-
 : current-task ( -- task ) var-current-task @ ;
 : current-task! ( task -- ) var-current-task ! ;
 
-struct
-    cell field .next
-    cell field .status
-    cell field .sp
-    cell field .rp
-    cell field .ip
-constant Task
-
-\ initialize main task
-here Task allot constant MAIN_TASK
-MAIN_TASK MAIN_TASK .next !
-SKIPPED MAIN_TASK .status !
-MAIN_TASK last-task!
-MAIN_TASK current-task!
-
 : alloc-data-stack ( -- a )
-    task_stack_size @ allot here ;
+    var-task-stack-size @ allot here ;
 
 : alloc-return-stack ( -- a )
-    task_rstack_size @ allot here ;
+    var-task-rstack-size @ allot here ;
 
 : task: ( "name" ) ( -- task )
     create
@@ -77,13 +68,17 @@ MAIN_TASK current-task!
     SKIPPED current-task .status !
     task-restore-context ;
 
-: pause ( -- )
+: pause-multi ( -- )
     PAUSED current-task .status !
     sp@ r> rp@ task-save-context
     task-choose-next task-run ;
 
+: pause-single ( -- ) ;
+
+: pause ( -- )
+    var-xt-pause @ execute ;
+
 : activate ( task -- )
-    \ TODO if already active
     r> over .ip !
     PAUSED current-task .status !   \ pause current task
     sp@ cell + r> rp@ task-save-context        
@@ -111,62 +106,59 @@ MAIN_TASK current-task!
     pause ;
  
 : multi ( -- ) \ switch to multi-task mode
-    ['] pause xpause ! ;
+    ['] pause xpause !
+    ['] pause-multi var-xt-pause ! ;
 
 : single ( -- ) \ switch to signle-task mode
     0 xpause ! 
-    \ TODO make pause NOOP
-    ;
+    ['] pause-single var-xt-pause ! ;
 
 struct
-    cell field .index
-    cell field .size
-constant BlockingQueue
+    cell field: .index
+    cell field: .size
+constant Mailbox
 
-: blocking-queue: ( size ) ( -- queue )
+: mailbox: ( size ) ( -- mailbox )
     create
         here 
-        dup BlockingQueue + allot
+        dup Mailbox + allot
           tuck .size !
         0 over .index !        
         drop
     does> ;
 
-: blocking-queue-full? ( queue -- bool )
+: mailbox-full? ( mailbox -- bool )
     ['] .index ['] .size bi 
     ['] @ bi@ >= ;
 
-: blocking-queue-empty? ( queue -- bool )
+: mailbox-empty? ( mailbox -- bool )
     .index @ 0= ;
 
-: blocking-queue-slot ( index queue -- adr )
-    BlockingQueue + swap cells + ;
+: mailbox-slot ( index mailbox -- adr )
+    Mailbox + swap cells + ;
 
-: blocking-queue-at ( index queue -- element )
-    blocking-queue-slot @ ;
-
-: blocking-queue-at-next ( queue -- adr )
+: mailbox-next-slot ( mailbox -- adr )
     dup .index @     
-    swap blocking-queue-slot ;
+    swap mailbox-slot ;
 
-: blocking-enqueue ( element queue -- )
+: >mailbox ( element mailbox -- )
     begin
-        dup blocking-queue-full? 
+        dup mailbox-full? 
     while
         pause 
     repeat
     tuck
-    blocking-queue-at-next !
+    mailbox-next-slot !
     .index 1 swap +! ;
 
-: blocking-dequeue ( queue -- element )
+: mailbox> ( mailbox -- element )
     begin
-        dup blocking-queue-empty?
+        dup mailbox-empty?
     while
         pause
     repeat
     dup
     .index -1 swap +! 
-    blocking-queue-at-next @ ;    
+    mailbox-next-slot @ ;
 
-multi    
+multi
