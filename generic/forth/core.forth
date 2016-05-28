@@ -112,6 +112,11 @@
 
 -1 constant TRUE 0 constant FALSE
 
+85 constant UNDERFLOW
+86 constant OVERFLOW
+65 constant ASSERTION
+40 constant NOTFOUND
+
 : +! ( n var -- )
     dup @ rot + swap ! ;
 
@@ -155,10 +160,10 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : struct 0 ;
 : field: create over , + does> @ + ;
 
-: ' ( -- xt | throws:10 ) \ find the xt of the next word in the inputstream
+: ' ( -- xt | throws:NOTFOUND ) \ find the xt of the next word in the inputstream
     word find dup
     0= if 
-        10 throw
+        NOTFOUND throw
     else 
         link>xt 
     then ;
@@ -167,7 +172,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 ' default-exception-handler on-uncaught-exception !
 
-: [compile] ( -- | throws:10 ) ' , ; immediate
+: [compile] ( -- | throws:NOTFOUND ) ' , ; immediate
 
 : [str ( -- address-to-fill-in )
     XT_LIT , here 3 cells + ,       \ compile return value: address of string
@@ -272,6 +277,8 @@ variable handler 0 handler !       \ stores the address of the nearest exception
         @ dup 
     @ var-lastword !
     var-dp ! ;
+
+: assert ( bool -- | throws:ASSERTION ) invert if ASSERTION throw then ;
 
 : print-words ( -- )
     lastword

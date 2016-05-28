@@ -113,52 +113,22 @@ variable var-xt-pause
     0 xpause ! 
     ['] pause-single var-xt-pause ! ;
 
-struct
-    cell field: .index
-    cell field: .size
-constant Mailbox
+: mailbox: ( size ) ( -- mailbox ) ringbuffer: ;
 
-: mailbox: ( size ) ( -- mailbox )
-    create
-        here 
-        dup Mailbox + allot
-          tuck .size !
-        0 over .index !        
-        drop
-    does> ;
-
-: mailbox-full? ( mailbox -- bool )
-    ['] .index ['] .size bi 
-    ['] @ bi@ >= ;
-
-: mailbox-empty? ( mailbox -- bool )
-    .index @ 0= ;
-
-: mailbox-slot ( index mailbox -- adr )
-    Mailbox + swap cells + ;
-
-: mailbox-next-slot ( mailbox -- adr )
-    dup .index @     
-    swap mailbox-slot ;
-
-: >mailbox ( element mailbox -- )
+: send ( element mailbox -- )
     begin
-        dup mailbox-full? 
+        dup full? 
     while
         pause 
     repeat
-    tuck
-    mailbox-next-slot !
-    .index 1 swap +! ;
+    enqueue ;
 
-: mailbox> ( mailbox -- element )
+: receive ( mailbox -- element )
     begin
-        dup mailbox-empty?
+        dup empty?
     while
         pause
     repeat
-    dup
-    .index -1 swap +! 
-    mailbox-next-slot @ ;
+    dequeue ;
 
 multi
