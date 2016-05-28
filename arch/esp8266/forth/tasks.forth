@@ -1,7 +1,5 @@
 marker -tasks
 
-4000 constant TASK_ERROR
-
 0 constant PAUSED
 1 constant SKIPPED
 
@@ -130,5 +128,3 @@ variable var-xt-pause
         pause
     repeat
     dequeue ;
-
-multi
