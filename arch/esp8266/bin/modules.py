@@ -12,7 +12,7 @@ available_modules = {
     'netconn' : '../forth/netconn.forth',
     'tasks' : '../forth/tasks.forth',
     'example-game-of-life' : '../forth/examples/example-game-of-life.forth',
-    'exampe-consumer' : '../forth/examples/exampe-consumer.forth'
+    'example-consumer' : '../forth/examples/example-consumer.forth'
 }
 
 dependencies = {

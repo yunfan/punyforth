@@ -14,9 +14,7 @@ task: task-consumer
     again
     deactivate ;                        \ deactivate task
 
-multi                                   \ switch to multitask mode
-
-task-consumer consumer                  \ run the consumer
-
-123 mailbox1 send                       \ send some numbers to the consumer
-456 mailbox1 send
+\ multi                                   \ switch to multitask mode
+\ task-consumer consumer                  \ run the consumer
+\ 123 mailbox1 send                       \ send some numbers to the consumer
+\ 456 mailbox1 send
