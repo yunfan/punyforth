@@ -293,6 +293,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     drop ;   
 
 : stack_prompt ( -- ) 
+    depth 0< if UNDERFLOW throw then
     cr .s ." % " ;
 
 ' stack_prompt prompt !
