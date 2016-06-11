@@ -21,7 +21,7 @@ dependencies = {
     'gpio' : ['core'],
     'wifi' : ['core'],
     'ssd1306-spi' : ['core', 'gpio'],
-    'netconn' : ['core'],
+    'netconn' : ['core', 'tasks'],
     'tasks' : ['core', 'ringbuf'],    
     'example-game-of-life' : ['core', 'ssd1306-spi'],
     'example-consumer' : ['core', 'tasks']
