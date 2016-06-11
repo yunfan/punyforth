@@ -12,7 +12,8 @@ available_modules = {
     'netconn' : '../forth/netconn.forth',
     'tasks' : '../forth/tasks.forth',
     'example-game-of-life' : '../forth/examples/example-game-of-life.forth',
-    'example-consumer' : '../forth/examples/example-consumer.forth'
+    'example-consumer' : '../forth/examples/example-consumer.forth',
+    'example-ircbot' : '../forth/examples/example-ircbot.forth'
 }
 
 dependencies = {
@@ -24,7 +25,8 @@ dependencies = {
     'netconn' : ['core', 'tasks'],
     'tasks' : ['core', 'ringbuf'],    
     'example-game-of-life' : ['core', 'ssd1306-spi'],
-    'example-consumer' : ['core', 'tasks']
+    'example-consumer' : ['core', 'tasks'],
+    'example-ircbot' : ['core', 'netconn', 'tasks', 'gpio']
 }
 
 def print_help():
