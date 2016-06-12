@@ -31,7 +31,7 @@ SOCKET join
     dup s" PING " str-starts-with if
         SOCKET s" PONG" writeln
         random 200 % 0= if
-            greet
+            SOCKET greet
         then
     then
     s' PRIVMSG' str-includes if
