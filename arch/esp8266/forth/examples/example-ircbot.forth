@@ -8,10 +8,10 @@ marker -ircbot
         s" USER hodor189 hodor189 bla :hodor189" writeln ;
     
 : join ( netconn -- ) 
-    s" JOIN #takarodjki" writeln ;
+    s" JOIN #somechan" writeln ;
 
 : greet ( netconn -- )
-    s" PRIVMSG #takarodjki :Hodor? ..hoodor!" writeln ;
+    s" PRIVMSG #somechan :Hodor? ..hoodor!" writeln ;
 
 : quit ( netconn -- )
     s" QUIT :hodor" writeln ;
