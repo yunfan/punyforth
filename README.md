@@ -95,7 +95,7 @@ The else part can be omitted.
 Punyforth also supports switch-case like flow control logic as shown in the following example.
 
 ```forth
-: day ( code --)
+: day ( n -- )
   case
     1 of ." Monday" endof
     2 of ." Tuesday" endof
