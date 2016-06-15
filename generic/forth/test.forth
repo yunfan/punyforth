@@ -16,7 +16,7 @@ marker -tests
            then
        then ;
 
-: ifactorial ( n -- n! )
+: factorial2 ( n -- n! )
     1 2 rot
     begin
         2dup <=
@@ -26,6 +26,13 @@ marker -tests
         1+ rot
     repeat
     2drop ;
+
+: factorial3 ( n -- n! )
+    case
+        0 of 1 endof
+	1 of 1 endof
+	dup 1- factorial3 *
+    endcase ;
 
 : 'F' [ char F ] literal ; 
 
@@ -129,7 +136,8 @@ marker -test-test
 
    0 8 2 do 9 3 do i j + + loop loop 360 = assert
    9 factorial 362880 = assert
-   8 factorial 8 ifactorial = assert
+   8 factorial 8 factorial2 = assert
+   9 factorial 9 factorial3 = assert
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 = assert
    1 0 or 1 = assert 0 1 or 1 = assert
    1 1 or 1 = assert 0 0 or 0 = assert
