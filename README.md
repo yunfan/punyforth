@@ -92,6 +92,8 @@ The else part can be omitted.
 
 #### Case statement
 
+Punyforth also supports switch-case like flow control logic as shown in the following example.
+
 ```forth
 : day ( code --)
   case
