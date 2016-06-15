@@ -90,6 +90,36 @@ The else part can be omitted.
 -10 abs . \ prints 10  
 ```
 
+#### Case statement
+
+```forth
+: day ( code --)
+	case
+		1 of
+			." Monday"
+		endof
+		2 of
+			." Tuesday"
+		endof
+		3 of
+			." Wednesday"
+		endof
+		4 of
+			." Thursday"
+		endof
+		5 of
+			." Friday"
+		endof
+		6 of
+			." Saturday"
+		endof
+		7 of
+			." Sunday"
+		endof
+		." Unknown day: " .
+endcase ;
+````
+
 #### Count-controlled loops
 
 The *limit* and *start* before the word *do* defines the number of times the loop will run.
