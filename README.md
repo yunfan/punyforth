@@ -117,7 +117,7 @@ The else part can be omitted.
 			." Sunday"
 		endof
 		." Unknown day: " .
-endcase ;
+	endcase ;
 ````
 
 #### Count-controlled loops
