@@ -106,6 +106,29 @@
     ['] branch , resolve-backward-ref 
     resolve-forward-ref ; immediate
 
+: case
+    compile_time_only 
+    0 ; immediate                           \ init branchcounter
+
+: of
+    compile_time_only
+    ['] over , ['] = ,
+    ['] branch0 , prepare-forward-ref 
+    ['] drop , ; immediate  
+
+: endof 
+    compile_time_only
+    swap 1+ swap                            \ increase number of branches
+    ['] branch , prepare-forward-ref swap
+    resolve-forward-ref
+    swap ; immediate                        \ keep branch counter at TOS
+
+: endcase
+    compile_time_only
+    0 do
+        resolve-forward-ref
+    loop ; immediate
+
 : create createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
@@ -300,3 +323,4 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     cr .s ." % " ;
 
 ' stack_prompt prompt !
+

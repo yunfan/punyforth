@@ -147,6 +147,29 @@ marker -test-test
    12 test_var1 ! test_var1 @ 12 = assert
    3 test_var1 +! test_var1 @ 15 = assert
 
+   1 case
+       1 of 10 endof
+       2 of 20 endof
+       3 of 30 endof
+   endcase 10 = assert
+
+   2 case
+       1 of 10 endof
+       2 of 20 endof
+       3 of 30 endof
+   endcase 20 = assert
+
+   3 case
+       1 of 10 endof
+       2 of 20 endof
+       3 of 30 endof
+   endcase 30 = assert
+
+   1 case
+       1 of 2 endof
+       2 of 3 endof
+   endcase 2 = assert
+
    sp@ test_var1 !
    -1 ['] factorial catch 1024 = assert
    1 ['] nested-throw2 catch 30 = assert
