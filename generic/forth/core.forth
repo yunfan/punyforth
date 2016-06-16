@@ -211,28 +211,19 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     dup here swap - cell - swap ! ; \ calculate and store relative address    
 
 : c,-until ( separator -- )
-    dup
-    key dup rot <> if
-        begin 
-        c, dup
-        key dup rot = until
-    then
+    begin
+        key 2dup <>
+    while
+        c,
+    repeat        
     2drop ;                          \ drop last key and separator
 
-: s"
+: str
     state @ 0= if                    \ interpretation mode 
-        here '"' c,-until 0 c,
+        align! here key c,-until 0 c,
     else
-        [str '"' c,-until str]
+        [str key c,-until str]
     then        
- ; immediate
-
-: s'
-    state @ 0= if                    \ interpretation mode 
-        here "'" c,-until 0 c,
-    else
-        [str "'" c,-until str]
-    then
  ; immediate
 
 : (crlf) [str 'cr' c, 'lf' c, str] ; immediate
@@ -278,26 +269,27 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : max ( a b -- max ) 2dup < if nip else drop then ;
 : min ( a b -- min ) 2dup < if drop else nip then ;
 
-: ."
+: print
     state @ 0= if            \ interpretation mode 
+        key                  \ separator   
         begin
-            key dup 34 = if
-                drop exit
-            then
+            key 2dup <>
+        while
             emit
-        again
+        repeat
+        2drop           
     else                     \ compilation mode 
-        [compile] s" ['] type ,
+        [compile] str ['] type ,
     then ; immediate
     
-: .s ( i*x -- i*x )
+: print-stack ( -- )
     depth 0= if exit then
-    ." stack["
+    print "stack["
     0 depth 2 - do 
         sp@ i cells + @ .
     i 0<> if space then
     -1 +loop 
-    ." ] ";
+    print "] ";
 
 : clear-stack ( i*x -- ) 
     depth 0 do drop loop ;
@@ -326,7 +318,8 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 : stack_prompt ( -- ) 
     depth 0< if UNDERFLOW throw then
-    cr .s ." % " ;
+    cr print-stack
+    print "% " ;
 
 ' stack_prompt prompt !
 

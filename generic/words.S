@@ -268,6 +268,10 @@ defword "freemem",7,freemem,REGULAR
     .int xt_btick, _M end_dictionary, xt_dp, xt_minus
     .int xt_exit
 
+defword "align!",6,align_bang,REGULAR /* (  -- ) */
+    .int xt_here, xt_align, xt_var_dp, xt_store
+    .int xt_exit
+
 defword "allot",5,allot,REGULAR /* ( n -- ) */
     .int xt_here, xt_plus, xt_align, xt_var_dp, xt_store
     .int xt_exit

@@ -75,7 +75,7 @@ marker -test-test
        TRUE <> if 'F' emit test_count ? then ;
 
 : selftest ( -- )
-   ." testing"
+   print "testing"
    depth 0= assert
    0 test_count !
    12 3 min 3 = assert
@@ -187,54 +187,54 @@ marker -test-test
    sp@ test_var2 !
    test_var1 @ test_var2 @ = assert
    freemem 16 allot freemem - 16 = assert
-   s" " strlen 0 = assert
-   s" 1" strlen 1 = assert
-   s" 12" strlen 2 = assert
-   s" 1234567" strlen 7 = assert
-   s' """"' strlen 4 = assert
-   s' anystring' 
-   s' '
+   str "" strlen 0 = assert
+   str "1" strlen 1 = assert
+   str "12" strlen 2 = assert
+   str "1234567" strlen 7 = assert
+   str '""""' strlen 4 = assert
+   str 'anystring' 
+   str ''
    str-starts-with TRUE = assert
-   s' '
-   s' '
+   str ''
+   str ''
    str-starts-with TRUE = assert
-   s' abc'
-   s' bc'
+   str 'abc'
+   str 'bc'
    str-starts-with FALSE = assert
-   s' abc'
-   s' ab'
+   str 'abc'
+   str 'ab'
    str-starts-with TRUE = assert
-   s' aabbc'
-   s' aabbc'
+   str 'aabbc'
+   str 'aabbc'
    str-starts-with TRUE = assert
-   s' aabbc'
-   s' aabbcc'
+   str 'aabbc'
+   str 'aabbcc'
    str-starts-with FALSE = assert
-   s' abcxxxx' 
-   s' abc' 
+   str 'abcxxxx' 
+   str 'abc' 
    str-includes TRUE = assert   
-   s' xxabcyy' 
-   s' abc' 
+   str 'xxabcyy' 
+   str 'abc' 
    str-includes TRUE = assert   
-   s' xxabzyy' 
-   s' abc'
+   str 'xxabzyy' 
+   str 'abc'
    str-includes FALSE = assert
-   s' anystring' 
-   s' ' 
+   str 'anystring' 
+   str '' 
    str-includes TRUE = assert   
-   s' xxx'
-   s' xxx' 
+   str 'xxx'
+   str 'xxx' 
    str-includes TRUE = assert   
-   s' abcdef'
-   s' def' 
+   str 'abcdef'
+   str 'def' 
    str-includes TRUE = assert   
-   s' abcdef'
-   s' efg' 
+   str 'abcdef'
+   str 'efg' 
    str-includes FALSE = assert   
    depth 0= assert
    -test-test dp stored_dp @ = assert
-   ." OK " test_count ? cr ; 
+   print "OK " test_count ? cr ; 
 
-' selftest execute ." Punyforth ready" cr
+' selftest execute print "Punyforth ready" cr
 
 -tests
