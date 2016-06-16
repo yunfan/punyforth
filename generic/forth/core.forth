@@ -220,13 +220,19 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     2drop ;                          \ drop last key and separator
 
 : s"
-    compile_time_only
-    [str '"' c,-until str]   
+    state @ 0= if                    \ interpretation mode 
+        here '"' c,-until 0 c,
+    else
+        [str '"' c,-until str]
+    then        
  ; immediate
 
 : s'
-    compile_time_only
-    [str "'" c,-until str]
+    state @ 0= if                    \ interpretation mode 
+        here "'" c,-until 0 c,
+    else
+        [str "'" c,-until str]
+    then
  ; immediate
 
 : (crlf) [str 'cr' c, 'lf' c, str] ; immediate
