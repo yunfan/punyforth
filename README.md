@@ -97,14 +97,14 @@ Punyforth also supports switch-case like flow control logic as shown in the foll
 ```forth
 : day ( n -- )
   case
-    1 of ." Monday" endof
-    2 of ." Tuesday" endof
-    3 of ." Wednesday" endof
-    4 of ." Thursday" endof
-    5 of ." Friday" endof
-    6 of ." Saturday" endof
-    7 of ." Sunday" endof
-    ." Unknown day: " .
+    1 of print "Monday" endof
+    2 of print "Tuesday" endof
+    3 of print "Wednesday" endof
+    4 of print "Thursday" endof
+    5 of print "Friday" endof
+    6 of print "Saturday" endof
+    7 of print "Sunday" endof
+    print "Unknown day: " .
   endcase ;
 ````
 
@@ -211,7 +211,7 @@ For example:
 : test-div ( q d -- r )
   ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
       dup division_by_zero = if     \ error code is 1099 indicating division by zero
-        ." Error: division by zero"
+        print "Error: division by zero"
       else
         throw                       \ there was an other error, rethrow it
       then
@@ -230,7 +230,7 @@ You can modify this behaviour by reassigning the variable *on-uncaught-exception
 
 ```forth
 : my-uncaught-exception-handler ( code -- )
-    cr ." Uncaught exception: " . cr
+    cr print "Uncaught exception: " . cr
     abort ;
     
 ' my-uncaught-exception-handler on-uncaught-exception !
