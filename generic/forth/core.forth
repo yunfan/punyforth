@@ -33,6 +33,7 @@
 : "'" [ char ' ] literal ;
 
 : 'space' ( -- n ) 32 ;
+: 'tab' ( -- n ) 9 ;
 : cr ( -- ) 'cr' emit 'lf' emit ;
 : space ( -- ) 'space' emit ;
 
@@ -219,10 +220,17 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     2drop ;                          \ drop last key and separator
 
 : str
+    begin                            \ determine separator
+        key dup 
+	'space' = over
+	'tab' = or  
+    while
+        drop
+    repeat
     state @ 0= if                    \ interpretation mode 
-        align! here key c,-until 0 c,
+        align! here swap c,-until 0 c,
     else
-        [str key c,-until str]
+        [str swap c,-until str]
     then        
  ; immediate
 
