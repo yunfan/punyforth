@@ -9,7 +9,7 @@ task: task-consumer
     activate                            \ actiavte task
     begin    
         mailbox1 receive .
-        ."  received by consumer" cr
+        print "received by consumer" cr
         pause                           \ allow other tasks to run
     again
     deactivate ;                        \ deactivate task

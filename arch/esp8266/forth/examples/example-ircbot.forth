@@ -1,20 +1,20 @@
 marker -ircbot
 
 : connect ( -- netconn )
-    6667 s" irc.freenode.net" tcp-open ;
+    6667 str "irc.freenode.net" tcp-open ;
     
 : register ( netconn -- )
-    dup s" NICK hodor189"                        writeln
-        s" USER hodor189 hodor189 bla :hodor189" writeln ;
+    dup str "NICK hodor189"                        writeln
+        str "USER hodor189 hodor189 bla :hodor189" writeln ;
     
 : join ( netconn -- ) 
-    s" JOIN #somechan" writeln ;
+    str "JOIN #somechan" writeln ;
 
 : greet ( netconn -- )
-    s" PRIVMSG #somechan :Hodor? ..hoodor!" writeln ;
+    str "PRIVMSG #somechan :Hodor? ..hoodor!" writeln ;
 
 : quit ( netconn -- )
-    s" QUIT :hodor" writeln ;
+    str "QUIT :hodor" writeln ;
     
 2 constant LED
 connect constant SOCKET
@@ -28,13 +28,13 @@ SOCKET join
 : data-received ( buffer length -- )
     counted>asciiz
     dup type
-    dup s" PING " str-starts-with if
-        SOCKET s" PONG" writeln
+    dup str "PING" str-starts-with if
+        SOCKET str "PONG" writeln
         random 200 % 0= if
             SOCKET greet
         then
     then
-    s' PRIVMSG' str-includes if
+    str "PRIVMSG" str-includes if
         LED blink
     then ;
 
