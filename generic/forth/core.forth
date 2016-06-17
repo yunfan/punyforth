@@ -219,14 +219,17 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     repeat        
     2drop ;                          \ drop last key and separator
 
-: str
-    begin                            \ determine separator
+: separator ( -- char )
+    begin
         key dup 
-	'space' = over
-	'tab' = or  
+        'space' = over
+        'tab' = or  
     while
         drop
-    repeat
+    repeat ;
+
+: str
+    separator
     state @ 0= if                    \ interpretation mode 
         align! here swap c,-until 0 c,
     else
@@ -279,7 +282,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 : print
     state @ 0= if            \ interpretation mode 
-        key                  \ separator   
+        separator
         begin
             key 2dup <>
         while
