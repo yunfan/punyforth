@@ -457,8 +457,23 @@ SOCKET write-crlf
 
 Punyforth supports cooperative multitasking which enables users to run more than one task simultaneously. For example one task may wait for input on a socket, while another one receives commands through the serial port. Punyforth never initiates a context switch by its own. Instead, tasks voluntarily yield control periodically using the word *pause*.
 
-
-
 ##### Examples
+
+```forth
+\ create a task for the counter
+task: task-counter
+
+\ this word is executed by the task
+: counter ( task -- )
+    activate                              \ actiavte task
+    100 0 do 
+        i . cr 
+        500 delay
+    loop
+    deactivate ;                          \ deactivate task
+
+multi                                     \ switch to multitask mode
+task-counter counter                      \ run the consumer
+```
 
 #### Misc
