@@ -481,7 +481,7 @@ semaphore mutex wait signal
 
 ##### Mailboxes
 
-Often tasks need to communicate with each other. A mailbox is a fixed size blocking queue where messages can be left for a task.
+Often tasks need to communicate with each other. A mailbox is a fixed size blocking queue where messages can be left for a task. Receiving from an empty mailbox or sending to a full mailbox blocks the current task.
 
 ```forth
 \ create a mailbox with size 5
