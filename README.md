@@ -455,7 +455,22 @@ SOCKET write-crlf
 
 #### Tasks (experimental)
 
-Punyforth supports cooperative multitasking which enables users to run more than one task simultaneously. For example one task may wait for input on a socket, while another one receives commands through the serial port. Punyforth never initiates a context switch by its own. Instead, tasks voluntarily yield control periodically using the word *pause*.
+Punyforth supports cooperative multitasking which enables users to run more than one task simultaneously. For example one task may wait for input on a socket, while another one receives commands through the serial port. Punyforth never initiates a context switch by its own. Instead, tasks voluntarily yield control periodically using the word *pause*. Task are executed in a round robin fashion.
+
+In order to run some code in the background, one must create a new task first, using *task:* parsing word. A tasks can be activated inside a word.
+
+```forth
+task: mytask
+
+: my-word
+  mytask activate
+  [...]
+  pause
+  [...]
+  deactivate
+```
+
+
 
 ##### Examples
 
