@@ -475,6 +475,10 @@ multi
 my-word
 ```
 
+##### Locks
+
+##### Mailboxes
+
 ##### Examples
 
 ```forth
