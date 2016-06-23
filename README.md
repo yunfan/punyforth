@@ -464,17 +464,14 @@ task: mytask
 
 : my-word
   mytask activate
-  [...]
-  pause
-  [...]
+  [...] pause [...]
   deactivate
 ```
 
 To start first the task you have to switch to multi tasking mode first by executing the word *multi*. Then simply call the word that was associated to the task.
 
 ```forth
-multi
-
+multi 
 my-word
 ```
 
