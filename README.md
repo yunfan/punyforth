@@ -423,7 +423,7 @@ PIN GPIO_OUT gpio-enable
 PIN HIGH gpio-write
 250 delay
 PIN LOW gpio-write
-```    
+```
 
 #### Netconn
 
@@ -445,8 +445,6 @@ SOCKET str "GET / HTTP/1.1" writeln
 SOCKET write-crlf
 1024 0 buffer SOCKET receive-into
 ```
-
-
 
 
 #### Flash
