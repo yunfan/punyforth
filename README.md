@@ -409,6 +409,8 @@ r1 area .
 
 #### Netconn
 
+Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS] (https://en.wikipedia.org/wiki/FreeRTOS).
+
 ```forth
 80 str "google.com" tcp-open constant SOCKET
 SOCKET str "GET / HTTP/1.1" writeln
