@@ -1,3 +1,4 @@
+: interpret-mode? state @ 0= ;
 : prepare-backward-ref here ;
 : resolve-backward-ref here - cell - , ;
 
@@ -230,7 +231,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 : str
     separator
-    state @ 0= if                    \ interpretation mode 
+    interpret-mode? if
         align! here swap c,-until 0 c,
     else
         [str swap c,-until str]
@@ -281,7 +282,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : min ( a b -- min ) 2dup < if drop else nip then ;
 
 : print
-    state @ 0= if            \ interpretation mode 
+    interpret-mode? if
         separator
         begin
             key 2dup <>
@@ -292,7 +293,14 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     else                     \ compilation mode 
         [compile] str ['] type ,
     then ; immediate
-    
+  
+: println 
+    interpret-mode? if
+        str "print" 5 find link>xt execute cr 
+    else
+        [compile] str ['] type , ['] cr ,
+    then ; immediate
+
 : print-stack ( -- )
     depth 0= if exit then
     print "stack["
