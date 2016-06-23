@@ -411,12 +411,20 @@ r1 area .
 
 ```forth
 80 str "google.com" tcp-open constant SOCKET
-
 SOCKET str "GET / HTTP/1.1" writeln
 SOCKET write-crlf
 SOCKET ['] type-counted receive
-
 ```
+
+```forth
+1024 byte-array buffer
+80 str "google.com" tcp-open constant SOCKET
+SOCKET str "GET / HTTP/1.1" writeln
+SOCKET write-crlf
+1024 0 buffer SOCKET receive-into
+```
+
+
 
 
 #### Flash
