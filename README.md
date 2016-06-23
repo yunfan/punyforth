@@ -410,7 +410,7 @@ r1 area .
 ##### Examples
 
 ```forth
-str "SomePassword" str "SomeSSID" wifi-connect
+str "MyPassword" str "MySSID" wifi-connect
 ```    
 
 #### GPIO
