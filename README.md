@@ -477,6 +477,8 @@ my-word
 
 ##### Locks
 
+semaphore mutex wait signal
+
 ##### Mailboxes
 
 ##### Examples
