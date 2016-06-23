@@ -97,14 +97,14 @@ Punyforth also supports switch-case like flow control logic as shown in the foll
 ```forth
 : day ( n -- )
   case
-    1 of ." Monday" endof
-    2 of ." Tuesday" endof
-    3 of ." Wednesday" endof
-    4 of ." Thursday" endof
-    5 of ." Friday" endof
-    6 of ." Saturday" endof
-    7 of ." Sunday" endof
-    ." Unknown day: " .
+    1 of print "Monday" endof
+    2 of print "Tuesday" endof
+    3 of print "Wednesday" endof
+    4 of print "Thursday" endof
+    5 of print "Friday" endof
+    6 of print "Saturday" endof
+    7 of print "Sunday" endof
+    print "Unknown day: " .
   endcase ;
 ````
 
@@ -211,7 +211,7 @@ For example:
 : test-div ( q d -- r )
   ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
       dup division_by_zero = if     \ error code is 1099 indicating division by zero
-        ." Error: division by zero"
+        print "Error: division by zero"
       else
         throw                       \ there was an other error, rethrow it
       then
@@ -230,7 +230,7 @@ You can modify this behaviour by reassigning the variable *on-uncaught-exception
 
 ```forth
 : my-uncaught-exception-handler ( code -- )
-    cr ." Uncaught exception: " . cr
+    cr print "Uncaught exception: " . cr
     abort ;
     
 ' my-uncaught-exception-handler on-uncaught-exception !
@@ -405,14 +405,124 @@ r1 area .
 
 ### ESP8266 specific things
 
+#### WIFI
+
+##### Examples
+
+```forth
+str "MyPassword" str "MySSID" wifi-connect
+```    
+
 #### GPIO
 
+##### Examples
+
+```forth
+2 constant PIN
+PIN GPIO_OUT gpio-enable
+PIN HIGH gpio-write
+250 delay
+PIN LOW gpio-write
+```
+
 #### Netconn
+
+Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS] (https://en.wikipedia.org/wiki/FreeRTOS). Punyforth provides a forth wrapper around the Netconn API.
+
+##### Examples
+
+```forth
+80 str "google.com" tcp-open constant SOCKET
+SOCKET str "GET / HTTP/1.1" writeln
+SOCKET write-crlf
+SOCKET ['] type-counted receive
+```
+
+```forth
+1024 byte-array buffer
+80 str "google.com" tcp-open constant SOCKET
+SOCKET str "GET / HTTP/1.1" writeln
+SOCKET write-crlf
+1024 0 buffer SOCKET receive-into
+```
+
 
 #### Flash
 
 #### Storing code in flash
 
 #### OLED display ssd1306 through SPI
+
+#### Tasks (experimental)
+
+Punyforth supports cooperative multitasking which enables users to run more than one task simultaneously. For example one task may wait for input on a socket, while another one receives commands through the serial port. Punyforth never initiates a context switch by its own. Instead, tasks voluntarily yield control periodically using the word *pause*. Task are executed in a round robin fashion.
+
+In order to run some code in the background, one must create a new task first, using the *task:* parsing word. A tasks can be activated inside a word. This word usually does something in a loop and calls *pause* periodically to yield controll to other tasks.
+
+```forth
+task: mytask
+
+: my-word
+  mytask activate
+  [...] pause [...]
+  deactivate
+```
+
+To start first the task you have to switch to multi tasking mode first by executing the word *multi*. Then simply call the word that was associated to the task.
+
+```forth
+multi 
+my-word
+```
+
+##### Locks
+
+semaphore mutex wait signal
+
+##### Mailboxes
+
+Often tasks need to communicate with each other. A mailbox is a fixed size blocking queue where messages can be left for a task. Receiving from an empty mailbox or sending to a full mailbox blocks the current task.
+
+```forth
+\ create a mailbox with size 5
+5 mailbox: mailbox1
+
+\ create a task for the consumer
+task: task-consumer
+
+\ this word is executed by the task
+: consumer ( task -- )
+    activate                            \ actiavte task
+    begin    
+        mailbox1 receive .              \ receive and print one item from the mailbox
+        print "received by consumer" cr
+        pause                           \ allow other tasks to run
+    again
+    deactivate ;                        \ deactivate task
+
+\ multi                                   \ switch to multitask mode
+\ task-consumer consumer                  \ run the consumer
+\ 123 mailbox1 send                       \ send some numbers to the consumer
+\ 456 mailbox1 send
+```
+
+##### Examples
+
+```forth
+\ create a task for the counter
+task: task-counter
+
+\ this word is executed by the task
+: counter ( task -- )
+    activate                              \ actiavte task
+    100 0 do 
+        i . cr 
+        500 delay
+    loop
+    deactivate ;                          \ deactivate task
+
+multi                                     \ switch to multitask mode
+task-counter counter                      \ run the consumer
+```
 
 #### Misc
