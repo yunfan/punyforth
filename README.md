@@ -409,6 +409,16 @@ r1 area .
 
 #### Netconn
 
+```forth
+80 str "google.com" tcp-open constant SOCKET
+
+SOCKET str "GET / HTTP/1.1" writeln
+SOCKET write-crlf
+SOCKET ['] type-counted receive
+
+```
+
+
 #### Flash
 
 #### Storing code in flash
