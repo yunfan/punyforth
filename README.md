@@ -481,6 +481,8 @@ semaphore mutex wait signal
 
 ##### Mailboxes
 
+Often tasks need to communicate with each other. A mailbox is a fixed size blocking queue where messages can be left for a task.
+
 ```forth
 \ create a mailbox with size 5
 5 mailbox: mailbox1
