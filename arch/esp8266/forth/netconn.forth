@@ -82,11 +82,11 @@ marker -netconn
         2drop
     again ;
 
-: receive ( netconn consumer -- )
+: receive ( netconn consumer-xt -- )
     begin
         2dup swap
         receive-responsively 0<> if
-            3drop exit
+            4drop exit
         then
         consume-netbuf
         netbuf-del
