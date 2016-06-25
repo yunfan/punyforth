@@ -13,7 +13,8 @@ available_modules = {
     'tasks' : '../forth/tasks.forth',
     'example-game-of-life' : '../forth/examples/example-game-of-life.forth',
     'example-consumer' : '../forth/examples/example-consumer.forth',
-    'example-ircbot' : '../forth/examples/example-ircbot.forth'
+    'example-ircbot' : '../forth/examples/example-ircbot.forth',
+    'example-philips-hue.forth' : '../forth/examples/example-philips-hue.forth'
 }
 
 dependencies = {
@@ -26,7 +27,8 @@ dependencies = {
     'tasks' : ['core', 'ringbuf'],    
     'example-game-of-life' : ['core', 'ssd1306-spi'],
     'example-consumer' : ['core', 'tasks'],
-    'example-ircbot' : ['core', 'netconn', 'tasks', 'gpio']
+    'example-ircbot' : ['core', 'netconn', 'tasks', 'gpio'],
+    'example-philips-hue.forth' : ['core', 'netconn', 'gpio']
 }
 
 def print_help():
