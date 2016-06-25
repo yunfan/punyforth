@@ -55,7 +55,8 @@ marker -netconn
         2drop
     again ;
 
-: receive-into ( size buffer netconn -- count | throws:ENETCON )   
+: receive-into ( netconn size buffer -- count | throws:ENETCON )
+    rot 
     receive-into-responsively
     check-netconn-error ;
     

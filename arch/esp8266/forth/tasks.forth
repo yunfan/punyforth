@@ -106,11 +106,11 @@ variable var-xt-pause
 : multi ( -- ) \ switch to multi-task mode
     ['] pause xpause !
     ['] pause-multi var-xt-pause ! ;
-
+    
 : single ( -- ) \ switch to signle-task mode
     0 xpause ! 
     ['] pause-single var-xt-pause ! ;
-
+    
 : mailbox: ( size ) ( -- mailbox ) ringbuffer: ;
 
 : send ( element mailbox -- )
@@ -128,3 +128,5 @@ variable var-xt-pause
         pause
     repeat
     dequeue ;
+    
+single
