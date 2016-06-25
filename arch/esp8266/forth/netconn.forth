@@ -22,7 +22,7 @@ marker -netconn
 
 : check-netconn-error ( errcode --  | throws:ENETCON )
     dup 0<> if
-        ." NETCON error: " .
+        print "NETCON error: " .
         ENETCON throw 
     then 
     drop ;
