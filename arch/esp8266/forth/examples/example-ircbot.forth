@@ -44,6 +44,7 @@ task: ircbot-task
     multi
     ircbot-task activate
     SOCKET ['] data-received receive
+    print "response code: " . cr
     deactivate ;
 
 start-irc-task

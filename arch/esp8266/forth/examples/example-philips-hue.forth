@@ -32,15 +32,18 @@ str "2" constant BEDROOM
     buffer str '"on":true' str-includes ;
     
 : request-change-state ( bulb netconn -- )
-    dup str "PUT "             write
-    dup BASE_URL               write
-    dup rot                    write
-    dup str "/state"           writeln
-    dup str "Content-Type:"    write
-    dup str "application/json" writeln
+    dup str "PUT "              write
+    dup BASE_URL                write
+    dup rot                     write
+    dup str "/state "           write
+    dup str "HTTP/1.1"          writeln
+    dup str "Content-Type: "    write
+    dup str "application/json"  writeln
+    dup str "Accept: */*"       writeln
+    dup str "Connection: Close" writeln
     drop ;
 
-: turn-on ( bulb -- ) 
+: on ( bulb -- ) 
     bridge
         tuck request-change-state
         dup str "Content-length: "       write
@@ -48,9 +51,10 @@ str "2" constant BEDROOM
         dup \r\n                         write
         dup str '{"on":true,"bri": 255}' writeln
         dup ['] type-counted             receive
+        print "response code: " . cr
         dispose ;
         
-: turn-off ( bulb -- )
+: off ( bulb -- )
     bridge
         tuck request-change-state
         dup str "Content-length: " write
@@ -58,14 +62,11 @@ str "2" constant BEDROOM
         dup \r\n                   write
         dup str '{"on":false}'     writeln
         dup ['] type-counted       receive
+        print "response code: " . cr
         dispose ;
         
 : toggle-unsafe ( bulb -- | throws:ENETCON )
-    dup on? if
-        turn-off
-    else
-        turn-on
-    then ;
+    dup on? if off else on then ;
     
 : toggle ( bulb -- )
     ['] toggle-unsafe catch 
