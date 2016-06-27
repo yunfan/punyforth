@@ -9,7 +9,6 @@ BUTTON_HALL GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 BUTTON_BEDROOM GPIO_IN gpio-enable
 BUTTON_BEDROOM GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 
-\ used for debouncing
 50 constant DEBOUNCE_TIME \ half sec
 variable last-event-time
 
