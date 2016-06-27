@@ -280,7 +280,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : abs ( n -- n ) dup 0< if -1 * then ;
 : max ( a b -- max ) 2dup < if nip else drop then ;
 : min ( a b -- min ) 2dup < if drop else nip then ;
-: between ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
+: between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
 
 : print
     interpret-mode? if

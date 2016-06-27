@@ -155,12 +155,12 @@ marker -test-test
    12 test_var1 ! test_var1 @ 12 = assert
    3 test_var1 +! test_var1 @ 15 = assert
 
-   1 2 3 between assert
-   1 1 1 between assert
-   1 1 2 between assert
-   1 2 2 between assert
-   3 2 4 between invert assert
-   1 3 2 between invert assert
+   1 2 3 between? assert
+   1 1 1 between? assert
+   1 1 2 between? assert
+   1 2 2 between? assert
+   3 2 4 between? invert assert
+   1 3 2 between? invert assert
 
    1 case
        1 of 10 endof
