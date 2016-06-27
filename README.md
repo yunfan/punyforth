@@ -468,7 +468,7 @@ task: mytask
   deactivate
 ```
 
-To start first the task you have to switch to multi tasking mode first by executing the word *multi*. Then simply call the word that was associated to the task.
+To start the task, first you have to switch to multi tasking mode first by executing the word *multi*. Then simply call the word that was associated to the task.
 
 ```forth
 multi 
