@@ -350,17 +350,21 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 : assert ( bool -- | throws:EASSERTION ) invert if EASSERTION throw then ;
 
-: print-words ( -- )
+: each-word ( xt -- )
     lastword
     begin
-       dup 0<>
+        dup 0<>
     while
-       dup
-       ['] link>name ['] link>len bi 
-       type-counted cr
-       @
-    repeat 
-    drop ;   
+        2dup swap execute
+        @
+    repeat
+    2drop ;
+
+: type-word ( link -- )
+    ['] link>name ['] link>len bi
+    type-counted cr ;
+
+: print-words ( -- ) ['] type-word each-word ;
 
 : stack_prompt ( -- ) 
     depth 0< if EUNDERFLOW throw then
