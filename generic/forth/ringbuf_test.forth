@@ -38,8 +38,9 @@ buf full? invert assert
 
 \ works as ring buffer
 5 ringbuffer: buf 
-1 buf enqueue buf dequeue = assert
+1 buf enqueue buf dequeue 1 = assert
 buf full? invert assert
+
 1 buf enqueue
 2 buf enqueue
 3 buf enqueue
@@ -60,13 +61,13 @@ buf empty? assert
 
 \ over and underflow
 2 ringbuffer: buf
-: test_underflow ['] dequeue catch UNDERFLOW = assert ;
+: test_underflow ['] dequeue catch EUNDERFLOW = assert ;
 buf test_underflow
 
 1 buf enqueue
 2 buf enqueue
 
-: test_overflow ['] enqueue catch OVERFLOW = assert ;
-3 buf test_overflow
+: test_overflow ['] enqueue catch EOVERFLOW = assert ;
+3 buf test_overflow drop
 
 -ringbuf-test

@@ -1,5 +1,5 @@
 rm punyforth
 gcc -m32 -nostdlib -I. ../../main.S -o punyforth
 chmod +x punyforth
-cat ../../generic/forth/core.forth ../../generic/forth/ringbuf.forth .../../generic/forth/ringbuf_test.forth ../../generic/forth/test.forth /dev/stdin | ./punyforth
+cat ../../generic/forth/core.forth ../../generic/forth/ringbuf.forth ../../generic/forth/ringbuf_test.forth ../../generic/forth/test.forth /dev/stdin | ./punyforth
 

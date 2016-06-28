@@ -56,7 +56,7 @@ constant RingBuffer
 
 : enqueue ( element ringbuffer -- )
     dup full? if
-        OVERFLOW throw
+        EOVERFLOW throw
     then
     tuck
     ringbuffer-back-slot !
@@ -64,7 +64,7 @@ constant RingBuffer
 
 : dequeue ( ringbuffer -- element )
     dup empty? if
-        UNDERFLOW throw
+        EUNDERFLOW throw
     then
     dup
     ringbuffer-front-slot @
