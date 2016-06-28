@@ -185,6 +185,16 @@ marker -test-test
        2 of 3 endof
    endcase 2 = assert
 
+   str "aBcDeF" hex>int 11259375 = assert
+   str "AbCdEf" hex>int 11259375 = assert
+   str "12345678" hex>int 305419896 = assert
+   str "a1" hex>int 161 = assert
+   str "123abc" hex>int 1194684 = assert
+   str "" ['] hex>int catch ECONVERSION = assert
+   str "123g4" ['] hex>int catch ECONVERSION = assert
+   str "12G4" ['] hex>int catch ECONVERSION = assert
+   hex: a0f 2575 = assert
+
    sp@ test_var1 !
    -1 ['] factorial catch 1024 = assert
    1 ['] nested-throw2 catch 30 = assert

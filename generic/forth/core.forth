@@ -144,6 +144,7 @@
 86 constant EOVERFLOW
 65 constant EASSERTION
 40 constant ENOTFOUND
+67 constant ECONVERSION
 
 : +! ( n var -- )
     dup @ rot + swap ! ;
@@ -281,6 +282,31 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : max ( a b -- max ) 2dup < if nip else drop then ;
 : min ( a b -- min ) 2dup < if drop else nip then ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
+
+: hexchar>int ( char -- n | throws:ECONVERSION )
+    48 over 57 between? if 48 - exit then
+    65 over 70 between? if 55 - exit then
+    97 over 102 between? if 87 - exit then
+    ECONVERSION throw ;
+
+: hex>int' ( str len -- n | throws:ECONVERSION )
+    dup 0= if ECONVERSION throw then
+    dup 1- 2 lshift 0 swap
+    2swap 0 do
+        dup >r
+        c@ hexchar>int
+        over lshift rot +
+        swap 4 -
+        r> 1+
+    loop 
+    2drop ;
+
+: hex>int ( str -- n | throws:ECONVERSION ) dup strlen hex>int' ;
+
+: hex:
+    word hex>int'
+    interpret-mode? invert if XT_LIT , , then 
+  ; immediate
 
 : print
     interpret-mode? if
