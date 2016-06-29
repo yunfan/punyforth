@@ -74,6 +74,9 @@ marker -test-test
        test_count @ 1+ test_count ! '.' emit
        TRUE <> if 'F' emit test_count ? then ;
 
+defer: deferred-word
+: use-deferred 2 3 deferred-word ;
+
 : selftest ( -- )
    print "testing"
    depth 0= assert
@@ -194,6 +197,11 @@ marker -test-test
    str "123g4" ['] hex>int catch ECONVERSION = assert
    str "12G4" ['] hex>int catch ECONVERSION = assert
    hex: a0f 2575 = assert
+
+   ['] deferred-word is: +
+   use-deferreed 5 = assert
+   ['] deferred-word is: *
+   use-deferred 6 = assert
 
    sp@ test_var1 !
    -1 ['] factorial catch 1024 = assert

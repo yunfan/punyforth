@@ -373,3 +373,17 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 ' stack_prompt prompt !
 
+: defer: ( "name" -- )
+    create ['] abort ,
+    does> @ execute ;
+
+: defer! ( xt2 xt1 -- ) swap 2 cells + ! ;
+
+: is:
+    interpret-mode? if
+        ' defer!
+    else        
+        XT_LIT ,
+        word find link>xt ,
+	['] defer! ,
+    then ; immediate
