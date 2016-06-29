@@ -199,7 +199,7 @@ defer: deferred-word
    hex: a0f 2575 = assert
 
    ['] deferred-word is: +
-   use-deferreed 5 = assert
+   use-deferred 5 = assert
    ['] deferred-word is: *
    use-deferred 6 = assert
 
