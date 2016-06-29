@@ -217,7 +217,6 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 ' default-exception-handler on-uncaught-exception !
 
 : [compile] ( -- | throws:ENOTFOUND ) ' , ; immediate
-: compile word find link>xt , ; immediate
 
 : [str ( -- address-to-fill-in )
     XT_LIT , here 3 cells + ,       \ compile return value: address of string
