@@ -170,7 +170,7 @@ defer: unhandled
 : throw ( i*x errcode -- i*x errcode | 0 )
       dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
       handler @ 0= if             \ this was an uncaught exception
-      unhandled
+          unhandled
           exit
       then
       handler @ rp!           \ restore rstack, now it is the same as it was before execute
@@ -365,7 +365,7 @@ defer: unhandled
 
 : type-word ( link -- )
     ['] link>name ['] link>len bi
-    type-counted cr ;
+    type-counted space ;    
 
 : print-words ( -- ) ['] type-word each-word ;
 
@@ -377,7 +377,25 @@ defer: unhandled
 ' stack_prompt prompt !
 
 : traceback ( code -- )
-    cr print "Unhandled exeption: " . cr
+    cr print "Unhandled exeption: " .
+    print " rdepth: " rdepth . cr
+    rdepth 1+  3 do
+        print "  at "
+        rp@ i cells + @ cell - @
+        lastword    
+        begin
+            dup 0<>
+        while
+            2dup
+            link>xt = if dup type-word then
+            @
+        repeat
+        [ char ( ] literal emit
+		drop .
+        [ char ) ] literal emit
+	    cr
+    loop
+    print-stack
     abort ; 
 
 ' unhandled ' traceback defer!

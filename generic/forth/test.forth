@@ -203,6 +203,14 @@ defer: deferred-word
    ['] deferred-word is: *
    use-deferred 6 = assert
 
+   rdepth
+   1 >r 2 >r 3 >r
+   dup 3 + rdepth = assert
+   r> drop r> drop
+   dup 1 + rdepth = assert
+   r> drop
+   rdepth = assert
+
    sp@ test_var1 !
    -1 ['] factorial catch 1024 = assert
    1 ['] nested-throw2 catch 30 = assert
