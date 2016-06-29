@@ -160,6 +160,8 @@
 variable on-uncaught-exception
 variable handler 0 handler !       \ stores the address of the nearest exception handler
 
+: compile-tick ['] ['] , ;
+
 : catch ( xt -- errcode | 0 )
       sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
       rp@ handler !                \ set the currend handler to this
@@ -197,8 +199,6 @@ variable handler 0 handler !       \ stores the address of the nearest exception
         link>xt 
     then ;
 
-' ['] constant XT_LIT
-
 : defer: ( "name" -- )
     create ['] abort ,
     does> @ execute ;
@@ -209,17 +209,17 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     interpret-mode? if
         ' defer!
     else        
-        XT_LIT ,
+        compile-tick
         ' ,
         ['] defer! ,
     then ; immediate
 
 ' default-exception-handler on-uncaught-exception !
 
-: [compile] ( -- | throws:ENOTFOUND ) ' , ; immediate
+: [compile-imm] ( -- | throws:ENOTFOUND ) ' , ; immediate \ compile an other imm. word
 
 : [str ( -- address-to-fill-in )
-    XT_LIT , here 3 cells + ,       \ compile return value: address of string
+    compile-tick here 3 cells + ,   \ compile return value: address of string
     ['] branch ,                    \ compile branch that will skip the string
     here                            \ address of the dummy address 
     0 , ;                           \ dummy address
@@ -320,7 +320,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 : hex:
     word hex>int'
-    interpret-mode? invert if XT_LIT , , then 
+    interpret-mode? invert if compile-tick , then 
   ; immediate
 
 : print
@@ -332,15 +332,15 @@ variable handler 0 handler !       \ stores the address of the nearest exception
             emit
         repeat
         2drop           
-    else                     \ compilation mode 
-        [compile] str ['] type ,
+    else
+        [compile-imm] str ['] type ,
     then ; immediate
   
 : println 
     interpret-mode? if
         str "print" 5 find link>xt execute cr 
     else
-        [compile] str ['] type , ['] cr ,
+        [compile-imm] str ['] type , ['] cr ,
     then ; immediate
 
 : print-stack ( -- )
