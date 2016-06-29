@@ -160,7 +160,7 @@
 variable on-uncaught-exception
 variable handler 0 handler !       \ stores the address of the nearest exception handler
 
-: compile-tick ['] ['] , ;
+: ['], ['] ['] , ;
 
 : catch ( xt -- errcode | 0 )
       sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
@@ -180,17 +180,6 @@ variable handler 0 handler !       \ stores the address of the nearest exception
       r> swap >r sp!          \ restore the data stack as it was before the most recent catch
       drop r> ;               \ return to the caller of most recent catch with the errcode
 
-: array ( size -- ) ( index -- addr )
-      create cells allot
-      does> swap cells + ;
-
-: byte-array ( size -- ) ( index -- addr )
-    create allot
-    does> swap + ;
-    
-: struct 0 ;
-: field: create over , + does> @ + ;
-
 : ' ( -- xt | throws:ENOTFOUND ) \ find the xt of the next word in the inputstream
     word find dup
     0= if 
@@ -198,6 +187,8 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     else 
         link>xt 
     then ;
+
+: compile-imm: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 
 : defer: ( "name" -- )
     create ['] abort ,
@@ -209,17 +200,24 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     interpret-mode? if
         ' defer!
     else        
-        compile-tick
-        ' ,
-        ['] defer! ,
+        ['], ' , ['] defer! ,
     then ; immediate
+
+: array ( size -- ) ( index -- addr )
+      create cells allot
+      does> swap cells + ;
+
+: byte-array ( size -- ) ( index -- addr )
+    create allot
+    does> swap + ;
+    
+: struct 0 ;
+: field: create over , + does> @ + ;
 
 ' default-exception-handler on-uncaught-exception !
 
-: [compile-imm] ( -- | throws:ENOTFOUND ) ' , ; immediate \ compile an other imm. word
-
 : [str ( -- address-to-fill-in )
-    compile-tick here 3 cells + ,   \ compile return value: address of string
+    ['], here 3 cells + ,           \ compile return value: address of string
     ['] branch ,                    \ compile branch that will skip the string
     here                            \ address of the dummy address 
     0 , ;                           \ dummy address
@@ -320,7 +318,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 : hex:
     word hex>int'
-    interpret-mode? invert if compile-tick , then 
+    interpret-mode? invert if ['], , then 
   ; immediate
 
 : print
@@ -333,14 +331,14 @@ variable handler 0 handler !       \ stores the address of the nearest exception
         repeat
         2drop           
     else
-        [compile-imm] str ['] type ,
+        compile-imm: str ['] type ,
     then ; immediate
   
 : println 
     interpret-mode? if
         str "print" 5 find link>xt execute cr 
     else
-        [compile-imm] str ['] type , ['] cr ,
+        compile-imm: str ['] type , ['] cr ,
     then ; immediate
 
 : print-stack ( -- )
