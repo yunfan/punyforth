@@ -146,21 +146,19 @@
 40 constant ENOTFOUND
 67 constant ECONVERSION
 
+: ['], ['] ['] , ;
+
 : +! ( n var -- )
     dup @ rot + swap ! ;
 
-: default-exception-handler ( code -- )
-    cr 
-    [ char E ] literal emit
-    [ char R ] literal dup emit emit
-    space
-    . cr
-    abort ;
+: defer: ( "name" -- )
+    create ['] abort ,
+    does> @ execute ;
 
-variable on-uncaught-exception
+: defer! ( dst-xt src-xt -- ) swap 2 cells + ! ;
+
 variable handler 0 handler !       \ stores the address of the nearest exception handler
-
-: ['], ['] ['] , ;
+defer: unhandled
 
 : catch ( xt -- errcode | 0 )
       sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
@@ -172,7 +170,7 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 : throw ( i*x errcode -- i*x errcode | 0 )
       dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
       handler @ 0= if             \ this was an uncaught exception
-          on-uncaught-exception @ execute
+      unhandled
           exit
       then
       handler @ rp!           \ restore rstack, now it is the same as it was before execute
@@ -189,12 +187,6 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     then ;
 
 : compile-imm: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
-
-: defer: ( "name" -- )
-    create ['] abort ,
-    does> @ execute ;
-
-: defer! ( xt2 xt1 -- ) swap 2 cells + ! ;
 
 : is:
     interpret-mode? if
@@ -213,8 +205,6 @@ variable handler 0 handler !       \ stores the address of the nearest exception
     
 : struct 0 ;
 : field: create over , + does> @ + ;
-
-' default-exception-handler on-uncaught-exception !
 
 : [str ( -- address-to-fill-in )
     ['], here 3 cells + ,           \ compile return value: address of string
@@ -386,3 +376,8 @@ variable handler 0 handler !       \ stores the address of the nearest exception
 
 ' stack_prompt prompt !
 
+: traceback ( code -- )
+    cr print "Unhandled exeption: " . cr
+    abort ; 
+
+' unhandled ' traceback defer!
