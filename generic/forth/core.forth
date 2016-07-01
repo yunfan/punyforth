@@ -399,3 +399,34 @@ defer: unhandled
     abort ; 
 
 ' unhandled is: traceback
+
+: test? ( link -- bool )
+    ['] link>name
+    ['] link>len bi 5 <= if
+        FALSE     
+    else        
+        TRUE
+        over 0 + c@ [ char t ] literal = and
+        over 1 + c@ [ char e ] literal = and
+        over 2 + c@ [ char s ] literal = and
+        over 3 + c@ [ char t ] literal = and
+        over 4 + c@ [ char : ] literal = and
+    then        
+    nip ;   
+
+: run-if-test ( link -- )
+    dup test? if
+        dup type-word        
+        link>xt ['] execute catch
+        case
+           0 of println "OK" endof 
+           EASSERTION of println "FAILED" endof
+           print "ERROR: " . cr
+        endcase
+    else
+        drop
+    then ;
+
+: test ( -- )
+    \ check stack effect
+    ['] run-if-test each-word ;
