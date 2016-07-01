@@ -226,14 +226,14 @@ The exeption mechanism in Punyforth follows the "catch everything and re-throw i
 
 An uncaught exception causes the program to print out the error to the standard output and terminate.
 
-You can modify this behaviour by reassigning the variable *on-uncaught-exception* with an execution token of a new handler.
+You can modify this behaviour by overriding the *unhandled* deferred word.
 
 ```forth
 : my-uncaught-exception-handler ( code -- )
     cr print "Uncaught exception: " . cr
     abort ;
     
-' my-uncaught-exception-handler on-uncaught-exception !
+' unhandled is: my-uncaught-exception-handler
 ```    
 
 The implementation of exceptions is based on the idea of [William Bradley](http://www.complang.tuwien.ac.at/anton/euroforth/ef98/milendorf98.pdf).
