@@ -224,7 +224,7 @@ The exeption mechanism in Punyforth follows the "catch everything and re-throw i
 
 #### Uncaught exception handler
 
-An uncaught exception causes the program to print out the error to the standard output and terminate.
+An uncaught exception causes the program to print out the error and the stack trace to the standard output and terminate.
 
 You can modify this behaviour by overriding the *unhandled* deferred word.
 
