@@ -19,7 +19,6 @@ SKIPPED INTERPRETER .status !
 128 variable! var-task-rstack-size
 INTERPRETER variable! var-last-task
 INTERPRETER variable! var-current-task
-variable var-xt-pause
 
 : last-task ( -- task ) var-last-task @ ;
 : last-task! ( task -- ) var-last-task ! ;
@@ -66,15 +65,14 @@ variable var-xt-pause
     SKIPPED current-task .status !
     task-restore-context ;
 
+defer: pause
+
 : pause-multi ( -- )
     PAUSED current-task .status !
     sp@ r> rp@ task-save-context
     task-choose-next task-run ;
 
 : pause-single ( -- ) ;
-
-: pause ( -- )
-    var-xt-pause @ execute ;
 
 : activate ( task -- )
     r> over .ip !
@@ -105,11 +103,11 @@ variable var-xt-pause
  
 : multi ( -- ) \ switch to multi-task mode
     ['] pause xpause !
-    ['] pause-multi var-xt-pause ! ;
+    ['] pause is: pause-multi ;     
     
 : single ( -- ) \ switch to signle-task mode
     0 xpause ! 
-    ['] pause-single var-xt-pause ! ;
+    ['] pause is: pause-single ;     
     
 : mailbox: ( size ) ( -- mailbox ) ringbuffer: ;
 
