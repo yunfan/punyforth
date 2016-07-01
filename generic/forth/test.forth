@@ -61,10 +61,6 @@ new-rect r1
 
 0 variable! test_count
 variable test_var1 variable test_var2
-variable stored_dp 
-dp stored_dp !
-
-marker -test-test
 
 : assert ( bool -- )
        test_count @ 1+ test_count ! [ char . ] literal emit
@@ -286,34 +282,18 @@ defer: deferred-word
    12 test_var1 ! test_var1 @ 12 = assert
    3 test_var1 +! test_var1 @ 15 = assert ;
 
-: selftest ( -- )
-   print "testing"
-   depth 0= assert
+variable dp-before-mark dp dp-before-mark !
+marker -test-mark
+: word-after-marker 1 2 3 ; 237 allot
 
-   0 test_count !
-   test:arithmetic
-   test:branch
-   test:bounds
-   test:doloop
-   test:untilloop
-   test:logic
-   test:factorial
-   test:between
-   test:hex
-   test:case
-   test:defer
-   test:catch
-   test:rdepth
-   test:alloc
-   test:str
-   test:array
-   test:struct
-   test:var
+: test:marker
+   -test-mark
+   dp dp-before-mark @ = assert ;
 
-   depth 0= assert
-   \ -test-test dp stored_dp @ = assert
-   print "OK " test_count ? cr ; 
+depth 0= assert
+0 test_count !
+test
+depth 0= assert
+print "OK " test_count ? cr ; 
 
-' selftest execute print "Punyforth ready" cr
-
-\ -tests
+-tests
