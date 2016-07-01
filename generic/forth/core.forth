@@ -391,9 +391,9 @@ defer: unhandled
             @
         repeat
         [ char ( ] literal emit
-		drop .
+        drop .
         [ char ) ] literal emit
-	    cr
+        cr
     loop
     print-stack
     abort ; 
