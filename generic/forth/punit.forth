@@ -75,3 +75,10 @@ marker -punit
     drop
     test-report ;
 
+: test: ( "testname" -- )
+    cr test-reset
+    word find dup 0<> if
+        test-run
+    else
+        drop println "No such test"
+    then ;
