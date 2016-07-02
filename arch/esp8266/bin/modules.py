@@ -5,6 +5,7 @@ FLASH_SPACE = 0x20000 - 0x18000
 
 available_modules = {
     'core' : '../../../generic/forth/core.forth',
+    'punit' : '../../../generic/forth/punit.forth',
     'ringbuf' : '../../../generic/forth/ringbuf.forth',
     'gpio' : '../forth/gpio.forth',
     'wifi' : '../forth/wifi.forth',
@@ -21,6 +22,7 @@ available_modules = {
 
 dependencies = {
     'core' : [],
+    'punit' : ['core'],
     'ringbuf' : ['core'],
     'gpio' : ['core'],
     'wifi' : ['core'],
