@@ -87,6 +87,32 @@ defer: pause
 : deactivate ( -- )
     current-task stop ;
 
+: task-find ( task -- link )
+    lastword
+    begin
+        dup 0<>
+    while
+        2dup
+        link>body cell + = if
+            nip exit
+        then
+        @
+    repeat
+    2drop 0 ;
+
+: tasks-print ( -- )
+    current-task
+    begin
+        dup task-find dup 0<> if
+            type-word cr
+        else
+            drop println "interpreter"
+        then
+        .next @ dup
+        current-task =
+    until
+    drop ;
+   
 : semaphore: ( -- ) variable! ;
 : mutex: ( -- ) 1 semaphore: ;
 
