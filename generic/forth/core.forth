@@ -150,7 +150,7 @@
 : ['], ['] ['] , ;
 
 : +! ( n var -- ) dup @ rot + swap ! ;
-: c+! ( n var -- ) dup @ rot + swap c! ;
+: c+! ( n var -- ) dup c@ rot + swap c! ;
 
 : defer: ( "name" -- )
     create ['] abort ,
