@@ -140,16 +140,17 @@
 
 -1 constant TRUE 0 constant FALSE
 
+0  constant EOK
 85 constant EUNDERFLOW
 86 constant EOVERFLOW
-65 constant EASSERTION
+65 constant EASSERT
 40 constant ENOTFOUND
 67 constant ECONVERSION
 
 : ['], ['] ['] , ;
 
-: +! ( n var -- )
-    dup @ rot + swap ! ;
+: +! ( n var -- ) dup @ rot + swap ! ;
+: c+! ( n var -- ) dup @ rot + swap c! ;
 
 : defer: ( "name" -- )
     create ['] abort ,
@@ -351,7 +352,14 @@ defer: unhandled
     @ var-lastword !
     var-dp ! ;
 
-: assert ( bool -- | throws:EASSERTION ) invert if EASSERTION throw then ;
+: assert ( bool -- | throws:EASSERT ) invert if EASSERT throw then ;
+: =assert ( n1 n2 -- | throws:EASSERT )
+    2dup <> if 
+        print '(' . space . print ' <>)' space
+        EASSERT throw 
+    else
+        2drop
+    then ;
 
 : each-word ( xt -- )
     lastword
@@ -414,19 +422,49 @@ defer: unhandled
     then        
     nip ;   
 
-: run-if-test ( link -- )
-    dup test? if
-        dup type-word        
-        link>xt ['] execute catch
-        case
-           0 of println "OK" endof 
-           EASSERTION of println "FAILED" endof
-           print "ERROR: " . cr
-        endcase
-    else
-        drop
-    then ;
+3 byte-array test-report
+: passed ( -- n ) 0 test-report ;
+: failed ( -- n ) 1 test-report ;
+: errors ( -- n ) 2 test-report ;
+
+: test-run ( link -- )
+    dup type-word        
+    link>xt ['] execute catch
+    case
+        0 of 
+            cr
+            1 passed c+!
+        endof 
+        EASSERT of 
+            println "FAIL" 
+            1 failed c+!
+        endof
+        print "ERROR " . cr
+        1 errors c+!
+    endcase ;
 
 : test ( -- )
-    \ check stack effect
-    ['] run-if-test each-word ;
+    cr
+    0 passed c! 0 failed c! 0 errors c!
+    lastword
+    begin
+        dup 0<>
+    while
+        dup test? if
+            dup test-run
+        then
+        @
+    repeat
+    drop
+    passed c@ failed c@ errors c@ + + . print " tests, "
+    passed c@ . print " passed, " 
+    failed c@ . print " failed, "
+    errors c@ . print " errors"
+    cr
+    errors c@ 0= failed c@ 0= and if
+        println "All passed"
+    else
+        println "There were failures"
+    then
+    cr ;
+
