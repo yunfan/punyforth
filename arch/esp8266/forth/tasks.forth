@@ -93,7 +93,7 @@ defer: pause
         dup 0<>
     while
         2dup
-        link>body cell + = if
+        link>body cell + = if \ XXX skip behaviour pointer
             nip exit
         then
         @
