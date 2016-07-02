@@ -152,11 +152,13 @@
 : +! ( n var -- ) dup @ rot + swap ! ;
 : c+! ( n var -- ) dup c@ rot + swap c! ;
 
+: xt>body ( xt -- a ) 2 cells + ;
+
 : defer: ( "name" -- )
     create ['] abort ,
     does> @ execute ;
 
-: defer! ( dst-xt src-xt -- ) swap 2 cells + ! ;
+: defer! ( dst-xt src-xt -- ) swap xt>body ! ;
 
 variable handler 0 handler !       \ stores the address of the nearest exception handler
 defer: unhandled
