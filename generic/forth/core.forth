@@ -355,7 +355,7 @@ defer: unhandled
 : assert ( bool -- | throws:EASSERT ) invert if EASSERT throw then ;
 : =assert ( n1 n2 -- | throws:EASSERT )
     2dup <> if 
-        print '(' . space . print ' <>)' space
+        swap print '(' . space . print ' <>)' space
         EASSERT throw 
     else
         2drop
