@@ -273,8 +273,16 @@ defword "var-dp",6,var_dp,REGULAR
     .int xt_btick, _M var_dp
     .int xt_exit
 
+defword "heap-start",10,heap_start,REGULAR
+    .int xt_btick, _M dictionary
+    .int xt_exit
+
+defword "heap-end",8,heap_end,REGULAR
+    .int xt_btick, _M end_dictionary
+    .int xt_exit
+
 defword "freemem",7,freemem,REGULAR
-    .int xt_btick, _M end_dictionary, xt_dp, xt_minus
+    .int xt_heap_end, xt_dp, xt_minus
     .int xt_exit
 
 defword "align!",6,align_bang,REGULAR /* (  -- ) */

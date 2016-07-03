@@ -379,24 +379,31 @@ defer: unhandled
 
 ' stack_prompt prompt !
 
+: in-heap? ( a -- bool ) heap-start over heap-end between? ;
+
 : traceback ( code -- )
     cr print "Unhandled exeption: " .
     print " rdepth: " rdepth . cr
     rdepth 1+  3 do
         print "  at "
-        rp@ i cells + @ cell - @
-        lastword    
-        begin
-            dup 0<>
-        while
-            2dup
-            link>xt = if dup type-word then
-            @
-        repeat
-        [ char ( ] literal emit
-        drop .
-        [ char ) ] literal emit
-        cr
+        rp@ i cells + @                     \ i. return address
+        in-heap? if
+            cell - @                        \ instruction before the return address 
+            lastword    
+            begin
+                dup 0<>
+            while
+                2dup
+                link>xt = if dup type-word then
+                @
+            repeat
+            [ char ( ] literal emit
+            drop .
+            [ char ) ] literal emit
+            cr
+        else
+            print "??? (" . println ")"     \ not valid return address, could be doloop var
+        then            
     loop
     print-stack
     abort ; 
