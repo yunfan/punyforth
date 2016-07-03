@@ -6,6 +6,7 @@
 .set STATE_COMPILE,1
 .set STATE_INTERPRET,0
 .set IMMEDIATE,128
+.set HIDDEN,64
 .set REGULAR,0
 .set TRUE,-1
 .set FALSE,0

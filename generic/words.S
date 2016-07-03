@@ -234,6 +234,8 @@ find_try_next_word:                                                             
     .int xt_dup
     .int xt_branch0
     lbl find_not_found
+    .int xt_dup, xt_is_hidden, xt_invert, xt_branch0
+    lbl find_skip_hidden
     .int xt_dup, xt_swap2, xt_rot                                                 // (link a1 len1 link)
     .int xt_dup
     .int xt_link2len, xt_swap 
@@ -243,6 +245,7 @@ find_try_next_word:                                                             
     .int xt_branch0
     lbl find_found
     .int xt_rot                                                                   // (a1 len1 link)
+find_skip_hidden:        
     .int xt_fetch
     .int xt_branch
     lbl find_try_next_word
@@ -303,6 +306,7 @@ create_name_done:
 defword ";",1,semicolon,IMMEDIATE
     .int xt_openbracket
     .int xt_btick, xt_exit, xt_comma
+    .int xt_lastword, xt_reveal
     .int xt_exit
 
 defword ">number",7,tonumber,REGULAR /* ( a len -- num bool ) */
@@ -537,8 +541,22 @@ defword "link>body",9,link2body,REGULAR /* ( a1 -- a2 ) */
     .int xt_link2xt, xt_cell, xt_plus
     .int xt_exit
 
-defword "immediate?",10,is_immediate,REGULAR /* link -- bool */
-    .int xt_link2flags, xt_btick, IMMEDIATE, xt_eq
+defword "hidden?",7,is_hidden,REGULAR /* link -- bool */
+    .int xt_link2flags, xt_btick, HIDDEN, xt_and, xt_btick, HIDDEN, xt_eq
+    .int xt_exit
+
+defword "hide",4,hide,REGULAR /* ( link -- ) */
+    .int xt_btick, HIDDEN, xt_over, xt_link2len, xt_or
+    .int xt_swap, xt_link2flb, xt_storebyte
+    .int xt_exit
+
+defword "reveal",6,reveal,REGULAR /* ( link -- ) */
+    .int xt_btick, HIDDEN, xt_invert, xt_over, xt_link2len, xt_and
+    .int xt_swap, xt_link2flb, xt_storebyte
+    .int xt_exit
+
+defword "immediate?",10,is_immediate,REGULAR /* ( link -- bool) */
+    .int xt_link2flags, xt_btick, IMMEDIATE, xt_and, xt_btick, IMMEDIATE, xt_eq
     .int xt_exit
 
 FINAL_WORD:    

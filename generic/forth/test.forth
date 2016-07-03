@@ -272,6 +272,11 @@ defer: deferred-word
    12 test_var1 ! test_var1 @ 12 =assert
    3 test_var1 +! test_var1 @ 15 =assert ;
 
+: to-override 42 ;
+: to-override override to-override 3 + ;
+: test:override
+    to-override 45 =assert ;
+
 variable dp-before-mark dp dp-before-mark !
 marker -test-mark
 : word-after-marker 1 2 3 ; 237 allot

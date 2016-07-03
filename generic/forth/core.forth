@@ -131,6 +131,8 @@
         resolve-forward-ref
     loop ; immediate
 
+: override ( -- ) lastword hide ; immediate
+
 : create createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
