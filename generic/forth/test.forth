@@ -39,7 +39,7 @@ struct
   cell field: .height
 constant: Rect
 
-: new-rect Rect create allot does> ;
+: new-rect Rect create: allot does> ;
 : area ( rect -- area ) dup .width @ swap .height @ * ;
 new-rect r1
 

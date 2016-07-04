@@ -133,11 +133,11 @@
 
 : override ( -- ) lastword hide ; immediate
 
-: create createheader enterdoes , 0 , ;
+: create: createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
-: constant: create , does> @ ; 
-: init-variable: create , does> ;
+: constant: create: , does> @ ; 
+: init-variable: create: , does> ;
 : variable: 0 init-variable: ; 
 
 -1 constant: TRUE 
@@ -158,7 +158,7 @@
 : xt>body ( xt -- a ) 2 cells + ;
 
 : defer: ( "name" -- )
-    create ['] abort ,
+    create: ['] abort ,
     does> @ execute ;
 
 : defer! ( dst-xt src-xt -- ) swap xt>body ! ;
@@ -202,15 +202,15 @@ defer: unhandled
     then ; immediate
 
 : array ( size -- ) ( index -- addr )
-      create cells allot
+      create: cells allot
       does> swap cells + ;
 
 : byte-array ( size -- ) ( index -- addr )
-    create allot
+    create: allot
     does> swap + ;
     
 : struct 0 ;
-: field: create over , + does> @ + ;
+: field: create: over , + does> @ + ;
 
 : [str ( -- address-to-fill-in )
     ['], here 3 cells + ,           \ compile return value: address of string
@@ -350,7 +350,7 @@ defer: unhandled
     depth 0 do drop loop ;
 
 : marker
-    create
+    create:
         lastword ,
     does>
         @ dup 

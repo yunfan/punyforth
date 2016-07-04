@@ -291,20 +291,20 @@ Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 * bi@ ( a b xt -- xt.a xt.b )
 
 
-### The word *create does>*
+### The word *create: does>*
 
 TODO
 
-### About the implementation of *create does>*
+### About the implementation of *create: does>*
 
 TODO
 
 ```forth
 : constant: ( n -- ) 
-    create , 
+    create: , 
     does> @ ;
 
-: create 
+: create:
     createheader enterdoes , 0 , ;     \ write enterdoes to the code field and store a dummy addres for the behavior
     
 : does>
@@ -356,11 +356,11 @@ ENTERDOES:
     NEXT                    // jump to behavour
 ```
 
-### Other examples of create does>
+### Other examples of create: does>
 
 ```forth
 : array ( size -- ) ( index -- addr )
-    create cells allot
+    create: cells allot
     does> swap cells + ;
     
 10 array numbers
@@ -380,7 +380,7 @@ ENTERDOES:
 : struct 0 ;
 
 : field 
-  create over , + 
+  create: over , + 
   does> @ + ;
 
 struct 
@@ -389,7 +389,7 @@ struct
 constant Rect
 
 : new-rect
-  Rect create allot does> ;
+  Rect create: allot does> ;
   
 : area ( rect -- area ) 
   dup width @ swap height @ * ;  

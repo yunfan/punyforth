@@ -8,7 +8,7 @@ struct
 constant: RingBuffer
 
 : ringbuffer: ( capacity ) ( -- ringbuffer )
-    create
+    create:
         here 
         over cells RingBuffer + allot
         0 over .i !

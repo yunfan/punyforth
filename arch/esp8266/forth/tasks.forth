@@ -32,7 +32,7 @@ INTERPRETER init-variable: var-current-task
     var-task-rstack-size @ allot here ;
 
 : task: ( "name" ) ( -- task )
-    create
+    create:
         here                                 \ task header begins here
         Task allot                           \ make room for task header
         SKIPPED             over .status !   \ new status is SKIPPED
