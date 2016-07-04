@@ -14,12 +14,8 @@
        compile_time_only
        ['] branch0 , resolve-backward-ref ; immediate
 
-: ')' [ char ) ] literal ;
-: 'cr' 13 ; 
-: 'lf' 10 ; 
-
-: ( begin key ')' = until ; immediate
-: \ begin key dup 'cr' = swap 'lf' = or until ; immediate
+: ( begin key [ char ) ] literal = until ; immediate
+: \ begin key dup 13 = swap 10 = or until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
 : sip ( a xt -- xt.a a ) over >r execute r> ;
@@ -30,13 +26,8 @@
 : 3dup ( a b c -- a b c a b c) dup 2over rot ;
 : 3drop ( a b c -- ) 2drop drop ;
 
-: '"' [ char " ] literal ;
-: "'" [ char ' ] literal ;
-
-: 'space' ( -- n ) 32 ;
-: 'tab' ( -- n ) 9 ;
-: cr ( -- ) 'cr' emit 'lf' emit ;
-: space ( -- ) 'space' emit ;
+: cr ( -- ) 13 emit 10 emit ;
+: space ( -- ) 32 emit ;
 
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
@@ -233,8 +224,7 @@ defer: unhandled
 : separator ( -- char )
     begin
         key dup 
-        'space' = over
-        'tab' = or  
+        32 = over 9 = or  
     while
         drop
     repeat ;
@@ -248,7 +238,7 @@ defer: unhandled
     then        
  ; immediate
 
-: (crlf) [str 'cr' c, 'lf' c, str] ; immediate
+: (crlf) [str 13 c, 10 c, str] ; immediate
 : \r\n (crlf) ;
 
 : strlen ( str -- len )
@@ -332,7 +322,7 @@ defer: unhandled
   
 : println: ( "<separator>string<separator>" )
     interpret-mode? if
-        str: "print:" 6 find link>xt execute cr 
+        str: "print:" 6 find link>xt execute cr \ XXX
     else
         compile-imm: str: ['] type , ['] cr ,
     then ; immediate
