@@ -1,16 +1,16 @@
 marker -hue
 
 \ HUE Bridge local IP and port
-str "192.168.0.12" constant BRIDGE_IP 
-80 constant BRIDGE_PORT
+str "192.168.0.12" constant: BRIDGE_IP 
+80 constant: BRIDGE_PORT
 \ Base URL containing the HUE API key
-str "/api/<YOUR_HUE_API_KEY>/lights/" constant BASE_URL
+str "/api/<YOUR_HUE_API_KEY>/lights/" constant: BASE_URL
 \ Light bulb ids for each room
-str "1" constant HALL
-str "2" constant BEDROOM
+str "1" constant: HALL
+str "2" constant: BEDROOM
 
 1024 byte-array buffer-at
-0 buffer-at constant buffer
+0 buffer-at constant: buffer
 
 : buffer>asciiz ( size -- )
     0 swap buffer-at c! ;

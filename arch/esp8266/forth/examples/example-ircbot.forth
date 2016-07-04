@@ -16,8 +16,8 @@ marker -ircbot
 : quit ( netconn -- )
     str "QUIT :hodor" writeln ;
     
-2 constant LED
-connect constant SOCKET
+2 constant: LED
+connect constant: SOCKET
 SOCKET register
 SOCKET join
 

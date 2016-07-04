@@ -1,7 +1,7 @@
 marker -tasks
 
-0 constant PAUSED
-1 constant SKIPPED
+0 constant: PAUSED
+1 constant: SKIPPED
 
 struct
     cell field: .next
@@ -11,7 +11,7 @@ struct
     cell field: .ip
 constant Task
 
-here Task allot constant INTERPRETER
+here Task allot constant: INTERPRETER
 INTERPRETER INTERPRETER .next !
 SKIPPED INTERPRETER .status !
 

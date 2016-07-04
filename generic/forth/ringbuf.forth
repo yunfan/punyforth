@@ -5,7 +5,7 @@ struct
     cell field: .j
     cell field: .capacity
     cell field: .size
-constant RingBuffer
+constant: RingBuffer
 
 : ringbuffer: ( capacity ) ( -- ringbuffer )
     create

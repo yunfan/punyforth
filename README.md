@@ -199,7 +199,7 @@ If a word faces an error condition it can *throw* an exception. Exceptions are r
 For example:
 
 ```forth
-1099 constant division_by_zero \ define a constant for the exception
+1099 constant: division_by_zero \ define a constant: for the exception
 
 : div ( q d -- r | throws:division_by_zero ) \ this word throws an exception in case of division by zero
     dup 0= if 
@@ -300,7 +300,7 @@ TODO
 TODO
 
 ```forth
-: constant ( n -- ) 
+: constant: ( n -- ) 
     create , 
     does> @ ;
 
@@ -312,8 +312,8 @@ TODO
 
 ( Examples )
 
--1 constant TRUE 
-0 constant FALSE
+-1 constant: TRUE 
+0 constant: FALSE
 
 ```
 
@@ -332,7 +332,7 @@ Here are the dictionary entries of the compiled *constant* and the word *TRUE* c
                              /                                  
                             |                                                                behavior
 +-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
-| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_r> | xt_lastword | xt_link>body | xt_! | xt_@ | xt_exit |
+| LNK | 8 | constant: | 1 | CW | xt_create | xt_, | xt_r> | xt_lastword | xt_link>body | xt_! | xt_@ | xt_exit |
 +-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
                                                                                                /
                                              behavior pointer  /```````````````````````````````
@@ -422,7 +422,7 @@ str "MyPassword" str "MySSID" wifi-connect
 ##### Examples
 
 ```forth
-2 constant PIN
+2 constant: PIN
 PIN GPIO_OUT gpio-enable
 PIN HIGH gpio-write
 250 delay
@@ -436,7 +436,7 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
 ##### Examples
 
 ```forth
-80 str "google.com" tcp-open constant SOCKET
+80 str "google.com" tcp-open constant: SOCKET
 SOCKET str "GET / HTTP/1.1" writeln
 SOCKET write-crlf
 SOCKET ['] type-counted receive
@@ -444,7 +444,7 @@ SOCKET ['] type-counted receive
 
 ```forth
 1024 byte-array buffer
-80 str "google.com" tcp-open constant SOCKET
+80 str "google.com" tcp-open constant: SOCKET
 SOCKET str "GET / HTTP/1.1" writeln
 SOCKET write-crlf
 1024 0 buffer SOCKET receive-into

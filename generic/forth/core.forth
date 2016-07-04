@@ -136,18 +136,19 @@
 : create createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
-: constant create , does> @ ; 
+: constant: create , does> @ ; 
 : variable! create , does> ;
 : variable 0 variable! ; 
 
--1 constant TRUE 0 constant FALSE
+-1 constant: TRUE 
+ 0 constant: FALSE
 
-0  constant EOK
-85 constant EUNDERFLOW
-86 constant EOVERFLOW
-65 constant EASSERT
-40 constant ENOTFOUND
-67 constant ECONVERSION
+0  constant: EOK
+85 constant: EUNDERFLOW
+86 constant: EOVERFLOW
+65 constant: EASSERT
+40 constant: ENOTFOUND
+67 constant: ECONVERSION
 
 : ['], ['] ['] , ;
 

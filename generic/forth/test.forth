@@ -37,7 +37,7 @@ marker -tests
 struct
   cell field: .width
   cell field: .height
-constant Rect
+constant: Rect
 
 : new-rect Rect create allot does> ;
 : area ( rect -- area ) dup .width @ swap .height @ * ;
@@ -110,7 +110,7 @@ defer: deferred-word
 : test:bounds
     10000 5 bounds 10000 =assert 10005 =assert ;
 
-424242 constant SENTINEL
+424242 constant: SENTINEL
 
 : test:doloop
    SENTINEL 10000 5 bounds do i loop
