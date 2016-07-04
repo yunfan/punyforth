@@ -9,7 +9,7 @@ struct
     cell field: .sp
     cell field: .rp
     cell field: .ip
-constant Task
+constant: Task
 
 here Task allot constant: INTERPRETER
 INTERPRETER INTERPRETER .next !
