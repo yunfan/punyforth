@@ -201,11 +201,11 @@ defer: unhandled
         ['], ' , ['] defer! ,
     then ; immediate
 
-: array ( size -- ) ( index -- addr )
+: array: ( size "name" -- ) ( index -- addr )
       create: cells allot
       does> swap cells + ;
 
-: byte-array ( size -- ) ( index -- addr )
+: byte-array: ( size "name" -- ) ( index -- addr )
     create: allot
     does> swap + ;
     

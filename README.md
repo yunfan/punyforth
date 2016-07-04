@@ -359,11 +359,11 @@ ENTERDOES:
 ### Other examples of create: does>
 
 ```forth
-: array ( size -- ) ( index -- addr )
+: array: ( size "name" -- ) ( index -- addr )
     create: cells allot
     does> swap cells + ;
     
-10 array numbers
+10 array: numbers
 
 : fill-numbers ( size )
     0 do i i numbers ! loop ;
@@ -443,7 +443,7 @@ SOCKET ['] type-counted receive
 ```
 
 ```forth
-1024 byte-array buffer
+1024 byte-array: buffer
 80 str "google.com" tcp-open constant: SOCKET
 SOCKET str "GET / HTTP/1.1" writeln
 SOCKET write-crlf

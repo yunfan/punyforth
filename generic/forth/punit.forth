@@ -23,7 +23,7 @@ marker -punit
     then        
     nip ;   
 
-3 byte-array test-report
+3 byte-array: test-report
 : passed ( -- n ) 0 test-report ;
 : failed ( -- n ) 1 test-report ;
 : errors ( -- n ) 2 test-report ;

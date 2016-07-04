@@ -4,5 +4,5 @@
 3 constant: FLASH_UNKNOWN
 
 \ example reading flash
-\ 128 array buffer
+\ 128 array: buffer
 \ 128 0 buffer 512000 read-flash

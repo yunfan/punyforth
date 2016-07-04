@@ -32,7 +32,7 @@ marker -tests
     dup 1- factorial3 *
     endcase ;
 
-5 array test_numbers
+5 array: test_numbers
 
 struct
   cell field: .width

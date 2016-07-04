@@ -9,7 +9,7 @@ str "/api/<YOUR_HUE_API_KEY>/lights/" constant: BASE_URL
 str "1" constant: HALL
 str "2" constant: BEDROOM
 
-1024 byte-array buffer-at
+1024 byte-array: buffer-at
 0 buffer-at constant: buffer
 
 : buffer>asciiz ( size -- )

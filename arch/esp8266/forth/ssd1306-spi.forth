@@ -87,9 +87,9 @@ marker -ssd1306-spi
 DISPLAY_WIDTH DISPLAY_HEIGHT * 8 / constant: BUFFER_SIZE
 
 \ display buffers
-BUFFER_SIZE byte-array screen-ary1
-BUFFER_SIZE byte-array screen-ary2
-BUFFER_SIZE byte-array screen-output
+BUFFER_SIZE byte-array: screen-ary1
+BUFFER_SIZE byte-array: screen-ary2
+BUFFER_SIZE byte-array: screen-output
 
 ' screen-ary1 init-variable: var-screen-ary1
 ' screen-ary2 init-variable: var-screen-ary2
