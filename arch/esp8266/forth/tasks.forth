@@ -15,10 +15,10 @@ here Task allot constant: INTERPRETER
 INTERPRETER INTERPRETER .next !
 SKIPPED INTERPRETER .status !
 
-256 variable! var-task-stack-size
-128 variable! var-task-rstack-size
-INTERPRETER variable! var-last-task
-INTERPRETER variable! var-current-task
+256 init-variable: var-task-stack-size
+128 init-variable: var-task-rstack-size
+INTERPRETER init-variable: var-last-task
+INTERPRETER init-variable: var-current-task
 
 : last-task ( -- task ) var-last-task @ ;
 : last-task! ( task -- ) var-last-task ! ;
@@ -113,7 +113,7 @@ defer: pause
     until
     drop ;
    
-: semaphore: ( -- ) variable! ;
+: semaphore: ( -- ) init-variable: ;
 : mutex: ( -- ) 1 semaphore: ;
 
 : wait ( semaphore -- )

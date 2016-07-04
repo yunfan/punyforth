@@ -137,8 +137,8 @@
 : does> r> lastword link>body ! ;
 
 : constant: create , does> @ ; 
-: variable! create , does> ;
-: variable 0 variable! ; 
+: init-variable: create , does> ;
+: variable: 0 init-variable: ; 
 
 -1 constant: TRUE 
  0 constant: FALSE
@@ -163,7 +163,7 @@
 
 : defer! ( dst-xt src-xt -- ) swap xt>body ! ;
 
-variable handler 0 handler !       \ stores the address of the nearest exception handler
+0 init-variable: handler           \ stores the address of the nearest exception handler
 defer: unhandled
 
 : catch ( xt -- errcode | 0 )

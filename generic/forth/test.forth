@@ -56,7 +56,8 @@ new-rect r1
        0 do 10 factorial drop loop
        time swap - ;
 
-variable test_var1 variable test_var2
+variable: test_var1
+variable: test_var2
 
 defer: deferred-word
 : use-deferred 2 3 deferred-word ;
@@ -277,7 +278,7 @@ defer: deferred-word
 : test:override
     to-override 45 =assert ;
 
-variable dp-before-mark dp dp-before-mark !
+variable: dp-before-mark dp dp-before-mark !
 marker -test-mark
 : word-after-marker 1 2 3 ; 237 allot
 

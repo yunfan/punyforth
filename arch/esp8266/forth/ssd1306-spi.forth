@@ -91,12 +91,8 @@ BUFFER_SIZE byte-array screen-ary1
 BUFFER_SIZE byte-array screen-ary2
 BUFFER_SIZE byte-array screen-output
 
-variable var-screen-ary1
-variable var-screen-ary2
-
-' screen-ary1 var-screen-ary1 !
-' screen-ary2 var-screen-ary2 !
-
+' screen-ary1 init-variable: var-screen-ary1
+' screen-ary2 init-variable: var-screen-ary2
 : screen1 ( index -- addr ) var-screen-ary1 @ execute ;
 : screen2 ( index -- addr ) var-screen-ary2 @ execute ;
 

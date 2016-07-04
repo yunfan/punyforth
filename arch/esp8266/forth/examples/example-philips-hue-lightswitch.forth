@@ -10,7 +10,7 @@ BUTTON_BEDROOM GPIO_IN gpio-enable
 BUTTON_BEDROOM GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 
 50 constant: DEBOUNCE_TIME \ half sec
-variable last-event-time
+variable: last-event-time
 
 : toggle-debounced ( ligth -- )
     time last-event-time @ - DEBOUNCE_TIME > if
