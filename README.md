@@ -211,7 +211,7 @@ For example:
 : test-div ( q d -- r )
   ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
       dup division_by_zero = if     \ error code is 1099 indicating division by zero
-        print "Error: division by zero"
+        print: "Error: division by zero"
       else
         throw                       \ there was an other error, rethrow it
       then
@@ -230,7 +230,7 @@ You can modify this behaviour by overriding the *unhandled* deferred word.
 
 ```forth
 : my-uncaught-exception-handler ( code -- )
-    cr print "Uncaught exception: " . cr
+    cr print: "Uncaught exception: " . cr
     abort ;
     
 ' unhandled is: my-uncaught-exception-handler
@@ -499,7 +499,7 @@ task: task-consumer
     activate                            \ actiavte task
     begin    
         mailbox1 receive .              \ receive and print one item from the mailbox
-        println "received by consumer"
+        println: "received by consumer"
         pause                           \ allow other tasks to run
     again
     deactivate ;                        \ deactivate task
