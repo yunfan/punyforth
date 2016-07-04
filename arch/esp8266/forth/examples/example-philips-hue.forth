@@ -51,7 +51,7 @@ str: "2" constant: BEDROOM
         dup \r\n                          write
         dup str: '{"on":true,"bri": 255}' writeln
         dup ['] type-counted              receive
-        print "response code: " . cr
+        print: "response code: " . cr
         dispose ;
         
 : off ( bulb -- )
@@ -62,7 +62,7 @@ str: "2" constant: BEDROOM
         dup \r\n                    write
         dup str: '{"on":false}'     writeln
         dup ['] type-counted        receive
-        print "response code: " . cr
+        print: "response code: " . cr
         dispose ;
         
 : toggle-unsafe ( bulb -- | throws:ENETCON )
@@ -72,6 +72,6 @@ str: "2" constant: BEDROOM
     ['] toggle-unsafe catch 
     case
         0 of exit endof
-        ENETCON of println "netconn error" endof
+        ENETCON of println: "netconn error" endof
         throw
     endcase ;

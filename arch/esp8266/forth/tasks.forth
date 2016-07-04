@@ -106,7 +106,7 @@ defer: pause
         dup task-find dup 0<> if
             type-word cr
         else
-            drop println "interpreter"
+            drop println: "interpreter"
         then
         .next @ dup
         current-task =

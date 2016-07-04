@@ -317,7 +317,7 @@ defer: unhandled
     interpret-mode? invert if ['], , then 
   ; immediate
 
-: print
+: print: ( "<separator>string<separator>" )
     interpret-mode? if
         separator
         begin
@@ -330,21 +330,21 @@ defer: unhandled
         compile-imm: str: ['] type ,
     then ; immediate
   
-: println 
+: println: ( "<separator>string<separator>" )
     interpret-mode? if
-        str: "print" 5 find link>xt execute cr 
+        str: "print:" 6 find link>xt execute cr 
     else
         compile-imm: str: ['] type , ['] cr ,
     then ; immediate
 
 : print-stack ( -- )
     depth 0= if exit then
-    print "stack["
+    print: "stack["
     0 depth 2 - do 
         sp@ i cells + @ .
     i 0<> if space then
     -1 +loop 
-    print "] ";
+    print: "] ";
 
 : clear-stack ( i*x -- ) 
     depth 0 do drop loop ;
@@ -376,17 +376,17 @@ defer: unhandled
 : stack_prompt ( -- ) 
     depth 0< if EUNDERFLOW throw then
     cr print-stack
-    print "% " ;
+    print: "% " ;
 
 ' stack_prompt prompt !
 
 : in-heap? ( a -- bool ) heap-start over heap-end between? ;
 
 : traceback ( code -- )
-    cr print "Unhandled exeption: " .
-    print " rdepth: " rdepth . cr
+    cr print: "Unhandled exeption: " .
+    print: " rdepth: " rdepth . cr
     rdepth 1+  3 do
-        print "  at "
+        print: "  at "
         rp@ i cells + @                     \ i. return address
         in-heap? if
             cell - @                        \ instruction before the return address 
@@ -403,7 +403,7 @@ defer: unhandled
             [ char ) ] literal emit
             cr
         else
-            print "??? (" . println ")"     \ not valid return address, could be doloop var
+            print: "??? (" . println: ")"     \ not valid return address, could be doloop var
         then            
     loop
     print-stack

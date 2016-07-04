@@ -97,14 +97,14 @@ Punyforth also supports switch-case like flow control logic as shown in the foll
 ```forth
 : day ( n -- )
   case
-    1 of print "Monday" endof
-    2 of print "Tuesday" endof
-    3 of print "Wednesday" endof
-    4 of print "Thursday" endof
-    5 of print "Friday" endof
-    6 of print "Saturday" endof
-    7 of print "Sunday" endof
-    print "Unknown day: " .
+    1 of print: "Monday" endof
+    2 of print: "Tuesday" endof
+    3 of print: "Wednesday" endof
+    4 of print: "Thursday" endof
+    5 of print: "Friday" endof
+    6 of print: "Saturday" endof
+    7 of print: "Sunday" endof
+    print: "Unknown day: " .
   endcase ;
 ````
 
