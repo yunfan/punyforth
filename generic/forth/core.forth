@@ -239,7 +239,7 @@ defer: unhandled
         drop
     repeat ;
 
-: str
+: str: ( "<separator>string content<separator>" )
     separator
     interpret-mode? if
         align! here swap c,-until 0 c,
@@ -327,14 +327,14 @@ defer: unhandled
         repeat
         2drop           
     else
-        compile-imm: str ['] type ,
+        compile-imm: str: ['] type ,
     then ; immediate
   
 : println 
     interpret-mode? if
-        str "print" 5 find link>xt execute cr 
+        str: "print" 5 find link>xt execute cr 
     else
-        compile-imm: str ['] type , ['] cr ,
+        compile-imm: str: ['] type , ['] cr ,
     then ; immediate
 
 : print-stack ( -- )
