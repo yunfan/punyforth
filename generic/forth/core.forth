@@ -349,7 +349,7 @@ defer: unhandled
 : clear-stack ( i*x -- ) 
     depth 0 do drop loop ;
 
-: marker
+: marker: ( "name" -- )
     create:
         lastword ,
     does>

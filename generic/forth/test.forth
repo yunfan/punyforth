@@ -1,4 +1,4 @@
-marker -tests
+marker: -tests
 
 : factorial ( n -- n! | err:1024 )
        dup 0< if
@@ -279,7 +279,7 @@ defer: deferred-word
     to-override 45 =assert ;
 
 variable: dp-before-mark dp dp-before-mark !
-marker -test-mark
+marker: -test-mark
 : word-after-marker 1 2 3 ; 237 allot
 
 : test:marker

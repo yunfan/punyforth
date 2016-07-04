@@ -1,4 +1,4 @@
-marker -ssd1306-spi
+marker: -ssd1306-spi
 
 \ ssd1306 SPI display driver
 

@@ -1,4 +1,4 @@
-marker -tasks
+marker: -tasks
 
 0 constant: PAUSED
 1 constant: SKIPPED

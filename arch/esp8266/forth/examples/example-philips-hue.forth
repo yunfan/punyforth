@@ -1,4 +1,4 @@
-marker -hue
+marker: -hue
 
 \ HUE Bridge local IP and port
 str "192.168.0.12" constant: BRIDGE_IP 

@@ -1,4 +1,4 @@
-marker -punit
+marker: -punit
 
 : assert ( bool -- | throws:EASSERT ) invert if EASSERT throw then ;
 : =assert ( n1 n2 -- | throws:EASSERT )

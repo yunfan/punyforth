@@ -1,4 +1,4 @@
-marker -ircbot
+marker: -ircbot
 
 : connect ( -- netconn )
     6667 str "irc.freenode.net" tcp-open ;

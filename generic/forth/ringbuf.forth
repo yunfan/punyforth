@@ -1,4 +1,4 @@
-marker -ringbuf
+marker: -ringbuf
 
 struct
     cell field: .i

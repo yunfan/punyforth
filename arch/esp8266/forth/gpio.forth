@@ -1,4 +1,4 @@
-marker -gpio
+marker: -gpio
 
 0 constant: GPIO_INTTYPE_NONE
 1 constant: GPIO_INTTYPE_EDGE_POS
