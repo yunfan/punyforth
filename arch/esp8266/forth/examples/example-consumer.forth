@@ -8,13 +8,13 @@ task: task-consumer
 : consumer ( task -- )
     activate                            \ actiavte task
     begin    
-        mailbox1 receive .
+        mailbox1 mailbox-receive .
         print: " received by consumer" cr
         pause                           \ allow other tasks to run
     again
     deactivate ;                        \ deactivate task
 
-\ multi                                   \ switch to multitask mode
-\ task-consumer consumer                  \ run the consumer
-\ 123 mailbox1 send                       \ send some numbers to the consumer
-\ 456 mailbox1 send
+\ multi                                 \ switch to multitask mode
+\ task-consumer consumer                \ run the consumer
+\ 123 mailbox1 mailbox-send             \ send some numbers to the consumer
+\ 456 mailbox1 mailbox-send

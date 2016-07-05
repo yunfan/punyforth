@@ -137,7 +137,7 @@ defer: pause
     
 : mailbox: ( size ) ( -- mailbox ) ringbuffer: ;
 
-: send ( element mailbox -- )
+: mailbox-send ( element mailbox -- )
     begin
         dup full? 
     while
@@ -145,7 +145,7 @@ defer: pause
     repeat
     enqueue ;
 
-: receive ( mailbox -- element )
+: mailbox-receive ( mailbox -- element )
     begin
         dup empty?
     while

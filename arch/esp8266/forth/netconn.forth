@@ -49,6 +49,24 @@ marker: -netconn
     check-netconn-error
     r> ;
     
+: bind ( port host netconn -- | throws:ENETCONN )
+    netconn-bind
+    check-netconn-error ;
+    
+: listen ( netconn -- | throws:ENETCON )
+    netconn-listen
+    check-netconn-error ;
+    
+: accept ( netconn -- new-netconn | throws:ENETCONN)
+    begin
+        pause
+        dup netconn-accept dup NC_ERR_TIMEOUT <> if
+            check-netconn-error nip
+            exit
+        then
+        2drop
+    again ;
+    
 : write ( netconn str -- | throws:ENETCON )
     dup strlen swap rot 
     netconn-write
