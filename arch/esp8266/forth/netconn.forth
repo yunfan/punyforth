@@ -25,12 +25,12 @@ marker -netconn
 : check-new-netconn ( netconn -- netconn | throws:ENETCON )
     dup 0= if ENETCON throw then ;
     
-: tcp-new ( port host -- netconn )
+: tcp-new ( -- netconn )
     TCP netconn-new
     RECV_TIMEOUT_MSEC over netconn-set-recvtimeout
     check-new-netconn ;
     
-: udp-new ( port host -- netconn )
+: udp-new ( -- netconn )
     UDP netconn-new
     RECV_TIMEOUT_MSEC over netconn-set-recvtimeout
     check-new-netconn ;
