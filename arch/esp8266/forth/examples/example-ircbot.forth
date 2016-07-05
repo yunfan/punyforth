@@ -1,23 +1,23 @@
-marker -ircbot
+marker: -ircbot
 
 : connect ( -- netconn )
-    6667 str "irc.freenode.net" tcp-open ;
+    6667 str: "irc.freenode.net" tcp-open ;
     
 : register ( netconn -- )
-    dup str "NICK hodor189"                        writeln
-        str "USER hodor189 hodor189 bla :hodor189" writeln ;
+    dup str: "NICK hodor189"                        writeln
+        str: "USER hodor189 hodor189 bla :hodor189" writeln ;
     
 : join ( netconn -- ) 
-    str "JOIN #somechan" writeln ;
+    str: "JOIN #somechan" writeln ;
 
 : greet ( netconn -- )
-    str "PRIVMSG #somechan :Hodor? ..hoodor!" writeln ;
+    str: "PRIVMSG #somechan :Hodor? ..hoodor!" writeln ;
 
 : quit ( netconn -- )
-    str "QUIT :hodor" writeln ;
+    str: "QUIT :hodor" writeln ;
     
-2 constant LED
-connect constant SOCKET
+2 constant: LED
+connect constant: SOCKET
 SOCKET register
 SOCKET join
 
@@ -28,13 +28,13 @@ SOCKET join
 : data-received ( buffer length -- )
     counted>asciiz
     dup type
-    dup str "PING" str-starts-with if
-        SOCKET str "PONG" writeln
+    dup str: "PING" str-starts-with if
+        SOCKET str: "PONG" writeln
         random 200 % 0= if
             SOCKET greet
         then
     then
-    str "PRIVMSG" str-includes if
+    str: "PRIVMSG" str-includes if
         LED blink
     then ;
 
@@ -44,7 +44,7 @@ task: ircbot-task
     multi
     ircbot-task activate
     SOCKET ['] data-received receive
-    print "response code: " . cr
+    print: "response code: " . cr
     deactivate ;
 
 start-irc-task

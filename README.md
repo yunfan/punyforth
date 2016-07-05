@@ -97,14 +97,14 @@ Punyforth also supports switch-case like flow control logic as shown in the foll
 ```forth
 : day ( n -- )
   case
-    1 of print "Monday" endof
-    2 of print "Tuesday" endof
-    3 of print "Wednesday" endof
-    4 of print "Thursday" endof
-    5 of print "Friday" endof
-    6 of print "Saturday" endof
-    7 of print "Sunday" endof
-    print "Unknown day: " .
+    1 of print: "Monday" endof
+    2 of print: "Tuesday" endof
+    3 of print: "Wednesday" endof
+    4 of print: "Thursday" endof
+    5 of print: "Friday" endof
+    6 of print: "Saturday" endof
+    7 of print: "Sunday" endof
+    print: "Unknown day: " .
   endcase ;
 ````
 
@@ -199,7 +199,7 @@ If a word faces an error condition it can *throw* an exception. Exceptions are r
 For example:
 
 ```forth
-1099 constant division_by_zero \ define a constant for the exception
+1099 constant: division_by_zero \ define a constant: for the exception
 
 : div ( q d -- r | throws:division_by_zero ) \ this word throws an exception in case of division by zero
     dup 0= if 
@@ -211,7 +211,7 @@ For example:
 : test-div ( q d -- r )
   ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
       dup division_by_zero = if     \ error code is 1099 indicating division by zero
-        print "Error: division by zero"
+        print: "Error: division by zero"
       else
         throw                       \ there was an other error, rethrow it
       then
@@ -230,7 +230,7 @@ You can modify this behaviour by overriding the *unhandled* deferred word.
 
 ```forth
 : my-uncaught-exception-handler ( code -- )
-    cr print "Uncaught exception: " . cr
+    cr print: "Uncaught exception: " . cr
     abort ;
     
 ' unhandled is: my-uncaught-exception-handler
@@ -291,20 +291,20 @@ Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 * bi@ ( a b xt -- xt.a xt.b )
 
 
-### The word *create does>*
+### The word *create: does>*
 
 TODO
 
-### About the implementation of *create does>*
+### About the implementation of *create: does>*
 
 TODO
 
 ```forth
-: constant ( n -- ) 
-    create , 
+: constant: ( n -- ) 
+    create: , 
     does> @ ;
 
-: create 
+: create:
     createheader enterdoes , 0 , ;     \ write enterdoes to the code field and store a dummy addres for the behavior
     
 : does>
@@ -312,8 +312,8 @@ TODO
 
 ( Examples )
 
--1 constant TRUE 
-0 constant FALSE
+-1 constant: TRUE 
+0 constant: FALSE
 
 ```
 
@@ -332,7 +332,7 @@ Here are the dictionary entries of the compiled *constant* and the word *TRUE* c
                              /                                  
                             |                                                                behavior
 +-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
-| LNK | 8 | constant | 1 | CW | xt_create | xt_, | xt_r> | xt_lastword | xt_link>body | xt_! | xt_@ | xt_exit |
+| LNK | 8 | constant: | 1 | CW | xt_create | xt_, | xt_r> | xt_lastword | xt_link>body | xt_! | xt_@ | xt_exit |
 +-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
                                                                                                /
                                              behavior pointer  /```````````````````````````````
@@ -356,14 +356,14 @@ ENTERDOES:
     NEXT                    // jump to behavour
 ```
 
-### Other examples of create does>
+### Other examples of create: does>
 
 ```forth
-: array ( size -- ) ( index -- addr )
-    create cells allot
+: array: ( size "name" -- ) ( index -- addr )
+    create: cells allot
     does> swap cells + ;
     
-10 array numbers
+10 array: numbers
 
 : fill-numbers ( size )
     0 do i i numbers ! loop ;
@@ -380,7 +380,7 @@ ENTERDOES:
 : struct 0 ;
 
 : field 
-  create over , + 
+  create: over , + 
   does> @ + ;
 
 struct 
@@ -389,7 +389,7 @@ struct
 constant Rect
 
 : new-rect
-  Rect create allot does> ;
+  Rect create: allot does> ;
   
 : area ( rect -- area ) 
   dup width @ swap height @ * ;  
@@ -414,7 +414,7 @@ r1 area .
 ##### Examples
 
 ```forth
-str "MyPassword" str "MySSID" wifi-connect
+str: "MyPassword" str: "MySSID" wifi-connect
 ```    
 
 #### GPIO
@@ -422,7 +422,7 @@ str "MyPassword" str "MySSID" wifi-connect
 ##### Examples
 
 ```forth
-2 constant PIN
+2 constant: PIN
 PIN GPIO_OUT gpio-enable
 PIN HIGH gpio-write
 250 delay
@@ -436,16 +436,16 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
 ##### Examples
 
 ```forth
-80 str "google.com" tcp-open constant SOCKET
-SOCKET str "GET / HTTP/1.1" writeln
+80 str: "google.com" tcp-open constant: SOCKET
+SOCKET str: "GET / HTTP/1.1" writeln
 SOCKET write-crlf
 SOCKET ['] type-counted receive
 ```
 
 ```forth
-1024 byte-array buffer
-80 str "google.com" tcp-open constant SOCKET
-SOCKET str "GET / HTTP/1.1" writeln
+1024 byte-array: buffer
+80 str: "google.com" tcp-open constant: SOCKET
+SOCKET str: "GET / HTTP/1.1" writeln
 SOCKET write-crlf
 1024 0 buffer SOCKET receive-into
 ```
@@ -499,7 +499,7 @@ task: task-consumer
     activate                            \ actiavte task
     begin    
         mailbox1 receive .              \ receive and print one item from the mailbox
-        println "received by consumer"
+        println: "received by consumer"
         pause                           \ allow other tasks to run
     again
     deactivate ;                        \ deactivate task

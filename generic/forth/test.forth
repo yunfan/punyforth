@@ -1,4 +1,4 @@
-marker -tests
+marker: -tests
 
 : factorial ( n -- n! | err:1024 )
        dup 0< if
@@ -32,14 +32,14 @@ marker -tests
     dup 1- factorial3 *
     endcase ;
 
-5 array test_numbers
+5 array: test_numbers
 
 struct
   cell field: .width
   cell field: .height
-constant Rect
+constant: Rect
 
-: new-rect Rect create allot does> ;
+: new-rect Rect create: allot does> ;
 : area ( rect -- area ) dup .width @ swap .height @ * ;
 new-rect r1
 
@@ -56,7 +56,8 @@ new-rect r1
        0 do 10 factorial drop loop
        time swap - ;
 
-variable test_var1 variable test_var2
+variable: test_var1
+variable: test_var2
 
 defer: deferred-word
 : use-deferred 2 3 deferred-word ;
@@ -110,7 +111,7 @@ defer: deferred-word
 : test:bounds
     10000 5 bounds 10000 =assert 10005 =assert ;
 
-424242 constant SENTINEL
+424242 constant: SENTINEL
 
 : test:doloop
    SENTINEL 10000 5 bounds do i loop
@@ -152,14 +153,14 @@ defer: deferred-word
    9 factorial 9 factorial3 =assert ;
 
 : test:hex
-   str "aBcDeF" hex>int 11259375 =assert
-   str "AbCdEf" hex>int 11259375 =assert
-   str "12345678" hex>int 305419896 =assert
-   str "a1" hex>int 161 =assert
-   str "123abc" hex>int 1194684 =assert
-   str "" ['] hex>int catch ECONVERSION =assert
-   str "123g4" ['] hex>int catch ECONVERSION =assert
-   str "12G4" ['] hex>int catch ECONVERSION =assert
+   str: "aBcDeF" hex>int 11259375 =assert
+   str: "AbCdEf" hex>int 11259375 =assert
+   str: "12345678" hex>int 305419896 =assert
+   str: "a1" hex>int 161 =assert
+   str: "123abc" hex>int 1194684 =assert
+   str: "" ['] hex>int catch ECONVERSION =assert
+   str: "123g4" ['] hex>int catch ECONVERSION =assert
+   str: "12G4" ['] hex>int catch ECONVERSION =assert
    hex: a0f 2575 =assert ;
 
 : test:case   
@@ -212,49 +213,49 @@ defer: deferred-word
    freemem 16 allot freemem - 16 =assert ;
 
 : test:str
-   str "" strlen 0 =assert
-   str "1" strlen 1 =assert
-   str "12" strlen 2 =assert
-   str "1234567" strlen 7 =assert
-   str '""""' strlen 4 =assert
-   str 'anystring' 
-   str ''
+   str: "" strlen 0 =assert
+   str: "1" strlen 1 =assert
+   str: "12" strlen 2 =assert
+   str: "1234567" strlen 7 =assert
+   str: '""""' strlen 4 =assert
+   str: 'anystring' 
+   str: ''
    str-starts-with TRUE =assert
-   str ''
-   str ''
+   str: ''
+   str: ''
    str-starts-with TRUE =assert
-   str 'abc'
-   str 'bc'
+   str: 'abc'
+   str: 'bc'
    str-starts-with FALSE =assert
-   str 'abc'
-   str 'ab'
+   str: 'abc'
+   str: 'ab'
    str-starts-with TRUE =assert
-   str 'aabbc'
-   str 'aabbc'
+   str: 'aabbc'
+   str: 'aabbc'
    str-starts-with TRUE =assert
-   str 'aabbc'
-   str 'aabbcc'
+   str: 'aabbc'
+   str: 'aabbcc'
    str-starts-with FALSE =assert
-   str 'abcxxxx' 
-   str 'abc' 
+   str: 'abcxxxx' 
+   str: 'abc' 
    str-includes TRUE =assert   
-   str 'xxabcyy' 
-   str 'abc' 
+   str: 'xxabcyy' 
+   str: 'abc' 
    str-includes TRUE =assert   
-   str 'xxabzyy' 
-   str 'abc'
+   str: 'xxabzyy' 
+   str: 'abc'
    str-includes FALSE =assert
-   str 'anystring' 
-   str '' 
+   str: 'anystring' 
+   str: '' 
    str-includes assert   
-   str 'xxx'
-   str 'xxx' 
+   str: 'xxx'
+   str: 'xxx' 
    str-includes assert   
-   str 'abcdef'
-   str 'def' 
+   str: 'abcdef'
+   str: 'def' 
    str-includes assert   
-   str 'abcdef'
-   str 'efg' 
+   str: 'abcdef'
+   str: 'efg' 
    str-includes FALSE =assert ;
 
 : test:untilloop
@@ -277,8 +278,8 @@ defer: deferred-word
 : test:override
     to-override 45 =assert ;
 
-variable dp-before-mark dp dp-before-mark !
-marker -test-mark
+variable: dp-before-mark dp dp-before-mark !
+marker: -test-mark
 : word-after-marker 1 2 3 ; 237 allot
 
 : test:marker

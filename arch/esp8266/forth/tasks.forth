@@ -1,7 +1,7 @@
-marker -tasks
+marker: -tasks
 
-0 constant PAUSED
-1 constant SKIPPED
+0 constant: PAUSED
+1 constant: SKIPPED
 
 struct
     cell field: .next
@@ -9,16 +9,16 @@ struct
     cell field: .sp
     cell field: .rp
     cell field: .ip
-constant Task
+constant: Task
 
-here Task allot constant INTERPRETER
+here Task allot constant: INTERPRETER
 INTERPRETER INTERPRETER .next !
 SKIPPED INTERPRETER .status !
 
-256 variable! var-task-stack-size
-128 variable! var-task-rstack-size
-INTERPRETER variable! var-last-task
-INTERPRETER variable! var-current-task
+256 init-variable: var-task-stack-size
+128 init-variable: var-task-rstack-size
+INTERPRETER init-variable: var-last-task
+INTERPRETER init-variable: var-current-task
 
 : last-task ( -- task ) var-last-task @ ;
 : last-task! ( task -- ) var-last-task ! ;
@@ -32,7 +32,7 @@ INTERPRETER variable! var-current-task
     var-task-rstack-size @ allot here ;
 
 : task: ( "name" ) ( -- task )
-    create
+    create:
         here                                 \ task header begins here
         Task allot                           \ make room for task header
         SKIPPED             over .status !   \ new status is SKIPPED
@@ -106,14 +106,14 @@ defer: pause
         dup task-find dup 0<> if
             type-word cr
         else
-            drop println "interpreter"
+            drop println: "interpreter"
         then
         .next @ dup
         current-task =
     until
     drop ;
    
-: semaphore: ( -- ) variable! ;
+: semaphore: ( -- ) init-variable: ;
 : mutex: ( -- ) 1 semaphore: ;
 
 : wait ( semaphore -- )

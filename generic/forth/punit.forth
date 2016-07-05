@@ -1,9 +1,9 @@
-marker -punit
+marker: -punit
 
 : assert ( bool -- | throws:EASSERT ) invert if EASSERT throw then ;
 : =assert ( n1 n2 -- | throws:EASSERT )
     2dup <> if 
-        swap print '(' . space . print ' <>)' space
+        swap print: '(' . space . print: ' <>)' space
         EASSERT throw 
     else
         2drop
@@ -23,7 +23,7 @@ marker -punit
     then        
     nip ;   
 
-3 byte-array test-report
+3 byte-array: test-report
 : passed ( -- n ) 0 test-report ;
 : failed ( -- n ) 1 test-report ;
 : errors ( -- n ) 2 test-report ;
@@ -37,10 +37,10 @@ marker -punit
             1 passed c+!
         endof 
         EASSERT of 
-            println "FAIL" 
+            println: "FAIL" 
             1 failed c+!
         endof
-        print "ERROR " . cr
+        print: "ERROR " . cr
         1 errors c+!
     endcase ;
 
@@ -48,15 +48,15 @@ marker -punit
     0 passed c! 0 failed c! 0 errors c! ;
 
 : test-report ( -- )
-    passed c@ failed c@ errors c@ + + . print " tests, "
-    passed c@ . print " passed, " 
-    failed c@ . print " failed, "
-    errors c@ . print " errors"
+    passed c@ failed c@ errors c@ + + . print: " tests, "
+    passed c@ . print: " passed, " 
+    failed c@ . print: " failed, "
+    errors c@ . print: " errors"
     cr
     errors c@ 0= failed c@ 0= and if
-        println "All passed"
+        println: "All passed"
     else
-        println "There were failures"
+        println: "There were failures"
     then
     cr ;
 
@@ -80,5 +80,5 @@ marker -punit
     word find dup 0<> if
         test-run
     else
-        drop println "No such test"
+        drop println: "No such test"
     then ;

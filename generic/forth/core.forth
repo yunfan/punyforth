@@ -14,12 +14,8 @@
        compile_time_only
        ['] branch0 , resolve-backward-ref ; immediate
 
-: ')' [ char ) ] literal ;
-: 'cr' 13 ; 
-: 'lf' 10 ; 
-
-: ( begin key ')' = until ; immediate
-: \ begin key dup 'cr' = swap 'lf' = or until ; immediate
+: ( begin key [ char ) ] literal = until ; immediate
+: \ begin key dup 13 = swap 10 = or until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
 : sip ( a xt -- xt.a a ) over >r execute r> ;
@@ -30,13 +26,8 @@
 : 3dup ( a b c -- a b c a b c) dup 2over rot ;
 : 3drop ( a b c -- ) 2drop drop ;
 
-: '"' [ char " ] literal ;
-: "'" [ char ' ] literal ;
-
-: 'space' ( -- n ) 32 ;
-: 'tab' ( -- n ) 9 ;
-: cr ( -- ) 'cr' emit 'lf' emit ;
-: space ( -- ) 'space' emit ;
+: cr ( -- ) 13 emit 10 emit ;
+: space ( -- ) 32 emit ;
 
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
@@ -133,21 +124,22 @@
 
 : override ( -- ) lastword hide ; immediate
 
-: create createheader enterdoes , 0 , ;
+: create: createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
 
-: constant create , does> @ ; 
-: variable! create , does> ;
-: variable 0 variable! ; 
+: constant: create: , does> @ ; 
+: init-variable: create: , does> ;
+: variable: 0 init-variable: ; 
 
--1 constant TRUE 0 constant FALSE
+-1 constant: TRUE 
+ 0 constant: FALSE
 
-0  constant EOK
-85 constant EUNDERFLOW
-86 constant EOVERFLOW
-65 constant EASSERT
-40 constant ENOTFOUND
-67 constant ECONVERSION
+0  constant: EOK
+85 constant: EUNDERFLOW
+86 constant: EOVERFLOW
+65 constant: EASSERT
+40 constant: ENOTFOUND
+67 constant: ECONVERSION
 
 : ['], ['] ['] , ;
 
@@ -157,12 +149,12 @@
 : xt>body ( xt -- a ) 2 cells + ;
 
 : defer: ( "name" -- )
-    create ['] abort ,
+    create: ['] abort ,
     does> @ execute ;
 
 : defer! ( dst-xt src-xt -- ) swap xt>body ! ;
 
-variable handler 0 handler !       \ stores the address of the nearest exception handler
+0 init-variable: handler           \ stores the address of the nearest exception handler
 defer: unhandled
 
 : catch ( xt -- errcode | 0 )
@@ -200,16 +192,16 @@ defer: unhandled
         ['], ' , ['] defer! ,
     then ; immediate
 
-: array ( size -- ) ( index -- addr )
-      create cells allot
+: array: ( size "name" -- ) ( index -- addr )
+      create: cells allot
       does> swap cells + ;
 
-: byte-array ( size -- ) ( index -- addr )
-    create allot
+: byte-array: ( size "name" -- ) ( index -- addr )
+    create: allot
     does> swap + ;
     
 : struct 0 ;
-: field: create over , + does> @ + ;
+: field: create: over , + does> @ + ;
 
 : [str ( -- address-to-fill-in )
     ['], here 3 cells + ,           \ compile return value: address of string
@@ -232,13 +224,12 @@ defer: unhandled
 : separator ( -- char )
     begin
         key dup 
-        'space' = over
-        'tab' = or  
+        32 = over 9 = or  
     while
         drop
     repeat ;
 
-: str
+: str: ( "<separator>string content<separator>" )
     separator
     interpret-mode? if
         align! here swap c,-until 0 c,
@@ -247,7 +238,7 @@ defer: unhandled
     then        
  ; immediate
 
-: (crlf) [str 'cr' c, 'lf' c, str] ; immediate
+: (crlf) [str 13 c, 10 c, str] ; immediate
 : \r\n (crlf) ;
 
 : strlen ( str -- len )
@@ -316,7 +307,7 @@ defer: unhandled
     interpret-mode? invert if ['], , then 
   ; immediate
 
-: print
+: print: ( "<separator>string<separator>" )
     interpret-mode? if
         separator
         begin
@@ -326,30 +317,30 @@ defer: unhandled
         repeat
         2drop           
     else
-        compile-imm: str ['] type ,
+        compile-imm: str: ['] type ,
     then ; immediate
   
-: println 
+: println: ( "<separator>string<separator>" )
     interpret-mode? if
-        str "print" 5 find link>xt execute cr 
+        str: "print:" 6 find link>xt execute cr \ XXX
     else
-        compile-imm: str ['] type , ['] cr ,
+        compile-imm: str: ['] type , ['] cr ,
     then ; immediate
 
 : print-stack ( -- )
     depth 0= if exit then
-    print "stack["
+    print: "stack["
     0 depth 2 - do 
         sp@ i cells + @ .
     i 0<> if space then
     -1 +loop 
-    print "] ";
+    print: "] ";
 
 : clear-stack ( i*x -- ) 
     depth 0 do drop loop ;
 
-: marker
-    create
+: marker: ( "name" -- )
+    create:
         lastword ,
     does>
         @ dup 
@@ -375,17 +366,17 @@ defer: unhandled
 : stack_prompt ( -- ) 
     depth 0< if EUNDERFLOW throw then
     cr print-stack
-    print "% " ;
+    print: "% " ;
 
 ' stack_prompt prompt !
 
 : in-heap? ( a -- bool ) heap-start over heap-end between? ;
 
 : traceback ( code -- )
-    cr print "Unhandled exeption: " .
-    print " rdepth: " rdepth . cr
+    cr print: "Unhandled exeption: " .
+    print: " rdepth: " rdepth . cr
     rdepth 1+  3 do
-        print "  at "
+        print: "  at "
         rp@ i cells + @                     \ i. return address
         in-heap? if
             cell - @                        \ instruction before the return address 
@@ -402,7 +393,7 @@ defer: unhandled
             [ char ) ] literal emit
             cr
         else
-            print "??? (" . println ")"     \ not valid return address, could be doloop var
+            print: "??? (" . println: ")"     \ not valid return address, could be doloop var
         then            
     loop
     print-stack

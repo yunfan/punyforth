@@ -1,4 +1,4 @@
-marker -ringbuf-test
+marker: -ringbuf-test
 
 5 ringbuffer: buf
 : test:initially-empty  

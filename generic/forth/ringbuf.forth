@@ -1,14 +1,14 @@
-marker -ringbuf
+marker: -ringbuf
 
 struct
     cell field: .i
     cell field: .j
     cell field: .capacity
     cell field: .size
-constant RingBuffer
+constant: RingBuffer
 
 : ringbuffer: ( capacity ) ( -- ringbuffer )
-    create
+    create:
         here 
         over cells RingBuffer + allot
         0 over .i !
