@@ -15,7 +15,7 @@ server-socket listen
 
 4 mailbox: client-sockets
 
-: serve ( task -- )       
+: server ( task -- )       
     activate
     begin
         println: "Accepting socket.."
