@@ -1,7 +1,7 @@
 multi
 
-8080 constant: BIND_PORT
-str: "192.168.0.15" constant: BIND_HOST
+8080 constant: PORT
+str: "192.168.0.15" constant: HOST
 
 6 byte-array: buffer-at
 0 buffer-at constant: buffer
@@ -24,7 +24,7 @@ task: worker-task2
 
 : server ( task -- )       
     activate
-    BIND_PORT BIND_HOST tcp-server-new
+    PORT HOST tcp-server-new
     begin
         println: "Accepting socket.."
         dup accept client-sockets mailbox-send
