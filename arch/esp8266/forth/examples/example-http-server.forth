@@ -9,9 +9,12 @@ multi
 : receive-into-buffer ( netconn -- )
     5 buffer receive-into buffer>asciiz ;
     
-tcp-new constant: server-socket
-8080 str: "192.168.0.15" server-socket bind
-server-socket listen 
+: tcp-server-new ( port host -- netconn | throws:ENETCON )
+    tcp-new dup
+    8080 str: "192.168.0.15" rot bind
+    dup listen ;    
+    
+8080 str: "192.168.0.15" tcp-server-new constant: server-socket
 
 4 mailbox: client-sockets
 task: server-task
