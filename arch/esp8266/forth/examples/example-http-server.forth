@@ -17,7 +17,7 @@ str: "192.168.0.15" constant: HOST
     ['] bind sip
     dup listen ;    
     
-4 mailbox: client-sockets
+4 mailbox: connections
 task: server-task
 task: worker-task1
 task: worker-task2
@@ -27,7 +27,7 @@ task: worker-task2
     PORT HOST tcp-server-new
     begin
         println: "Accepting socket.."
-        dup accept client-sockets mailbox-send
+        dup accept connections mailbox-send
     again 
     deactivate ;
 
@@ -35,7 +35,7 @@ task: worker-task2
     activate
     begin
         println: "Waiting for client"
-        client-sockets mailbox-receive
+        connections mailbox-receive
         println: "Client connected"
         dup receive-into-buffer
         buffer type
