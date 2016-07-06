@@ -34,7 +34,6 @@ task: worker-task2
 : worker ( task -- )
     activate
     begin
-        println: "Waiting for client"
         connections mailbox-receive
         println: "Client connected"
         dup receive-into-buffer
