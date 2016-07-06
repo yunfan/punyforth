@@ -14,6 +14,9 @@ tcp-new constant: server-socket
 server-socket listen 
 
 4 mailbox: client-sockets
+task: server-task
+task: worker-task1
+task: worker-task2
 
 : server ( task -- )       
     activate
@@ -42,10 +45,6 @@ server-socket listen
     again
     deactivate ;
     
-task: server-task
-task: worker-task1
-task: worker-task2
-
 server-task server
 worker-task1 worker
 worker-task2 worker
