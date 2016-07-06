@@ -35,7 +35,7 @@ task: worker-task2
     activate
     begin
         connections mailbox-receive
-        println: "Client connected"
+        print: "Client connected" dup . cr
         dup receive-into-buffer
         buffer type
         buffer str: "GET /" str-starts-with if
