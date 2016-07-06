@@ -34,7 +34,7 @@ marker: -netconn
     UDP netconn-new
     RECV_TIMEOUT_MSEC over netconn-set-recvtimeout
     check-new-netconn ;
-
+    
 : check-netconn-error ( errcode --  | throws:ENETCON )
     dup 0<> if
         print: "NETCON error: " . cr
@@ -56,6 +56,11 @@ marker: -netconn
 : listen ( netconn -- | throws:ENETCON )
     netconn-listen
     check-netconn-error ;
+    
+: tcp-server-new ( port host -- netconn | throws:ENETCON )
+    tcp-new
+    ['] bind sip
+    dup listen ;    
     
 : accept ( netconn -- new-netconn | throws:ENETCONN)
     begin

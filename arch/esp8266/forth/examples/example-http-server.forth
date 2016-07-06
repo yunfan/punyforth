@@ -1,26 +1,19 @@
-multi
+\ work in progress
 
 str: "192.168.0.15" constant: HOST
 8080 constant: PORT
-
-6 byte-array: buffer-at
-0 buffer-at constant: buffer
-
-: buffer>asciiz ( size -- )
-    0 swap buffer-at c! ;
-
-: receive-into-buffer ( netconn -- )
-    5 buffer receive-into buffer>asciiz ;
-    
-: tcp-server-new ( port host -- netconn | throws:ENETCON )
-    tcp-new
-    ['] bind sip
-    dup listen ;    
     
 4 mailbox: connections
 task: server-task
 task: worker-task1
 task: worker-task2
+
+\ XXX this is global per worker
+128 byte-array: line
+0 init-variable: position
+
+\ TODO get rid of me
+variable: current-client
 
 : server ( task -- )       
     activate
@@ -31,26 +24,55 @@ task: worker-task2
     again 
     deactivate ;
 
+: on-line ( str -- )
+    dup str: "GET /" str-starts-with if
+        current-client @
+        dup str: "HTTP/1.0 200" writeln
+        dup str: "Content-Type: text/html" writeln
+        dup \r\n write
+        dup str: "<html><body>" writeln
+        dup str: "<h1>Hello World!</h1>" writeln
+        dup str: "</body></html>" writeln
+        drop
+    then 
+    print: "line received: " type cr ;
+    
+: on-data ( buffer size -- )
+    0 do
+        dup i + c@
+        dup 10 = if
+            drop            
+            0 position @ line c! \ terminate with zero
+            0 line on-line
+            0 position !
+        else        
+            position @ line c!
+            1 position +!
+        then                
+    loop
+    drop ;
+    
 : worker ( task -- )
     activate
     begin
         connections mailbox-receive
+        dup current-client !
         print: "Client connected: " dup . cr
-        dup receive-into-buffer
-        buffer type
-        buffer str: "GET /" str-starts-with if
-            dup str: "HTTP/1.0 200" writeln
-            dup str: "Content-Type: text/html" writeln
-            dup \r\n write
-            dup str: "<h1>Hello World from ESP8266</h1>" writeln
-        then    
-        dispose
+        dup ['] on-data ['] receive catch ENETCON = if
+            println: "Client lost: " . cr
+        else
+            println: "Connection closed: " . cr
+        then
     again
     deactivate ;
+
+: start-server ( -- )
+    multi
+    server-task server
+    \ worker-task1 worker
+    worker-task2 worker ;
     
-server-task server
-worker-task1 worker
-worker-task2 worker
-
-
-
+512 var-task-stack-size !
+256 var-task-rstack-size !
+    
+\ start-server
