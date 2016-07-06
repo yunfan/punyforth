@@ -43,7 +43,7 @@ server-socket listen
     deactivate ;
     
 task: server-task
-task: client-task
+task: worker-task1
 
 server-task server
 client-task worker
