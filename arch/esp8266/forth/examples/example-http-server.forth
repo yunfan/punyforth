@@ -1,7 +1,7 @@
 multi
 
-8080 constant: PORT
 str: "192.168.0.15" constant: HOST
+8080 constant: PORT
 
 6 byte-array: buffer-at
 0 buffer-at constant: buffer
