@@ -9,27 +9,26 @@ multi
 : receive-into-buffer ( netconn -- )
     5 buffer receive-into buffer>asciiz ;
     
-tcp-new constant: SERVER
-8080 str: "192.168.0.15"
-SERVER bind
-SERVER listen 
+tcp-new constant: server-socket
+8080 str: "192.168.0.15" server-socket bind
+server-socket listen 
 
-4 mailbox: SOCKET_MAILBOX
+4 mailbox: client-sockets
 
-: start-server ( task -- )       
+: serve ( task -- )       
     activate
     begin
         println: "Accepting socket.."
-        SERVER accept
-        SOCKET_MAILBOX mailbox-send
+        server-socket accept
+        client-sockets mailbox-send
     again 
     deactivate ;
 
-: start-connection-handler ( task -- )
+: worker ( task -- )
     activate
     begin
         println: "Waiting for client"
-        SOCKET_MAILBOX mailbox-receive
+        client-sockets mailbox-receive
         println: "Client connected"
         dup receive-into-buffer
         buffer type
@@ -46,8 +45,8 @@ SERVER listen
 task: server-task
 task: client-task
 
-server-task start-server
-client-task start-connection-handler
+server-task server
+client-task worker
 
 
 
