@@ -31,9 +31,10 @@ variable: current-client
         dup str: "Content-Type: text/html" writeln
         dup \r\n write
         dup str: "<html><body>" writeln
-        dup str: "<h1>Hello World!</h1>" writeln
+        dup str: "<h1>ESP8266 web server is working!</h1>" writeln
         dup str: "</body></html>" writeln
         drop
+        \ dispose
     then 
     print: "line received: " type cr ;
     
@@ -75,4 +76,4 @@ variable: current-client
 512 var-task-stack-size !
 256 var-task-rstack-size !
     
-\ start-server
+start-server
