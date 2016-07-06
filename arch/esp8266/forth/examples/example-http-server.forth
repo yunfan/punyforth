@@ -1,5 +1,8 @@
 multi
 
+8080 constant: BIND_PORT
+str: "192.168.0.15" constant: BIND_HOST
+
 6 byte-array: buffer-at
 0 buffer-at constant: buffer
 
@@ -14,8 +17,6 @@ multi
     ['] bind sip
     dup listen ;    
     
-8080 str: "192.168.0.15" tcp-server-new constant: server-socket
-
 4 mailbox: client-sockets
 task: server-task
 task: worker-task1
@@ -23,10 +24,10 @@ task: worker-task2
 
 : server ( task -- )       
     activate
+    BIND_PORT BIND_HOST tcp-server-new
     begin
         println: "Accepting socket.."
-        server-socket accept
-        client-sockets mailbox-send
+        dup accept client-sockets mailbox-send
     again 
     deactivate ;
 
