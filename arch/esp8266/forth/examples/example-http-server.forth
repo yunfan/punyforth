@@ -44,9 +44,11 @@ server-socket listen
     
 task: server-task
 task: worker-task1
+task: worker-task2
 
 server-task server
-client-task worker
+worker-task1 worker
+worker-task2 worker
 
 
 
