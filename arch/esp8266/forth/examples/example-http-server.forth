@@ -10,9 +10,9 @@ multi
     5 buffer receive-into buffer>asciiz ;
     
 : tcp-server-new ( port host -- netconn | throws:ENETCON )
-    tcp-new 
-    dup >r bind
-    r> dup listen ;    
+    tcp-new
+    ['] bind sip
+    dup listen ;    
     
 8080 str: "192.168.0.15" tcp-server-new constant: server-socket
 
