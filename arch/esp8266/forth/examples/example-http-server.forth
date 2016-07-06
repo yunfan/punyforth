@@ -26,7 +26,7 @@ task: worker-task2
     activate
     PORT HOST tcp-server-new
     begin
-        println: "Accepting socket.."
+        println: "Waiting for incoming connection"
         dup accept connections mailbox-send
     again 
     deactivate ;
