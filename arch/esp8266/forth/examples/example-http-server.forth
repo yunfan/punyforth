@@ -25,7 +25,8 @@ WorkerContext task: worker-task2
     PORT HOST tcp-server-new
     begin
         println: "Waiting for incoming connection"
-        dup accept connections send
+        dup accept
+        connections send
     again 
     deactivate ;
 
@@ -61,6 +62,7 @@ WorkerContext task: worker-task2
 : worker ( task -- )
     activate
     begin
+        0 position !
         connections receive client !
         print: "Client connected: " client @ . cr
         client @ ['] on-data ['] read-all catch ENETCON = if
