@@ -4,7 +4,7 @@
 str: "192.168.0.15" constant: HOST
 8080 constant: PORT
     
-struct:
+struct
     cell field: .client
     128  field: .line
     cell field: .position
