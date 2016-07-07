@@ -8,7 +8,7 @@ struct:
     cell field: .client
     128  field: .line
     cell field: .position
-constant: WorkerContext
+constant: WorkerSpace
 
 : client ( -- a ) user-space .client ;
 : line ( -- a ) user-space .line ;
@@ -17,8 +17,8 @@ constant: WorkerContext
 4 mailbox: connections
 0 task: server-task
 
-WorkerContext task: worker-task1
-WorkerContext task: worker-task2
+WorkerSpace task: worker-task1
+WorkerSpace task: worker-task2
 
 : server ( task -- )       
     activate
