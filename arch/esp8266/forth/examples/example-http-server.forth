@@ -61,10 +61,9 @@ WorkerContext task: worker-task2
 : worker ( task -- )
     activate
     begin
-        connections receive
-        dup client !
-        print: "Client connected: " dup . cr
-        dup ['] on-data ['] read-all catch ENETCON = if
+        connections receive client !
+        print: "Client connected: " client @ . cr
+        client @ ['] on-data ['] read-all catch ENETCON = if
             println: "Client lost: " . cr
         else
             println: "Connection closed: " . cr
