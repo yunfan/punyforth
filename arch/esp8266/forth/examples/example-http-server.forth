@@ -1,4 +1,5 @@
 \ work in progress
+\ TODO check line boundary
 
 str: "192.168.0.15" constant: HOST
 8080 constant: PORT
