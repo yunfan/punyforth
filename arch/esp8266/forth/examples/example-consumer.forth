@@ -2,7 +2,7 @@
 4 mailbox: mailbox1
 
 \ create a task for the consumer
-task: task-consumer
+0 task: task-consumer
 
 \ this word is executed by the task
 : consumer ( task -- )

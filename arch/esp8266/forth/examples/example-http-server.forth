@@ -3,17 +3,21 @@
 str: "192.168.0.15" constant: HOST
 8080 constant: PORT
     
+struct:
+    cell field: .client
+    128  field: .line
+    cell field: .position
+constant: WorkerContext
+
+: client ( -- a ) user-space .client ;
+: line ( -- a ) user-space .line ;
+: position ( -- n ) user-space .position ;
+
 4 mailbox: connections
-task: server-task
-task: worker-task1
-task: worker-task2
+0 task: server-task
 
-\ XXX this is global per worker
-128 byte-array: line
-0 init-variable: position
-
-\ TODO get rid of me
-variable: current-client
+WorkerContext task: worker-task1
+WorkerContext task: worker-task2
 
 : server ( task -- )       
     activate
@@ -26,7 +30,7 @@ variable: current-client
 
 : on-line ( str -- )
     dup str: "GET /" str-starts-with if
-        current-client @
+        client @
         dup str: "HTTP/1.0 200" writeln
         dup str: "Content-Type: text/html" writeln
         dup \r\n write
@@ -43,11 +47,11 @@ variable: current-client
         dup i + c@
         dup 10 = if
             drop            
-            0 position @ line c! \ terminate with zero
-            0 line on-line
+            0 line position @ + c! \ terminate with zero
+            line on-line
             0 position !
         else        
-            position @ line c!
+            position @ line + c!
             1 position +!
         then                
     loop
@@ -57,7 +61,7 @@ variable: current-client
     activate
     begin
         connections receive
-        dup current-client !
+        dup client !
         print: "Client connected: " dup . cr
         dup ['] on-data ['] read-all catch ENETCON = if
             println: "Client lost: " . cr
