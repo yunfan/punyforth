@@ -20,7 +20,7 @@ variable: current-client
     PORT HOST tcp-server-new
     begin
         println: "Waiting for incoming connection"
-        dup accept connections mailbox-send
+        dup accept connections send
     again 
     deactivate ;
 
@@ -56,7 +56,7 @@ variable: current-client
 : worker ( task -- )
     activate
     begin
-        connections mailbox-receive
+        connections receive
         dup current-client !
         print: "Client connected: " dup . cr
         dup ['] on-data ['] read-all catch ENETCON = if
