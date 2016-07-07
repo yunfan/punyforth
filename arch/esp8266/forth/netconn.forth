@@ -82,7 +82,7 @@ marker: -netconn
     swap write 
     \r\n write ;
 
-: receive-into-responsively ( size buffer netconn -- count code )
+: read-into-responsively ( size buffer netconn -- count code )
     begin
         pause
         3dup netconn-recvinto
@@ -93,9 +93,9 @@ marker: -netconn
         2drop
     again ;
 
-: receive-into ( netconn size buffer -- count | throws:ENETCON )
+: read-into ( netconn size buffer -- count | throws:ENETCON )
     rot 
-    receive-into-responsively
+    read-into-responsively
     check-netconn-error ;
     
 : consume-next ( consumer-xt netbuf -- n )
@@ -109,7 +109,7 @@ marker: -netconn
     0 < until 
     nip ;
 
-: receive-responsively ( netconn -- netbuf code )
+: read-responsively ( netconn -- netbuf code )
     begin
         pause
         dup netconn-recv
@@ -120,10 +120,10 @@ marker: -netconn
         2drop
     again ;
 
-: receive ( netconn consumer-xt -- code )
+: read-all ( netconn consumer-xt -- code )
     begin
         2dup swap
-        receive-responsively 
+        read-responsively 
         dup 0<> if
             >r 4drop r>
             exit

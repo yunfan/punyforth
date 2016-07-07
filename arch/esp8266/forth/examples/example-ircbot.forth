@@ -43,7 +43,7 @@ task: ircbot-task
 : start-irc-task ( -- )
     multi
     ircbot-task activate
-    SOCKET ['] data-received receive
+    SOCKET ['] data-received read-all
     print: "response code: " . cr
     deactivate ;
 

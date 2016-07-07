@@ -59,7 +59,7 @@ variable: current-client
         connections mailbox-receive
         dup current-client !
         print: "Client connected: " dup . cr
-        dup ['] on-data ['] receive catch ENETCON = if
+        dup ['] on-data ['] read-all catch ENETCON = if
             println: "Client lost: " . cr
         else
             println: "Connection closed: " . cr
