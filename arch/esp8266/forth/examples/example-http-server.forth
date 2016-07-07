@@ -31,18 +31,19 @@ WorkerSpace task: worker-task2
     deactivate ;
 
 : line-received ( str -- )
-    dup str: "GET /" str-starts-with if
+    print: "line received: " dup type cr
+    str: "GET /" str-starts-with if
         client @
         dup str: "HTTP/1.0 200" writeln
         dup str: "Content-Type: text/html" writeln
+        dup str: "Connection: close" writeln
         dup \r\n write
         dup str: "<html><body>" writeln
         dup str: "<h1>ESP8266 web server is working!</h1>" writeln
         dup str: "</body></html>" writeln
         drop
-        \ dispose
     then 
-    print: "line received: " type cr ;
+    println: "response sent" ;
     
 : data-received ( buffer size -- )
     0 do
@@ -70,13 +71,14 @@ WorkerSpace task: worker-task2
         else
             println: "Connection closed: " . cr
         then
+        client @ dispose
     again
     deactivate ;
 
 : start-server ( -- )
     multi
     server-task server
-    \ worker-task1 worker
+    worker-task1 worker
     worker-task2 worker ;
     
 512 var-task-stack-size !

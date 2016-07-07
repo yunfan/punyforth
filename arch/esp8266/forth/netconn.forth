@@ -67,6 +67,7 @@ marker: -netconn
         pause
         dup netconn-accept dup NC_ERR_TIMEOUT <> if
             check-netconn-error nip
+            RECV_TIMEOUT_MSEC over netconn-set-recvtimeout
             exit
         then
         2drop
