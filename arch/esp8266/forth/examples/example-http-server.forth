@@ -30,7 +30,7 @@ WorkerContext task: worker-task2
     again 
     deactivate ;
 
-: on-line ( str -- )
+: line-received ( str -- )
     dup str: "GET /" str-starts-with if
         client @
         dup str: "HTTP/1.0 200" writeln
@@ -44,13 +44,13 @@ WorkerContext task: worker-task2
     then 
     print: "line received: " type cr ;
     
-: on-data ( buffer size -- )
+: data-received ( buffer size -- )
     0 do
         dup i + c@
         dup 10 = if
             drop            
             0 line position @ + c! \ terminate with zero
-            line on-line
+            line line-received
             0 position !
         else        
             position @ line + c!
@@ -65,7 +65,7 @@ WorkerContext task: worker-task2
         0 position !
         connections receive client !
         print: "Client connected: " client @ . cr
-        client @ ['] on-data ['] read-all catch ENETCON = if
+        client @ ['] data-received ['] read-all catch ENETCON = if
             println: "Client lost: " . cr
         else
             println: "Connection closed: " . cr
