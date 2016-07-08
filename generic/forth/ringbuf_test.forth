@@ -1,13 +1,13 @@
 marker: -ringbuf-test
 
 5 ringbuffer: buf
-: test:initially-empty  
+: test:ringbuf-initially-empty  
     buf size 0 =assert 
     buf full? invert assert
     buf empty? assert ;
 
 5 ringbuffer: buf
-: test:size-increases-when-adding
+: test:ringbuf-size-increases-when-adding
     1 buf enqueue
     buf size 1 =assert 
     2 buf enqueue
@@ -16,7 +16,7 @@ marker: -ringbuf-test
     buf full? invert assert ;
 
 5 ringbuffer: buf 
-: test:size-decreases-when-removing
+: test:ringbuf-size-decreases-when-removing
     1 buf enqueue
     2 buf enqueue
     buf dequeue drop
@@ -26,7 +26,7 @@ marker: -ringbuf-test
     buf empty? assert ;
 
 2 ringbuffer: buf 
-: test:becomes-empy-after-removing-when-full
+: test:ringbuf-becomes-empty-after-removing-when-full
     1 buf enqueue
     2 buf enqueue
     buf full? assert
@@ -37,7 +37,7 @@ marker: -ringbuf-test
     buf full? invert assert ;
 
 5 ringbuffer: buf 
-: test:has-circular-property
+: test:ringbuf-has-circular-property
     1 buf enqueue buf dequeue 1 =assert
     buf full? invert assert 
     1 buf enqueue
@@ -56,13 +56,9 @@ marker: -ringbuf-test
     buf empty? assert ;
 
 2 ringbuffer: buf
-: expect-underflow ['] dequeue catch EUNDERFLOW =assert ;
-: expect-overflow ['] enqueue catch EOVERFLOW =assert ;
-: test:over-under-flows
-    buf expect-underflow
+: test:ringbuf-over-under-flows
+    buf ['] dequeue catch EUNDERFLOW =assert 
     1 buf enqueue
     2 buf enqueue
-    3 buf expect-overflow drop ;
-
-test
--ringbuf-test
+    3 buf ['] enqueue catch EOVERFLOW =assert
+    drop ;

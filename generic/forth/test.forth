@@ -62,7 +62,7 @@ variable: test_var2
 defer: deferred-word
 : use-deferred 2 3 deferred-word ;
 
-: test:arithmetic
+: test:core-arithmetic
    12 3 min 3 =assert
    -3 7 min -3 =assert
    -3 -7 min -7 =assert
@@ -102,18 +102,18 @@ defer: deferred-word
    12 3 /mod 4 =assert 0 =assert 12 4 / 3 =assert
    13 5 /mod 2 =assert 3 =assert 14 6 % 2 =assert ;
 
-: test:branch
+: test:core-branch
    TRUE if TRUE assert else FALSE assert then
    FALSE if FALSE assert else TRUE assert then
    2 TRUE if dup * then 4 =assert
    2 FALSE if dup * then 2 =assert ;
 
-: test:bounds
+: test:core-bounds
     10000 5 bounds 10000 =assert 10005 =assert ;
 
 424242 constant: SENTINEL
 
-: test:doloop
+: test:core-doloop
    SENTINEL 10000 5 bounds do i loop
    10004 =assert 10003 =assert 10002 =assert 10001 =assert 10000 =assert
    SENTINEL =assert
@@ -128,7 +128,7 @@ defer: deferred-word
    SENTINEL 0 0 do i -1 +loop 0 =assert SENTINEL =assert
    0 8 2 do 9 3 do i j + + loop loop 360 =assert ;
 
-: test:logic
+: test:core-logic
    1 0 or 1 =assert 0 1 or 1 =assert
    1 1 or 1 =assert 0 0 or 0 =assert
    1 0 and 0 =assert 0 1 and 0 =assert
@@ -139,7 +139,7 @@ defer: deferred-word
    3 10 < 3 11 > and if 1 else 0 then 0 =assert
    -98 45 < 33 11 > and if 1 else 0 then 1 =assert ;
 
-: test:between
+: test:core-between
    1 2 3 between? assert
    1 1 1 between? assert
    1 1 2 between? assert
@@ -147,12 +147,12 @@ defer: deferred-word
    3 2 4 between? invert assert
    1 3 2 between? invert assert ;
 
-: test:factorial
+: test:core-factorial
    9 factorial 362880 =assert
    8 factorial 8 factorial2 =assert
    9 factorial 9 factorial3 =assert ;
 
-: test:hex
+: test:core-hex
    str: "aBcDeF" hex>int 11259375 =assert
    str: "AbCdEf" hex>int 11259375 =assert
    str: "12345678" hex>int 305419896 =assert
@@ -163,7 +163,7 @@ defer: deferred-word
    str: "12G4" ['] hex>int catch ECONVERSION =assert
    hex: a0f 2575 =assert ;
 
-: test:case   
+: test:core-case   
    1 case
        1 of 10 endof
        2 of 20 endof
@@ -184,13 +184,13 @@ defer: deferred-word
        2 of 3 endof
    endcase 2 =assert ;
 
-: test:defer
+: test:core-defer
    ['] deferred-word is: +
    use-deferred 5 =assert
    ['] deferred-word is: *
    use-deferred 6 =assert ;
 
-: test:catch
+: test:core-catch
    sp@ test_var1 !
    -1 ['] factorial catch 1024 =assert
    1 ['] nested-throw2 catch 30 =assert
@@ -200,7 +200,7 @@ defer: deferred-word
    sp@ test_var2 !
    test_var1 @ test_var2 @ =assert ;
 
-: test:rdepth
+: test:core-rdepth
    rdepth
    1 >r 2 >r 3 >r
    dup 3 + rdepth =assert
@@ -209,10 +209,10 @@ defer: deferred-word
    r> drop
    rdepth =assert ;
 
-: test:alloc
+: test:core-alloc
    freemem 16 allot freemem - 16 =assert ;
 
-: test:str
+: test:core-str
    str: "" strlen 0 =assert
    str: "1" strlen 1 =assert
    str: "12" strlen 2 =assert
@@ -258,31 +258,31 @@ defer: deferred-word
    str: 'efg' 
    str-includes FALSE =assert ;
 
-: test:untilloop
+: test:core-untilloop
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 =assert ;
 
-: test:array
+: test:core-array
    5 0 do i i test_numbers ! loop
    5 0 do i test_numbers @ i =assert loop ;
 
-: test:struct
+: test:core-struct
    3 r1 .width ! 5 r1 .height !
    r1 area 15 =assert ;
 
-: test:var
+: test:core-var
    12 test_var1 ! test_var1 @ 12 =assert
    3 test_var1 +! test_var1 @ 15 =assert ;
 
 : to-override 42 ;
 : to-override override to-override 3 + ;
-: test:override
+: test:core-override
     to-override 45 =assert ;
 
 variable: dp-before-mark dp dp-before-mark !
 marker: -test-mark
 : word-after-marker 1 2 3 ; 237 allot
 
-: test:marker
+: test:core-marker
    -test-mark
    dp dp-before-mark @ =assert ;
 
