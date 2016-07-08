@@ -6,4 +6,4 @@ script:
  - cd arch/x86
  - gcc -m32 -nostdlib -I. ../../main.S -o punyforth
  - chmod +x punyforth 
- - cat ../../generic/forth/core.forth ../../generic/forth/punit.forth ../../generic/forth/ringbuf.forth  ../../generic/forth/ringbuf_test.forth ../../generic/forth/stream.forth  ../../generic/forth/stream_test.forth ../../generic/forth/test.forth | ./punyforth | grep -q "All passed"
+ - cat ../../generic/forth/core.forth ../../generic/forth/punit.forth ../../generic/forth/ringbuf.forth  ../../generic/forth/ringbuf_test.forth ../../generic/forth/stream.forth  ../../generic/forth/stream_test.forth ../../generic/forth/test.forth | ./punyforth | grep "All passed" | grep -q 3
