@@ -6,13 +6,15 @@ struct
     cell field: .size
 constant: Stream
 
+: stream.new ( capacity-bytes -- stream )
+    here tuck 
+    over cells Stream + allot
+    0 over .i !
+    0 over .size !
+    .capacity ! ;
+
 : stream.new: ( capacity-bytes "name"  -- stream )
-    create:
-        here 
-        over cells Stream + allot
-        0 over .i !
-        0 over .size !
-        .capacity !
+    create: stream.new drop
     does> ;
 
 : stream.buffer ( stream -- a ) Stream + ;

@@ -7,14 +7,16 @@ struct
     cell field: .size
 constant: RingBuffer
 
+: ringbuf.new ( capacity -- ringbuf )
+    here tuck
+    over cells RingBuffer + allot
+    0 over .i !
+    0 over .j !
+    0 over .size !
+    .capacity ! ;
+
 : ringbuffer: ( capacity ) ( -- ringbuffer )
-    create:
-        here 
-        over cells RingBuffer + allot
-        0 over .i !
-        0 over .j !
-        0 over .size !
-        .capacity !
+    create: ringbuf.new drop
     does> ;
 
 : size ( ringbuffer -- n ) .size @ ;

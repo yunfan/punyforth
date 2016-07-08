@@ -1,64 +1,65 @@
 marker: -ringbuf-test
 
-5 ringbuffer: buf
 : test:ringbuf-initially-empty  
-    buf size 0 =assert 
-    buf full? invert assert
-    buf empty? assert ;
+    5 ringbuf.new
+    dup size 0 =assert 
+    dup full? invert assert
+        empty? assert ;
 
-5 ringbuffer: buf
 : test:ringbuf-size-increases-when-adding
-    1 buf enqueue
-    buf size 1 =assert 
-    2 buf enqueue
-    buf size 2 =assert 
-    buf empty? invert assert
-    buf full? invert assert ;
+    5 ringbuf.new
+    1 over enqueue
+    dup size 1 =assert 
+    2 over enqueue
+    dup size 2 =assert 
+    dup empty? invert assert
+        full? invert assert ;
 
-5 ringbuffer: buf 
 : test:ringbuf-size-decreases-when-removing
-    1 buf enqueue
-    2 buf enqueue
-    buf dequeue drop
-    buf size 1 =assert 
-    buf dequeue drop
-    buf size 0 =assert 
-    buf empty? assert ;
+    5 ringbuf.new
+    1 over enqueue
+    2 over enqueue
+    dup dequeue drop
+    dup size 1 =assert 
+    dup dequeue drop
+    dup size 0 =assert 
+        empty? assert ;
 
-2 ringbuffer: buf 
 : test:ringbuf-becomes-empty-after-removing-when-full
-    1 buf enqueue
-    2 buf enqueue
-    buf full? assert
-    buf empty? invert assert
-    buf dequeue drop
-    buf dequeue drop
-    buf empty? assert
-    buf full? invert assert ;
+    2 ringbuf.new
+    1 over enqueue
+    2 over enqueue
+    dup full? assert
+    dup empty? invert assert
+    dup dequeue drop
+    dup dequeue drop
+    dup empty? assert
+        full? invert assert ;
 
-5 ringbuffer: buf 
 : test:ringbuf-has-circular-property
-    1 buf enqueue buf dequeue 1 =assert
-    buf full? invert assert 
-    1 buf enqueue
-    2 buf enqueue
-    3 buf enqueue
-    4 buf enqueue
-    5 buf enqueue
-    buf size 5 =assert 
-    buf full? assert
-    buf dequeue 1 =assert 
-    buf dequeue 2 =assert 
-    buf dequeue 3 =assert 
-    buf dequeue 4 =assert 
-    buf dequeue 5 =assert 
-    buf size 0 =assert 
-    buf empty? assert ;
+    5 ringbuf.new
+    1 over enqueue
+    dup dequeue 1 =assert
+    dup full? invert assert 
+    1 over enqueue
+    2 over enqueue
+    3 over enqueue
+    4 over enqueue
+    5 over enqueue
+    dup size 5 =assert 
+    dup full? assert
+    dup dequeue 1 =assert 
+    dup dequeue 2 =assert 
+    dup dequeue 3 =assert 
+    dup dequeue 4 =assert 
+    dup dequeue 5 =assert 
+    dup size 0 =assert 
+        empty? assert ;
 
-2 ringbuffer: buf
 : test:ringbuf-over-under-flows
-    buf ['] dequeue catch EUNDERFLOW =assert 
-    1 buf enqueue
-    2 buf enqueue
-    3 buf ['] enqueue catch EOVERFLOW =assert
-    drop ;
+    2 ringbuf.new
+    dup ['] dequeue catch EUNDERFLOW =assert 
+    1 over enqueue
+    2 over enqueue
+    3 over ['] enqueue catch EOVERFLOW =assert
+    2drop ;
