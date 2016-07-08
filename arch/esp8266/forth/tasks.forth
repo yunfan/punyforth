@@ -140,7 +140,7 @@ defer: pause
     0 xpause ! 
     ['] pause is: pause-single ;     
     
-: mailbox: ( size ) ( -- mailbox ) ringbuf.new: ;
+: mailbox.new: ( size ) ( -- mailbox ) ringbuf.new: ;
 
 : mailbox.send ( message mailbox -- )
     begin
