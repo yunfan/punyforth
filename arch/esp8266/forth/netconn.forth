@@ -130,8 +130,12 @@ marker: -netconn
             exit
         then
         drop
-        consume-netbuf
-        netbuf-del
+        ['] consume-netbuf catch dup 0<> if
+            \ swap netbuf-del
+            nip
+            throw
+        then
+        drop netbuf-del        
     again ;    
               
 : dispose ( netconn -- )

@@ -42,6 +42,7 @@ WorkerSpace task: worker-task2
         dup str: "<h1>ESP8266 web server is working!</h1>" writeln
         dup str: "</body></html>" writeln
         drop
+        123 throw
     then 
     println: "response sent" ;
     
@@ -66,7 +67,7 @@ WorkerSpace task: worker-task2
         0 position !
         connections receive client !
         print: "Client connected: " client @ . cr
-        client @ ['] data-received ['] read-all catch ENETCON = if
+        client @ ['] data-received ['] read-all catch dup ENETCON = if
             println: "Client lost: " . cr
         else
             println: "Connection closed: " . cr
