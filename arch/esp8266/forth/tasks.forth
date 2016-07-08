@@ -144,7 +144,7 @@ defer: pause
 
 : mailbox.send ( message mailbox -- )
     begin
-        dup mailbox.full? 
+        dup ringbuf.full? 
     while
         pause 
     repeat
@@ -152,7 +152,7 @@ defer: pause
 
 : mailbox.receive ( mailbox -- message )
     begin
-        dup mailbox.empty?
+        dup ringbuf.empty?
     while
         pause
     repeat
