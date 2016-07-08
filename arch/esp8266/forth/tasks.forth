@@ -140,22 +140,22 @@ defer: pause
     0 xpause ! 
     ['] pause is: pause-single ;     
     
-: mailbox: ( size ) ( -- mailbox ) ringbuffer: ;
+: mailbox.new: ( size ) ( -- mailbox ) ringbuf.new: ;
 
-: send ( element mailbox -- )
+: mailbox.send ( message mailbox -- )
     begin
         dup full? 
     while
         pause 
     repeat
-    enqueue ;
+    ringbuf.enqueue ;
 
-: receive ( mailbox -- element )
+: mailbox.receive ( mailbox -- message )
     begin
         dup empty?
     while
         pause
     repeat
-    dequeue ;
+    ringbuf.dequeue ;
     
 single

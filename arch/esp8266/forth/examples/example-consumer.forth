@@ -1,5 +1,5 @@
 \ create a mailbox with size 4
-4 mailbox: mailbox1
+4 mailbox.new: mailbox1
 
 \ create a task for the consumer
 0 task: task-consumer
@@ -8,7 +8,7 @@
 : consumer ( task -- )
     activate                            \ activate task
     begin    
-        mailbox1 receive .
+        mailbox1 mailbox.receive .
         print: " received by consumer" cr
         pause                           \ allow other tasks to run
     again
@@ -16,5 +16,5 @@
 
 \ multi                                 \ switch to multitask mode
 \ task-consumer consumer                \ run the consumer
-\ 123 mailbox1 send                     \ send some numbers to the consumer
-\ 456 mailbox1 send
+\ 123 mailbox1 mailbox.send                     \ send some numbers to the consumer
+\ 456 mailbox1 mailbox.send
