@@ -7,7 +7,7 @@ struct
     cell field: .size
 constant: RingBuffer
 
-: ringbuf.new ( capacity -- ringbuf )
+: ringbuf.new ( capacity -- ringbuffer )
     here tuck
     over cells RingBuffer + allot
     0 over .i !
@@ -15,60 +15,60 @@ constant: RingBuffer
     0 over .size !
     .capacity ! ;
 
-: ringbuffer: ( capacity ) ( -- ringbuffer )
+: ringbuf.new: ( capacity ) ( -- ringbuffer )
     create: ringbuf.new drop
     does> ;
 
-: size ( ringbuffer -- n ) .size @ ;
+: ringbuf.size ( ringbuffer -- n ) .size @ ;
 
-: empty? ( ringbuffer -- bool ) size 0= ;
+: ringbuf.empty? ( ringbuffer -- bool ) ringbuf.size 0= ;
 
-: full? ( ringbuffer -- bool )
+: ringbuf.full? ( ringbuffer -- bool )
     ['] .size ['] .capacity bi 
     ['] @ bi@ = ;
 
-: ringbuffer-slot ( index ringbuffer -- adr )
+: slot ( index ringbuffer -- adr )
     RingBuffer + swap cells + ;
 
-: ringbuffer-back-slot ( ringbuffer -- adr )
+: back-slot ( ringbuffer -- adr )
     dup .j @
-    swap ringbuffer-slot ;
+    swap slot ;
 
-: ringbuffer-front-slot ( ringbuffer -- adr )
+: front-slot ( ringbuffer -- adr )
     dup .i @
-    swap ringbuffer-slot ;    
+    swap slot ;    
 
-: ringbuffer-increase-size ( ringbuffer -- ) .size 1 swap +! ;
+: increase-size ( ringbuffer -- ) .size 1 swap +! ;
 
-: ringbuffer-added ( ringbuffer -- )
+: added ( ringbuffer -- )
     dup
-    dup ringbuffer-increase-size
+    dup increase-size
     ['] .capacity ['] .j bi ['] @ bi@
     1+ swap %
     swap .j ! ;
 
-: ringbuffer-decrease-size ( ringbuffer -- ) .size -1 swap +! ;
+: decrease-size ( ringbuffer -- ) .size -1 swap +! ;
 
-: ringbuffer-removed ( ringbuffer -- )
+: removed ( ringbuffer -- )
     dup
-    dup ringbuffer-decrease-size
+    dup decrease-size
     ['] .capacity ['] .i bi ['] @ bi@
     1+ swap %
     swap .i ! ;
 
-: enqueue ( element ringbuffer -- )
-    dup full? if
+: ringbuf.enqueue ( element ringbuffer -- )
+    dup ringbuf.full? if
         EOVERFLOW throw
     then
     tuck
-    ringbuffer-back-slot !
-    ringbuffer-added ;
+    back-slot !
+    added ;
 
-: dequeue ( ringbuffer -- element )
-    dup empty? if
+: ringbuf.dequeue ( ringbuffer -- element )
+    dup ringbuf.empty? if
         EUNDERFLOW throw
     then
     dup
-    ringbuffer-front-slot @
+    front-slot @
     swap
-    ringbuffer-removed ;
+    removed ;

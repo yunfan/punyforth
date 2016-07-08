@@ -14,7 +14,7 @@ constant: WorkerSpace
 : line ( -- a ) user-space .line ;
 : position ( -- n ) user-space .position ;
 
-4 mailbox: connections
+4 mailbox.new: connections
 0 task: server-task
 
 WorkerSpace task: worker-task1
@@ -26,7 +26,7 @@ WorkerSpace task: worker-task2
     begin
         println: "Waiting for incoming connection"
         dup accept
-        connections send
+        connections mailbox.send
     again 
     deactivate ;
 
@@ -64,7 +64,7 @@ WorkerSpace task: worker-task2
     activate
     begin
         0 position !
-        connections receive client !
+        connections mailbox.receive client !
         print: "Client connected: " client @ . cr
         client @ ['] data-received ['] read-all catch ENETCON = if
             println: "Client lost: " . cr

@@ -13,7 +13,7 @@ constant: Stream
     0 over .size !
     .capacity ! ;
 
-: stream.new: ( capacity-bytes "name"  -- stream )
+: stream.new: ( capacity-bytes "name" ) ( -- stream )
     create: stream.new drop
     does> ;
 
