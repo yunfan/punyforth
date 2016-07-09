@@ -1,7 +1,7 @@
 marker: -ircbot
 
 : connect ( -- netconn )
-    6667 str: "irc.freenode.net" tcp-open ;
+    6667 str: "irc.freenode.net" netcon-connect ;
     
 : register ( netconn -- )
     dup str: "NICK hodor189"                        writeln

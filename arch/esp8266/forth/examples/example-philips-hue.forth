@@ -19,7 +19,7 @@ str: "2" constant: BEDROOM
     1023 buffer read-into buffer>asciiz ;
 
 : bridge ( -- netconn )
-    BRIDGE_PORT BRIDGE_IP tcp-open ;
+    BRIDGE_PORT BRIDGE_IP netcon-connect ;
 
 : on? ( bulb -- bool )
     bridge

@@ -10,11 +10,11 @@ struct
     \ cell field: .position
 constant: WorkerSpace
 
-128 stream.new: line
+128 stream-new: line
 
 : client ( -- a ) user-space .client ;
 
-4 mailbox.new: connections
+4 mailbox-new: connections
 0 task: server-task
 
 WorkerSpace task: worker-task1
@@ -22,11 +22,11 @@ WorkerSpace task: worker-task2
 
 : server ( task -- )       
     activate
-    PORT HOST tcp-server-new
+    PORT HOST netcon-tcp-server
     begin
         println: "Waiting for incoming connection"
-        dup accept
-        connections mailbox.send
+        dup netcon-accept
+        connections mailbox-send
     again 
     deactivate ;
 
@@ -51,11 +51,11 @@ WorkerSpace task: worker-task2
         dup i + c@
         dup 10 = if
             drop            
-            0 line stream.put-byte
-            line stream.buffer line-received
-            line stream.reset
+            0 line stream-put-byte
+            line stream-buffer line-received
+            line stream-reset
         else
-            line stream.put-byte
+            line stream-put-byte
         then                
     loop
     drop ;
@@ -63,8 +63,8 @@ WorkerSpace task: worker-task2
 : worker ( task -- )
     activate
     begin
-        line stream.reset
-        connections mailbox.receive client !
+        line stream-reset
+        connections mailbox-receive client !
         print: "Client connected: " client @ . cr
         client @ ['] data-received ['] read-all catch dup ENETCON = if
             println: "Client lost: " . cr
