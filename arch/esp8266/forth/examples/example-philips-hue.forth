@@ -16,7 +16,7 @@ str: "2" constant: BEDROOM
     0 swap buffer-at c! ;
 
 : read-into-buffer ( netconn -- )
-    1023 buffer read-into buffer>asciiz ;
+    1023 buffer netcon-read buffer>asciiz ;
 
 : bridge ( -- netconn )
     BRIDGE_PORT BRIDGE_IP netcon-connect ;
