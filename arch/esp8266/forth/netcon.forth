@@ -22,20 +22,20 @@ marker: -netcon
 -14 constant: NC_ERR_ARG         \ Illegal argument.
 -15 constant: NC_ERR_IF          \ Low-level netif error.
 
-: check-new-netcon ( netcon -- netcon | throws:ENETCON )
+: check-new ( netcon -- netcon | throws:ENETCON )
     dup 0= if ENETCON throw then ;
     
 : netcon-tcp ( -- netcon )
     TCP netcon-new
     RECV_TIMEOUT_MSEC over netcon-set-recvtimeout
-    check-new-netcon ;
+    check-new ;
     
 : netcon-udp ( -- netcon )
     UDP netcon-new
     RECV_TIMEOUT_MSEC over netcon-set-recvtimeout
-    check-new-netcon ;
+    check-new ;
     
-: check-netcon-error ( errcode --  | throws:ENETCON )
+: check-error ( errcode --  | throws:ENETCON )
     dup 0<> if
         print: "NETCON error: " . cr
         ENETCON throw 
@@ -46,16 +46,16 @@ marker: -netcon
     netcon-tcp dup 
     >r
     netcon-connect
-    check-netcon-error
+    check-error
     r> ;
     
 : netcon-bind ( port host netcon -- | throws:ENETCON ) override
     netcon-bind
-    check-netcon-error ;
+    check-error ;
     
 : netcon-listen ( netcon -- | throws:ENETCON ) override
     netcon-listen
-    check-netcon-error ;
+    check-error ;
     
 : netcon-tcp-server ( port host -- netcon | throws:ENETCON )
     netcon-tcp
@@ -66,22 +66,22 @@ marker: -netcon
     begin
         pause
         dup netcon-accept dup NC_ERR_TIMEOUT <> if
-            check-netcon-error nip
+            check-error nip
             RECV_TIMEOUT_MSEC over netcon-set-recvtimeout
             exit
         then
         2drop
     again ;
     
-: write ( netcon str -- | throws:ENETCON )
+: netcon-write ( netcon str -- | throws:ENETCON ) override
     dup strlen swap rot 
     netcon-write
-    check-netcon-error ;
+    check-error ;
 
-: writeln ( netcon str -- | throws:ENETCON )
+: netcon-writeln ( netcon str -- | throws:ENETCON )
     over 
-    swap write 
-    \r\n write ;
+    swap netcon-write 
+    \r\n netcon-write ;
 
 : read-into-responsively ( size buffer netcon -- count code )
     begin
@@ -94,10 +94,11 @@ marker: -netcon
         2drop
     again ;
 
+\    
 : read-into ( netcon size buffer -- count | throws:ENETCON )
     rot 
     read-into-responsively
-    check-netcon-error ;
+    check-error ;
     
 : consume-next ( consumer-xt netbuf -- n )
     tuck netbuf-data
@@ -121,6 +122,7 @@ marker: -netcon
         2drop
     again ;
 
+\    
 : read-all ( netcon consumer-xt -- code )
     begin
         2dup swap
@@ -137,6 +139,8 @@ marker: -netcon
         then
         drop netbuf-del        
     again ;    
-              
-: dispose ( netcon -- )
-    netcon-dispose ;
+
+: netcon-dispose ( netcon -- )
+    dup
+    netcon-close
+    netcon-delete ;

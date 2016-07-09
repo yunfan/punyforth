@@ -23,47 +23,47 @@ str: "2" constant: BEDROOM
 
 : on? ( bulb -- bool )
     bridge
-        dup str: "GET " write
-        dup BASE_URL   write
-        dup rot        writeln
-        dup \r\n       write
+        dup str: "GET " netcon-write
+        dup BASE_URL    netcon-write
+        dup rot         netcon-writeln
+        dup \r\n        netcon-write
         dup read-into-buffer
-        dispose
+        netcon-dispose
     buffer str: '"on":true' str-includes ;
     
 : request-change-state ( bulb netconn -- )
-    dup str: "PUT "              write
-    dup BASE_URL                 write
-    dup rot                      write
-    dup str: "/state "           write
-    dup str: "HTTP/1.1"          writeln
-    dup str: "Content-Type: "    write
-    dup str: "application/json"  writeln
-    dup str: "Accept: */*"       writeln
-    dup str: "Connection: Close" writeln
+    dup str: "PUT "              netcon-write
+    dup BASE_URL                 netcon-write
+    dup rot                      netcon-write
+    dup str: "/state "           netcon-write
+    dup str: "HTTP/1.1"          netcon-writeln
+    dup str: "Content-Type: "    netcon-write
+    dup str: "application/json"  netcon-writeln
+    dup str: "Accept: */*"       netcon-writeln
+    dup str: "Connection: Close" netcon-writeln
     drop ;
 
 : on ( bulb -- ) 
     bridge
         tuck request-change-state
-        dup str: "Content-length: "       write
-        dup str: "22"                     writeln
-        dup \r\n                          write
-        dup str: '{"on":true,"bri": 255}' writeln
+        dup str: "Content-length: "       netcon-write
+        dup str: "22"                     netcon-writeln
+        dup \r\n                          netcon-write
+        dup str: '{"on":true,"bri": 255}' netcon-writeln
         dup ['] type-counted              read-all
         print: "response code: " . cr
-        dispose ;
+        netcon-dispose ;
         
 : off ( bulb -- )
     bridge
         tuck request-change-state
-        dup str: "Content-length: " write
-        dup str: "12"               writeln
-        dup \r\n                    write
-        dup str: '{"on":false}'     writeln
+        dup str: "Content-length: " netcon-write
+        dup str: "12"               netcon-writeln
+        dup \r\n                    netcon-write
+        dup str: '{"on":false}'     netcon-writeln
         dup ['] type-counted        read
         print: "response code: " . cr
-        dispose ;
+        netcon-dispose ;
         
 : toggle-unsafe ( bulb -- | throws:ENETCON )
     dup on? if off else on then ;
