@@ -7,7 +7,7 @@ struct
     cell field: .size
 constant: RingBuffer
 
-: ringbuf.new ( capacity -- ringbuffer )
+: ringbuf-new ( capacity -- ringbuffer )
     here tuck
     over cells RingBuffer + allot
     0 over .i !
@@ -15,15 +15,15 @@ constant: RingBuffer
     0 over .size !
     .capacity ! ;
 
-: ringbuf.new: ( capacity ) ( -- ringbuffer )
-    create: ringbuf.new drop
+: ringbuf-new: ( capacity ) ( -- ringbuffer )
+    create: ringbuf-new drop
     does> ;
 
-: ringbuf.size ( ringbuffer -- n ) .size @ ;
+: ringbuf-size ( ringbuffer -- n ) .size @ ;
 
-: ringbuf.empty? ( ringbuffer -- bool ) ringbuf.size 0= ;
+: ringbuf-empty? ( ringbuffer -- bool ) ringbuf-size 0= ;
 
-: ringbuf.full? ( ringbuffer -- bool )
+: ringbuf-full? ( ringbuffer -- bool )
     ['] .size ['] .capacity bi 
     ['] @ bi@ = ;
 
@@ -56,16 +56,16 @@ constant: RingBuffer
     1+ swap %
     swap .i ! ;
 
-: ringbuf.enqueue ( element ringbuffer -- )
-    dup ringbuf.full? if
+: ringbuf-enqueue ( element ringbuffer -- )
+    dup ringbuf-full? if
         EOVERFLOW throw
     then
     tuck
     back-slot !
     added ;
 
-: ringbuf.dequeue ( ringbuffer -- element )
-    dup ringbuf.empty? if
+: ringbuf-dequeue ( ringbuffer -- element )
+    dup ringbuf-empty? if
         EUNDERFLOW throw
     then
     dup

@@ -6,28 +6,28 @@ struct
     cell field: .size
 constant: Stream
 
-: stream.new ( capacity-bytes -- stream )
+: stream-new ( capacity-bytes -- stream )
     here tuck 
     over cells Stream + allot
     0 over .i !
     0 over .size !
     .capacity ! ;
 
-: stream.new: ( capacity-bytes "name" ) ( -- stream )
-    create: stream.new drop
+: stream-new: ( capacity-bytes "name" ) ( -- stream )
+    create: stream-new drop
     does> ;
 
-: stream.buffer ( stream -- a ) Stream + ;
+: stream-buffer ( stream -- a ) Stream + ;
    
-: stream.size ( stream -- n ) .size @ ;
+: stream-size ( stream -- n ) .size @ ;
 
-: stream.empty? ( stream -- bool ) stream.size 0= ;
+: stream-empty? ( stream -- bool ) stream-size 0= ;
 
-: stream.full? ( stream -- bool )
+: stream-full? ( stream -- bool )
     ['] .size ['] .capacity bi 
     ['] @ bi@ = ;
 
-: stream.reset ( stream -- )
+: stream-reset ( stream -- )
     0 swap .i ! ;
 
 : next-slot ( stream -- a )
@@ -35,16 +35,16 @@ constant: Stream
     dup .i @ + Stream +
     swap .i 1 swap +! ;
 
-: stream.put-byte ( byte stream -- )
-    dup stream.full? if
+: stream-put-byte ( byte stream -- )
+    dup stream-full? if
         EOVERFLOW throw
     then
     tuck
     next-slot c!
     .size 1 swap +! ;
 
-: stream.next-byte ( stream -- byte )
-    dup stream.empty? if
+: stream-next-byte ( stream -- byte )
+    dup stream-empty? if
         EUNDERFLOW throw
     then
     dup next-slot c@
