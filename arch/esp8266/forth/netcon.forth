@@ -42,7 +42,7 @@ marker: -netcon
     then 
     drop ;
 
-: netcon-connect ( port host -- netcon | throws:ENETCON )
+: netcon-connect ( port host -- netcon | throws:ENETCON ) override
     netcon-tcp dup 
     >r
     netcon-connect
