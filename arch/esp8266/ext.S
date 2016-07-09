@@ -174,61 +174,61 @@ defprimitive "ds18b20",7,ds18b20,REGULAR
     CCALL forth_ds18b20_read_all    
     NEXT
 
-defprimitive "netconn-set-recvtimeout",23,netconn_set_recvtimeout,REGULAR 
+defprimitive "netcon-set-recvtimeout",22,netcon_set_recvtimeout,REGULAR 
     DPOP a2                    // conn
     DPOP a3                    // recv timeout ms
-    CCALL forth_netconn_set_recvtimeout
+    CCALL forth_netcon_set_recvtimeout
     NEXT
 
-defprimitive "netconn-new",11,netconn_new,REGULAR
+defprimitive "netcon-new",10,netcon_new,REGULAR
     DPOP a2                    // conn type
-    CCALL forth_netconn_new
+    CCALL forth_netcon_new
     DPUSH a2
     NEXT
 
-defprimitive "netconn-connect",15,netconn_connect,REGULAR       
+defprimitive "netcon-connect",14,netcon_connect,REGULAR       
     DPOP a2                    // conn
     DPOP a3                    // host
     DPOP a4                    // port
-    CCALL forth_netconn_connect
+    CCALL forth_netcon_connect
     DPUSH a2
     NEXT
 
-defprimitive "netconn-bind",12,netconn_bind,REGULAR       
+defprimitive "netcon-bind",11,netcon_bind,REGULAR       
     DPOP a2                    // conn
     DPOP a3                    // host
     DPOP a4                    // port
-    CCALL forth_netconn_bind
+    CCALL forth_netcon_bind
     DPUSH a2
     NEXT
 
-defprimitive "netconn-listen",14,netconn_listen,REGULAR       
-    DPOP a2                    // netconn
-    CCALL forth_netconn_listen
+defprimitive "netcon-listen",13,netcon_listen,REGULAR       
+    DPOP a2                    // netcon
+    CCALL forth_netcon_listen
     DPUSH a2
     NEXT
 
-defprimitive "netconn-send",12,netconn_send,REGULAR
+defprimitive "netcon-send",11,netcon_send,REGULAR
     DPOP a2                    // conn
     DPOP a3                    // data
     DPOP a4                    // len
-    CCALL forth_netconn_send
+    CCALL forth_netcon_send
     DPUSH a2
     NEXT
 
-defprimitive "netconn-write",13,netconn_write,REGULAR
+defprimitive "netcon-write",12,netcon_write,REGULAR
     DPOP a2                    // conn
     DPOP a3                    // data
     DPOP a4                    // size
-    CCALL forth_netconn_write
+    CCALL forth_netcon_write
     DPUSH a2
     NEXT
 
-defprimitive "netconn-recvinto",16,netconn_recvinto,REGULAR
+defprimitive "netcon-recvinto",15,netcon_recvinto,REGULAR
     DPOP a2                    // conn
     DPOP a3                    // buffer
     DPOP a4                    // size
-    CCALL forth_netconn_recvinto
+    CCALL forth_netcon_recvinto
     DPUSH a3                   // count read
     DPUSH a2                   // err_t
     NEXT
@@ -251,28 +251,28 @@ defprimitive "netbuf-data",11,netbuf_data,REGULAR
     DPUSH a2                   // size
     NEXT
 
-defprimitive "netconn-recv",12,netconn_recv,REGULAR
-    DPOP a2                    // netconn
-    CCALL forth_netconn_recv
+defprimitive "netcon-recv",11,netcon_recv,REGULAR
+    DPOP a2                    // netcon
+    CCALL forth_netcon_recv
     DPUSH a3                   // netbuf
     DPUSH a2                   // err_t
     NEXT
 
-defprimitive "netconn-accept",14,netconn_accep,REGULAR
-    DPOP a2                    // netconn
-    CCALL forth_netconn_accept
-    DPUSH a3                   // netconn
+defprimitive "netcon-accept",13,netcon_accep,REGULAR
+    DPOP a2                    // netcon
+    CCALL forth_netcon_accept
+    DPUSH a3                   // netcon
     DPUSH a2                   // err_t
     NEXT
 
-defprimitive "netconn-dispose",15,netconn_dispose,REGULAR
+defprimitive "netcon-dispose",14,netcon_dispose,REGULAR
     DPOP a2                    // conn
-    CCALL forth_netconn_dispose
+    CCALL forth_netcon_dispose
     NEXT
 
-defprimitive "netconn-close",13,netconn_close,REGULAR
+defprimitive "netcon-close",12,netcon_close,REGULAR
     DPOP a2                    // conn
-    CCALL forth_netconn_close
+    CCALL forth_netcon_close
     NEXT
 
 defprimitive "task-yield",10,task_yield,REGULAR

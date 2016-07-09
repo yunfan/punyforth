@@ -4,9 +4,9 @@
 #include "lwip/api.h"
 #include "lwip/ip_addr.h"
 
-struct netconn* forth_netconn_new(int type) {
+struct netconn* forth_netcon_new(int type) {
     enum netconn_type con_type;
-    printf("New netconn type: %d\n", type);
+    printf("New netcon type: %d\n", type);
     switch (type) {
         case 1: con_type = NETCONN_UDP; break;
         case 2: con_type = NETCONN_TCP; break;
@@ -17,7 +17,7 @@ struct netconn* forth_netconn_new(int type) {
     return conn;
 }
 
-int forth_netconn_connect(struct netconn* conn, char* host, int port) {   
+int forth_netcon_connect(struct netconn* conn, char* host, int port) {   
     err_t err; ip_addr_t ip;
     printf("Getting hostname: %s\n", host);
     err = netconn_gethostbyname(host, &ip);
@@ -33,11 +33,11 @@ int forth_netconn_connect(struct netconn* conn, char* host, int port) {
     return err;
 }
 
-int forth_netconn_listen(struct netconn *conn) {
+int forth_netcon_listen(struct netconn *conn) {
     return netconn_listen(conn);
 }
 
-int forth_netconn_bind(struct netconn* conn, char* host, int port) {   
+int forth_netcon_bind(struct netconn* conn, char* host, int port) {   
     err_t err; ip_addr_t ip;
     printf("Getting hostname: %s\n", host);
     err = netconn_gethostbyname(host, &ip);
@@ -53,7 +53,7 @@ int forth_netconn_bind(struct netconn* conn, char* host, int port) {
     return err;
 }
 
-int forth_netconn_send(struct netconn* conn, void* data, int len) {
+int forth_netcon_send(struct netconn* conn, void* data, int len) {
     printf("Sending data len: %d conn: %p\n", len, conn);
     err_t err;
     uint16_t len16 = len;
@@ -74,7 +74,7 @@ int forth_netconn_send(struct netconn* conn, void* data, int len) {
     return err;
 }
 
-int forth_netconn_write(struct netconn* conn, void* data, int len) {
+int forth_netcon_write(struct netconn* conn, void* data, int len) {
     printf("Writing data len: %d conn: %p\n", len, conn);
     err_t err;
     uint16_t len16 = len;
@@ -90,7 +90,7 @@ struct recv_res {
     struct netbuf* nbuf;
 };
 
-struct recv_res forth_netconn_recv(struct netconn* conn) {
+struct recv_res forth_netcon_recv(struct netconn* conn) {
     //printf("Receiving from connection: %p\n", conn);
     err_t err;
     struct netbuf *inbuf;
@@ -128,7 +128,7 @@ struct recvinto_res {
     int count;
 };
 
-struct recvinto_res forth_netconn_recvinto(struct netconn* conn, void* buffer, int size) {
+struct recvinto_res forth_netcon_recvinto(struct netconn* conn, void* buffer, int size) {
     //printf("receiving buffer %p max size: %d\n", buffer, size);
     err_t err;
     struct netbuf *inbuf;
@@ -150,7 +150,7 @@ struct accept_res {
     struct netconn* conn;
 };
 
-struct accept_res forth_netconn_accept(struct netconn* conn) {
+struct accept_res forth_netcon_accept(struct netconn* conn) {
     struct netconn *new_conn;
     err_t code = netconn_accept(conn, &new_conn);
     struct accept_res result = {
@@ -160,17 +160,17 @@ struct accept_res forth_netconn_accept(struct netconn* conn) {
     return result;
 }
  
-void forth_netconn_dispose(struct netconn* conn) {
+void forth_netcon_dispose(struct netconn* conn) {
     printf("Disposing connection %p\n", conn);
     netconn_close(conn);
     netconn_delete(conn);
 }
 
-void forth_netconn_close(struct netconn* conn) {
+void forth_netcon_close(struct netconn* conn) {
     printf("Closing connection %p\n", conn);
     netconn_close(conn);
 }
 
-void forth_netconn_set_recvtimeout(struct netconn* conn, int timeout) {
+void forth_netcon_set_recvtimeout(struct netconn* conn, int timeout) {
     netconn_set_recvtimeout(conn, timeout);
 }
