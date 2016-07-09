@@ -13,6 +13,7 @@ available_modules = {
     'ssd1306-spi' : '../forth/ssd1306-spi.forth',
     'netconn' : '../forth/netconn.forth',
     'tasks' : '../forth/tasks.forth',
+    'stream' : '../../../generic/forth/stream.forth',
     'flash' : '../forth/flash.forth',
     'example-game-of-life' : '../forth/examples/example-game-of-life.forth',
     'example-consumer' : '../forth/examples/example-consumer.forth',
@@ -32,13 +33,14 @@ dependencies = {
     'ssd1306-spi' : ['core', 'gpio'],
     'netconn' : ['core', 'tasks'],
     'tasks' : ['core', 'ringbuf'],
+    'stream' : ['core'],   
     'flash' : ['core'],
     'example-game-of-life' : ['core', 'ssd1306-spi'],
     'example-consumer' : ['core', 'tasks'],
     'example-ircbot' : ['core', 'netconn', 'tasks', 'gpio'],
     'example-philips-hue' : ['core', 'netconn'],
     'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio'],
-    'example-http-server' : ['core', 'netconn']
+    'example-http-server' : ['core', 'netconn', 'stream']
 }
 
 def print_help():

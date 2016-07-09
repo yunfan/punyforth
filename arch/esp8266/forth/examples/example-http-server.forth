@@ -6,13 +6,13 @@ str: "192.168.0.15" constant: HOST
     
 struct
     cell field: .client
-    128  field: .line
-    cell field: .position
+    \ 128  field: .line
+    \ cell field: .position
 constant: WorkerSpace
 
+128 stream.new: line
+
 : client ( -- a ) user-space .client ;
-: line ( -- a ) user-space .line ;
-: position ( -- n ) user-space .position ;
 
 4 mailbox.new: connections
 0 task: server-task
@@ -51,12 +51,11 @@ WorkerSpace task: worker-task2
         dup i + c@
         dup 10 = if
             drop            
-            0 line position @ + c! \ terminate with zero
-            line line-received
-            0 position !
-        else        
-            position @ line + c!
-            1 position +!
+            0 line stream.put-byte
+            line stream.buffer line-received
+            line stream.reset
+        else
+            line stream.put-byte
         then                
     loop
     drop ;
@@ -64,7 +63,7 @@ WorkerSpace task: worker-task2
 : worker ( task -- )
     activate
     begin
-        0 position !
+        line stream.reset
         connections mailbox.receive client !
         print: "Client connected: " client @ . cr
         client @ ['] data-received ['] read-all catch dup ENETCON = if
@@ -79,7 +78,7 @@ WorkerSpace task: worker-task2
 : start-server ( -- )
     multi
     server-task server
-    worker-task1 worker
+    \ worker-task1 worker TODO
     worker-task2 worker ;
     
 512 var-task-stack-size !
