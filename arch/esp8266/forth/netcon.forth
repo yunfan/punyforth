@@ -123,7 +123,7 @@ marker: -netcon
     again ;
 
 \    
-: read-all ( netcon consumer-xt -- code )
+: netcon-consume ( netcon consumer-xt -- code )
     begin
         2dup swap
         read-responsively 

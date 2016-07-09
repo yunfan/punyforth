@@ -66,7 +66,7 @@ WorkerSpace task: worker-task2
         line stream-reset
         connections mailbox-receive client !
         print: "Client connected: " client @ . cr
-        client @ ['] data-received ['] read-all catch dup ENETCON = if
+        client @ ['] data-received ['] netcon-consume catch dup ENETCON = if
             println: "Client lost: " . cr
         else
             println: "Connection closed: " . cr

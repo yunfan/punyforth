@@ -50,7 +50,7 @@ str: "2" constant: BEDROOM
         dup str: "22"                     netcon-writeln
         dup \r\n                          netcon-write
         dup str: '{"on":true,"bri": 255}' netcon-writeln
-        dup ['] type-counted              read-all
+        dup ['] type-counted              netcon-consume
         print: "response code: " . cr
         netcon-dispose ;
         

@@ -43,7 +43,7 @@ SOCKET join
 : start-irc-task ( -- )
     multi
     ircbot-task activate
-    SOCKET ['] data-received read-all
+    SOCKET ['] data-received netcon-consume
     print: "response code: " . cr
     deactivate ;
 
