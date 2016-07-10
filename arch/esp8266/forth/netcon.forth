@@ -131,13 +131,34 @@ marker: -netcon
         then
         drop
         ['] consume-netbuf catch dup 0<> if
-            \ swap netbuf-del
+            swap netbuf-del
             nip
             throw
         then
         drop netbuf-del        
     again ;    
 
+\ Reads one line into the given buffer. The line terminator is crlf.
+\ Leaves the length of the line on the top of the stack.
+\ If the given buffer is not large enough to hold the EOVERFLOW is thrown.
+\ Note: this reads bytes one by one, therefore it is not super effective.
+: netcon-readln ( netcon size buffer -- count | throws:ENETCON )
+    swap 0 do
+        2dup
+        1 swap i + netcon-read 1 <> if
+            ENETCON throw
+        then
+        dup i + c@ 10 = i 2 >= and if            
+            dup i + 1- c@ 13 = if
+                i + 1- 0 swap c!
+                drop i 1- 
+                r> r> 2drop \ XXX clear loop variables before exiting
+                exit
+            then            
+        then
+    loop 
+    EOVERFLOW throw ;    
+    
 : netcon-dispose ( netcon -- )
     dup
     netcon-close
