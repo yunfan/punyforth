@@ -140,8 +140,7 @@ marker: -netcon
 
 \ Reads one line into the given buffer. The line terminator is crlf.
 \ Leaves the length of the line on the top of the stack.
-\ If the given buffer is not large enough to hold the EOVERFLOW is thrown.
-\ Note: this reads bytes one by one, therefore it is not super effective.
+\ If the given buffer is not large enough to hold EOVERFLOW is thrown.
 : netcon-readln ( netcon size buffer -- count | throws:ENETCON )
     swap 0 do
         2dup
