@@ -97,57 +97,21 @@ marker: -netcon
 : netcon-read ( netcon size buffer -- count | throws:ENETCON )
     rot 
     read-ungreedy
+    dup NC_ERR_CLSD = if 2drop 0 exit then
     check-error ;
-    
-: consume-next ( consumer-xt netbuf -- n )
-    tuck netbuf-data
-    rot execute                         \ execute consumer with stack effect ( buffer size -- ) 
-    netbuf-next ;
-
-: consume-netbuf ( consumer-xt netbuf -- netbuf )
-    begin   
-        2dup consume-next
-    0 < until 
-    nip ;
-
-: consume-ungreedy ( netcon -- netbuf code )
-    begin
-        pause
-        dup netcon-recv
-        dup NC_ERR_TIMEOUT <> if
-            rot drop
-            exit
-        then
-        2drop
-    again ;
-
-: netcon-consume ( netcon consumer-xt -- code )
-    begin
-        2dup swap
-        consume-ungreedy 
-        dup 0<> if
-            >r 4drop r>
-            exit
-        then
-        drop
-        ['] consume-netbuf catch dup 0<> if
-            swap netbuf-del
-            nip
-            throw
-        then
-        drop netbuf-del        
-    again ;    
 
 \ Reads one line into the given buffer. The line terminator is crlf.
-\ Leaves the length of the line on the top of the stack.
+\ Leaves the length of the line on the top of the stack, or -1 if the connection was closed.
 \ If the given buffer is not large enough to hold EOVERFLOW is thrown.
 : netcon-readln ( netcon size buffer -- count | throws:ENETCON )
     swap 0 do
         2dup
-        1 swap i + netcon-read 1 <> if
-            ENETCON throw
+        1 swap i + netcon-read 0= if
+            2drop
+            r> r> 2drop \ XXX clear loop variables before exiting
+            -1 exit
         then
-        dup i + c@ 10 = i 2 >= and if            
+        dup i + c@ 10 = i 1 >= and if            
             dup i + 1- c@ 13 = if
                 i + 1- 0 swap c!
                 drop i 1- 
