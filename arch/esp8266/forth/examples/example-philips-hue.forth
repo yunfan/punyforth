@@ -104,5 +104,6 @@ buffer-len byte-array: buffer-at
     case
         0 of exit endof
         ENETCON of println: "netconn error" endof
+        EHTTP of println: "http error" endof
         throw
     endcase ;

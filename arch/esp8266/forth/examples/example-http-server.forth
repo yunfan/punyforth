@@ -55,7 +55,7 @@ WorkerSpace task: worker-task2
             print: ' exception: ' . cr
         else
             drop
-        then        
+        then
         client @ netcon-dispose
     again
     deactivate ;
