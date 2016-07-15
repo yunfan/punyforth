@@ -208,7 +208,6 @@ defer: deferred-word
    ['] 3nested-throw2 catch drop 42 =assert
    3 nested-throw2 42 =assert
    ['] simple-throw catch 123 =assert
-   3nested-throw2 42 =assert
    sp@ test_var2 !
    test_var1 @ test_var2 @ =assert ;
 
