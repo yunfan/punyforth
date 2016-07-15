@@ -14,7 +14,9 @@
        compile_time_only
        ['] branch0 , resolve-backward-ref ; immediate
 
-: ( begin key [ char ) ] literal = until ; immediate
+: char: word drop c@ ;
+
+: ( begin key [ char: ) ] literal = until ; immediate
 : \ begin key dup 13 = swap 10 = or until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
@@ -139,7 +141,7 @@
 86 constant: EOVERFLOW
 65 constant: EASSERT
 40 constant: ENOTFOUND
-67 constant: ECONVERSION
+67 constant: ECONVERT
 69 constant: EESCAPE
 
 : ['], ['] ['] , ;
@@ -155,8 +157,10 @@
 
 : defer! ( dst-xt src-xt -- ) swap xt>body ! ;
 
-0 init-variable: handler           \ stores the address of the nearest exception handler
 defer: unhandled
+defer: handler
+0 init-variable: var-handler            \ stores the address of the nearest exception handler
+: single-handler ( -- a ) var-handler ; \ single threaded global handler
 
 : catch ( xt -- errcode | 0 )
       sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
@@ -166,8 +170,8 @@ defer: unhandled
       r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
 
 : throw ( i*x errcode -- i*x errcode | 0 )
-      dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
-      handler @ 0= if             \ this was an uncaught exception
+      dup 0= if drop exit then     \ 0 means no error, drop errorcode exit from execute
+      handler @ 0= if              \ this was an uncaught exception
           unhandled
           exit
       then
@@ -183,6 +187,8 @@ defer: unhandled
     else 
         link>xt 
     then ;
+
+' handler ' single-handler defer!
 
 : compile-imm: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 
@@ -215,12 +221,12 @@ defer: unhandled
     dup here swap - cell - swap ! ; \ calculate and store relative address    
 
 : eschr ( char -- char ) \ read next char from stdin
-    dup [ char \ ] literal = if
+    dup [ char: \ ] literal = if
         drop key case
-            [ char r ] literal of 13 endof
-            [ char n ] literal of 10 endof
-            [ char t ] literal of 9  endof
-            [ char \ ] literal of 92 endof
+            [ char: r ] literal of 13 endof
+            [ char: n ] literal of 10 endof
+            [ char: t ] literal of 9  endof
+            [ char: \ ] literal of 92 endof
             EESCAPE throw
         endcase
     then ;
@@ -291,14 +297,14 @@ defer: unhandled
 : min ( a b -- min ) 2dup < if drop else nip then ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
 
-: hexchar>int ( char -- n | throws:ECONVERSION )
+: hexchar>int ( char -- n | throws:ECONVERT )
     48 over 57 between? if 48 - exit then
     65 over 70 between? if 55 - exit then
     97 over 102 between? if 87 - exit then
-    ECONVERSION throw ;
+    ECONVERT throw ;
 
-: hex>int' ( str len -- n | throws:ECONVERSION )
-    dup 0= if ECONVERSION throw then
+: hex>int' ( str len -- n | throws:ECONVERT )
+    dup 0= if ECONVERT throw then
     dup 1- 2 lshift 0 swap
     2swap 0 do
         dup >r
@@ -309,7 +315,7 @@ defer: unhandled
     loop 
     2drop ;
 
-: hex>int ( str -- n | throws:ECONVERSION ) dup strlen hex>int' ;
+: hex>int ( str -- n | throws:ECONVERT ) dup strlen hex>int' ;
 
 : hex:
     word hex>int'
@@ -397,9 +403,9 @@ defer: unhandled
                 link>xt = if dup type-word then
                 @
             repeat
-            [ char ( ] literal emit
+            [ char: ( ] literal emit
             drop .
-            [ char ) ] literal emit
+            [ char: ) ] literal emit
             cr
         else
             print: "??? (" . println: ")"     \ not valid return address, could be doloop var

@@ -420,10 +420,6 @@ defword ":",1,colon,REGULAR
     .int xt_btick, _M ENTERCOL, xt_comma                                         // codeword is ENTERCOL
     .int xt_exit
 
-defword "char",4,char,REGULAR
-    .int xt_word, xt_drop, xt_fetchbyte
-    .int xt_exit
-
 .ifndef xt_type
 defword "type",4,type,REGULAR            // ( zstring -- )
 type_next_char:
