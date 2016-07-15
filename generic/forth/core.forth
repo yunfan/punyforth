@@ -250,9 +250,6 @@ defer: unhandled
     then        
  ; immediate
 
-: (crlf) [str 13 c, 10 c, str] ; immediate
-: \r\n (crlf) ;
-
 : strlen ( str -- len )
     0 swap
     begin
