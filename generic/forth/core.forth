@@ -214,20 +214,22 @@ defer: unhandled
     0 c,                            \ terminate string
     dup here swap - cell - swap ! ; \ calculate and store relative address    
 
+: eschr ( char -- char ) \ read next char from stdin
+    dup [ char \ ] literal = if
+        drop key case
+            [ char r ] literal of 13 endof
+            [ char n ] literal of 10 endof
+            [ char t ] literal of 9  endof
+            [ char \ ] literal of 92 endof
+            EESCAPE throw
+        endcase
+    then ;
+
 : c,-until ( separator -- )
     begin
         key 2dup <>
     while
-        dup [ char \ ] literal = if
-            drop key case
-                [ char r ] literal of 13 c, endof
-                [ char n ] literal of 10 c, endof
-                [ char \ ] literal of 92 c, endof
-                EESCAPE throw
-            endcase
-        else
-            c,
-        then
+        eschr c, 
     repeat        
     2drop ;                          \ drop last key and separator
 
@@ -323,7 +325,7 @@ defer: unhandled
         begin
             key 2dup <>
         while
-            emit
+            eschr emit
         repeat
         2drop           
     else
