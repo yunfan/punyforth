@@ -42,20 +42,6 @@ WorkerSpace task: worker-task2
         println: 'response sent for GET request'
     then ;
     
-: data-received ( buffer size -- )
-    0 do
-        dup i + c@
-        dup 10 = if
-            drop            
-            0 line stream-put-byte
-            line stream-buffer line-received
-            line stream-reset
-        else
-            line stream-put-byte
-        then                
-    loop
-    drop ;
-    
 : handle-client ( -- )    
     client @ 128 line netcon-readln    
     print: 'line received: ' line type print: ' length=' . cr
