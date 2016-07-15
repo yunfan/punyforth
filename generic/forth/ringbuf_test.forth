@@ -57,7 +57,7 @@ marker: -ringbuf-test
         ringbuf-empty? assert ;
 
 : remove-from-empty
-    8 ringbuf-new ringbuf-dequeu ;
+    8 ringbuf-new ringbuf-dequeue ;
 
 : test:ringbuf-underflow-when-removing-empty
     ['] remove-from-empty catch EUNDERFLOW =assert ;
@@ -68,6 +68,6 @@ marker: -ringbuf-test
     2 over ringbuf-enqueue
     3 over ringbuf-enqueue ;
 
-: test:stream-overflow-when-adding-more-than-allowed
+: test:ringbuf-overflow-when-adding-more-than-allowed
     ['] add-more-than-allowed catch EOVERFLOW =assert ;
 
