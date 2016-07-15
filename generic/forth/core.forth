@@ -265,6 +265,16 @@ defer: handler
     repeat 
     drop ;
 
+: =str ( str1 str2 -- bool )
+    begin
+        2dup ['] c@ bi@
+        2dup ['] 0<> bi@ and
+        -rot = and        
+    while
+        ['] 1+ bi@
+    repeat
+    ['] c@ bi@ ['] 0= bi@ and ;
+
 : str-starts-with ( str substr -- bool )
     begin
         2dup ['] c@ bi@
@@ -296,6 +306,37 @@ defer: handler
 : max ( a b -- max ) 2dup < if nip else drop then ;
 : min ( a b -- min ) 2dup < if drop else nip then ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
+
+: whitespace? ( char -- bool )
+    case
+        32 of TRUE exit endof
+        13 of TRUE exit endof
+        10 of TRUE exit endof
+         9 of TRUE exit endof
+        drop FALSE     
+    endcase ;
+
+: left-trim ( str -- str )
+    begin
+        dup c@ dup
+        ['] 0<> ['] whitespace? bi* and
+    while
+        1+
+    repeat ;
+
+: word-find ( str -- a len )
+    left-trim 0 swap
+    begin
+        dup c@
+        ['] 0<> ['] whitespace? bi invert and
+    while
+        ['] 1+ bi@
+    repeat
+    over -
+    swap ;
+
+: str-eval ( str -- i*x )
+    word-find token-eval ;
 
 : hexchar>int ( char -- n | throws:ECONVERT )
     48 over 57 between? if 48 - exit then
