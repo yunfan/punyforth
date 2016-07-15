@@ -1,4 +1,4 @@
--marker: -stream-test
+marker: -stream-test
 
 : test:stream-initially-empty
     4 stream-new stream-empty? assert ;
