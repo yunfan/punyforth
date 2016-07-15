@@ -157,8 +157,10 @@
 
 : defer! ( dst-xt src-xt -- ) swap xt>body ! ;
 
-0 init-variable: handler           \ stores the address of the nearest exception handler
 defer: unhandled
+defer: handler
+0 init-variable: var-handler            \ stores the address of the nearest exception handler
+: single-handler ( -- a ) var-handler ; \ single threaded global handler
 
 : catch ( xt -- errcode | 0 )
       sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
@@ -168,8 +170,8 @@ defer: unhandled
       r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
 
 : throw ( i*x errcode -- i*x errcode | 0 )
-      dup 0= if drop exit then    \ 0 means no error, drop errorcode exit from execute
-      handler @ 0= if             \ this was an uncaught exception
+      dup 0= if drop exit then     \ 0 means no error, drop errorcode exit from execute
+      handler @ 0= if              \ this was an uncaught exception
           unhandled
           exit
       then
@@ -185,6 +187,8 @@ defer: unhandled
     else 
         link>xt 
     then ;
+
+' handler ' single-handler defer!
 
 : compile-imm: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 
