@@ -140,6 +140,7 @@
 65 constant: EASSERT
 40 constant: ENOTFOUND
 67 constant: ECONVERSION
+69 constant: EESCAPE
 
 : ['], ['] ['] , ;
 
@@ -217,7 +218,16 @@ defer: unhandled
     begin
         key 2dup <>
     while
-        c,
+        dup [ char \ ] literal = if
+            drop key case
+                [ char r ] literal of 13 c, endof
+                [ char n ] literal of 10 c, endof
+                [ char \ ] literal of 92 c, endof
+                EESCAPE throw
+            endcase
+        else
+            c,
+        then
     repeat        
     2drop ;                          \ drop last key and separator
 

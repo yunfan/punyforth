@@ -258,6 +258,13 @@ defer: deferred-word
    str: 'efg' 
    str-includes FALSE =assert ;
 
+: test:core-str-escape
+   str: 'a\nb' 1 + c@ 10 =assert 
+   str: '\rb' c@ 13 =assert 
+   str: '\\' c@ 92 =assert 
+   str: '\\\\' strlen 2 =assert 
+   str: 'abc\r\nd' strlen 6 =assert ;
+
 : test:core-untilloop
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 =assert ;
 
