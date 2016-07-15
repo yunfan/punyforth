@@ -14,7 +14,9 @@
        compile_time_only
        ['] branch0 , resolve-backward-ref ; immediate
 
-: ( begin key [ char ) ] literal = until ; immediate
+: char: word drop c@ ;
+
+: ( begin key [ char: ) ] literal = until ; immediate
 : \ begin key dup 13 = swap 10 = or until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
@@ -215,12 +217,12 @@ defer: unhandled
     dup here swap - cell - swap ! ; \ calculate and store relative address    
 
 : eschr ( char -- char ) \ read next char from stdin
-    dup [ char \ ] literal = if
+    dup [ char: \ ] literal = if
         drop key case
-            [ char r ] literal of 13 endof
-            [ char n ] literal of 10 endof
-            [ char t ] literal of 9  endof
-            [ char \ ] literal of 92 endof
+            [ char: r ] literal of 13 endof
+            [ char: n ] literal of 10 endof
+            [ char: t ] literal of 9  endof
+            [ char: \ ] literal of 92 endof
             EESCAPE throw
         endcase
     then ;
@@ -397,9 +399,9 @@ defer: unhandled
                 link>xt = if dup type-word then
                 @
             repeat
-            [ char ( ] literal emit
+            [ char: ( ] literal emit
             drop .
-            [ char ) ] literal emit
+            [ char: ) ] literal emit
             cr
         else
             print: "??? (" . println: ")"     \ not valid return address, could be doloop var
