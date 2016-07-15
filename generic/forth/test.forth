@@ -158,9 +158,9 @@ defer: deferred-word
    str: "12345678" hex>int 305419896 =assert
    str: "a1" hex>int 161 =assert
    str: "123abc" hex>int 1194684 =assert
-   str: "" ['] hex>int catch ECONVERSION =assert
-   str: "123g4" ['] hex>int catch ECONVERSION =assert
-   str: "12G4" ['] hex>int catch ECONVERSION =assert
+   str: "" ['] hex>int catch ECONVERT =assert
+   str: "123g4" ['] hex>int catch ECONVERT =assert
+   str: "12G4" ['] hex>int catch ECONVERT =assert
    hex: a0f 2575 =assert ;
 
 : test:core-case   

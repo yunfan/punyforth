@@ -141,7 +141,7 @@
 86 constant: EOVERFLOW
 65 constant: EASSERT
 40 constant: ENOTFOUND
-67 constant: ECONVERSION
+67 constant: ECONVERT
 69 constant: EESCAPE
 
 : ['], ['] ['] , ;
@@ -293,14 +293,14 @@ defer: unhandled
 : min ( a b -- min ) 2dup < if drop else nip then ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
 
-: hexchar>int ( char -- n | throws:ECONVERSION )
+: hexchar>int ( char -- n | throws:ECONVERT )
     48 over 57 between? if 48 - exit then
     65 over 70 between? if 55 - exit then
     97 over 102 between? if 87 - exit then
-    ECONVERSION throw ;
+    ECONVERT throw ;
 
-: hex>int' ( str len -- n | throws:ECONVERSION )
-    dup 0= if ECONVERSION throw then
+: hex>int' ( str len -- n | throws:ECONVERT )
+    dup 0= if ECONVERT throw then
     dup 1- 2 lshift 0 swap
     2swap 0 do
         dup >r
@@ -311,7 +311,7 @@ defer: unhandled
     loop 
     2drop ;
 
-: hex>int ( str -- n | throws:ECONVERSION ) dup strlen hex>int' ;
+: hex>int ( str -- n | throws:ECONVERT ) dup strlen hex>int' ;
 
 : hex:
     word hex>int'

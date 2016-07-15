@@ -19,9 +19,9 @@ buffer-len byte-array: buffer-at
 : read-into-buffer ( netconn -- )
     buffer-len buffer netcon-read buffer>asciiz ;
 
-: parse-http-code ( buffer -- code | throws:ECONVERSION )    
+: parse-http-code ( buffer -- code | throws:ECONVERT )
     9 + 3 >number invert if
-        ECONVERSION throw
+        ECONVERT throw
     then ;
     
 2048 constant: EHTTP
