@@ -163,7 +163,7 @@ defer: handler
 : single-handler ( -- a ) var-handler ; \ single threaded global handler
 
 : catch ( xt -- errcode | 0 )
-      sp@ cell + >r handler @ >r   \ save current stack pointer and previous handler (RS: sp h)
+      sp@ >r handler @ >r          \ save current stack pointer and previous handler (RS: sp h)
       rp@ handler !                \ set the currend handler to this
       execute                      \ execute word that potentially throws exception
       r> handler !                 \ word returned without exception, restore previous handler
@@ -411,7 +411,7 @@ defer: handler
             print: "??? (" . println: ")"     \ not valid return address, could be doloop var
         then            
     loop
-    print-stack
+    depth 0> if print-stack then
     abort ; 
 
 ' unhandled is: traceback

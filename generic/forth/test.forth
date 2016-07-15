@@ -43,14 +43,6 @@ constant: Rect
 : area ( rect -- area ) dup .width @ swap .height @ * ;
 new-rect r1
 
-: nested-throw1 dup 1= if drop 10 throw then 2 = if 20 throw then 42 ;
-: nested-throw2
-       ['] nested-throw1 catch dup 10 = if
-          drop 30 throw
-       else
-          throw
-       then ;
-
 : bench ( ntimes -- sec )
        time swap
        0 do 10 factorial drop loop
@@ -152,15 +144,19 @@ defer: deferred-word
    8 factorial 8 factorial2 =assert
    9 factorial 9 factorial3 =assert ;
 
+: empty-hex>int str: "" hex>int ;
+: invalid1-hex>int str: "123g4" hex>int ;
+: invalid2-hex>int str: "12G4" hex>int ;
+
 : test:core-hex
    str: "aBcDeF" hex>int 11259375 =assert
    str: "AbCdEf" hex>int 11259375 =assert
    str: "12345678" hex>int 305419896 =assert
    str: "a1" hex>int 161 =assert
    str: "123abc" hex>int 1194684 =assert
-   str: "" ['] hex>int catch ECONVERT =assert
-   str: "123g4" ['] hex>int catch ECONVERT =assert
-   str: "12G4" ['] hex>int catch ECONVERT =assert
+   ['] empty-hex>int catch ECONVERT =assert
+   ['] invalid1-hex>int catch ECONVERT =assert
+   ['] invalid2-hex>int catch ECONVERT =assert
    hex: a0f 2575 =assert ;
 
 : test:core-case   
@@ -190,13 +186,29 @@ defer: deferred-word
    ['] deferred-word is: *
    use-deferred 6 =assert ;
 
+: negative-factorial -1 factorial ;
+: nested-throw1 dup 1= if drop 10 throw then 2 = if 20 throw then 42 ;
+: nested-throw2
+       ['] nested-throw1 catch dup 10 = if
+          drop 30 throw
+       else
+          throw
+       then ;
+: 1nested-throw2 1 nested-throw2 ;
+: 2nested-throw2 2 nested-throw2 ;
+: 3nested-throw2 3 nested-throw2 ;
+
+: simple-throw 123 throw ;
+
 : test:core-catch
    sp@ test_var1 !
-   -1 ['] factorial catch 1024 =assert
-   1 ['] nested-throw2 catch 30 =assert
-   2 ['] nested-throw2 catch 20 =assert
-   3 ['] nested-throw2 catch drop 42 =assert
+   ['] negative-factorial catch 1024 =assert
+   ['] 1nested-throw2 catch 30 =assert
+   ['] 2nested-throw2 catch 20 =assert
+   ['] 3nested-throw2 catch drop 42 =assert
    3 nested-throw2 42 =assert
+   ['] simple-throw catch 123 =assert
+   3nested-throw2 42 =assert
    sp@ test_var2 !
    test_var1 @ test_var2 @ =assert ;
 
