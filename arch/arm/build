@@ -7,9 +7,7 @@ cat ../../generic/forth/core.forth \
     ../../generic/forth/ringbuf_test.forth \
     ../../generic/forth/stream.forth \
     ../../generic/forth/stream_test.forth \
-    ../../generic/forth/eval.forth \
-    ../../generic/forth/eval_test.forth \
-    ../../generic/forth/test.forth \
+   ../../generic/forth/test.forth \
     /dev/stdin \
     | ./punyforth
 
