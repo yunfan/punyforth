@@ -307,37 +307,6 @@ defer: handler
 : min ( a b -- min ) 2dup < if drop else nip then ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
 
-: whitespace? ( char -- bool )
-    case
-        32 of TRUE exit endof
-        13 of TRUE exit endof
-        10 of TRUE exit endof
-         9 of TRUE exit endof
-        drop FALSE     
-    endcase ;
-
-: left-trim ( str -- str )
-    begin
-        dup c@ dup
-        ['] 0<> ['] whitespace? bi* and
-    while
-        1+
-    repeat ;
-
-: word-find ( str -- a len )
-    left-trim 0 swap
-    begin
-        dup c@
-        ['] 0<> ['] whitespace? bi invert and
-    while
-        ['] 1+ bi@
-    repeat
-    over -
-    swap ;
-
-: str-eval ( str -- i*x )
-    word-find token-eval ;
-
 : hexchar>int ( char -- n | throws:ECONVERT )
     48 over 57 between? if 48 - exit then
     65 over 70 between? if 55 - exit then
