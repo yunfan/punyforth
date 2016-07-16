@@ -426,3 +426,13 @@ defer: handler
 
 ' unhandled is: traceback
 
+: eval ( str -- i*x ) \ experimental, non thread safe
+    0 #tib !
+    tib >in ! 
+    dup strlen 0 do 
+        dup i + c@ chr>in
+    loop
+    13 chr>in 10 chr>in
+    drop 
+    tib >in ! ;
+
