@@ -275,6 +275,25 @@ defer: deferred-word
    str: "12" str: "13" =str invert assert
    str: "abcd" str: "abcde" =str invert assert
    str: "abcdef" str: "abcdeF" =str invert assert ;
+       
+: test:eval-whitespace
+   32 whitespace? assert
+   10 whitespace? assert
+   13 whitespace? assert
+   9 whitespace? assert
+   65 whitespace? invert assert ;
+
+: test:core-multi-line-str
+str: 
+"
+A\n
+B
+"  
+   dup strlen 3 = assert
+   dup c@ 65 = assert
+   dup 1+ c@ 10 = assert
+   dup 2 + c@ 66 = assert
+   drop ;
 
 : test:core-str-escape
    str: 'a\nb' 1 + c@ 10 =assert 

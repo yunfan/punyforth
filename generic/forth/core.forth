@@ -231,18 +231,33 @@ defer: handler
         endcase
     then ;
 
+: whitespace? ( char -- bool )
+    case
+        32 of TRUE exit endof
+        13 of TRUE exit endof
+        10 of TRUE exit endof
+        9 of TRUE exit endof
+        drop FALSE     
+    endcase ;
+
+: line-break? ( char -- bool )
+    dup 10 = swap 13 = or ;
+
 : c,-until ( separator -- )
     begin
         key 2dup <>
     while
-        eschr c, 
+        dup line-break? if
+            drop
+        else
+            eschr c, 
+        then
     repeat        
     2drop ;                          \ drop last key and separator
 
 : separator ( -- char )
     begin
-        key dup 
-        32 = over 9 = or  
+        key dup whitespace?        
     while
         drop
     repeat ;
