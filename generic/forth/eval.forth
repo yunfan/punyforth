@@ -26,7 +26,37 @@
     over -
     swap ;
 
-: str-eval ( str -- i*x )
-    word-find token-eval ;
+struct
+    cell field: .start
+    cell field: .end
+constant: Eval
 
+: eval-new ( str -- evaluator )
+    dup
+    dup strlen +
+    here 
+    Eval allot
+    tuck .end !
+    tuck .start ! ;
 
+: eval-new: ( str "name" ) ( -- evaluator )
+    create: eval-new drop
+    does> ;
+
+: eval-done? ( evaluator -- bool )
+    ['] .start ['] .end bi
+    ['] @ bi@ >= ;
+
+: eval-done! ( evaluator -- )
+    dup .start @
+    swap .end ! ;
+
+: eval-next ( evaluator -- i*x )
+    dup eval-done? if drop exit then
+    dup >r
+    .start @ word-find dup 0= if
+        r> eval-done!
+        2drop exit
+    then
+    2dup + r> .start !
+    token-eval ;
