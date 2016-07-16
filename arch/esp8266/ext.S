@@ -352,3 +352,9 @@ defprimitive "wifi-set-station-config",23,wifi_set_config,REGULAR
     CCALL forth_wifi_set_station_config
     DPUSH a2                   // c bool
     NEXT
+
+defprimitive "wifi-ip-str",11,wifi_ip_str,REGULAR
+    DPOP a2                    // buffer
+    DPOP a3                    // buffer size
+    CCALL forth_wifi_get_ip_str
+    NEXT
