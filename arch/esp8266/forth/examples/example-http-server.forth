@@ -1,25 +1,25 @@
-\ work in progress
+80 constant: PORT
 
-str: "192.168.0.15" constant: HOST
-8080 constant: PORT
-    
+\ task local variables    
 struct
     cell field: .client
     128  field: .line
 constant: WorkerSpace
 
+\ access to task local variables from worker tasks
 : client ( -- a ) user-space .client ;
 : line ( -- a ) user-space .line ;
 
+\ mailbox used for communication between server and worker tasks
 4 mailbox-new: connections
 0 task: server-task
 
 WorkerSpace task: worker-task1
 WorkerSpace task: worker-task2
 
-: server ( task -- )       
+: server ( task -- )
     activate
-    PORT HOST netcon-tcp-server
+    PORT wifi-ip netcon-tcp-server
     begin
         println: "Waiting for incoming connection"
         dup netcon-accept
@@ -27,16 +27,20 @@ WorkerSpace task: worker-task2
     again 
     deactivate ;
 
+str: "
+HTTP/1.0 200\r\n
+Content-Type: text/html\r\n
+Connection: close\r\n
+\r\n
+<html>
+    <body>
+        <h1>ESP8266 web server is working!</h1>
+    </body>
+</html>" constant: HTML
+    
 : send-response ( request-str -- )
     str: "GET /" str-starts-with if
-        client @
-        dup str: "HTTP/1.0 200\r\n" netcon-write
-        dup str: "Content-Type: text/html\r\n" netcon-write
-        dup str: "Connection: close\r\n\r\n" netcon-write
-        dup str: "<html><body>" netcon-writeln
-        dup str: "<h1>ESP8266 web server is working!</h1>" netcon-writeln
-        dup str: "</body></html>" netcon-writeln
-        drop
+        client @ HTML netcon-write
         println: 'response sent for GET request'
     then ;
     
