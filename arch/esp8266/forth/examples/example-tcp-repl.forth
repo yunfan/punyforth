@@ -53,8 +53,10 @@ str: "192.168.0.15" constant: HOST
     begin        
         client @ 128 line netcon-readln -1 <>
         line str: "quit" =str invert and
-    while        
-        line eval
+    while
+        line strlen 0<> if
+            line eval
+        then
     repeat ;
         
 : worker ( task -- )
@@ -73,12 +75,10 @@ str: "192.168.0.15" constant: HOST
     again
     deactivate ;
 
-: start-server ( -- )
+: start-repl ( -- )
     println: 'Starting PunyREPL server..'
     multi    
     ['] type-interceptor xtype !
     ['] emit-interceptor xemit !
     repl-server-task server
     repl-worker-task worker ;
-
-start-server
