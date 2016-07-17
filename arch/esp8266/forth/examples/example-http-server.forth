@@ -1,3 +1,4 @@
+\ server listens on this port
 80 constant: PORT
 
 \ task local variables    
@@ -10,10 +11,11 @@ constant: WorkerSpace
 : client ( -- a ) user-space .client ;
 : line ( -- a ) user-space .line ;
 
-\ mailbox used for communication between server and worker tasks
+\ a mailbox used for communication between server and worker tasks
 4 mailbox-new: connections
 0 task: server-task
 
+\ worker task allocations
 WorkerSpace task: worker-task1
 WorkerSpace task: worker-task2
 
@@ -26,7 +28,8 @@ WorkerSpace task: worker-task2
         connections mailbox-send
     again 
     deactivate ;
-
+    
+\ index page as a mult line string
 str: "
 HTTP/1.0 200\r\n
 Content-Type: text/html\r\n
