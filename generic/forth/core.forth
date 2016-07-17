@@ -369,12 +369,16 @@ defer: handler
 
 : print-stack ( -- )
     depth 0= if exit then
-    print: "stack["
-    0 depth 2 - do 
+    depth 10 > if
+        print: "stack[.. "
+    else        
+        print: "stack["
+    then 
+    0 depth 2 - 9 min do \ maximalize depth to print
         sp@ i cells + @ .
-    i 0<> if space then
+        i 0<> if space then
     -1 +loop 
-    print: "] ";
+    print: "] " ;
 
 : clear-stack ( i*x -- ) 
     depth 0 do drop loop ;
