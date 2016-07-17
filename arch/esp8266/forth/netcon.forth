@@ -85,11 +85,12 @@ marker: -netcon
 
 : read-ungreedy ( size buffer netcon -- count code )
     begin
-        pause
         3dup netcon-recvinto
         dup NC_ERR_TIMEOUT <> if            
             rot drop rot drop rot drop
             exit
+        else
+            pause
         then
         2drop
     again ;
