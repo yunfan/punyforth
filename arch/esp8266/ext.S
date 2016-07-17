@@ -128,7 +128,7 @@ defprimitive "time",4,time,REGULAR
     DPUSH a2
     NEXT
 
-defprimitive "type",4,type,REGULAR    // ( a -- )
+defprimitive "_type",5,utype,REGULAR    // ( a -- )
     DPOP a2			// string
     CCALL forth_type
     NEXT
