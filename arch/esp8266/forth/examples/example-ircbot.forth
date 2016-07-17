@@ -2,8 +2,7 @@ marker: -ircbot
 
 2 constant: LED    
 512 constant: buffer-size
-buffer-size byte-array: line-at
-0 line-at constant: line-buffer
+buffer-size buffer: line-buffer
 
 : connect ( -- netconn )
     6667 str: "irc.freenode.net" netcon-connect ;
@@ -41,16 +40,25 @@ buffer-size byte-array: line-at
 
 0 task: ircbot-task
 
-: start-bot ( -- )
-    multi
-    ircbot-task activate
+: run ( -- )    
     connect
     dup register
     dup join
     begin
         dup readln 
         over swap processline        
+    again ;
+
+: bot-start ( -- )
+    multi
+    ircbot-task activate
+    begin
+        println: "Starting IRC bot"
+        ['] run catch dup 0<> if            
+            print: 'Exception in irc bot: ' . cr
+        else
+            drop
+        then
+        5000 delay
     again
     deactivate ;
-
-start-bot

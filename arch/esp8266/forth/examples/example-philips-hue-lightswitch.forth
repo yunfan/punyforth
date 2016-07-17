@@ -1,4 +1,4 @@
-marker: -lightswitch
+marker: -hueswitch
 
 12 constant: BUTTON_BEDROOM \ D6 pin on nodemcu
 14 constant: BUTTON_HALL    \ D5 pin on nodemcu
@@ -20,7 +20,7 @@ variable: last-event-time
         drop
     then ;
 
-: start-light-switch-task ( task -- )
+: switch-loop ( task -- )
     activate
     time last-event-time !
     begin
@@ -38,14 +38,8 @@ variable: last-event-time
     again 
     deactivate ;
 
-512 var-task-stack-size !
-256 var-task-rstack-size !
-
-0 task: light-switch-task
+0 task: hue-task
     
-: light-switch-start ( -- )
+: hue-start ( -- )
     multi
-    light-switch-task 
-    start-light-switch-task ;
-    
-light-switch-start
+    hue-task switch-loop ;

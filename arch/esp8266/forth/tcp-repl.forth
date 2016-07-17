@@ -4,26 +4,25 @@ str: "192.168.0.15" constant: HOST
 1983 constant: PORT
     
 0 init-variable: client
-128 byte-array: buf
-0 buf constant: line 
+128 buffer: line 
     
 1 mailbox-new: connections
 0 task: repl-server-task
 0 task: repl-worker-task
 
-: type-interceptor ( str -- )
+: type-composite ( str -- )
     client @ 0<> if
         client @ swap netcon-write
     else
         _type
     then ;
     
-2 byte-array: emit-buffer 
-0 1 emit-buffer c!
-: emit-interceptor ( char -- )
+2 buffer: emit-buf 0 emit-buf 1+ c!
+
+: emit-composite ( char -- )
     client @ 0<> if
-        0 emit-buffer c!
-        client @ 0 emit-buffer netcon-write
+        emit-buf c!
+        client @ emit-buf netcon-write
     else
         _emit
     then ;
@@ -77,10 +76,10 @@ str: "192.168.0.15" constant: HOST
     again
     deactivate ;
 
-: start-repl ( -- )
+: repl-start ( -- )
     println: 'Starting PunyREPL server..'
     multi    
-    ['] type-interceptor xtype !
-    ['] emit-interceptor xemit !
+    ['] type-composite xtype !
+    ['] emit-composite xemit !
     repl-server-task server
     repl-worker-task worker ;

@@ -3,7 +3,7 @@ marker: -netcon
 1 constant: UDP
 2 constant: TCP
 8000 constant: ENETCON 
-100 constant: RECV_TIMEOUT_MSEC 
+30 constant: RECV_TIMEOUT_MSEC 
 
 \ netcon errors. see: esp-open-rtos/lwip/lwip/src/include/lwip/err.h
  -1 constant: NC_ERR_MEM         \ Out of memory error.
