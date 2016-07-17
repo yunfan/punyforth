@@ -420,7 +420,16 @@ defword ":",1,colon,REGULAR
     .int xt_btick, _M ENTERCOL, xt_comma                                         // codeword is ENTERCOL
     .int xt_exit
 
+defword "xemit",5,xemit,REGULAR
+    .int xt_btick, _M var_emit_xt
+    .int xt_exit
+
 defword "emit",4,emit,REGULAR            // ( char -- )
+    .int xt_xemit, xt_fetch, xt_branch0
+    lbl emit_fallback
+    .int xt_xemit, xt_fetch, xt_execute
+    .int xt_exit
+emit_fallback:
     .int xt_uemit
     .int xt_exit
 
