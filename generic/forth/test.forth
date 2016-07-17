@@ -310,6 +310,15 @@ B
    5 0 do i i test_numbers ! loop
    5 0 do i test_numbers @ i =assert loop ;
 
+3 buffer: buf1
+: Itest:core-buffer
+   1 buf1 0 + c!
+   2 buf1 1 + c!
+   3 buf1 2 + c!
+   buf1 0 + c@ 1 =assert
+   buf1 1 + c@ 2 =assert
+   buf1 2 + c@ 3 =assert ;
+
 : test:core-struct
    3 r1 .width ! 5 r1 .height !
    r1 area 15 =assert ;

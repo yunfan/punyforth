@@ -207,6 +207,9 @@ defer: handler
     create: allot
     does> swap + ;
     
+: buffer: ( size "name" -- ) ( -- addr )
+    create: allot does> ;
+    
 : struct 0 ;
 : field: create: over , + does> @ + ;
 
