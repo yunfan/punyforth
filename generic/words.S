@@ -433,8 +433,21 @@ emit_fallback:
     .int xt_uemit
     .int xt_exit
 
-.ifndef xt_type
-defword "type",4,type,REGULAR            // ( zstring -- )
+defword "xtype",5,xtype,REGULAR
+    .int xt_btick, _M var_type_xt   
+    .int xt_exit
+
+defword "type",4,type,REGULAR            // ( asciiz -- )
+    .int xt_xtype, xt_fetch, xt_branch0
+    lbl type_fallback
+    .int xt_xtype, xt_fetch, xt_execute    
+    .int xt_exit
+type_fallback:
+    .int xt_utype
+    .int xt_exit
+
+.ifndef xt_utype
+defword "_type",5,utype,REGULAR            // ( asciiz -- )
 type_next_char:
     .int xt_dup, xt_fetchbyte, xt_eq0, xt_invert, xt_branch0
     lbl type_done
