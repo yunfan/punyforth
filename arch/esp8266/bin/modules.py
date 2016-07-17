@@ -13,14 +13,14 @@ available_modules = {
     'ssd1306-spi' : '../forth/ssd1306-spi.forth',
     'netcon' : '../forth/netcon.forth',
     'tasks' : '../forth/tasks.forth',
+    'tcp-repl' : '../forth/tcp-repl.forth',
     'stream' : '../../../generic/forth/stream.forth',
     'flash' : '../forth/flash.forth',
     'example-game-of-life' : '../forth/examples/example-game-of-life.forth',
     'example-ircbot' : '../forth/examples/example-ircbot.forth',
     'example-philips-hue' : '../forth/examples/example-philips-hue.forth',
     'example-philips-hue-lightswitch' : '../forth/examples/example-philips-hue-lightswitch.forth',
-    'example-http-server' : '../forth/examples/example-http-server.forth',
-    'example-tcp-repl' : '../forth/examples/example-tcp-repl.forth',
+    'example-http-server' : '../forth/examples/example-http-server.forth',    
 }
 
 dependencies = {
@@ -35,12 +35,12 @@ dependencies = {
     'tasks' : ['core', 'ringbuf'],
     'stream' : ['core'],   
     'flash' : ['core'],
+    'tcp-repl' : ['core', 'netcon', 'wifi'],
     'example-game-of-life' : ['core', 'ssd1306-spi'],
     'example-ircbot' : ['core', 'netcon', 'tasks', 'gpio'],
     'example-philips-hue' : ['core', 'netcon'],
     'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio'],
-    'example-http-server' : ['core', 'netcon', 'wifi'],
-    'example-tcp-repl' : ['core', 'netcon', 'wifi'],
+    'example-http-server' : ['core', 'netcon', 'wifi']
 }
 
 def print_help():
