@@ -24,6 +24,8 @@ input_size:   .int . - input_buffer
 var_dp:       .int 0                   // data pointer
 var_prompt_xt:.int 0
 var_pause_xt: .int 0
+var_emit_xt:  .int 0
+var_type_xt:  .int 0
 dictionary:   .space 27648
 end_dictionary:
 rstack_space: .space 320

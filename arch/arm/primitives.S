@@ -109,7 +109,7 @@ defprimitive "rshift",6,rshift,REGULAR
     push {r0}
     NEXT
 
-defprimitive "emit",4,emit,REGULAR
+defprimitive "_emit",5,uemit,REGULAR
     pop {r0}
     push {r6, r7}
     ldr r1, =var0

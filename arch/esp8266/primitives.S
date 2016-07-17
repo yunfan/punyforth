@@ -147,7 +147,7 @@ defprimitive "rshift",6,rshift,REGULAR
     NEXT
 
 .literal_position
-defprimitive "emit",4,emit,REGULAR
+defprimitive "_emit",5,uemit,REGULAR
     DPOP a2
     CCALL forth_putchar
     NEXT    

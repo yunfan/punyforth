@@ -107,7 +107,7 @@ defprimitive "rshift",6,rshift,REGULAR
     push eax
     NEXT
 
-defprimitive "emit",4,emit,REGULAR
+defprimitive "_emit",5,uemit,REGULAR
     mov edx, 1     // length
     pop eax
     mov [var0], eax
