@@ -1,15 +1,32 @@
 str: "192.168.0.15" constant: HOST
 1983 constant: PORT
     
-variable: client
+0 init-variable: client
 128 byte-array: buf
 0 buf constant: line 
     
 1 mailbox-new: connections
-0 task: server-task
-0 task: worker-task
+0 task: repl-server-task
+0 task: repl-worker-task
 
-: eval ( str -- i*x ) \ experimental, non thread safe
+: type-interceptor ( str -- )
+    client @ 0<> if
+        client @ swap netcon-write
+    else
+        _type
+    then ;
+    
+2 byte-array: emit-buffer 
+0 1 emit-buffer c!
+: emit-interceptor ( char -- )
+    client @ 0<> if
+        0 emit-buffer c!
+        client @ 0 emit-buffer netcon-write
+    else
+        _emit
+    then ;
+    
+: eval ( str -- i*x )
     0 #tib !
     tib >in ! 
     dup strlen 0 do 
@@ -23,19 +40,20 @@ variable: client
     activate
     PORT HOST netcon-tcp-server
     begin
-        println: "Waiting for incoming connection"
+        print: 'PunyREPL server started on port ' PORT . 
+        print: ' on host ' HOST type cr
         dup netcon-accept
         connections mailbox-send
     again 
     deactivate ;
 
-: handle-client ( -- )        
-    begin
-        client @ str: " % " netcon-write
+: command-loop ( -- )   
+    client @ str: "PunyREPL ready. Type quit to exit.\r\n" netcon-write
+    push-enter
+    begin        
         client @ 128 line netcon-readln -1 <>
         line str: "quit" =str invert and
-    while
-        print: 'evaluate: ' line type cr
+    while        
         line eval
     repeat ;
         
@@ -44,19 +62,23 @@ variable: client
     begin
         connections mailbox-receive client !
         print: "Client connected: " client @ . cr
-        ['] handle-client catch dup 0<> if
+        ['] command-loop catch dup 0<> if
             print: 'error while handling client: ' client @ .
             print: ' exception: ' . cr
         else
             drop
         then
         client @ netcon-dispose
+        0 client !
     again
     deactivate ;
 
 : start-server ( -- )
-    multi
-    server-task server
-    worker-task worker ;
+    println: 'Starting PunyREPL server..'
+    multi    
+    ['] type-interceptor xtype !
+    ['] emit-interceptor xemit !
+    repl-server-task server
+    repl-worker-task worker ;
 
 start-server
