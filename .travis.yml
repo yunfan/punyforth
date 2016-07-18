@@ -3,7 +3,7 @@ compiler:
   - gcc
 
 env:
- - MODULES="../../generic/forth/core.forth ../../generic/forth/punit.forth ../../generic/forth/ringbuf.forth  ../../generic/forth/ringbuf_test.forth ../../generic/forth/stream.forth  ../../generic/forth/stream_test.forth ../../generic/forth/test.forth"
+ - MODULES="../../generic/forth/core.forth ../../generic/forth/punit.forth ../../generic/forth/ringbuf.forth  ../../generic/forth/ringbuf_test.forth ../../generic/forth/test.forth"
 
 script: 
  - cd arch/x86
