@@ -2,9 +2,12 @@ language: c
 compiler:
   - gcc
 
+env:
+- MODULES=../../generic/forth/core.forth ../../generic/forth/punit.forth ../../generic/forth/ringbuf.forth  ../../generic/forth/ringbuf_test.forth ../../generic/forth/stream.forth  ../../generic/forth/stream_test.forth ../../generic/forth/test.forth
+
 script: 
  - cd arch/x86
  - gcc -m32 -nostdlib -I. ../../main.S -o punyforth
  - chmod +x punyforth 
- - cat ../../generic/forth/core.forth ../../generic/forth/punit.forth ../../generic/forth/ringbuf.forth  ../../generic/forth/ringbuf_test.forth ../../generic/forth/stream.forth  ../../generic/forth/stream_test.forth ../../generic/forth/test.forth | ./punyforth | grep "Undefined word" | wc -l | grep -q 0
- - cat ../../generic/forth/core.forth ../../generic/forth/punit.forth ../../generic/forth/ringbuf.forth  ../../generic/forth/ringbuf_test.forth ../../generic/forth/stream.forth  ../../generic/forth/stream_test.forth ../../generic/forth/test.forth | ./punyforth | grep "All passed" | wc -l | grep -q 1
+ - cat $MODULES | ./punyforth | grep "Undefined word" | wc -l | grep -q 0
+ - cat $MODULES | ./punyforth | grep "All passed" | wc -l | grep -q 1
