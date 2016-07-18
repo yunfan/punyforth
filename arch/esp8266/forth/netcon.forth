@@ -98,7 +98,7 @@ marker: -netcon
 : netcon-read ( netcon size buffer -- count | throws:ENETCON )
     rot 
     read-ungreedy
-    dup NC_ERR_CLSD = if 2drop 0 exit then
+    dup NC_ERR_CLSD = if 2drop 0 exit then \ TODO return -1 instead of 0, modify readln as well
     check-error ;
 
 \ Reads one line into the given buffer. The line terminator is crlf.

@@ -4,6 +4,8 @@ marker: -ircbot
 512 constant: buffer-size
 buffer-size buffer: line-buffer
 
+IRC_ECLOSED constant: 6000
+
 : connect ( -- netconn )
     6667 str: "irc.freenode.net" netcon-connect ;
     
@@ -21,8 +23,9 @@ buffer-size buffer: line-buffer
     str: "QUIT :hodor" netcon-writeln ;
     
 : readln ( netconn -- str )
-    buffer-size line-buffer netcon-readln
-    cr print: 'line length=' . cr
+    buffer-size line-buffer netcon-readln -1 = if
+        IRC_ECLOSED throw
+    then    
     line-buffer ;
         
 : processline ( netcon str -- )
