@@ -344,4 +344,6 @@ depth 0= assert
 test
 depth 0= assert
 
+asdfsdfs \ TODO delme, deliberately broken, testing travis-ci
+
 -tests
