@@ -1,5 +1,6 @@
 \ server listens on this port
 80 constant: PORT
+wifi-ip constant: HOST
 
 \ task local variables    
 struct
@@ -21,9 +22,9 @@ WorkerSpace task: worker-task2
 
 : server ( task -- )
     activate
-    PORT wifi-ip netcon-tcp-server
+    PORT HOST netcon-tcp-server
     begin
-        println: "Waiting for incoming connection"
+        print: "Waiting for client in host " HOST type print: " on port " PORT .
         dup netcon-accept
         connections mailbox-send      \ send the client connection to one of the worker tasks
     again 
