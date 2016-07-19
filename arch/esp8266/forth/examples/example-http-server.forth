@@ -14,9 +14,8 @@ constant: WorkerSpace
 
 \ a mailbox used for communication between server and worker tasks
 4 mailbox-new: connections
+\ server and worker task allocations
 0 task: server-task
-
-\ worker task allocations
 WorkerSpace task: worker-task1
 WorkerSpace task: worker-task2
 
