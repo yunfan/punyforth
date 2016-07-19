@@ -25,7 +25,7 @@ WorkerSpace task: worker-task2
     begin
         println: "Waiting for incoming connection"
         dup netcon-accept
-        connections mailbox-send
+        connections mailbox-send      \ send the client connection to one of the workers
     again 
     deactivate ;
     
@@ -55,7 +55,7 @@ Connection: close\r\n
 : worker ( task -- )
     activate
     begin
-        connections mailbox-receive client !
+        connections mailbox-receive client !       \ receive client connection from the server
         print: "Client connected: " client @ . cr
         ['] handle-client catch dup 0<> if
             print: 'error while handling client: ' client @ .
