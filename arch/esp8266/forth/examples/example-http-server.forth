@@ -19,6 +19,7 @@ constant: WorkerSpace
 WorkerSpace task: worker-task1
 WorkerSpace task: worker-task2
 
+\ server task listens for incoming connections and passes them to the workers
 : server ( task -- )
     activate
     PORT HOST netcon-tcp-server
@@ -51,7 +52,8 @@ Connection: close\r\n
     client @ 128 line netcon-readln    
     print: 'line received: ' line type print: ' length=' . cr
     line send-response ;
-        
+ 
+\ worker taks receives clients from the server task then serves them with a static html    
 : worker ( task -- )
     activate
     begin
