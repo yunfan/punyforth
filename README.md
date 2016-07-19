@@ -20,7 +20,7 @@ Punyforth is heavily inspired by the FORTH programming language. It uses the sam
 ### Some of the differences
 * Punyforth is case sensitive
 * Strings are null-terminated
-* Strings are created and printed differently (*str: "foobar"*, *print: "foobar"*)
+* Strings are created and printed differently (*str: "foobar"*, *print: "foobar"* instead of *s" foobar"*, *." foobar"*)
 * Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
 * Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
 
