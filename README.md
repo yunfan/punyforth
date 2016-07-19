@@ -339,7 +339,7 @@ defer: myword1
 : printbaz ( -- ) print: 'baz' ;
 
 ' myword1 is: printfoo          \ redefine the deferred word to print out foo
-myword2                         \ this prints out foorbar
+myword2                         \ this prints out foobar
 
 ' myword1 is: printbaz          \ redefine the deferred word to print out baz
 myword2                         \ this prints out bazbar
