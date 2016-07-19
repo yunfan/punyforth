@@ -347,6 +347,24 @@ myword2                         \ this prints out bazbar
 
 ### Override
 
+```forth
+: myword (-- ) 
+  print: 'foo' ;
+
+: myword ( -- )
+  myword 
+  print: 'bar' ;
+```
+
+```forth
+: myword (-- ) 
+  print: 'foo' ;
+
+: myword ( -- ) override
+  myword 
+  print: 'bar' ;
+```
+
 ### Factor style combinators
 
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
