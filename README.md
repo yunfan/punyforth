@@ -365,7 +365,7 @@ myword \ infinite recursion
 Unfortunately this won't work because the *myword* inside the second defintion will refer to the new word, resulting infinite recursion. You can avoid this by marking the word with *override*.
 
 ```forth
-: myword (-- ) 
+: myword ( -- ) 
   print: 'foo' ;
 
 : myword ( -- ) override
