@@ -17,6 +17,13 @@ Most parts of Punyforth is written in itself. Including the outer interpreter an
 
 Punyforth is heavily inspired by the FORTH programming language. It uses the same compilation model (outer interpreter, modes, dictionary, immediate words, etc) as other FORTH systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of primitives written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself.
 
+### Some of the differences
+* Punyforth is case sensitive
+* Strings are null-terminated
+* Strings are created and printed differently
+* Parsing words are ended with a colon character by convention (including variable:, constant:, create: does>)
+* Defining a word in terms of itself results recursion by default (use can use the override word to alter this behaviour)
+
 ## About the language
 
 Punyforth is a simple imperative stack-based concatenative programming language and interactive environment with good metaprogramming support and extensibility.
