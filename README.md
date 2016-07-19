@@ -308,6 +308,8 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 
 ### Deferred words
 
+ Punyforth relies on a [Hyper Static Global Environment](http://c2.com/cgi/wiki?HyperStaticGlobalEnvironment). This means redifining word will create a new definition, but the words continue to refer to the definition that existed when they were defined. You can alter this behaviour by using deferred words.
+
 ### Override
 
 ### Factor style combinators
