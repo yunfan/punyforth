@@ -24,7 +24,7 @@ WorkerSpace task: worker-task2
     activate
     PORT HOST netcon-tcp-server
     begin
-        print: "Waiting for client on host " HOST type print: " on port " PORT . cr
+        print: "Waiting for clients on host " HOST type print: " on port " PORT . cr
         dup netcon-accept
         connections mailbox-send      \ send the client connection to one of the worker tasks
     again 
@@ -42,24 +42,21 @@ Connection: close\r\n
     </body>
 </html>" constant: HTML
     
-: send-response ( request-str -- )
-    str: "GET /" str-starts-with if
+: serve-client ( -- )    
+    client @ 128 line netcon-readln
+    print: 'line received: ' line type print: ' length=' . cr
+    line str: "GET /" str-starts-with if
         client @ HTML netcon-write
         println: 'response sent'
     then ;
     
-: handle-client ( -- )    
-    client @ 128 line netcon-readln    
-    print: 'line received: ' line type print: ' length=' . cr
-    line send-response ;
- 
 \ worker taks receives clients from the server task then serves them with a static html    
 : worker ( task -- )
     activate
     begin
         connections mailbox-receive client !       \ receive client connection from the server task
         print: "Client connected: " client @ . cr
-        ['] handle-client catch dup 0<> if
+        ['] serve-client catch dup 0<> if
             print: 'error while handling client: ' client @ .
             print: ' exception: ' . cr
         else
@@ -69,10 +66,10 @@ Connection: close\r\n
     again
     deactivate ;
 
-: start-server ( -- )
+: start-http-server ( -- )
     multi                      \ switch to multi task mode then start the server + worker taks
     server-task server
     worker-task1 worker
     worker-task2 worker ;
 
-start-server
+start-http-server
