@@ -30,7 +30,7 @@ Punyforth supports exception handling, multitasking, socket and GPIO APIs and co
 
 ## About the language
 
-Punyforth is a simple imperative stack-based concatenative programming language and interactive environment with good metaprogramming support and extensibility.
+Punyforth is a simple, imperative, stack-based, concatenative programming language and interactive environment with good metaprogramming support and extensibility.
 
 The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
 
