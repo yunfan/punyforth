@@ -313,7 +313,8 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 For example
 
 ```forth
-: myword1 ( -- ) print: 'foo' ;
+: myword1 ( -- ) 
+  print: 'foo' ;
 
 : myword2 ( -- ) 
   myword1 
@@ -329,10 +330,12 @@ myword2 \ myword2 will print out foobar, not bazbar
 ```forth
 defer: myword1
 
-: myword2 myword1 print: 'bar' ; \ I can define myword2 in terms of the (yet undefined) myword1
+: myword2 ( -- )
+  myword1                       \ I can define myword2 in terms of the (yet undefined) myword1  
+  print: 'bar' ; 
 
-: printfoo print: 'for' ;
-: printbaz print: 'baz' ;
+: printfoo ( -- ) print: 'for' ;
+: printbaz ( -- ) print: 'baz' ;
 
 ' myword1 is: printfoo          \ redefine the deferred word to print out foo
 myword2                         \ this prints out foorbar
