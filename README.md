@@ -24,6 +24,8 @@ Punyforth is heavily inspired by the [FORTH](https://en.wikipedia.org/wiki/Forth
 * Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
 * Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
 
+Punyforth supports exception handling, multitasking, socket and GPIO APIs and comes with a UART and a TCP REPL.
+
 ## About the language
 
 Punyforth is a simple imperative stack-based concatenative programming language and interactive environment with good metaprogramming support and extensibility.
