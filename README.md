@@ -313,10 +313,14 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 For example
 
 ```forth
-: myword1 print: 'foo' ;
-: myword2 myword1 print: 'bar' ;
+: myword1 ( -- ) print: 'foo' ;
+
+: myword2 ( -- ) 
+  myword1 
+  print: 'bar' ;
     
-: myword1 print: 'baz' ; \ redefining myword1 to print out baz instead of foo
+: myword1 ( -- ) \ redefining myword1 to print out baz instead of foo
+  print: 'baz' ; 
 
 myword2 \ myword2 will print out foobar, not bazbar
 ```    
