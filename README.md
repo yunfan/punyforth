@@ -2,6 +2,8 @@
 
 # Punyforth
 
+Punyforth is a simple, stack-based, [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) inspired programming language that primarily targets Internet of Things (IOT) devices, like the ESP8266.
+
 Punyforth is a simple and portable implementation of the Forth programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266/NodeMCU). This latter one is the primary supported target.
 
 ## About the language
