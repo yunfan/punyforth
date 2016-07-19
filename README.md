@@ -13,6 +13,10 @@ Punyforth is a simple, stack-based, [FORTH](https://en.wikipedia.org/wiki/Forth_
 
 Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and *Xtensa LX3 (ESP8266/NodeMCU)*. This latter one is the primary supported target.
 
+## Differences between Punyforth and other FORTH systems
+
+Punyforth is heavily inspired by the FORTH programming language. It uses the same compilation model (outer interpreter, modes, dictionary, immediate words, etc) as other FORTH systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of primitives written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself.
+
 ## About the language
 
 Punyforth is a simple imperative stack-based concatenative programming language and interactive environment with good metaprogramming support and extensibility.
