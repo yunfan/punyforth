@@ -335,7 +335,7 @@ defer: myword1
   myword1                       \ I can define myword2 in terms of the (yet undefined) myword1  
   print: 'bar' ; 
 
-: printfoo ( -- ) print: 'for' ;
+: printfoo ( -- ) print: 'foo' ;
 : printbaz ( -- ) print: 'baz' ;
 
 ' myword1 is: printfoo          \ redefine the deferred word to print out foo
