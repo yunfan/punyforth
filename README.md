@@ -11,7 +11,7 @@ Punyforth is a simple, stack-based, [FORTH](https://en.wikipedia.org/wiki/Forth_
 * Extensible
 * Small memory footprint
 
-Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266/NodeMCU). This latter one is the primary supported target.
+Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and *Xtensa LX3 (ESP8266/NodeMCU)*. This latter one is the primary supported target.
 
 ## About the language
 
