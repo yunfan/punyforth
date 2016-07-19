@@ -310,6 +310,32 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 
  Punyforth relies on a [Hyper Static Global Environment](http://c2.com/cgi/wiki?HyperStaticGlobalEnvironment). This means redifining a word will create a new definition, but the words continue to refer to the definition that existed when they were defined. You can alter this behaviour by using deferred words.
 
+For example
+
+```forth
+: myword1 print: 'foo' ;
+: myword2 myword1 print: 'bar' ;
+    
+: myword1 print: 'baz' ; \ redefining myword1 to print out baz instead of foo
+
+myword2 \ myword2 will print out foobar, not bazbar
+```    
+
+
+```forth
+defer: myword1
+
+: myword2 myword1 print: 'bar' ; \ I can define myword2 in terms of the (yet undefined) myword1
+
+: printfoo print: 'for' ;
+: printbaz print: 'baz' ;
+
+' myword1 is: printfoo          \ redefine the deferred word to print out foo
+myword2                         \ this prints out foorbar
+
+' myword1 is: printbaz          \ redefine the deferred word to print out baz
+myword2                         \ this prints out bazbar
+
 ### Override
 
 ### Factor style combinators
