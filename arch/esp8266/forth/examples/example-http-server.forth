@@ -45,7 +45,7 @@ Connection: close\r\n
 : send-response ( request-str -- )
     str: "GET /" str-starts-with if
         client @ HTML netcon-write
-        println: 'response sent for GET request'
+        println: 'response sent'
     then ;
     
 : handle-client ( -- )    
