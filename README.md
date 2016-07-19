@@ -306,6 +306,10 @@ Parsing words can parse the input stream. One example of a parsing word is the c
  ; immediate
 ``` 
 
+### Deferred words
+
+### Override
+
 ### Factor style combinators
 
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
