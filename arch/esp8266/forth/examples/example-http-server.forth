@@ -1,5 +1,6 @@
 \ server listens on this port
 80 constant: PORT
+wifi-ip constant: HOST
 
 \ task local variables    
 struct
@@ -13,19 +14,19 @@ constant: WorkerSpace
 
 \ a mailbox used for communication between server and worker tasks
 4 mailbox-new: connections
+\ server and worker task allocations
 0 task: server-task
-
-\ worker task allocations
 WorkerSpace task: worker-task1
 WorkerSpace task: worker-task2
 
+\ server task listens for incoming connections and passes them to the workers
 : server ( task -- )
     activate
-    PORT wifi-ip netcon-tcp-server
+    PORT HOST netcon-tcp-server
     begin
-        println: "Waiting for incoming connection"
+        print: "Waiting for client on host " HOST type print: " on port " PORT . cr
         dup netcon-accept
-        connections mailbox-send
+        connections mailbox-send      \ send the client connection to one of the worker tasks
     again 
     deactivate ;
     
@@ -44,18 +45,19 @@ Connection: close\r\n
 : send-response ( request-str -- )
     str: "GET /" str-starts-with if
         client @ HTML netcon-write
-        println: 'response sent for GET request'
+        println: 'response sent'
     then ;
     
 : handle-client ( -- )    
     client @ 128 line netcon-readln    
     print: 'line received: ' line type print: ' length=' . cr
     line send-response ;
-        
+ 
+\ worker taks receives clients from the server task then serves them with a static html    
 : worker ( task -- )
     activate
     begin
-        connections mailbox-receive client !
+        connections mailbox-receive client !       \ receive client connection from the server task
         print: "Client connected: " client @ . cr
         ['] handle-client catch dup 0<> if
             print: 'error while handling client: ' client @ .
@@ -68,7 +70,7 @@ Connection: close\r\n
     deactivate ;
 
 : start-server ( -- )
-    multi
+    multi                      \ switch to multi task mode then start the server + worker taks
     server-task server
     worker-task1 worker
     worker-task2 worker ;

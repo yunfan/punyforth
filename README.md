@@ -2,11 +2,35 @@
 
 # Punyforth
 
-Punyforth is a simple and portable implementation of the Forth programming language. Most parts of Punyforth is written in itself. Including the outer interpreter and the compiler (that compiles indirect-threaded code). The primitives are implemented in assembly language. Punyforth runs on x86 (Linux), ARM (Raspberry PI) and Xtensa LX3 (ESP8266/NodeMCU). This latter one is the primary supported target.
+*Please not this is under development*
+
+Punyforth is a simple, stack-based, [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) inspired programming language that primarily targets Internet of Things (IOT) devices, like the [ESP8266](https://en.wikipedia.org/wiki/ESP8266). The ESP8266 is a low-cost Wi-Fi capable chip with a Xtensa LX3 CPU, TCP/IP stack, GPIO pins and 512 KiB to 4 MiB flash memory. It is widely used in IoT applications and home automation projects.
+
+Punyforth also runs on x86 (Linux), ARM (Raspberry PI) but these are *not* the primary supported targets.
+
+### Design goals
+
+* Simple
+* Highly interactive 
+* Extensible
+* Small memory footprint
+
+## Differences between Punyforth and other FORTH systems
+
+Punyforth is heavily inspired by the [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other FORTH systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in FORTH).
+
+### Some of the differences
+* Punyforth is case sensitive
+* Strings are null-terminated
+* Strings are created and printed differently (*str: "foobar"*, *print: "foobar"* instead of *s" foobar"*, *." foobar"*)
+* Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
+* Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
+
+Punyforth supports exception handling, multitasking, socket and GPIO APIs and comes with a UART and a TCP REPL.
 
 ## About the language
 
-Punyforth is a simple imperative stack-based concatenative programming language and interactive environment with good metaprogramming support and extensibility.
+Punyforth is a simple, imperative, stack-based, concatenative programming language and interactive environment with good metaprogramming support and extensibility.
 
 The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
 
@@ -282,6 +306,77 @@ Parsing words can parse the input stream. One example of a parsing word is the c
  ; immediate
 ``` 
 
+### Deferred words
+
+ Punyforth relies on a [Hyper Static Global Environment](http://c2.com/cgi/wiki?HyperStaticGlobalEnvironment). This means redefining a word will create a new definition, but the words continue to refer to the definition that existed when they were defined. You can alter this behaviour by using deferred words.
+
+For example
+
+```forth
+: myword1 ( -- ) 
+  print: 'foo' ;
+
+: myword2 ( -- ) 
+  myword1 
+  print: 'bar' ;
+    
+: myword1 ( -- ) \ redefining myword1 to print out baz instead of foo
+  print: 'baz' ; 
+
+myword2 \ myword2 will print out foobar, not bazbar
+```
+
+Redefinition has no effect on myword2. Let's try it again. This time using the *defer:*/*is:* words.
+
+```forth
+defer: myword1
+
+: myword2 ( -- )
+  myword1                       \ I can define myword2 in terms of the (yet undefined) myword1  
+  print: 'bar' ; 
+
+: printfoo ( -- ) print: 'foo' ;
+: printbaz ( -- ) print: 'baz' ;
+
+' myword1 is: printfoo          \ redefine the deferred word to print out foo
+myword2                         \ this prints out foobar
+
+' myword1 is: printbaz          \ redefine the deferred word to print out baz
+myword2                         \ this prints out bazbar
+```
+
+### Override
+
+You might want to redefine a word in terms of it's older definition. 
+
+For example:
+
+```forth
+: myword ( -- ) 
+  print: 'foo' ;
+
+: myword ( -- )
+  myword 
+  print: 'bar' ;
+  
+myword \ infinite recursion
+```
+
+Unfortunately this won't work because the *myword* inside the second defintion will refer to the new word, resulting infinite recursion. You can avoid this by marking the word with *override*.
+
+```forth
+: myword ( -- ) 
+  print: 'foo' ;
+
+: myword ( -- ) override
+  myword 
+  print: 'bar' ;
+  
+myword \ prints out foobar  
+```
+
+Because the usage of *override*, the *myword* in the second defintion will refer to the old *myword*. Therefore the execution of *myword* will print out foobar.
+
 ### Factor style combinators
 
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
@@ -405,8 +500,6 @@ r1 area .
   
 ```
 
-### Override
-
 ### Unit testing
 
 ### ESP8266 specific things
@@ -434,6 +527,8 @@ PIN LOW gpio-write
 #### Netconn
 
 Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS] (https://en.wikipedia.org/wiki/FreeRTOS). Punyforth provides a forth wrapper around the Netconn API.
+
+**OBSOLETE**
 
 ##### Examples
 
