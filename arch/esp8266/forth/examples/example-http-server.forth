@@ -24,7 +24,7 @@ WorkerSpace task: worker-task2
     activate
     PORT HOST netcon-tcp-server
     begin
-        print: "Waiting for client on host " HOST type print: " on port " PORT .
+        print: "Waiting for client on host " HOST type print: " on port " PORT . cr
         dup netcon-accept
         connections mailbox-send      \ send the client connection to one of the worker tasks
     again 
