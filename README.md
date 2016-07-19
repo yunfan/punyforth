@@ -435,6 +435,8 @@ PIN LOW gpio-write
 
 Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS] (https://en.wikipedia.org/wiki/FreeRTOS). Punyforth provides a forth wrapper around the Netconn API.
 
+**OBSOLETE**
+
 ##### Examples
 
 ```forth
