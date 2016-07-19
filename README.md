@@ -323,7 +323,7 @@ For example
   print: 'baz' ; 
 
 myword2 \ myword2 will print out foobar, not bazbar
-```    
+```
 
 
 ```forth
@@ -339,6 +339,7 @@ myword2                         \ this prints out foorbar
 
 ' myword1 is: printbaz          \ redefine the deferred word to print out baz
 myword2                         \ this prints out bazbar
+```
 
 ### Override
 
