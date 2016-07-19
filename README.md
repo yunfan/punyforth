@@ -347,14 +347,22 @@ myword2                         \ this prints out bazbar
 
 ### Override
 
+You might want to redefine a word in terms of it's older definition. 
+
+For example:
+
 ```forth
-: myword (-- ) 
+: myword ( -- ) 
   print: 'foo' ;
 
 : myword ( -- )
   myword 
   print: 'bar' ;
+  
+myword \ infinite recursion
 ```
+
+Unfortunately this won't work because the *myword* inside the second defintion will refer to the new word, resulting infinite recursion. You can avoid this by marking the word with *override*.
 
 ```forth
 : myword (-- ) 
@@ -363,7 +371,11 @@ myword2                         \ this prints out bazbar
 : myword ( -- ) override
   myword 
   print: 'bar' ;
+  
+myword \ prints out foobar  
 ```
+
+Because the usage of *override*, the *myword* in the second defintion will refer to the old *myword*. Therefore the execution of *myword* will print out foobar.
 
 ### Factor style combinators
 
