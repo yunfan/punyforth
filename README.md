@@ -326,7 +326,7 @@ For example
 myword2 \ myword2 will print out foobar, not bazbar
 ```
 
-Redefinition has no effect on myword2. Let's try it again. This time using the *defer:*/*is:* word.
+Redefinition has no effect on myword2. Let's try it again. This time using the *defer:*/*is:* words.
 
 ```forth
 defer: myword1
