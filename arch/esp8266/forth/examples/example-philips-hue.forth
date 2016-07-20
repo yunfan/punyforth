@@ -10,14 +10,7 @@ str: "1" constant: HALL
 str: "2" constant: BEDROOM
 
 1024 constant: buffer-len
-buffer-len byte-array: buffer-at
-0 buffer-at constant: buffer
-
-: buffer>asciiz ( size -- )
-    0 swap buffer-at c! ;
-
-: read-into-buffer ( netconn -- )
-    buffer-len buffer netcon-read buffer>asciiz ;
+buffer-len buffer: buffer
 
 : parse-http-code ( buffer -- code | throws:ECONVERT )
     9 + 3 >number invert if
@@ -44,7 +37,8 @@ buffer-len byte-array: buffer-at
             println: 'end of header detected'
             exit
         then
-    repeat ;
+    repeat
+    EHTTP throw ;
    
 : read-http-resp ( netconn -- response-code )    
     dup read-http-code

@@ -95,21 +95,24 @@ marker: -netcon
         2drop
     again ;
 
-: netcon-read ( netcon size buffer -- count | throws:ENETCON )
+\ Reads maximum `size` amount of bytes into the buffer
+\ Leaves the amount of bytes read on the top of the stack, or -1 if the connection was closed.
+: netcon-read ( netcon size buffer -- count | -1 | throws:ENETCON )
     rot 
     read-ungreedy
-    dup NC_ERR_CLSD = if 2drop 0 exit then \ TODO return -1 instead of 0, modify readln as well
+    dup NC_ERR_CLSD = if 2drop -1 exit then
     check-error ;
 
 \ Reads one line into the given buffer. The line terminator is crlf.
 \ Leaves the length of the line on the top of the stack, or -1 if the connection was closed.
 \ If the given buffer is not large enough to hold EOVERFLOW is thrown.
-: netcon-readln ( netcon size buffer -- count | throws:ENETCON )
+: netcon-readln ( netcon size buffer -- count | -1 | throws:ENETCON/EOVERFLOW )
     swap 0 do
         2dup
-        1 swap i + netcon-read 0= if
+        1 swap i + netcon-read -1 = if
             2drop
-            -1 unloop exit
+            i 0= if -1 else i then
+            unloop exit
         then
         dup i + c@ 10 = i 1 >= and if            
             dup i + 1- c@ 13 = if

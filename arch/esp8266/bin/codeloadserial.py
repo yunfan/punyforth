@@ -3,7 +3,7 @@ import sys
 import time
 
 port = serial.Serial(
-    port='COM4',
+    port='COM3',
     baudrate=115200,
     parity=serial.PARITY_NONE,
     stopbits=serial.STOPBITS_ONE,	
