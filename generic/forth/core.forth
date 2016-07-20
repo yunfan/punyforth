@@ -91,6 +91,8 @@
     ['] r> , ['] r> , ['] 2drop ,
  ; immediate
 
+: unloop r> r> r> 2drop >r ;
+
 : while
     compile_time_only
     ['] branch0 , prepare-forward-ref ; immediate

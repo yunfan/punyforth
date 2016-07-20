@@ -120,6 +120,10 @@ defer: deferred-word
    SENTINEL 0 0 do i -1 +loop 0 =assert SENTINEL =assert
    0 8 2 do 9 3 do i j + + loop loop 360 =assert ;
 
+: doloop-exit 10 0 do i 5 = if i unloop exit then loop ;
+: test:core-unloop
+   doloop-exit 5 =assert ;
+
 : test:core-logic
    1 0 or 1 =assert 0 1 or 1 =assert
    1 1 or 1 =assert 0 0 or 0 =assert
