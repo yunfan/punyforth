@@ -110,7 +110,8 @@ marker: -netcon
     swap 0 do
         2dup
         1 swap i + netcon-read -1 = if
-            2drop
+            i + 0 swap c!
+            drop
             i 0= if -1 else i then
             unloop exit
         then
