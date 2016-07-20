@@ -3,65 +3,67 @@ marker: -ircbot
 2 constant: LED    
 512 constant: buffer-size
 buffer-size buffer: line-buffer
+0 init-variable: irc-con
 
-IRC_ECLOSED constant: 6000
+6000 constant: IRC_ECLOSED
 
-: connect ( -- netconn )
-    6667 str: "irc.freenode.net" netcon-connect ;
+: connect ( -- )
+    6667 str: "irc.freenode.net" netcon-connect irc-con ! ;
+
+: send ( str -- )
+    irc-con @ swap netcon-writeln ;
     
-: register ( netconn -- )
-    dup str: "NICK hodor169"                        netcon-writeln
-        str: "USER hodor169 hodor169 bla :hodor169" netcon-writeln ;
+: register ( -- )
+    str: "NICK hodor179" send
+    str: "USER hodor179 hodor179 bla :hodor179" send ;
     
-: join ( netconn -- ) 
-    str: "JOIN #somechan" netcon-writeln ;
-
-: greet ( netconn -- )
-    str: "PRIVMSG #somechan :Hodor? ..hoodor!" netcon-writeln ;
-
-: quit ( netconn -- )
-    str: "QUIT :hodor" netcon-writeln ;
+: join ( -- ) str: "JOIN #somechan" send ;
+: greet ( -- ) str: "PRIVMSG #somechan :Hodor? ..hoodor!" send ;
+: quit ( -- ) str: "QUIT :hodor" send ;
     
-: readln ( netconn -- str )
-    buffer-size line-buffer netcon-readln -1 = if
+: readln ( -- str )
+    irc-con @ buffer-size line-buffer netcon-readln -1 = if
         IRC_ECLOSED throw
     then    
     line-buffer ;
         
-: processline ( netcon str -- )
-    dup type
+: processline ( str -- )
+    dup type cr
     dup str: "PING" str-starts-with if
-        over str: "PONG" netcon-writeln
+        str: "PONG" send
         random 200 % 0= if
-            over greet
+            greet
         then
     then
     dup str: "PRIVMSG" str-includes if
         LED blink
     then 
-    2drop ;
+    drop ;
 
 0 task: ircbot-task
 
 : run ( -- )    
-    connect
-    dup register
-    dup join
+    connect 
+    register 
+    join
     begin
-        dup readln 
-        over swap processline        
+        readln processline        
     again ;
 
 : bot-start ( -- )
     multi
     ircbot-task activate
-    begin
+    begin    
         println: "Starting IRC bot"
         ['] run catch dup 0<> if            
             print: 'Exception in irc bot: ' . cr
         else
             drop
         then
+        irc-con @ 0<> if
+            irc-con @ netcon-dispose
+            0 irc-con !
+        then        
         5000 delay
     again
     deactivate ;
