@@ -1,6 +1,6 @@
 marker: -tcprepl
 
-str: "192.168.0.15" constant: HOST
+wifi-ip constant: HOST
 1983 constant: PORT
     
 0 init-variable: client
