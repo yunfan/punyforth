@@ -46,6 +46,8 @@ INTERPRETER init-variable: var-current-task
         alloc-data-stack    over .sp !       \ this.sp = allocated
         alloc-return-stack  over .rp !       \ this.sp = allocated
         0                   over .handler !  \ exception handler of this thread
+\        dup .sp @ over s0 !                  \ init s0 = top of stack address
+\        dup .rp @ over r0 !                  \ init r0 = top of rstack address
         last-task!                           \ last-task = this
     does> ;
 
