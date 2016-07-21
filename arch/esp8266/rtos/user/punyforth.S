@@ -24,7 +24,7 @@ forth_start:
     s32i a8, a9, 0
 
     movi a15, stack
-    movi a13, rstack
+    movi a13, rstack_top
 
     movi a8, stack_top
     s32i a15, a8, 0

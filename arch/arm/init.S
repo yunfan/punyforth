@@ -10,7 +10,7 @@
     ldr r1, =stack_top
     str sp, [r1]
 
-    ldr r6, =rstack    
+    ldr r6, =rstack_top
     ldr r7, =outer_interpreter 
     NEXT                         
 .endm

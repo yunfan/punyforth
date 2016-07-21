@@ -7,7 +7,7 @@
     mov eax, OFFSET FLAT:dictionary
     mov [var_dp], eax                           // initialzie 'here' to the beginning of the dictionary
     mov [stack_top], esp
-    mov ebp, OFFSET FLAT:rstack                 // ebp is used to track the return stack 
+    mov ebp, OFFSET FLAT:rstack_top             // ebp is used to track the return stack 
     mov esi, OFFSET FLAT:outer_interpreter      // esi works as an instruction pointer 
     NEXT                                        // start the outer interpreter (repl)
 .endm

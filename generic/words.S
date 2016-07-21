@@ -63,7 +63,7 @@ defword "depth",5,depth,REGULAR
     .int xt_exit
 
 defword "rdepth",6,rdepth,REGULAR
-    .int xt_btick, _M rstack
+    .int xt_btick, _M rstack_top
     .int xt_rpat, xt_minus
     .int xt_cell, xt_divmod, xt_dec, xt_nip
     .int xt_exit

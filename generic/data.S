@@ -29,7 +29,7 @@ var_type_xt:  .int 0
 dictionary:   .space 24576
 end_dictionary:
 rstack_space: .space 320
-rstack:
+rstack_top:
 stack_space:  .space 576 // used only by ESP port
 stack:
 prompt_str:   .asciz "\n % "
