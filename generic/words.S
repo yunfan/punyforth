@@ -57,7 +57,7 @@ defword "rswap",5,rswap,REGULAR
     .int xt_exit
 
 defword "depth",5,depth,REGULAR
-    .int xt_btick, _M STACK_ORIG, xt_fetch
+    .int xt_btick, _M stack_top, xt_fetch
     .int xt_spat, xt_minus
     .int xt_cell, xt_divmod, xt_dec, xt_nip
     .int xt_exit

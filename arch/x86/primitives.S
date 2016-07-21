@@ -118,7 +118,7 @@ defprimitive "_emit",5,uemit,REGULAR
     NEXT
     
 defprimitive "abort",5,abort,REGULAR
-    mov esp, [STACK_ORIG]
+    mov esp, [stack_top]
     mov eax, 1
     int 0x80
     

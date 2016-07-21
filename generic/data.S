@@ -13,7 +13,7 @@
 .set INPUT_BUFFER_SIZE,128
 .set MAX_WORD_LEN,63
 
-STACK_ORIG:   .int 0
+stack_top:    .int 0
 var0:         .int 0
 state_var:    .int STATE_INTERPRET
 LAST_WORD:    .int FINAL_WORD

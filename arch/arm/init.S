@@ -7,7 +7,7 @@
     ldr r1, =var_dp 
     str r0, [r1]
 
-    ldr r1, =STACK_ORIG
+    ldr r1, =stack_top
     str sp, [r1]
 
     ldr r6, =rstack    
