@@ -34,6 +34,9 @@
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
 
+: depth ( -- n ) stack-top sp@ - cell / 1- ;
+: rdepth ( -- n ) rstack-top rp@ - cell / 1- ;
+
 : prepare-forward-ref here 0 , ;
 : resolve-forward-ref dup here swap - cell - swap ! ;
 

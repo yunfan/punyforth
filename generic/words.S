@@ -56,16 +56,12 @@ defword "rswap",5,rswap,REGULAR
     .int xt_rpush, xt_rpush, xt_rpush
     .int xt_exit
 
-defword "depth",5,depth,REGULAR
+defword "stack-top",9,stack_top,REGULAR
     .int xt_btick, _M stack_top, xt_fetch
-    .int xt_spat, xt_minus
-    .int xt_cell, xt_divmod, xt_dec, xt_nip
     .int xt_exit
 
-defword "rdepth",6,rdepth,REGULAR
+defword "rstack-top",10,rstack_top,REGULAR
     .int xt_btick, _M rstack_top
-    .int xt_rpat, xt_minus
-    .int xt_cell, xt_divmod, xt_dec, xt_nip
     .int xt_exit
 
 .ifndef xt_gt
