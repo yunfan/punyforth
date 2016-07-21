@@ -34,9 +34,6 @@
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
 
-: depth ( -- n ) stack-top sp@ - cell / 1- ;
-: rdepth ( -- n ) rstack-top rp@ - cell / 1- ;
-
 : prepare-forward-ref here 0 , ;
 : resolve-forward-ref dup here swap - cell - swap ! ;
 
@@ -374,6 +371,12 @@ defer: handler
     else
         compile-imm: str: ['] type , ['] cr ,
     then ; immediate
+
+defer: s0 ' s0 is: _s0
+defer: r0 ' r0 is: _r0
+
+: depth ( -- n ) s0 sp@ - cell / 1- ;
+: rdepth ( -- n ) r0 rp@ - cell / 1- ;
 
 : print-stack ( -- )
     depth 0= if exit then

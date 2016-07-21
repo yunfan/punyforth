@@ -56,11 +56,11 @@ defword "rswap",5,rswap,REGULAR
     .int xt_rpush, xt_rpush, xt_rpush
     .int xt_exit
 
-defword "stack-top",9,stack_top,REGULAR
+defword "_s0",3,us0,REGULAR
     .int xt_btick, _M stack_top, xt_fetch
     .int xt_exit
 
-defword "rstack-top",10,rstack_top,REGULAR
+defword "_r0",3,ur0,REGULAR
     .int xt_btick, _M rstack_top
     .int xt_exit
 

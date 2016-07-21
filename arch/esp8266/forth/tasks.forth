@@ -9,12 +9,16 @@ struct
     cell field: .sp
     cell field: .rp
     cell field: .ip
+    cell field: .s0
+    cell field: .r0
     cell field: .handler
 constant: Task
 
 here Task allot constant: INTERPRETER
 INTERPRETER INTERPRETER .next !
 SKIPPED INTERPRETER .status !
+_s0 INTERPRETER .s0 !
+_r0 INTERPRETER .r0 !
 
 320 init-variable: var-task-stack-size
 320 init-variable: var-task-rstack-size
@@ -80,6 +84,12 @@ defer: pause
     task-choose-next task-run ;
 
 : pause-single ( -- ) ;
+
+: s0-multi ( -- top-stack-adr ) current-task .s0 @ ;
+: r0-multi ( -- top-rstack-adr ) current-task .r0 @ ;
+
+' s0 is s0-multi
+' r0 is r0-multi
 
 : activate ( task -- )
     r> over .ip !
