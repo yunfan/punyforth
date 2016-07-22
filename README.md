@@ -25,6 +25,7 @@ Punyforth is heavily inspired by the [FORTH](https://en.wikipedia.org/wiki/Forth
 * Strings are created and printed differently (*str: "foobar"*, *print: "foobar"* instead of *s" foobar"*, *." foobar"*)
 * Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
 * Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
+* Curly brackets denote quotations instead of locals
 
 Punyforth supports exception handling, multitasking, socket and GPIO APIs and comes with a UART and a TCP REPL.
 
