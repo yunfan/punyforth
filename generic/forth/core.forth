@@ -182,6 +182,17 @@ defer: handler
       r> swap >r sp!          \ restore the data stack as it was before the most recent catch
       drop r> ;               \ return to the caller of most recent catch with the errcode
 
+: { \ begin quotation
+    compile_time_only
+    ['], here 3 cells + ,
+    ['] branch , prepare-forward-ref
+    entercol , ; immediate
+
+: } \ end quotation
+    compile_time_only
+    ['] exit , 
+    resolve-forward-ref ; immediate
+
 : ' ( -- xt | throws:ENOTFOUND ) \ find the xt of the next word in the inputstream
     word find dup
     0= if 

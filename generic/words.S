@@ -542,6 +542,10 @@ defword "enterdoes",9,enterdoes,REGULAR
     .int xt_btick, _M ENTERDOES 
     .int xt_exit
 
+defword "entercol",8,entercol,REGULAR
+    .int xt_btick, _M ENTERCOL
+    .int xt_exit
+
 defword "link>flb",8,link2flb,REGULAR /* ( a1 -- a2 ) */
     .int xt_cell, xt_plus
     .int xt_exit

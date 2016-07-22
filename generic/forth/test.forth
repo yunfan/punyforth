@@ -310,6 +310,16 @@ B
 : test:core-untilloop
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 =assert ;
 
+: test:core-quotation
+   10 { } execute 10 =assert
+   6 { dup + } execute 12 =assert
+   3 4 { 1+ swap 2 * swap } execute 5 =assert 6 =assert
+   0 5 { 0 do i + loop } execute 10 =assert
+   -7 { dup 0< if -1 * then } execute 7 =assert
+   57 { dup 0< if -1 * then } execute 57 =assert
+   12 { 1+ { 1+ } execute } execute 14 =assert   
+   10 { 1+ { 1+ { 1+ } execute } execute } execute 13 =assert ;
+
 : test:core-array
    5 0 do i i test_numbers ! loop
    5 0 do i test_numbers @ i =assert loop ;
