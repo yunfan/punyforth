@@ -325,7 +325,7 @@ B
    5 0 do i test_numbers @ i =assert loop ;
 
 3 buffer: buf1
-: Itest:core-buffer
+: test:core-buffer
    1 buf1 0 + c!
    2 buf1 1 + c!
    3 buf1 2 + c!
