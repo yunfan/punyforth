@@ -90,8 +90,8 @@ defer: pause
 : s0-multi ( -- top-stack-adr ) current-task .s0 @ ;
 : r0-multi ( -- top-rstack-adr ) current-task .r0 @ ;
 
-' s0 is s0-multi
-' r0 is r0-multi
+' s0 is: s0-multi
+' r0 is: r0-multi
 
 : activate ( task -- )
     r> over .ip !
