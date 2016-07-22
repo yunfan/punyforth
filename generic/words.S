@@ -576,7 +576,7 @@ defword "hidden?",7,is_hidden,REGULAR /* link -- bool */
     .int xt_exit
 
 defword "hide",4,hide,REGULAR /* ( link -- ) */
-    .int xt_btick, HIDDEN, xt_over, xt_link2len, xt_or
+    .int xt_btick, HIDDEN, xt_over, xt_link2flb, xt_fetchbyte, xt_or
     .int xt_swap, xt_link2flb, xt_storebyte
     .int xt_exit
 
@@ -590,7 +590,7 @@ defword "immediate?",10,is_immediate,REGULAR /* ( link -- bool) */
     .int xt_exit
 
 defword "immediate",9,immediate,IMMEDIATE
-    .int xt_btick, IMMEDIATE, xt_lastword, xt_link2len, xt_or
+    .int xt_btick, IMMEDIATE, xt_lastword, xt_link2flb, xt_fetchbyte, xt_or
     .int xt_lastword, xt_link2flb, xt_storebyte
     .int xt_exit
 
