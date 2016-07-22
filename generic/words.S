@@ -581,7 +581,7 @@ defword "hide",4,hide,REGULAR /* ( link -- ) */
     .int xt_exit
 
 defword "reveal",6,reveal,REGULAR /* ( link -- ) */
-    .int xt_btick, HIDDEN, xt_invert, xt_over, xt_link2len, xt_and
+    .int xt_btick, HIDDEN, xt_invert, xt_over, xt_link2flb, xt_fetchbyte, xt_and
     .int xt_swap, xt_link2flb, xt_storebyte
     .int xt_exit
 

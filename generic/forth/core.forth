@@ -2,17 +2,17 @@
 : prepare-backward-ref here ;
 : resolve-backward-ref here - cell - , ;
 
-: begin
+: begin immediate
        compile_time_only
-       prepare-backward-ref ; immediate
+       prepare-backward-ref ;
 
-: again
+: again immediate
        compile_time_only
-       ['] branch , resolve-backward-ref ; immediate
+       ['] branch , resolve-backward-ref ;
 
-: until
+: until immediate
        compile_time_only
-       ['] branch0 , resolve-backward-ref ; immediate
+       ['] branch0 , resolve-backward-ref ;
 
 : char: word drop c@ ;
 
@@ -37,18 +37,18 @@
 : prepare-forward-ref here 0 , ;
 : resolve-forward-ref dup here swap - cell - swap ! ;
 
-: if
+: if immediate
        compile_time_only
-       ['] branch0 , prepare-forward-ref ; immediate
+       ['] branch0 , prepare-forward-ref ;
 
-: else
+: else immediate
        compile_time_only
        ['] branch , prepare-forward-ref swap
-       resolve-forward-ref ; immediate
+       resolve-forward-ref ;
 
-: then
+: then immediate
        compile_time_only
-       resolve-forward-ref ; immediate       
+       resolve-forward-ref ;
 
 : . ( n -- )
        dup 0< if 45 emit -1 * then
@@ -60,71 +60,68 @@
 
 : ? ( a -- ) @ . ;
 
-: do
+: do immediate
        compile_time_only
        ['] swap , ['] >r , ['] >r ,
-       prepare-backward-ref
-   ; immediate
+       prepare-backward-ref ;
 
 : bounds ( start len -- limit start )
     over + swap ;
 
-: loop
+: loop immediate
        compile_time_only
        ['] r> , ['] 1+ , ['] >r ,
        ['] r2dup , ['] r> , ['] r> ,
        ['] >= , ['] branch0 , resolve-backward-ref
-       ['] r> , ['] r> , ['] 2drop ,
-   ; immediate
+       ['] r> , ['] r> , ['] 2drop , ;
 
 : +loop-terminate? ( n limit i -- bool )
     swap 1+
     - dup rot + xor 0 < ;          \ (index-limit) and (index-limit+n) have different sign?
 
-: +loop
+: +loop immediate
     compile_time_only     
     ['] dup ,
     ['] r> , ['] + , ['] >r ,
     ['] r2dup , ['] r> , ['] r> ,
     ['] +loop-terminate? ,
     ['] branch0 , resolve-backward-ref
-    ['] r> , ['] r> , ['] 2drop ,
- ; immediate
+    ['] r> , ['] r> , ['] 2drop , ;
 
 : unloop r> r> r> 2drop >r ;
 
-: while
+: while immediate
     compile_time_only
-    ['] branch0 , prepare-forward-ref ; immediate
+    ['] branch0 , prepare-forward-ref ;
 
-: repeat
+: repeat immediate
     compile_time_only
     swap
     ['] branch , resolve-backward-ref 
-    resolve-forward-ref ; immediate
+    resolve-forward-ref ;
 
-: case
+: case immediate
     compile_time_only 
-    0 ; immediate                           \ init branchcounter
+    0 ;                            \ init branchcounter
 
-: of
+: of immediate
     compile_time_only
     ['] over , ['] = ,
     ['] branch0 , prepare-forward-ref 
-    ['] drop , ; immediate  
+    ['] drop , ;
 
-: endof 
+: endof immediate
     compile_time_only
     swap 1+ swap                            \ increase number of branches
     ['] branch , prepare-forward-ref swap
     resolve-forward-ref
-    swap ; immediate                        \ keep branch counter at TOS
+    swap ;                                  \ keep branch counter at TOS
 
-: endcase
+: endcase immediate
     compile_time_only
     0 do
         resolve-forward-ref
-    loop ; immediate
+    loop ;
 
 : override ( -- ) lastword hide ; immediate
 
@@ -182,16 +179,16 @@ defer: handler
       r> swap >r sp!          \ restore the data stack as it was before the most recent catch
       drop r> ;               \ return to the caller of most recent catch with the errcode
 
-: { \ begin quotation
+: { immediate
     compile_time_only
     ['], here 3 cells + ,
     ['] branch , prepare-forward-ref
-    entercol , ; immediate
+    entercol , ;
 
-: } \ end quotation
+: } immediate
     compile_time_only
     ['] exit , 
-    resolve-forward-ref ; immediate
+    resolve-forward-ref ;
 
 : ' ( -- xt | throws:ENOTFOUND ) \ find the xt of the next word in the inputstream
     word find dup
@@ -205,12 +202,12 @@ defer: handler
 
 : compile-imm: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 
-: is:
+: is: immediate
     interpret-mode? if
         ' defer!
     else        
         ['], ' , ['] defer! ,
-    then ; immediate
+    then ;
 
 : array: ( size "name" -- ) ( index -- addr )
       create: cells allot
@@ -278,14 +275,13 @@ defer: handler
         drop
     repeat ;
 
-: str: ( "<separator>string content<separator>" )
+: str: ( "<separator>string content<separator>" ) immediate
     separator
     interpret-mode? if
         align! here swap c,-until 0 c,
     else
         [str swap c,-until str]
-    then        
- ; immediate
+    then ;
 
 : strlen ( str -- len )
     0 swap
@@ -358,12 +354,11 @@ defer: handler
 
 : hex>int ( str -- n | throws:ECONVERT ) dup strlen hex>int' ;
 
-: hex:
+: hex: immediate
     word hex>int'
-    interpret-mode? invert if ['], , then 
-  ; immediate
+    interpret-mode? invert if ['], , then ;
 
-: print: ( "<separator>string<separator>" )
+: print: ( "<separator>string<separator>" ) immediate
     interpret-mode? if
         separator
         begin
@@ -374,14 +369,14 @@ defer: handler
         2drop           
     else
         compile-imm: str: ['] type ,
-    then ; immediate
+    then ;
   
-: println: ( "<separator>string<separator>" )
+: println: ( "<separator>string<separator>" ) immediate
     interpret-mode? if
         str: "print:" 6 find link>xt execute cr \ XXX
     else
         compile-imm: str: ['] type , ['] cr ,
-    then ; immediate
+    then ;
 
 defer: s0 ' s0 is: _s0
 defer: r0 ' r0 is: _r0
