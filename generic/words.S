@@ -589,7 +589,7 @@ defword "immediate?",10,is_immediate,REGULAR /* ( link -- bool) */
     .int xt_link2flags, xt_btick, IMMEDIATE, xt_and, xt_btick, IMMEDIATE, xt_eq
     .int xt_exit
 
-defword "immediate",9,immediate,REGULAR
+defword "immediate",9,immediate,IMMEDIATE
     .int xt_btick, IMMEDIATE, xt_lastword, xt_link2len, xt_or
     .int xt_lastword, xt_link2flb, xt_storebyte
     .int xt_exit
