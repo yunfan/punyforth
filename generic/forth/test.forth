@@ -235,22 +235,22 @@ defer: deferred-word
    str: '""""' strlen 4 =assert
    str: 'anystring' 
    str: ''
-   str-starts-with TRUE =assert
+   str-starts? TRUE =assert
    str: ''
    str: ''
-   str-starts-with TRUE =assert
+   str-starts? TRUE =assert
    str: 'abc'
    str: 'bc'
-   str-starts-with FALSE =assert
+   str-starts? FALSE =assert
    str: 'abc'
    str: 'ab'
-   str-starts-with TRUE =assert
+   str-starts? TRUE =assert
    str: 'aabbc'
    str: 'aabbc'
-   str-starts-with TRUE =assert
+   str-starts? TRUE =assert
    str: 'aabbc'
    str: 'aabbcc'
-   str-starts-with FALSE =assert
+   str-starts? FALSE =assert
    str: 'abcxxxx' 
    str: 'abc' 
    str-in? TRUE =assert   

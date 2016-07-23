@@ -45,7 +45,7 @@ Connection: close\r\n
 : serve-client ( -- )    
     client @ 128 line netcon-readln
     print: 'line received: ' line type print: ' length=' . cr
-    line str: "GET /" str-starts-with if
+    line str: "GET /" str-starts? if
         client @ HTML netcon-write
         println: 'response sent'
     then ;

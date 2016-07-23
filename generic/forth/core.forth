@@ -283,7 +283,7 @@ defer: handler
     repeat
     ['] c@ bi@ ['] 0= bi@ and ;
 
-: str-starts-with ( str substr -- bool )
+: str-starts? ( str substr -- bool )
     begin
         2dup ['] c@ bi@
         dup 0= if                       \ end of substr
@@ -301,7 +301,7 @@ defer: handler
 
 : str-in? ( str substr -- bool )
     begin
-        2dup str-starts-with if
+        2dup str-starts? if
             2drop TRUE exit
         then
         swap dup c@ 0= if

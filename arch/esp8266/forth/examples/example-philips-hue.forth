@@ -22,7 +22,7 @@ buffer-len buffer: buffer
 : read-http-code ( netconn -- http-code | throws:EHTTP )
     buffer-len buffer netcon-readln
     0 <= if EHTTP throw then           
-    buffer str: "HTTP/" str-starts-with if
+    buffer str: "HTTP/" str-starts? if
         buffer parse-http-code        
     else
         EHTTP throw

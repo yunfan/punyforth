@@ -29,7 +29,7 @@ buffer-size buffer: line-buffer
         
 : processline ( str -- )
     dup type cr
-    dup str: "PING" str-starts-with if
+    dup str: "PING" str-starts? if
         str: "PONG" send
         random 200 % 0= if
             greet
