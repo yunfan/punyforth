@@ -521,7 +521,7 @@ read_one_char_from_buffer:
     .int xt_char_fromin
     .int xt_exit
 
-defword "compile_time_only",17,compile_time_only,REGULAR    
+defword "compile-time",12,compile_time,REGULAR    
     .int xt_state, xt_fetch, xt_btick, STATE_COMPILE, xt_eq
     .int xt_branch0
     lbl cannot_interpret_compile_only_word

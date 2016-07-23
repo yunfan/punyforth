@@ -1,18 +1,15 @@
 : interpret-mode? state @ 0= ;
 : prepare-backward-ref here ;
-: resolve-backward-ref here - cell - , ;
+: backref here - cell - , ;
 
-: begin immediate
-       compile_time_only
-       prepare-backward-ref ;
+: begin immediate compile-time
+    prepare-backward-ref ;
 
-: again immediate
-       compile_time_only
-       ['] branch , resolve-backward-ref ;
+: again immediate compile-time
+    ['] branch , backref ;
 
-: until immediate
-       compile_time_only
-       ['] branch0 , resolve-backward-ref ;
+: until immediate compile-time
+    ['] branch0 , backref ;
 
 : char: word drop c@ ;
 
@@ -37,18 +34,15 @@
 : prepare-forward-ref here 0 , ;
 : resolve-forward-ref dup here swap - cell - swap ! ;
 
-: if immediate
-       compile_time_only
-       ['] branch0 , prepare-forward-ref ;
+: if immediate compile-time
+    ['] branch0 , prepare-forward-ref ;
 
-: else immediate
-       compile_time_only
-       ['] branch , prepare-forward-ref swap
-       resolve-forward-ref ;
+: else immediate compile-time
+    ['] branch , prepare-forward-ref swap
+    resolve-forward-ref ;
 
-: then immediate
-       compile_time_only
-       resolve-forward-ref ;
+: then immediate compile-time
+    resolve-forward-ref ;
 
 : . ( n -- )
        dup 0< if 45 emit -1 * then
@@ -60,65 +54,55 @@
 
 : ? ( a -- ) @ . ;
 
-: do immediate
-       compile_time_only
-       ['] swap , ['] >r , ['] >r ,
-       prepare-backward-ref ;
+: do immediate compile-time
+    ['] swap , ['] >r , ['] >r ,
+    prepare-backward-ref ;
 
 : bounds ( start len -- limit start )
     over + swap ;
 
-: loop immediate
-       compile_time_only
-       ['] r> , ['] 1+ , ['] >r ,
-       ['] r2dup , ['] r> , ['] r> ,
-       ['] >= , ['] branch0 , resolve-backward-ref
-       ['] r> , ['] r> , ['] 2drop , ;
+: loop immediate compile-time
+    ['] r> , ['] 1+ , ['] >r ,
+    ['] r2dup , ['] r> , ['] r> ,
+    ['] >= , ['] branch0 , backref
+    ['] r> , ['] r> , ['] 2drop , ;
 
 : +loop-terminate? ( n limit i -- bool )
     swap 1+
     - dup rot + xor 0 < ;          \ (index-limit) and (index-limit+n) have different sign?
 
-: +loop immediate
-    compile_time_only     
+: +loop immediate compile-time     
     ['] dup ,
     ['] r> , ['] + , ['] >r ,
     ['] r2dup , ['] r> , ['] r> ,
     ['] +loop-terminate? ,
-    ['] branch0 , resolve-backward-ref
+    ['] branch0 , backref
     ['] r> , ['] r> , ['] 2drop , ;
 
 : unloop r> r> r> 2drop >r ;
 
-: while immediate
-    compile_time_only
+: while immediate compile-time
     ['] branch0 , prepare-forward-ref ;
 
-: repeat immediate
-    compile_time_only
+: repeat immediate compile-time
     swap
-    ['] branch , resolve-backward-ref 
+    ['] branch , backref 
     resolve-forward-ref ;
 
-: case immediate
-    compile_time_only 
-    0 ;                            \ init branchcounter
+: case immediate compile-time 0 ;
 
-: of immediate
-    compile_time_only
+: of immediate compile-time
     ['] over , ['] = ,
     ['] branch0 , prepare-forward-ref 
     ['] drop , ;
 
-: endof immediate
-    compile_time_only
+: endof immediate compile-time
     swap 1+ swap                            \ increase number of branches
     ['] branch , prepare-forward-ref swap
     resolve-forward-ref
     swap ;                                  \ keep branch counter at TOS
 
-: endcase immediate
-    compile_time_only
+: endcase immediate compile-time
     0 do
         resolve-forward-ref
     loop ;
@@ -179,14 +163,12 @@ defer: handler
       r> swap >r sp!          \ restore the data stack as it was before the most recent catch
       drop r> ;               \ return to the caller of most recent catch with the errcode
 
-: { immediate
-    compile_time_only
+: { immediate compile-time
     ['], here 3 cells + ,
     ['] branch , prepare-forward-ref
     entercol , ;
 
-: } immediate
-    compile_time_only
+: } immediate compile-time
     ['] exit , 
     resolve-forward-ref ;
 
