@@ -23,7 +23,7 @@ variable: last-event-time
     time last-event-time !
     begin
         pause
-        30 next-event
+        60 next-event
         case
             BUTTON_HALL of 
                 HALL toggle-debounced

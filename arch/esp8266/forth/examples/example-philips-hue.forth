@@ -42,7 +42,7 @@ buffer-len buffer: buffer
     dup read-http-code
     swap skip-http-headers    
     buffer-len buffer netcon-readln      
-    print: 'body len=' . cr ; \ TODO why -1?
+    print: 'body len=' . cr ;
     
 : log-http-resp ( response-code -- response-code )
     dup print: 'HTTP:' . space buffer type cr ;

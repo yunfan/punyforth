@@ -16,7 +16,7 @@ buffer-size buffer: line-buffer
     str: "USER hodor179 hodor179 bla :hodor179" send ;
     
 : join ( -- ) str: "JOIN #somechan" send ;
-: greet ( -- ) str: "PRIVMSG #somechan :Hodor? ..hoodor!" send ;
+: greet ( -- ) str: "PRIVMSG #somechan :Hooodoor!" send ;
 : quit ( -- ) str: "QUIT :hodor" send ;
     
 : readln ( -- str )
