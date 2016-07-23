@@ -365,22 +365,6 @@ defer: r0 ' r0 is: _r0
 : depth ( -- n ) s0 sp@ - cell / 1- ;
 : rdepth ( -- n ) r0 rp@ - cell / 1- ;
 
-: print-stack ( -- )
-    depth 0= if exit then
-    depth 10 > if
-        print: "stack[.. "
-    else        
-        print: "stack["
-    then 
-    0 depth 2 - 9 min do \ maximalize depth to print
-        sp@ i cells + @ .
-        i 0<> if space then
-    -1 +loop 
-    print: "] " ;
-
-: clear-stack ( i*x -- )
-    depth 0 do drop loop ;
-
 : marker: ( "name" -- )
     create:
         lastword ,
@@ -393,7 +377,7 @@ defer: r0 ' r0 is: _r0
     ['] link>name ['] link>len bi
     type-counted ;
 
-: words ( -- )
+: help ( -- )
     lastword
     begin
         dup 0<>
@@ -402,12 +386,29 @@ defer: r0 ' r0 is: _r0
     repeat
     drop ;
 
-: sprompt ( -- ) 
-    depth 0< if EUNDERFLOW throw then
-    cr print-stack
-    print: "% " ;
+: stack-print ( -- )
+    depth 0= if exit then
+    depth 10 > if
+        print: "stack[.. "
+    else        
+        print: "stack["
+    then 
+    0 depth 2 - 9 min do \ maximalize depth to print
+        sp@ i cells + @ .
+        i 0<> if space then
+    -1 +loop 
+    print: "] " ;
 
-' sprompt prompt !
+: stack-clear ( i*x -- )
+    depth 0 do drop loop ;
+
+: stack-show ( -- )
+    {
+        depth 0< if EUNDERFLOW throw then
+        cr stack-print print: "% " 
+    } prompt ! ;
+
+: stack-hide ( -- ) 0 prompt ! ;
 
 : heap? ( a -- bool ) heap-start over heap-end between? ;
 
@@ -435,7 +436,9 @@ defer: r0 ' r0 is: _r0
             print: "??? (" . println: ")"     \ not valid return address, could be doloop var
         then            
     loop
-    depth 0> if print-stack then
+    depth 0> if stack-print then
     abort ; 
 
 ' unhandled is: traceback
+
+stack-show
