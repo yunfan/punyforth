@@ -2,7 +2,7 @@
 : backref, here - cell - , ;
 
 : begin immediate compile-time
-    here ; \ prepare backref
+    here ; 
 
 : again immediate compile-time
     ['] branch , backref, ;
