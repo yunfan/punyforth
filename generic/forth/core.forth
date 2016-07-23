@@ -440,5 +440,3 @@ defer: r0 ' r0 is: _r0
     abort ; 
 
 ' unhandled is: traceback
-
-stack-show
