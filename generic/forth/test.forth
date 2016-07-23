@@ -44,9 +44,9 @@ constant: Rect
 new-rect r1
 
 : bench ( ntimes -- sec )
-       time swap
-       0 do 10 factorial drop loop
-       time swap - ;
+    time swap
+    0 do 10 factorial drop loop
+    time swap - ;
 
 variable: test_var1
 variable: test_var2
@@ -253,25 +253,25 @@ defer: deferred-word
    str-starts-with FALSE =assert
    str: 'abcxxxx' 
    str: 'abc' 
-   str-includes TRUE =assert   
+   str-in? TRUE =assert   
    str: 'xxabcyy' 
    str: 'abc' 
-   str-includes TRUE =assert   
+   str-in? TRUE =assert   
    str: 'xxabzyy' 
    str: 'abc'
-   str-includes FALSE =assert
+   str-in? FALSE =assert
    str: 'anystring' 
    str: '' 
-   str-includes assert   
+   str-in? assert   
    str: 'xxx'
    str: 'xxx' 
-   str-includes assert   
+   str-in? assert   
    str: 'abcdef'
    str: 'def' 
-   str-includes assert   
+   str-in? assert   
    str: 'abcdef'
    str: 'efg' 
-   str-includes FALSE =assert 
+   str-in? FALSE =assert 
    str: "" str: "" =str assert
    str: "1" str: "12" =str invert assert
    str: "" str: "12" =str invert assert

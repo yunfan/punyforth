@@ -1,15 +1,14 @@
-: interpret-mode? state @ 0= ;
-: prepare-backward-ref here ;
-: backref here - cell - , ;
+: interpret? state @ 0= ;
+: backref, here - cell - , ;
 
 : begin immediate compile-time
-    prepare-backward-ref ;
+    here ; \ prepare backref
 
 : again immediate compile-time
-    ['] branch , backref ;
+    ['] branch , backref, ;
 
 : until immediate compile-time
-    ['] branch0 , backref ;
+    ['] branch0 , backref, ;
 
 : char: word drop c@ ;
 
@@ -31,8 +30,8 @@
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
 
-: prepare-forward-ref here 0 , ;
-: resolve-forward-ref dup here swap - cell - swap ! ;
+: prepare-forward-ref ( -- a) here 0 , ;
+: resolve-forward-ref ( a -- ) dup here swap - cell - swap ! ;
 
 : if immediate compile-time
     ['] branch0 , prepare-forward-ref ;
@@ -45,18 +44,18 @@
     resolve-forward-ref ;
 
 : . ( n -- )
-       dup 0< if 45 emit -1 * then
-       10 /mod dup 0= if
-           drop 48 + emit
-       else
-          . 48 + emit
-       then ;
+    dup 0< if 45 emit -1 * then
+    10 /mod dup 0= if
+        drop 48 + emit
+    else
+        . 48 + emit
+    then ;
 
 : ? ( a -- ) @ . ;
 
 : do immediate compile-time
     ['] swap , ['] >r , ['] >r ,
-    prepare-backward-ref ;
+    here ; \ prepare backref
 
 : bounds ( start len -- limit start )
     over + swap ;
@@ -64,7 +63,7 @@
 : loop immediate compile-time
     ['] r> , ['] 1+ , ['] >r ,
     ['] r2dup , ['] r> , ['] r> ,
-    ['] >= , ['] branch0 , backref
+    ['] >= , ['] branch0 , backref,
     ['] r> , ['] r> , ['] 2drop , ;
 
 : +loop-terminate? ( n limit i -- bool )
@@ -76,7 +75,7 @@
     ['] r> , ['] + , ['] >r ,
     ['] r2dup , ['] r> , ['] r> ,
     ['] +loop-terminate? ,
-    ['] branch0 , backref
+    ['] branch0 , backref,
     ['] r> , ['] r> , ['] 2drop , ;
 
 : unloop r> r> r> 2drop >r ;
@@ -86,10 +85,10 @@
 
 : repeat immediate compile-time
     swap
-    ['] branch , backref 
+    ['] branch , backref, 
     resolve-forward-ref ;
 
-: case immediate compile-time 0 ;
+: case ( -- branch-counter ) immediate compile-time 0 ;
 
 : of immediate compile-time
     ['] over , ['] = ,
@@ -102,12 +101,12 @@
     resolve-forward-ref
     swap ;                                  \ keep branch counter at TOS
 
-: endcase immediate compile-time
+: endcase ( #branches #branchesi*a -- ) immediate compile-time
     0 do
         resolve-forward-ref
     loop ;
 
-: override ( -- ) lastword hide ; immediate
+: override immediate ( -- ) lastword hide ;
 
 : create: createheader enterdoes , 0 , ;
 : does> r> lastword link>body ! ;
@@ -146,22 +145,22 @@ defer: handler
 : single-handler ( -- a ) var-handler ; \ single threaded global handler
 
 : catch ( xt -- errcode | 0 )
-      sp@ >r handler @ >r          \ save current stack pointer and previous handler (RS: sp h)
-      rp@ handler !                \ set the currend handler to this
-      execute                      \ execute word that potentially throws exception
-      r> handler !                 \ word returned without exception, restore previous handler
-      r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
+    sp@ >r handler @ >r          \ save current stack pointer and previous handler (RS: sp h)
+    rp@ handler !                \ set the currend handler to this
+    execute                      \ execute word that potentially throws exception
+    r> handler !                 \ word returned without exception, restore previous handler
+    r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
 
 : throw ( i*x errcode -- i*x errcode | 0 )
-      dup 0= if drop exit then     \ 0 means no error, drop errorcode exit from execute
-      handler @ 0= if              \ this was an uncaught exception
-          unhandled
-          exit
-      then
-      handler @ rp!           \ restore rstack, now it is the same as it was before execute
-      r> handler !            \ restore next handler
-      r> swap >r sp!          \ restore the data stack as it was before the most recent catch
-      drop r> ;               \ return to the caller of most recent catch with the errcode
+    dup 0= if drop exit then     \ 0 means no error, drop errorcode exit from execute
+    handler @ 0= if              \ this was an uncaught exception
+        unhandled
+        exit
+    then
+    handler @ rp!           \ restore rstack, now it is the same as it was before execute
+    r> handler !            \ restore next handler
+    r> swap >r sp!          \ restore the data stack as it was before the most recent catch
+    drop r> ;               \ return to the caller of most recent catch with the errcode
 
 : { immediate compile-time
     ['], here 3 cells + ,
@@ -185,15 +184,15 @@ defer: handler
 : compile-imm: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 
 : is: immediate
-    interpret-mode? if
+    interpret? if
         ' defer!
     else        
         ['], ' , ['] defer! ,
     then ;
 
 : array: ( size "name" -- ) ( index -- addr )
-      create: cells allot
-      does> swap cells + ;
+    create: cells allot
+    does> swap cells + ;
 
 : byte-array: ( size "name" -- ) ( index -- addr )
     create: allot
@@ -259,7 +258,7 @@ defer: handler
 
 : str: ( "<separator>string content<separator>" ) immediate
     separator
-    interpret-mode? if
+    interpret? if
         align! here swap c,-until 0 c,
     else
         [str swap c,-until str]
@@ -300,7 +299,7 @@ defer: handler
         ['] 1+ bi@
     again ;
 
-: str-includes ( str substr -- bool )
+: str-in? ( str substr -- bool )
     begin
         2dup str-starts-with if
             2drop TRUE exit
@@ -338,10 +337,10 @@ defer: handler
 
 : hex: immediate
     word hex>int'
-    interpret-mode? invert if ['], , then ;
+    interpret? invert if ['], , then ;
 
 : print: ( "<separator>string<separator>" ) immediate
-    interpret-mode? if
+    interpret? if
         separator
         begin
             key 2dup <>
@@ -354,7 +353,7 @@ defer: handler
     then ;
   
 : println: ( "<separator>string<separator>" ) immediate
-    interpret-mode? if
+    interpret? if
         str: "print:" 6 find link>xt execute cr \ XXX
     else
         compile-imm: str: ['] type , ['] cr ,
@@ -379,7 +378,7 @@ defer: r0 ' r0 is: _r0
     -1 +loop 
     print: "] " ;
 
-: clear-stack ( i*x -- ) 
+: clear-stack ( i*x -- )
     depth 0 do drop loop ;
 
 : marker: ( "name" -- )
@@ -406,14 +405,14 @@ defer: r0 ' r0 is: _r0
 
 : print-words ( -- ) ['] type-word each-word ;
 
-: stack_prompt ( -- ) 
+: sprompt ( -- ) 
     depth 0< if EUNDERFLOW throw then
     cr print-stack
     print: "% " ;
 
-' stack_prompt prompt !
+' sprompt prompt !
 
-: in-heap? ( a -- bool ) heap-start over heap-end between? ;
+: heap? ( a -- bool ) heap-start over heap-end between? ;
 
 : traceback ( code -- )
     cr print: "Unhandled exeption: " .
@@ -421,7 +420,7 @@ defer: r0 ' r0 is: _r0
     rdepth 1+  3 do
         print: "  at "
         rp@ i cells + @                     \ i. return address
-        in-heap? if
+        heap? if
             cell - @                        \ instruction before the return address 
             lastword    
             begin

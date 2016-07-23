@@ -35,7 +35,7 @@ buffer-size buffer: line-buffer
             greet
         then
     then
-    dup str: "PRIVMSG" str-includes if
+    dup str: "PRIVMSG" str-in? if
         LED blink
     then 
     drop ;

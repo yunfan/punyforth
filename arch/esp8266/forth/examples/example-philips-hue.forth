@@ -64,7 +64,7 @@ buffer-len buffer: buffer
         dup rot             netcon-write
         dup str: "\r\n\r\n" netcon-write
         consume&dispose
-        buffer str: '"on":true' str-includes ;        
+        buffer str: '"on":true' str-in? ;        
     
 : request-change-state ( bulb netconn -- )
     dup str: "PUT "                               netcon-write
