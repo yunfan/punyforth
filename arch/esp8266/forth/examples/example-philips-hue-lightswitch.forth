@@ -1,5 +1,3 @@
-marker: -hueswitch
-
 12 constant: BUTTON_BEDROOM \ D6 pin on nodemcu
 14 constant: BUTTON_HALL    \ D5 pin on nodemcu
 

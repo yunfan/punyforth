@@ -1,5 +1,3 @@
-marker: -game-of-life
-
 : north      ( x y -- x' y' )  1- 63 and ;
 : north-east ( x y -- x' y' )  swap 1+ swap 1- truncate-xy ;
 : east       ( x y -- x' y' )  swap 1+ 127 and swap ;

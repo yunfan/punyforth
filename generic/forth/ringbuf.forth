@@ -1,5 +1,3 @@
-marker: -ringbuf
-
 struct
     cell field: .i
     cell field: .j

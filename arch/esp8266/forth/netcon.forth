@@ -1,5 +1,3 @@
-marker: -netcon
-
 1 constant: UDP
 2 constant: TCP
 8000 constant: ENETCON 

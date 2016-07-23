@@ -415,7 +415,7 @@ defer: r0 ' r0 is: _r0
 : heap? ( a -- bool ) heap-start over heap-end between? ;
 
 : traceback ( code -- )
-    cr print: "Unhandled exeption: " .
+    cr print: "Exeption: " .
     print: " rdepth: " rdepth . cr
     rdepth 1+  3 do
         print: "  at "
