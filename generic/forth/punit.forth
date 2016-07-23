@@ -29,7 +29,7 @@ marker: -punit
 : errors ( -- n ) 2 test-report ;
 
 : test-run ( link -- )
-    dup type-word        
+    dup link-type
     link>xt ['] execute catch
     case
         0 of 

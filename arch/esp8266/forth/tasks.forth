@@ -121,7 +121,7 @@ defer: pause
     current-task
     begin
         dup task-find dup 0<> if
-            type-word cr
+            link-type cr
         else
             drop println: "interpreter"
         then

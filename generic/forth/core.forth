@@ -389,21 +389,18 @@ defer: r0 ' r0 is: _r0
     @ var-lastword !
     var-dp ! ;
 
-: each-word ( xt -- )
+: link-type ( link -- )
+    ['] link>name ['] link>len bi
+    type-counted ;
+
+: words ( -- )
     lastword
     begin
         dup 0<>
     while
-        2dup swap execute
-        @
+        dup link-type cr @
     repeat
-    2drop ;
-
-: type-word ( link -- )
-    ['] link>name ['] link>len bi
-    type-counted space ;    
-
-: print-words ( -- ) ['] type-word each-word ;
+    drop ;
 
 : sprompt ( -- ) 
     depth 0< if EUNDERFLOW throw then
@@ -427,7 +424,7 @@ defer: r0 ' r0 is: _r0
                 dup 0<>
             while
                 2dup
-                link>xt = if dup type-word then
+                link>xt = if dup link-type space then               
                 @
             repeat
             [ char: ( ] literal emit
