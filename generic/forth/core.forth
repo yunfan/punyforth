@@ -415,7 +415,7 @@ defer: r0 ' r0 is: _r0
 : traceback ( code -- )
     cr print: "Exeption: " .
     print: " rdepth: " rdepth . cr
-    rdepth 1+  3 do
+    rdepth 3 do
         print: "  at "
         rp@ i cells + @                     \ i. return address
         heap? if
