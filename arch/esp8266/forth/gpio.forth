@@ -1,5 +1,3 @@
-marker: -gpio
-
 0 constant: GPIO_INTTYPE_NONE
 1 constant: GPIO_INTTYPE_EDGE_POS
 2 constant: GPIO_INTTYPE_EDGE_NEG
