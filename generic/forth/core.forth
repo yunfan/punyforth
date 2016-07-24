@@ -388,9 +388,7 @@ defer: r0 ' r0 is: _r0
 
 : stack-print ( -- )
     depth 0= if exit then
-    depth 10 > if
-        print: ".. "
-    then 
+    depth 10 > if print: ".. " then 
     0 depth 2 - 9 min do \ maximalize depth to print
         sp@ i cells + @ .
         i 0<> if space then
@@ -403,7 +401,8 @@ defer: r0 ' r0 is: _r0
     {
         depth 0< if EUNDERFLOW throw then
         print: '\n(stack'
-        depth 0<> if space then stack-print
+        depth 0<> if space then
+        stack-print
         [ char: ) ] literal emit space
     } prompt ! ;
 
