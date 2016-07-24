@@ -82,7 +82,7 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 
 ```forth
-: square ( n -- nsquared ) dup * ;
+: square ( n -- n^2 ) dup * ;
 
 4 square .      \ prints 16
 ```
@@ -383,7 +383,7 @@ Because the usage of *override*, the *myword* in the second defintion will refer
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 
 * dip ( a xt -- a )
-* sip ( a xt -- xt.a a )
+* keep ( a xt -- xt.a a )
 * bi ( a xt1 xt2 -- xt1.a xt2.a )
 * bi* ( a b xt1 xt2 -- xt1.a xt2.b )
 * bi@ ( a b xt -- xt.a xt.b )
