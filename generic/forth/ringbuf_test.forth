@@ -56,18 +56,14 @@ marker: -ringbuf-test
     dup ringbuf-size 0 =assert 
         ringbuf-empty? assert ;
 
-: remove-from-empty
-    8 ringbuf-new ringbuf-dequeue ;
-
 : test:ringbuf-underflow-when-removing-empty
-    ['] remove-from-empty catch EUNDERFLOW =assert ;
-
-: add-more-than-allowed
-    2 ringbuf-new
-    1 over ringbuf-enqueue
-    2 over ringbuf-enqueue
-    3 over ringbuf-enqueue ;
+    { 8 ringbuf-new ringbuf-dequeue } catch EUNDERFLOW =assert ;    
 
 : test:ringbuf-overflow-when-adding-more-than-allowed
-    ['] add-more-than-allowed catch EOVERFLOW =assert ;
+    {
+        2 ringbuf-new
+        1 over ringbuf-enqueue
+        2 over ringbuf-enqueue
+        3 over ringbuf-enqueue
+    } catch EOVERFLOW =assert ;
 

@@ -148,19 +148,15 @@ defer: deferred-word
    8 factorial 8 factorial2 =assert
    9 factorial 9 factorial3 =assert ;
 
-: empty-hex>int str: "" hex>int ;
-: invalid1-hex>int str: "123g4" hex>int ;
-: invalid2-hex>int str: "12G4" hex>int ;
-
 : test:core-hex
    str: "aBcDeF" hex>int 11259375 =assert
    str: "AbCdEf" hex>int 11259375 =assert
    str: "12345678" hex>int 305419896 =assert
    str: "a1" hex>int 161 =assert
    str: "123abc" hex>int 1194684 =assert
-   ['] empty-hex>int catch ECONVERT =assert
-   ['] invalid1-hex>int catch ECONVERT =assert
-   ['] invalid2-hex>int catch ECONVERT =assert
+   { str: "" hex>int } catch ECONVERT =assert
+   { str: "123g4" hex>int } catch ECONVERT =assert
+   { str: "12G4" hex>int } catch ECONVERT =assert
    hex: a0f 2575 =assert ;
 
 : test:core-case   
