@@ -139,10 +139,10 @@ defprimitive "uart-set-bps",12,uart_set_bps,REGULAR    // ( bps uart_num -- )
     CCALL forth_uart_set_baud
     NEXT
 
-defprimitive "gpio-enable",11,gpioenable,REGULAR
+defprimitive "gpio-mode",9,gpio_mode,REGULAR
     DPOP a3                     // gpio direction
     DPOP a2                     // gpio num
-    CCALL forth_gpio_enable
+    CCALL forth_gpio_mode
     NEXT
 
 defprimitive "gpio-set-interrupt",18,gpiointerrupt,REGULAR

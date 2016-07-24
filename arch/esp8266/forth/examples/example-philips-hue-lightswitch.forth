@@ -2,9 +2,9 @@
 14 constant: BUTTON_HALL    \ D5 pin on nodemcu
 
 \ setup gpio buttons
-BUTTON_HALL GPIO_IN gpio-enable
+BUTTON_HALL GPIO_IN gpio-mode
 BUTTON_HALL GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
-BUTTON_BEDROOM GPIO_IN gpio-enable
+BUTTON_BEDROOM GPIO_IN gpio-mode
 BUTTON_BEDROOM GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 
 50 constant: DEBOUNCE_TIME \ half sec
