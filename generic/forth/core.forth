@@ -389,15 +389,12 @@ defer: r0 ' r0 is: _r0
 : stack-print ( -- )
     depth 0= if exit then
     depth 10 > if
-        print: "stack[.. "
-    else        
-        print: "stack["
+        print: ".. "
     then 
     0 depth 2 - 9 min do \ maximalize depth to print
         sp@ i cells + @ .
         i 0<> if space then
-    -1 +loop 
-    print: "] " ;
+    -1 +loop ;
 
 : stack-clear ( i*x -- )
     depth 0 do drop loop ;
@@ -405,7 +402,9 @@ defer: r0 ' r0 is: _r0
 : stack-show ( -- )
     {
         depth 0< if EUNDERFLOW throw then
-        cr stack-print print: "% " 
+        print: '\n(stack'
+        depth 0<> if space then stack-print
+        [ char: ) ] literal emit space
     } prompt ! ;
 
 : stack-hide ( -- ) 0 prompt ! ;
@@ -436,7 +435,11 @@ defer: r0 ' r0 is: _r0
             print: "??? (" . println: ")"     \ not valid return address, could be doloop var
         then            
     loop
-    depth 0> if stack-print then
+    depth 0> if
+        print: '(stack ' 
+        stack-print 
+        [ char: ) ] literal emit
+        then
     abort ; 
 
 ' unhandled is: traceback
