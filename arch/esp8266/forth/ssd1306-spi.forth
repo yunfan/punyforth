@@ -95,10 +95,10 @@ BUFFER_SIZE byte-array: screen-output
 : screen2 ( index -- addr ) var-screen-ary2 @ execute ;
 
 : display-setup-wiring
-    DC GPIO_OUT gpio-enable
-    RST GPIO_OUT gpio-enable
-    DC  LOW gpio-write
-    RST LOW gpio-write ;
+    DC GPIO_OUT gpio-mode
+    RST GPIO_OUT gpio-mode
+    DC  GPIO_LOW gpio-write
+    RST GPIO_LOW gpio-write ;
 
 : check-write-result ( code -- | SSD1306_WRITE_ERROR )
     255 <> if 
@@ -106,21 +106,21 @@ BUFFER_SIZE byte-array: screen-output
     then ;
 
 : write-command ( cmd -- | SSD1306_WRITE_ERROR ) 
-    DC LOW gpio-write
+    DC GPIO_LOW gpio-write
     BUS spi-send8 
     check-write-result ;
 
 : write-data ( data -- | SSD1306_WRITE_ERROR ) 
-    DC HIGH gpio-write
+    DC GPIO_HIGH gpio-write
     BUS spi-send8 
     check-write-result ;
 
 : display-on ( -- )
-    RST HIGH gpio-write
+    RST GPIO_HIGH gpio-write
     1 delay
-    RST LOW gpio-write
+    RST GPIO_LOW gpio-write
     10 delay
-    RST HIGH gpio-write ;
+    RST GPIO_HIGH gpio-write ;
 
 : display-send-init-sequence ( -- )
     SSD1306_DISP_SLEEP              write-command

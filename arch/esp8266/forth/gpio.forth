@@ -6,16 +6,16 @@
 5 constant: GPIO_INTTYPE_LEVEL_HIGH
 1 constant: GPIO_IN
 2 constant: GPIO_OUT
-1 constant: HIGH
-0 constant: LOW
+1 constant: GPIO_HIGH
+0 constant: GPIO_LOW
 
 : blink ( pin -- )
     dup 
-    GPIO_OUT gpio-enable
+    GPIO_OUT gpio-mode
     dup
-    HIGH gpio-write
+    GPIO_HIGH gpio-write
     250 delay
-    LOW gpio-write
+    GPIO_LOW gpio-write
     250 delay ;
     
 : times-blink ( pin ntimes -- )

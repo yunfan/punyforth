@@ -87,12 +87,9 @@ buffer-len buffer: buffer
         dup str: "Content-length: 12\r\n\r\n" netcon-write        
         dup str: '{"on":false}\r\n'           netcon-write
         netcon-dispose ;
-        
-: toggle-unsafe ( bulb -- | throws:ENETCON )
-    dup on? if off else on then ;
-    
+
 : toggle ( bulb -- )
-    ['] toggle-unsafe catch 
+    { dup on? if off else on then } catch 
     case
         0 of exit endof
         ENETCON of println: "netconn error" endof
