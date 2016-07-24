@@ -400,7 +400,7 @@ defer: r0 ' r0 is: _r0
 : stack-show ( -- )
     {
         depth 0< if EUNDERFLOW throw then
-        print: '\n(stack'
+        print: '\r\n(stack'
         depth 0<> if space then
         stack-print
         [ char: ) ] literal emit space
