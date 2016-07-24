@@ -316,6 +316,13 @@ B
    12 { 1+ { 1+ } execute } execute 14 =assert   
    10 { 1+ { 1+ { 1+ } execute } execute } execute 13 =assert ;
 
+: test:core-combinators
+   1 2 4 { + } dip 4 =assert 3 =assert
+   1 2 4 { + } keep 4 =assert 6 =assert 1 =assert
+   str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* =assert
+   str: "john" str: ".doe" { strlen } bi@ =assert
+   str: "john.doe" { strlen } { 1+ c@ 103 - } bi =assert ;
+
 : test:core-array
    5 0 do i i test_numbers ! loop
    5 0 do i test_numbers @ i =assert loop ;

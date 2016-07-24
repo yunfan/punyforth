@@ -57,7 +57,7 @@
     
 : netcon-tcp-server ( port host -- netcon | throws:ENETCON )
     netcon-tcp
-    ['] netcon-bind sip
+    ['] netcon-bind keep
     dup netcon-listen ;    
     
 : netcon-accept ( netcon -- new-netcon | throws:ENETCON) override

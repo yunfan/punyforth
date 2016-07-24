@@ -16,8 +16,8 @@
 : \ begin key dup 13 = swap 10 = or until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
-: sip ( a xt -- xt.a a ) over >r execute r> ;
-: bi ( a xt1 xt2 -- xt1.a xt2.a ) ['] sip dip execute ;
+: keep ( a xt -- xt.a a ) over >r execute r> ;
+: bi ( a xt1 xt2 -- xt1.a xt2.a ) ['] keep dip execute ;
 : bi* ( a b xt1 xt2 -- xt1.a xt2.b ) ['] dip dip execute ;
 : bi@ ( a b xt -- xt.a xt.b ) dup bi* ;
 
