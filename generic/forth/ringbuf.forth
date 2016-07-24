@@ -22,8 +22,7 @@ constant: RingBuffer
 : ringbuf-empty? ( ringbuffer -- bool ) ringbuf-size 0= ;
 
 : ringbuf-full? ( ringbuffer -- bool )
-    ['] .size ['] .capacity bi 
-    ['] @ bi@ = ;
+    { .size @ } { .capacity @ } bi = ;   
 
 : slot ( index ringbuffer -- adr )
     RingBuffer + swap cells + ;
@@ -41,7 +40,7 @@ constant: RingBuffer
 : added ( ringbuffer -- )
     dup
     dup increase-size
-    ['] .capacity ['] .j bi ['] @ bi@
+    { .capacity @ } { .j @ } bi
     1+ swap %
     swap .j ! ;
 
@@ -50,7 +49,7 @@ constant: RingBuffer
 : removed ( ringbuffer -- )
     dup
     dup decrease-size
-    ['] .capacity ['] .i bi ['] @ bi@
+    { .capacity @ } { .i @ } bi
     1+ swap %
     swap .i ! ;
 
