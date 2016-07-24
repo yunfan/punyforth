@@ -86,7 +86,7 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 4 square .      \ prints 16
 ```
-Word definitions start with colon character and end with a semicolon. The *n -- nsquared* is the optional stack effect comment.
+Word definitions start with colon character and end with a semicolon. The *( n -- n^2 )* is the optional stack effect comment.
 
 ### Control structures
 
