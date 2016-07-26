@@ -399,7 +399,7 @@ At runtime the quotation pushes its execution token onto the stack, therefore it
 (stack 20)
 ```   
 
-#### Quotations + exception handling
+#### Quotations and exception handling
 
 ```forth
    { str: 'AF01' hex>int } catch 
@@ -411,7 +411,7 @@ At runtime the quotation pushes its execution token onto the stack, therefore it
    then
 ```
 
-#### Quotations + Factor style combinators
+#### Quotations and Factor style combinators
 
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 
@@ -420,9 +420,8 @@ Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 Calls a quotation while temporarily hiding the top item on the stack.
 
 ```forth 
-  1 2 4 { + } dip
-  (stack 3 4)
-  \ Same as: 1 2 4 >r + r> 
+  1 2 4 { + } dip   \ Same as: 1 2 4 >r + r> 
+  (stack 3 4) 
 ``` 
  
 ##### keep ( x quot -- x ) 
@@ -430,9 +429,8 @@ Calls a quotation while temporarily hiding the top item on the stack.
 Calls a quotation with an item on the stack, restoring that item after the quotation returns.
 
 ```forth 
-  1 2 4 { + } keep
+  1 2 4 { + } keep    \ Same as: 1 2 4 dup >r + r>
   (stack 1 6 4)
-  \ Same as: 1 2 4 dup >r + r>
 ``` 
  
 ##### bi ( x p q -- ) 
@@ -441,9 +439,8 @@ Applies quotation p to x, then applies quotation q to x.
 
 ```forth 
   \ given a rectangle(width=3, height=4)
-  rectangle { .width @ } { .height @ } bi * 
+  rectangle { .width @ } { .height @ } bi *   \ Same as: rectangle dup .width @ swap .height @ *
   (stack 12) 
-  \ Same as: rectangle dup .width @ swap .height @ *
 ``` 
   
 ##### bi* ( x y p q -- ) 
@@ -451,9 +448,9 @@ Applies quotation p to x, then applies quotation q to x.
 Applies quotation p to x, then applies quotation q to y.
 
 ```forth 
-  str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* = 
+  str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* =    \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
   (stack -1)
-  \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
+  
 ``` 
   
 ##### bi@ ( x y quot -- )
@@ -461,9 +458,9 @@ Applies quotation p to x, then applies quotation q to y.
 Applies the quotation to x, then to y.
 
  ```forth
-  str: "john" str: ".doe" { strlen } bi@ = ; 
+  str: "john" str: ".doe" { strlen } bi@ =    \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
   (stack -1)
-  \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
+  
 ```
 
 ### The word *create: does>*
