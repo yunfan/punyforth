@@ -420,10 +420,9 @@ Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 Calls a quotation while temporarily hiding the top item on the stack.
 
 ```forth 
- \  For example:
-    1 2 4 { + } dip
-    (stack 3 4)
- \ Same as: 1 2 4 >r + r> 
+  1 2 4 { + } dip
+  (stack 3 4)
+  \ Same as: 1 2 4 >r + r> 
 ``` 
  
 ##### keep ( x quot -- x ) 
@@ -431,10 +430,9 @@ Calls a quotation while temporarily hiding the top item on the stack.
 Calls a quotation with an item on the stack, restoring that item after the quotation returns.
 
 ```forth 
- \  For example:
-    1 2 4 { + } keep
-    (stack 1 6 4)
- \ Same as: 1 2 4 dup >r + r>
+  1 2 4 { + } keep
+  (stack 1 6 4)
+  \ Same as: 1 2 4 dup >r + r>
 ``` 
  
 ##### bi ( x p q -- ) 
@@ -442,10 +440,10 @@ Calls a quotation with an item on the stack, restoring that item after the quota
 Applies quotation p to x, then applies quotation q to x.
 
 ```forth 
- \  For example: given a rectangle(width=3, height=4)
-    rectangle { .width @ } { .height @ } bi * 
-    (stack 12) 
- \ Same as: rectangle dup .width @ swap .height @ *
+  \ given a rectangle(width=3, height=4)
+  rectangle { .width @ } { .height @ } bi * 
+  (stack 12) 
+  \ Same as: rectangle dup .width @ swap .height @ *
 ``` 
   
 ##### bi* ( x y p q -- ) 
@@ -453,10 +451,9 @@ Applies quotation p to x, then applies quotation q to x.
 Applies quotation p to x, then applies quotation q to y.
 
 ```forth 
- \  For example:
-    str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* = 
-    (stack -1)
- \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
+  str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* = 
+  (stack -1)
+  \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
 ``` 
   
 ##### bi@ ( x y quot -- )
@@ -464,10 +461,9 @@ Applies quotation p to x, then applies quotation q to y.
 Applies the quotation to x, then to y.
 
  ```forth
- \  For example:
-    str: "john" str: ".doe" { strlen } bi@ = ; 
-    (stack -1)
- \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
+  str: "john" str: ".doe" { strlen } bi@ = ; 
+  (stack -1)
+  \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
 ```
 
 ### The word *create: does>*
