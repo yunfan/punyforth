@@ -413,6 +413,7 @@ At runtime the quotation pushes its execution token onto the stack, therefore it
 
 #### Quotations + Factor style combinators
 
+Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 
 dip ( x quot -- x ) calls a quotation while temporarily hiding the top item on the stack
 ```forth 
@@ -455,19 +456,6 @@ bi@ ( x y quot -- ) applies the quotation to x, then to y
     (stack -1)
  \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
 ```
-
-### Factor style combinators
-
-Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
-
-* dip ( a xt -- a )
-* keep ( a xt -- xt.a a )
-* bi ( a xt1 xt2 -- xt1.a xt2.a )
-* bi* ( a b xt1 xt2 -- xt1.a xt2.b )
-* bi@ ( a b xt -- xt.a xt.b )
-
-
-
 
 ### The word *create: does>*
 
