@@ -415,7 +415,10 @@ At runtime the quotation pushes its execution token onto the stack, therefore it
 
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 
-dip ( x quot -- x ) calls a quotation while temporarily hiding the top item on the stack
+##### dip ( x quot -- x ) 
+
+Calls a quotation while temporarily hiding the top item on the stack.
+
 ```forth 
  \  For example:
     1 2 4 { + } dip
@@ -423,7 +426,10 @@ dip ( x quot -- x ) calls a quotation while temporarily hiding the top item on t
  \ Same as: 1 2 4 >r + r> 
 ``` 
  
- keep ( x quot -- x ) calls a quotation with an item on the stack, restoring that item after the quotation returns
+##### keep ( x quot -- x ) 
+
+Calls a quotation with an item on the stack, restoring that item after the quotation returns.
+
 ```forth 
  \  For example:
     1 2 4 { + } keep
@@ -431,7 +437,10 @@ dip ( x quot -- x ) calls a quotation while temporarily hiding the top item on t
  \ Same as: 1 2 4 dup >r + r>
 ``` 
  
- bi ( x p q -- ) applies quotation p to x, then applies quotation q to x
+##### bi ( x p q -- ) 
+
+Applies quotation p to x, then applies quotation q to x.
+
 ```forth 
  \  For example: given a rectangle(width=3, height=4)
     rectangle { .width @ } { .height @ } bi * 
@@ -439,7 +448,9 @@ dip ( x quot -- x ) calls a quotation while temporarily hiding the top item on t
  \ Same as: rectangle dup .width @ swap .height @ *
 ``` 
   
-bi* ( x y p q -- ) applies quotation p to x, then applies quotation q to y
+##### bi* ( x y p q -- ) 
+
+Applies quotation p to x, then applies quotation q to y.
 
 ```forth 
  \  For example:
@@ -448,7 +459,9 @@ bi* ( x y p q -- ) applies quotation p to x, then applies quotation q to y
  \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
 ``` 
   
-bi@ ( x y quot -- ) applies the quotation to x, then to y
+##### bi@ ( x y quot -- )
+
+Applies the quotation to x, then to y.
 
  ```forth
  \  For example:
