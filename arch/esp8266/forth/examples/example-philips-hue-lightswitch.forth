@@ -7,33 +7,43 @@ BUTTON_HALL GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 BUTTON_BEDROOM GPIO_IN gpio-mode
 BUTTON_BEDROOM GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 
-50 constant: DEBOUNCE_TIME \ half sec
-variable: last-event-time
+80 constant: DEBOUNCE_TIME \ 0.8 sec
+0 init-variable: last-hall-event
+0 init-variable: last-bedroom-event
 
-: toggle-debounced ( ligth -- )
-    time last-event-time @ - DEBOUNCE_TIME > if
-        time last-event-time !
-        toggle        
-    else
-        drop
+Event buffer: event
+
+: toggle-hall ( -- )
+    time last-hall-event @ - DEBOUNCE_TIME > if
+        HALL toggle
+        time last-hall-event !
+    then ;
+
+: toggle-bedroom ( -- )
+    time last-bedroom-event @ - DEBOUNCE_TIME > if
+        BEDROOM toggle
+        time last-bedroom-event !
     then ;
 
 : switch-loop ( task -- )
     activate
-    time last-event-time !
     begin
-        pause
-        60 next-event
-        case
-            BUTTON_HALL of 
-                HALL toggle-debounced
-            endof
-            BUTTON_BEDROOM of 
-                BEDROOM toggle-debounced
-            endof
-            drop
-        endcase    
-    again 
+        event next-event
+        event .type @ EVT_GPIO = if
+            event .payload @
+            case
+                BUTTON_HALL of
+                    toggle-hall
+                endof
+                BUTTON_BEDROOM of
+                    toggle-bedroom
+                endof
+                drop
+            endcase
+        else
+            print: 'unknown event: ' event .type ? cr
+        then
+    again
     deactivate ;
 
 0 task: hue-task

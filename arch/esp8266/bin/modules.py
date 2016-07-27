@@ -9,6 +9,7 @@ available_modules = {
     'test' : '../../../generic/forth/test.forth',
     'ringbuf' : '../../../generic/forth/ringbuf.forth',
     'gpio' : '../forth/gpio.forth',
+    'event' : '../forth/event.forth',
     'wifi' : '../forth/wifi.forth',
     'ssd1306-spi' : '../forth/ssd1306-spi.forth',
     'netcon' : '../forth/netcon.forth',
@@ -28,6 +29,7 @@ dependencies = {
     'test' : ['core', 'punit'],
     'ringbuf' : ['core'],
     'gpio' : ['core'],
+    'event' : ['core', 'tasks'],
     'wifi' : ['core'],
     'ssd1306-spi' : ['core', 'gpio'],
     'netcon' : ['core', 'tasks'],
@@ -37,7 +39,7 @@ dependencies = {
     'example-game-of-life' : ['core', 'ssd1306-spi'],
     'example-ircbot' : ['core', 'netcon', 'tasks', 'gpio'],
     'example-philips-hue' : ['core', 'netcon'],
-    'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio'],
+    'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
     'example-http-server' : ['core', 'netcon', 'wifi']
 }
 
