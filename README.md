@@ -593,10 +593,10 @@ str: "MyPassword" str: "MySSID" wifi-connect
 
 ```forth
 2 constant: PIN
-PIN GPIO_OUT gpio-enable
-PIN HIGH gpio-write
+PIN GPIO_OUT gpio-mode
+PIN GPIO_HIGH gpio-write
 250 delay
-PIN LOW gpio-write
+PIN GPIO_LOW gpio-write
 ```
 
 #### Netconn
