@@ -323,7 +323,7 @@ B
    str: "john" str: ".doe" { strlen } bi@ =assert
    str: "john.doe" { strlen } { 1+ c@ 103 - } bi =assert ;
 
-: test:core-array
+: test:core-array   
    5 0 do i i test_numbers ! loop
    5 0 do i test_numbers @ i =assert loop ;
 
