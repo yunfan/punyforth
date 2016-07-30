@@ -5,7 +5,7 @@ struct
 constant: Event
 
 100 constant: EVT_GPIO
-60 init-variable: event-timeout
+70 init-variable: event-timeout
 
 : next-event ( event-struct -- event )
     begin
