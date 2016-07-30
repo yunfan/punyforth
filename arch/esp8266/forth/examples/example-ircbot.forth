@@ -54,7 +54,7 @@ buffer-size buffer: line-buffer
     begin    
         println: "Starting IRC bot"
         ['] run catch dup 0<> if            
-            print: 'Exception in irc bot: ' . cr
+            print: 'Exception in ircbot: ' . cr
         else
             drop
         then
