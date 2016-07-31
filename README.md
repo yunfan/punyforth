@@ -631,6 +631,7 @@ str: "192.168.0.15" constant: HOST
 
 PORT HOST netcon-udp-server
 dup 128 data netcon-readln
+print: 'received bytes: ' . cr
 data type
 dispose
 ```
