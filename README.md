@@ -633,7 +633,7 @@ PORT HOST netcon-udp-server
 dup 128 data netcon-readln
 print: 'received bytes: ' . cr
 data type
-dispose
+netcon-dispose
 ```
 
 ```python
