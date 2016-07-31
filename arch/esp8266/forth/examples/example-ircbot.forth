@@ -6,7 +6,7 @@ buffer-size buffer: line-buffer
 6000 constant: IRC_ECLOSED
 
 : connect ( -- )
-    6667 str: "irc.freenode.net" netcon-connect irc-con ! ;
+    6667 str: "irc.freenode.net" TCP netcon-connect irc-con ! ;
 
 : send ( str -- )
     irc-con @ swap netcon-writeln ;

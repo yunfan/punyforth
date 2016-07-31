@@ -53,7 +53,7 @@ str: "Hahooo" constant: request
 
 : test:netcon-echo \ TODO netcon-connect is blocking -> cant connect to itself
     start-echo-server
-    ECHO_PORT ECHO_HOST netcon-connect
+    ECHO_PORT ECHO_HOST TCP netcon-connect
     dup request netcon-writeln
     dup 128 response netcon-readln
     request strlen =assert

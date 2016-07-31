@@ -23,16 +23,11 @@
 : check-new ( netcon -- netcon | throws:ENETCON )
     dup 0= if ENETCON throw then ;
     
-: netcon-tcp ( -- netcon )
-    TCP netcon-new
+: netcon-new ( type -- netcon ) override
+    netcon-new
     RECV_TIMEOUT_MSEC over netcon-set-recvtimeout
     check-new ;
-    
-: netcon-udp ( -- netcon )
-    UDP netcon-new
-    RECV_TIMEOUT_MSEC over netcon-set-recvtimeout
-    check-new ;
-    
+
 : check-error ( errcode --  | throws:ENETCON )
     dup 0<> if
         print: "NETCON error: " . cr
@@ -40,25 +35,26 @@
     then 
     drop ;
 
-: netcon-connect ( port host -- netcon | throws:ENETCON ) override
-    netcon-tcp dup 
+: netcon-connect ( port host type -- netcon | throws:ENETCON ) override
+    netcon-new dup 
     >r
     netcon-connect
     check-error
     r> ;
     
 : netcon-bind ( port host netcon -- | throws:ENETCON ) override
-    netcon-bind
-    check-error ;
+    netcon-bind check-error ;
     
 : netcon-listen ( netcon -- | throws:ENETCON ) override
-    netcon-listen
-    check-error ;
+    netcon-listen check-error ;
     
 : netcon-tcp-server ( port host -- netcon | throws:ENETCON )
-    netcon-tcp
+    TCP netcon-new
     ['] netcon-bind keep
-    dup netcon-listen ;    
+    dup netcon-listen ;
+    
+: netcon-udp-server ( port host -- netcon | throws:ENETCON )
+    UDP netcon-new ['] netcon-bind keep ;
     
 : netcon-accept ( netcon -- new-netcon | throws:ENETCON) override
     begin
@@ -70,11 +66,17 @@
         then
         2drop
     again ;
+
+: netcon-send ( netcon buffer len -- | throws:ENETCON ) override
+    swap rot netcon-send
+    check-error ;
+    
+: netcon-write-buf ( netcon buffer len -- | throws:ENETCON )
+    swap rot netcon-write
+    check-error ;
     
 : netcon-write ( netcon str -- | throws:ENETCON ) override
-    dup strlen swap rot 
-    netcon-write
-    check-error ;
+    dup strlen netcon-write-buf ;
 
 : netcon-writeln ( netcon str -- | throws:ENETCON )
     over 

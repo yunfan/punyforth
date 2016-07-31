@@ -53,7 +53,7 @@ buffer-len buffer: buffer
     200 <> if EHTTP throw then ;
         
 : bridge ( -- netconn )
-    BRIDGE_PORT BRIDGE_IP netcon-connect ;
+    BRIDGE_PORT BRIDGE_IP TCP netcon-connect ;
 
 : on? ( bulb -- bool )
     bridge

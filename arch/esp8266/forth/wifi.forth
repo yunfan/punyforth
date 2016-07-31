@@ -4,7 +4,7 @@
 \ AP mode example:
 \   172 16 0 1 >ipv4 wifi-set-ip
 \   1 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
-\   4 172 16 0 2 >ipv4 dhcp-start
+\   4 172 16 0 2 >ipv4 dhcpd-start
 
 0 constant: NULL_MODE
 1 constant: STATION_MODE
