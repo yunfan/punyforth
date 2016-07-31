@@ -622,6 +622,24 @@ SOCKET write-crlf
 1024 0 buffer SOCKET receive-into
 ```
 
+##### UDP server
+
+```forth
+str: "192.168.0.15" constant: HOST
+8000 constant: PORT
+128 buffer: data
+
+PORT HOST netcon-udp-server
+dup 128 data netcon-readln
+data type
+dispose
+```
+
+```python
+import socket
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.sendto(b'hello\r\n', ('192.168.0.15',8000))
+```
 
 #### Flash
 
