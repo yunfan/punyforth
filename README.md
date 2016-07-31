@@ -608,18 +608,19 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
 ##### Examples
 
 ```forth
-80 str: "google.com" tcp-open constant: SOCKET
-SOCKET str: "GET / HTTP/1.1" writeln
-SOCKET write-crlf
-SOCKET ['] type-counted receive
-```
-
-```forth
-1024 byte-array: buffer
-80 str: "google.com" tcp-open constant: SOCKET
-SOCKET str: "GET / HTTP/1.1" writeln
-SOCKET write-crlf
-1024 0 buffer SOCKET receive-into
+1024 buffer: line
+80 str: "google.com" TCP netcon-connect constant: SOCKET
+SOCKET str: "GET / HTTP/1.1\r\n\r\n" netcon-write
+: fetch ( netcon -- )
+  begin
+    dup 128 line netcon-readln 0<>
+  while
+    line type
+  repeat 
+  drop ;
+  
+SOCKET fetch
+SOCKET netcon-dispose
 ```
 
 ##### UDP client
