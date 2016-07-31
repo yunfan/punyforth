@@ -607,8 +607,7 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
 
 ```forth
 1024 buffer: line
-80 str: "google.com" TCP netcon-connect constant: SOCKET
-SOCKET str: "GET / HTTP/1.1\r\n\r\n" netcon-write
+
 : fetch ( netcon -- )
   begin
     dup 128 line netcon-readln 0<>
@@ -616,7 +615,9 @@ SOCKET str: "GET / HTTP/1.1\r\n\r\n" netcon-write
     line type cr
   repeat 
   drop ;
-  
+
+80 str: "google.com" TCP netcon-connect constant: SOCKET
+SOCKET str: "GET / HTTP/1.1\r\n\r\n" netcon-write
 SOCKET fetch
 SOCKET netcon-dispose
 ```
