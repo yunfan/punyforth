@@ -622,6 +622,30 @@ SOCKET write-crlf
 1024 0 buffer SOCKET receive-into
 ```
 
+##### UDP client
+
+```forth
+str: "Lorem ipsum dolor sit amet" constant: data
+str: "192.168.0.3" constant: SERVER_IP
+8005 constant: SERVER_PORT
+SERVER_PORT SERVER_IP UDP netcon-connect
+dup data 10 netcon-send
+netcon-dispose
+```
+
+```python
+import select, socket
+
+s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+s.bind(('0.0.0.0', 8005))
+s.setblocking(0)
+
+while True:
+    result = select.select([s],[],[])
+    msg = result[0][0].recv(1024)
+    print(msg.strip())
+```
+
 ##### UDP server
 
 ```forth
