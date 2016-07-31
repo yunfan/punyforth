@@ -21,7 +21,7 @@
 
 5000 constant: EWIFI
 
-: >ipv4 ( octet1 octet2 octet3 octet4 )
+: >ipv4 ( octet1 octet2 octet3 octet4 -- n )
     255 and 24 lshift >r
     255 and 16 lshift >r
     255 and  8 lshift >r
