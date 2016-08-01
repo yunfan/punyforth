@@ -597,6 +597,8 @@ Words with name starting with the *test:* prefix are treated as unit tests. Unit
 test
 ```
 
+The *=assert* word asserts that two top-most items on the stack are equal. The *assert* words asserts that the top-most item of the stack is true.
+
 The *test* words runs all unit tests and gives back a simple report.
 
 ```text
