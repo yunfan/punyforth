@@ -588,6 +588,8 @@ r1 area .
 
 ### Unit testing
 
+Words with name starting with the *test:* prefix are treated as unit tests. Unit testing words typically use *assert* or *=assert* to validate the correctness of an other word.
+
 ```forth
 : test:add 1 2 + 3 =assert ;
 : test:sub 8 3 - 5 =assert ;
@@ -595,9 +597,23 @@ r1 area .
 test
 ```
 
+The *test* words runs all unit tests and gives back a simple report.
+
 ```text
 2 tests, 2 passed, 0 failed, 0 errors
 All passed
+```
+
+```forth
+: test:add 1 2 + 4 =assert ;
+
+test
+```
+
+```text
+1 tests, 0 passed, 1 failed, 0 errors
+test:add(3 4 <>) FAIL
+There were failures
 ```
 
 ### ESP8266 specific things
