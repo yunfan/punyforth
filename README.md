@@ -93,7 +93,7 @@ Stack visualization:
      2         9
 </pre>
 
-*dup* and *swap* are stack shuffle words. Excessive use of words like them make the code hard to follow, so it is advisable to use them sparingly. There are many ways to reduce the number of stack shuffles, one of them is the usage of quotations and combinators.
+*dup* and *swap* are stack shuffle words. Excessive use of words like them make the code hard to follow, so it is advisable to use them sparingly. There are many ways to reduce the number of stack shuffles, one of them is to use quotations and combinators.
 
 For example the above code could have been expressed the following way:
 
