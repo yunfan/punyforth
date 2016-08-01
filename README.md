@@ -588,6 +588,18 @@ r1 area .
 
 ### Unit testing
 
+```forth
+: test:add 1 2 + 3 =assert ;
+: test:sub 8 3 - 5 =assert ;
+
+test
+```
+
+```text
+2 tests, 2 passed, 0 failed, 0 errors
+All passed
+```
+
 ### ESP8266 specific things
 
 #### WIFI
