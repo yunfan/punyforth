@@ -75,18 +75,21 @@ The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. I
 
 ### The syntax
 
-Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number. Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
+Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number (everything in FORTH is either a word or a number). Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
 
 ### Extending the dictionary
 
+Words are stored in *dictionary*. The dictionary maps words to executable code or data structures. 
 
+You can use defining words to extend the dictionary with new definitions. The most basic defining words is the *:* (colon). This adds a new word to the dictionary with the same behavior as a sequence of existing words. A colon definition begins with a colon and ends with a semicolon.
 
 ```forth
 : square ( n -- n^2 ) dup * ;
 
 4 square .      \ prints 16
 ```
-Word definitions start with colon character and end with a semicolon. The *( n -- n^2 )* is the optional stack effect comment.
+
+In the above example we created a new word called *square* that takes a number off the stack then multiplies it with itself. The *( n -- n^2 )* is the optional stack effect comment indicating the input and output parameters.
 
 ### Control structures
 
