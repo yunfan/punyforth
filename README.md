@@ -140,7 +140,7 @@ You can use defining words to extend the dictionary with new definitions. The mo
 4 square .      \ prints 16
 ```
 
-In the above example we created a new word called *square* that takes a number off the stack, multiplies it with itself, then leaves the result on rhe stack. The *( n -- n^2 )* is the optional stack effect comment indicating the input and output parameters.
+In the above example we created a new word called *square* that takes a number off the stack, multiplies it with itself, then leaves the result on the stack. The *( n -- n^2 )* is the optional stack effect comment indicating the input and output parameters.
 
 ### Control structures
 
