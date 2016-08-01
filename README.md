@@ -57,7 +57,7 @@ Congratulation, you've just doubled a number and printed out the result using th
 
 ## About the language
 
-Punyforth is a simple, imperative, stack-based, concatenative programming language and interactive environment with good metaprogramming support and extensibility.
+Punyforth is a simple, imperative, stack-based, [concatenative programming language](https://en.wikipedia.org/wiki/Concatenative_programming_language) and interactive environment with good metaprogramming support and extensibility.
 
 The Forth environment combines the compiler with an interactive shell (REPL), where the user can define functions called words.
 
