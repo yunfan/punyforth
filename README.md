@@ -612,7 +612,6 @@ A unit test can either pass/fail or raise an error. Failure means an assertion w
 
 test
 ```
-
 ```text
 2 tests, 0 passed, 1 failed, 1 errors
 test:add(3 4 <>) FAIL
