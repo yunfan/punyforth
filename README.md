@@ -43,6 +43,8 @@ dup
 .
 ```
 
+This should give you the following output.
+
 ```forth
 (stack)
 (stack 4)
