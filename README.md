@@ -45,7 +45,7 @@ dup
 
 This should give you the following output.
 
-```forth
+```bash
 (stack)
 (stack 4)
 (stack 4 4)
