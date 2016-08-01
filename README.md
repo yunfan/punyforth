@@ -17,7 +17,7 @@ Punyforth also runs on x86 (Linux), ARM (Raspberry PI) but these are *not* the p
 
 ## Quick start
 
-The easiest way to try out Punyforth is to use a ESP8266 based NodeMCU development board that has USB to serial interface on the board (Geekcreit/Doit, Amica, WeMos, LoLin). Connect the development board to your computer via USB. Let's assume the serial port is COM3.
+The easiest way to try out Punyforth is to use a ESP8266 based NodeMCU development board that has USB to serial interface on board (Geekcreit/Doit, Amica, WeMos, LoLin). Connect the development board to your computer via USB. Let's assume the serial port is COM3.
 
 ```bash
 $ cd arch/esp8266/bin
@@ -31,6 +31,25 @@ Open a serial terminal on port COM3 then type:
 
 ```forth
 print: "Hello world!"
+```
+
+Let's do some simple arithmetics.
+
+```forth
+stack-show
+4
+dup
++
+.
+```
+
+```forth
+(stack)
+(stack 4)
+(stack 4 4)
+(stack 8)
+(stack)
+8
 ```
 
 ## Differences between Punyforth and other FORTH systems
