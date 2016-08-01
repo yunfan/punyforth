@@ -33,7 +33,7 @@ Open a serial terminal on port COM3 then type:
 print: "Hello world!"
 ```
 
-Let's do some simple arithmetics. But first we change the prompt to the one that shows the content of the stack.
+Now let's do some simple arithmetics. But first we change the prompt to the one that shows the content of the stack.
 
 ```forth
 stack-show
