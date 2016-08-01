@@ -55,21 +55,6 @@ This should give you the following output.
 ```
 Congratulation, you've just doubled a number and printed out the result using the [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop).
 
-
-## Differences between Punyforth and other FORTH systems
-
-Punyforth is heavily inspired by the [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other FORTH systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in FORTH).
-
-### Some of the differences
-* Punyforth is case sensitive
-* Strings are null-terminated
-* Strings are created and printed differently (*str: "foobar"*, *print: "foobar"* instead of *s" foobar"*, *." foobar"*)
-* Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
-* Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
-* Curly brackets denote quotations instead of locals
-
-Punyforth supports exception handling, multitasking, socket and GPIO APIs and comes with a UART and a TCP REPL.
-
 ## About the language
 
 Punyforth is a simple, imperative, stack-based, concatenative programming language and interactive environment with good metaprogramming support and extensibility.
@@ -106,7 +91,22 @@ Stack visualization:
 2 3  3  9  2   2 4 13
   2  3  2  9   2 9
      2         9
-</pre>     
+</pre>
+
+### Differences between Punyforth and other FORTH systems
+
+Punyforth is heavily inspired by the [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other FORTH systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in FORTH).
+
+### Some of the differences
+* Punyforth is case sensitive
+* Strings are null-terminated
+* Strings are created and printed differently (*str: "foobar"*, *print: "foobar"* instead of *s" foobar"*, *." foobar"*)
+* Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
+* Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
+* Curly brackets denote quotations instead of locals
+
+Punyforth supports exception handling, multitasking, socket and GPIO APIs and comes with a UART and a TCP REPL.
+
 
 ### Programming
 
