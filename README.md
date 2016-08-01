@@ -627,9 +627,18 @@ There were failures
 
 ##### Examples
 
+Station mode example:
 ```forth
-str: "MyPassword" str: "MySSID" wifi-connect
+\   str: "*****" str: "some-ssid" wifi-connect
 ```    
+
+\ AP mode example:
+```forth
+172 16 0 1 >ipv4 wifi-set-ip
+1 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
+4 172 16 0 2 >ipv4 dhcpd-start
+```    
+
 
 #### GPIO
 
