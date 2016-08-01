@@ -33,7 +33,7 @@ Open a serial terminal on port COM3 then type:
 print: "Hello world!"
 ```
 
-## Differences between Punryforth and other FORTH systems
+## Differences between Punyforth and other FORTH systems
 
 Punyforth is heavily inspired by the [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other FORTH systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in FORTH).
 
