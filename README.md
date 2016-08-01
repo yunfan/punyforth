@@ -17,6 +17,8 @@ Punyforth also runs on x86 (Linux), ARM (Raspberry PI) but these are *not* the p
 
 ## Quick start
 
+The easiest way to try out Punyforth is to use a ESP8266 based NodeMCU development board that has USB to serial interface on the board (Geekcreit/Doit, Amica, WeMos, LoLin). Connect the development board to your computer via USB. Let's assume the serial port is COM3.
+
 ```bash
 $ cd arch/esp8266/bin
 $ python modules.py core
