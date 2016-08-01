@@ -25,6 +25,8 @@ $ python modules.py core
 $ flash com3
 ```
 
+At first we select the modules to be installed using the *modules.py* python script. Then we'll install both Punyforth and the selected modules (this time only the core library) to the ESP8266 using the *flash* script. 
+
 Open a serial terminal on port COM3 then type:
 
 ```forth
