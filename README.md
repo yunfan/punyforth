@@ -45,7 +45,7 @@ dup
 
 This should give you the following output.
 
-```bash
+```lisp
 (stack)
 (stack 4)
 (stack 4 4)
