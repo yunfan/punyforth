@@ -120,7 +120,7 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 ### Extending the dictionary
 
-Words are stored in *dictionary*. The dictionary maps words to executable code or data structures. 
+Words are stored in a *dictionary*. The dictionary maps words to executable code or data structures. 
 
 You can use defining words to extend the dictionary with new definitions. The most basic defining words is the *:* (colon). This adds a new word to the dictionary with the same behavior as a sequence of existing words. A colon definition begins with a colon and ends with a semicolon.
 
