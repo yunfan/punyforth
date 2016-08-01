@@ -604,15 +604,19 @@ The *test* words runs all unit tests and gives back a simple report.
 All passed
 ```
 
+A unit test can either pass/fail or raise an error. Failure means an assertion wasn't met. Error occurs in case of an unhandled exception.
+
 ```forth
 : test:add 1 2 + 4 =assert ;
+: test:sub 123 throw ;
 
 test
 ```
 
 ```text
-1 tests, 0 passed, 1 failed, 0 errors
+2 tests, 0 passed, 1 failed, 1 errors
 test:add(3 4 <>) FAIL
+test:sub ERROR: 123
 There were failures
 ```
 
