@@ -51,6 +51,8 @@ dup
 (stack)
 8
 ```
+We've just doubled a number and printed out the result using the [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop).
+
 
 ## Differences between Punyforth and other FORTH systems
 
