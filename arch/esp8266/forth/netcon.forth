@@ -20,13 +20,10 @@
 -14 constant: NC_ERR_ARG         \ Illegal argument.
 -15 constant: NC_ERR_IF          \ Low-level netif error.
 
-: check-new ( netcon -- netcon | throws:ENETCON )
-    dup 0= if ENETCON throw then ;
-    
-: netcon-new ( type -- netcon ) override
+: netcon-new ( type -- netcon | throws:ENETCON ) override
     netcon-new
-    RECV_TIMEOUT_MSEC over netcon-set-recvtimeout
-    check-new ;
+    dup 0= if ENETCON throw then 
+    RECV_TIMEOUT_MSEC over netcon-set-recvtimeout ;
 
 : check-error ( errcode --  | throws:ENETCON )
     dup 0<> if
@@ -35,19 +32,22 @@
     then 
     drop ;
 
+\ Connect to a remote port/ip. Must be used in both TCP and UDP case.
 : netcon-connect ( port host type -- netcon | throws:ENETCON ) override
     netcon-new dup 
     >r
     netcon-connect
     check-error
     r> ;
-    
+
 : netcon-bind ( port host netcon -- | throws:ENETCON ) override
     netcon-bind check-error ;
     
 : netcon-listen ( netcon -- | throws:ENETCON ) override
     netcon-listen check-error ;
-    
+
+\ Creates a TCP server by binding a connection to the given port host then sets into listen mode
+\ Leaves the netcon connection associated to the server socket on the stack
 : netcon-tcp-server ( port host -- netcon | throws:ENETCON )
     TCP netcon-new
     ['] netcon-bind keep
@@ -56,6 +56,8 @@
 : netcon-udp-server ( port host -- netcon | throws:ENETCON )
     UDP netcon-new ['] netcon-bind keep ;
     
+\ Accept an incoming connection on a listening TCP connection.
+\ Leaves a new netcon connection that is associated to the client socket on the stack.
 : netcon-accept ( netcon -- new-netcon | throws:ENETCON) override
     begin
         pause
@@ -67,17 +69,21 @@
         2drop
     again ;
 
+\ Write the content of the given buffer to a UDP socket.
 : netcon-send ( netcon buffer len -- | throws:ENETCON ) override
     swap rot netcon-send
     check-error ;
     
+\ Write the content of the given buffer to a TCP socket.
 : netcon-write-buf ( netcon buffer len -- | throws:ENETCON )
     swap rot netcon-write
     check-error ;
     
+\ Write a null terminated string to a TCP socket.
 : netcon-write ( netcon str -- | throws:ENETCON ) override
     dup strlen netcon-write-buf ;
 
+\ Write a null terminated string then a CRLF to a TCP socket.
 : netcon-writeln ( netcon str -- | throws:ENETCON )
     over 
     swap netcon-write 
@@ -95,7 +101,7 @@
         2drop
     again ;
 
-\ Reads maximum `size` amount of bytes into the buffer
+\ Read maximum `size` amount of bytes into the buffer.
 \ Leaves the amount of bytes read on the top of the stack, or -1 if the connection was closed.
 : netcon-read ( netcon size buffer -- count | -1 | throws:ENETCON )
     rot 
@@ -103,7 +109,7 @@
     dup NC_ERR_CLSD = if 2drop -1 exit then
     check-error ;
 
-\ Reads one line into the given buffer. The line terminator is crlf.
+\ Read one line into the given buffer. The line terminator is CRLF.
 \ Leaves the length of the line on the top of the stack, or -1 if the connection was closed.
 \ If the given buffer is not large enough to hold EOVERFLOW is thrown.
 : netcon-readln ( netcon size buffer -- count | -1 | throws:ENETCON/EOVERFLOW )
@@ -125,6 +131,7 @@
     loop 
     EOVERFLOW throw ;    
     
+\ Close then dispose the given socket.
 : netcon-dispose ( netcon -- )
     dup
     netcon-close
