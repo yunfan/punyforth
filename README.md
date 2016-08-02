@@ -702,15 +702,19 @@ There were failures
 
 #### WIFI
 
+The ESP8266 has a built in Wi-Fi chip that can be used both in access point and station mode (wireless client).
+
 ##### Examples
 
-Station mode example:
+In station mode, the ESP8266 connects to an existing Wi-Fi access point.
 
 ```forth
 str: "*****" str: "some-ssid" wifi-connect
 ```    
 
 AP mode example:
+In AP mode, the ESP8266 acts as an central connection point, which wireless clients (smartphones, laptops) can connect to.
+
 ```forth
 172 16 0 1 >ipv4 wifi-set-ip
 1 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
