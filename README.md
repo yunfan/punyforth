@@ -799,12 +799,6 @@ s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 s.sendto(b'hello\r\n', ('192.168.0.15',8000))
 ```
 
-#### Flash
-
-#### Storing code in flash
-
-#### OLED display ssd1306 through SPI
-
 #### Tasks (experimental)
 
 Punyforth supports cooperative multitasking which enables users to run more than one task simultaneously. For example one task may wait for input on a socket, while another one receives commands through the serial port. Punyforth never initiates a context switch by its own. Instead, tasks voluntarily yield control periodically using the word *pause*. Tasks are executed in a round robin fashion.
