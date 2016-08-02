@@ -732,6 +732,8 @@ PIN GPIO_HIGH gpio-write
 PIN GPIO_LOW gpio-write
 ```
 
+See [Philips Hue lightswitch example](arch/esp8266/forth/examples/example-philips-hue-lightswitch.forth) for more information.
+
 #### Netconn
 
 Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS] (https://en.wikipedia.org/wiki/FreeRTOS). Punyforth provides a forth wrapper around the Netconn API.
