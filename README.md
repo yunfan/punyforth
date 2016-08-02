@@ -150,12 +150,13 @@ In the above example we created a new word called *square* that takes a number o
 Other common defining words are *variable:* and *constant:*.
 
 ```forth
-variable: var1
-54 init-variable: var2
-42 constant: answer
+variable: var1                \ create a variable 'var1' without initializing
+54 init-variable: var2        \ create a variable 'var2' and initialize it to 54
+42 constant: answer           \ create a constant 'answer' with the value 42
 
-var2 @ var1 ! \ assigns the value of var2 to var1
-answer . \ prints out 42
+var2 @ var1 !   \ assigns the value of var2 to var1
+var1 ?          \ prints out 54
+answer .        \ prints out 42
 ```
 
 ### Control structures
