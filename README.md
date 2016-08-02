@@ -704,8 +704,6 @@ There were failures
 
 The ESP8266 has a built in Wi-Fi chip that can be used both in access point and station mode (wireless client).
 
-##### Examples
-
 In station mode, the ESP8266 connects to an existing Wi-Fi access point.
 
 ```forth
