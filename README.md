@@ -129,8 +129,8 @@ The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. I
 Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number (everything in Forth is either a word or a number). Because of the postfix notation there are no precedence rules and parentheses.
 
 ```forth
- This is an example of a 
- valid   forth syntax 123    4435 *&^%$#@
+ This is an example of
+ valid   forth syntax 123  *&^%$#@2
 ```
 
 ### Extending the dictionary
