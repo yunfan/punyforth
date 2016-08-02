@@ -712,8 +712,7 @@ In station mode, the ESP8266 connects to an existing Wi-Fi access point.
 str: "*****" str: "some-ssid" wifi-connect
 ```    
 
-AP mode example:
-In AP mode, the ESP8266 acts as an central connection point, which wireless clients (smartphones, laptops) can connect to.
+In AP mode, the ESP8266 acts as an central connection point, which wireless clients (smartphones, laptops) can connect to. In this mode you have to choose an IP address for the ESP and an IP range for the clients.
 
 ```forth
 172 16 0 1 >ipv4 wifi-set-ip
@@ -721,6 +720,7 @@ In AP mode, the ESP8266 acts as an central connection point, which wireless clie
 4 172 16 0 2 >ipv4 dhcpd-start
 ```    
 
+The Wi-Fi settings are persistently stored by the ESP8266, there is no need to setup the Wi-Fi at every startup.
 
 #### GPIO
 
