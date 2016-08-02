@@ -707,7 +707,7 @@ The ESP8266 has a built in Wi-Fi chip that can be used both in access point and 
 In station mode, the ESP8266 connects to an existing Wi-Fi access point.
 
 ```forth
-str: "*****" str: "some-ssid" wifi-connect
+str: "password" str: "existing-ssid" wifi-connect
 ```    
 
 In AP mode, the ESP8266 acts as an central connection point, which wireless clients (smartphones, laptops) can connect to. In this mode you have to choose an IP address for the ESP and an IP range for the clients. Client IP addresses are assigned by the [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) server.
