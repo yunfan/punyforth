@@ -297,7 +297,7 @@ But this won't work with do loops. The reason for this is because do loops store
   loop ;
 ```
 
-Control structres are compile time words therefore they can be used only in compilation mode (inside a word definition).
+Control structres are compile time words without interpretation without semantics. They can be used only in compilation mode, that is inside a word definition.
 
 ### Exception handling
 
