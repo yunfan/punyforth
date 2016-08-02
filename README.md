@@ -214,7 +214,7 @@ The *limit* and *start* before the word *do* defines the number of times the loo
 <limit> <start> do <loop-body> loop
 ```
 
-*Do* loops iterate through integers by starting at *start* and incrementing until you reach the *limit*. The word *i* pushes the loop index onto the stack. In a nested loop, the innter loop may access the loop variable of the outer loop by using the word *j*.
+*Do* loops iterate through integers by starting at *start* and incrementing until you reach the *limit*. The word *i* pushes the loop index onto the stack. In a nested loop, the inner loop may access the loop variable of the outer loop by using the word *j*.
 
 For example:
 ```forth
