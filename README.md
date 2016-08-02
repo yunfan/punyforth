@@ -147,6 +147,17 @@ You can use *defining words* to extend the dictionary with new definitions. The 
 
 In the above example we created a new word called *square* that takes a number off the stack, multiplies it with itself, then leaves the result on the stack. The *( n -- n^2 )* is the optional stack effect comment indicating the input and output parameters.
 
+Other common defining words are *variable:* and *constant:*.
+
+```forth
+variable: var1
+54 init-variable: var2
+42 constant: answer
+
+var2 @ var1 ! \ assigns the value of var2 to var1
+answer . \ prints out 42
+```
+
 ### Control structures
 
 Punyforth supports the regular Forth conditional and loop words.
