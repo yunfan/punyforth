@@ -84,7 +84,7 @@ The following code calculates *3 * 3 + 2 * 2* and prints out *13*.
 
 ```
 
-The word *dup* duplicates the top level item of the stack. The word *swap* xchanges the two top level items of the stack.
+The word *dup* duplicates the top level item of the stack. The word *swap* exchanges the two top level items of the stack.
 
 Stack visualization:
 <pre>
