@@ -137,7 +137,7 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 Words are stored in a *dictionary*. The dictionary maps words to executable code or data structures. 
 
-You can use defining words to extend the dictionary with new definitions. The most basic defining words is the *:* (colon). This adds a new word to the dictionary with the same behavior as a sequence of existing words. A colon definition begins with a colon and ends with a semicolon.
+You can use *defining words* to extend the dictionary with new definitions. The most basic defining words is the *:* (colon). This adds a new word to the dictionary with the same behavior as a sequence of existing words. A colon definition begins with a colon and ends with a semicolon.
 
 ```forth
 : square ( n -- n^2 ) dup * ;
