@@ -130,7 +130,7 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 ```forth
  This is an example of
- valid   forth syntax 123  *&^%$#@2
+ valid   Forth syntax 123  *&^%$#@2
 ```
 
 ### Extending the dictionary
