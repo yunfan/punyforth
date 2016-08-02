@@ -290,7 +290,7 @@ You can use the *exit* word to exit from the current word as well from the loop.
 
 But this won't work with do loops. The reason for this is because do loops store the loop index on the return stack. You can use the *unloop* word to clear the return stack before exiting a do loop.
 
-```
+```forth
 : some-word ( -- )
   10 0 do 
     i 5 = if unloop exit then
