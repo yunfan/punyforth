@@ -751,10 +751,10 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
   repeat 
   drop ;
 
-80 str: "google.com" TCP netcon-connect constant: SOCKET
-SOCKET str: "GET / HTTP/1.1\r\n\r\n" netcon-write
-SOCKET fetch
-SOCKET netcon-dispose
+80 str: "google.com" TCP netcon-connect constant: socket
+socket str: "GET / HTTP/1.1\r\n\r\n" netcon-write
+socket fetch
+socket netcon-dispose
 ```
 
 ##### UDP client
