@@ -4,7 +4,7 @@
 
 *Please note this is under development*
 
-Punyforth is a simple, stack-based, [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) inspired programming language that primarily targets Internet of Things (IOT) devices, like the [ESP8266](https://en.wikipedia.org/wiki/ESP8266). The ESP8266 is a low-cost Wi-Fi capable chip with a 80 MHz Xtensa LX3 CPU, TCP/IP stack, GPIO pins and 512 KiB to 4 MiB flash memory. It is widely used in IoT applications and home automation projects.
+Punyforth is a simple, stack-based, [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language)) inspired programming language that primarily targets Internet of Things (IOT) devices, like the [ESP8266](https://en.wikipedia.org/wiki/ESP8266). The ESP8266 is a low-cost Wi-Fi capable chip with a 80 MHz Xtensa LX3 CPU, TCP/IP stack, GPIO pins and 512 KiB to 4 MiB flash memory. It is widely used in IoT applications and home automation projects.
 
 Punyforth also runs on x86 (Linux), ARM (Raspberry PI) but these are *not* the primary supported targets.
 
@@ -103,9 +103,9 @@ For example the above code could have been expressed the following way:
 
 See the chapter about quotations and combinators for more information.
 
-### Differences between Punyforth and other FORTH systems
+### Differences between Punyforth and other Forth systems
 
-Punyforth is heavily inspired by the [FORTH](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other FORTH systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in FORTH).
+Punyforth is heavily inspired by the [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other Forth systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in Forth).
 
 ### Some of the differences
 * Punyforth is case sensitive
@@ -126,7 +126,7 @@ The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. I
 
 ### The syntax
 
-Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number (everything in FORTH is either a word or a number). Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
+Forth has almost no syntax. It grabs tokens separated by whitespace, looks them up in a dictionary then executes either their compilation or interpretation semantic. If the token is not found in the dictionary, it tries to convert it to a number (everything in Forth is either a word or a number). Because of the postfix notation there are no precedence rules and parentheses. Punyforth, unlike most other Forth systems, is case-sensitive.
 
 ### Extending the dictionary
 
@@ -442,7 +442,7 @@ Because the usage of *override*, the *myword* in the second defintion will refer
 
 ### Quotations
 
-A quotation is an anonymous word inside an other word, similar than a lambda expression in other languages. Quotations don't act as lexical closures, because there are no locals in FORTH to close over. The word *{* starts compiling the quotation body into the current word definition. The word *}* ends the quotation by compiling an exit word into the quotation.
+A quotation is an anonymous word inside an other word, similar than a lambda expression in other languages. Quotations don't act as lexical closures, because there are no locals in Forth to close over. The word *{* starts compiling the quotation body into the current word definition. The word *}* ends the quotation by compiling an exit word into the quotation.
 
 ```forth
 : a-word-definition ( -- )
