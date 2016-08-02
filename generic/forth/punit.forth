@@ -1,6 +1,9 @@
 marker: -punit
 
+\ Asserts that the top-most item of the stack is true.
 : assert ( bool -- | throws:EASSERT ) invert if EASSERT throw then ;
+
+\ Asserts that two top-most items on the stack are equal. 
 : =assert ( n1 n2 -- | throws:EASSERT )
     2dup <> if 
         swap print: '(' . space . print: ' <>)' 
@@ -60,6 +63,8 @@ marker: -punit
     then
     cr ;
 
+\ Runs all unit tests then prints out a test report.
+\ Words with name starting with test: prefix are treated as unit tests.
 : test ( -- )
     cr
     test-reset
@@ -75,6 +80,7 @@ marker: -punit
     drop
     test-report ;
 
+\ Runs a single unit tests then prints out the test report.
 : test: ( "testname" -- )
     cr test-reset
     word find dup 0<> if

@@ -53,7 +53,7 @@ constant: RingBuffer
     1+ swap %
     swap .i ! ;
 
-: ringbuf-enqueue ( element ringbuffer -- )
+: ringbuf-enqueue ( element ringbuffer -- | EOVERFLOW )
     dup ringbuf-full? if
         EOVERFLOW throw
     then
@@ -61,7 +61,7 @@ constant: RingBuffer
     back-slot !
     added ;
 
-: ringbuf-dequeue ( ringbuffer -- element )
+: ringbuf-dequeue ( ringbuffer -- element | EUNDERFLOW )
     dup ringbuf-empty? if
         EUNDERFLOW throw
     then

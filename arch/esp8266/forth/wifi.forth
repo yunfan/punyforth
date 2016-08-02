@@ -1,11 +1,3 @@
-\ Station mode example:
-\   str: "*****" str: "some-ssid" wifi-connect
-
-\ AP mode example:
-\   172 16 0 1 >ipv4 wifi-set-ip
-\   1 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
-\   4 172 16 0 2 >ipv4 dhcpd-start
-
 0 constant: NULL_MODE
 1 constant: STATION_MODE
 2 constant: SOFTAP_MODE
@@ -32,11 +24,19 @@
 : check-status ( status -- | throws:EWIFI )
     1 <> if EWIFI throw then ;
     
+\ Connect to an existing Wi-Fi access point with the given ssid and password
+\ For example:
+\   str: "ap-pass" str: "ap-ssid" wifi-connect
 : wifi-connect ( password ssid  -- | throws:EWIFI )
     STATION_MODE wifi-set-mode check-status
     wifi-set-station-config check-status
     wifi-station-connect check-status ;
 
+\ Creates an access point mode with the given properties
+\ For example:
+\   172 16 0 1 >ipv4 wifi-set-ip
+\   1 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
+\   4 172 16 0 2 >ipv4 dhcpd-start
 : wifi-softap ( max-connections channels hidden authmode password ssid -- | throws:EWIFI )
     SOFTAP_MODE wifi-set-mode check-status
     wifi-set-softap-config check-status ;
