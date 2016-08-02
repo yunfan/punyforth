@@ -713,9 +713,9 @@ str: "password" str: "existing-ssid" wifi-connect
 In AP mode, the ESP8266 acts as an central connection point, which wireless clients (smartphones, laptops) can connect to. In this mode you have to choose an IP address for the ESP and an IP range for the clients. Client IP addresses are assigned by the [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) server.
 
 ```forth
-172 16 0 1 >ipv4 wifi-set-ip
+172 16 0 1 >ipv4 wifi-set-ip                                      \ AP ip is 172.16.0.1
 1 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
-4 172 16 0 2 >ipv4 dhcpd-start
+4 172 16 0 2 >ipv4 dhcpd-start                                    \ dhcp lease time = 4, first client ip is 172.16.0.2
 ```    
 
 The Wi-Fi settings are persistently stored by the ESP8266, there is no need to setup the Wi-Fi at every startup.
