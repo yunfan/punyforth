@@ -46,13 +46,15 @@
 : netcon-listen ( netcon -- | throws:ENETCON ) override
     netcon-listen check-error ;
 
-\ Creates a TCP server by binding a connection to the given port host then sets into listen mode
-\ Leaves the netcon connection associated to the server socket on the stack
+\ Create a TCP server by binding a connection to the given port host.
+\ Leaves a netcon connection associated to the server socket on the stack.
 : netcon-tcp-server ( port host -- netcon | throws:ENETCON )
     TCP netcon-new
     ['] netcon-bind keep
     dup netcon-listen ;
-    
+
+\ Create a UDP server by binding a connection to the given port host.
+\ Leaves a netcon connection associated to the server socket on the stack.
 : netcon-udp-server ( port host -- netcon | throws:ENETCON )
     UDP netcon-new ['] netcon-bind keep ;
     
@@ -70,7 +72,7 @@
     again ;
 
 \ Write the content of the given buffer to a UDP socket.
-: netcon-send ( netcon buffer len -- | throws:ENETCON ) override
+: netcon-send-buf ( netcon buffer len -- | throws:ENETCON )
     swap rot netcon-send
     check-error ;
     

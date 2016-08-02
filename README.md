@@ -764,7 +764,7 @@ str: "Lorem ipsum" constant: data
 str: "192.168.0.3" constant: SERVER_IP
 8005 constant: SERVER_PORT
 SERVER_PORT SERVER_IP UDP netcon-connect
-dup data 11 netcon-send
+dup data 11 netcon-send-buf
 netcon-dispose
 ```
 
