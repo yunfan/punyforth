@@ -559,63 +559,6 @@ TODO
 
 TODO
 
-```forth
-: constant: ( n -- ) 
-    create: , 
-    does> @ ;
-
-: create:
-    createheader enterdoes , 0 , ;     \ write enterdoes to the code field and store a dummy addres for the behavior
-    
-: does>
-    r> lastword link>body ! ;          \ store the pointer to the behavior into the body of the lastword
-
-( Examples )
-
--1 constant: TRUE 
-0 constant: FALSE
-
-```
-
-#### How *does>* it work?
-
-*constant* is a defining word that creates other words like *TRUE* or *FALSE*.
-
-The word *does>* writes the pointer to the behavior (e.g. @) into the first cell of the recently defined word (e.g. TRUE).
-
-*ENTERDOES* is similar than *ENTERCOL*. It pushes the data field (e.g. -1) to the stack before invoking the behavior.
-
-Here are the dictionary entries of the compiled *constant* and the word *TRUE* created by constant.
-
-<pre>                
-                             address of ENTERCOL                
-                             /                                  
-                            |                                                                behavior
-+-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
-| LNK | 8 | constant: | 1 | CW | xt_create | xt_, | xt_r> | xt_lastword | xt_link>body | xt_! | xt_@ | xt_exit |
-+-----+---+----------+---+----+-----------+------+-------+-------------+--------------+------+------+---------+
-                                                                                               /
-                                             behavior pointer  /```````````````````````````````
-                                                              |    
-                                  +-----+---+------+---+----+----+----+     
-                                  | LNK | 4 | TRUE | 1 | CW | bp | -1 |     
-                                  +-----+---+------+---+----+----+----+     
-                                                         /        data       
-                                                        |
-                                              address of ENTERDOES
-</pre>
-
-```assembly
-ENTERDOES:
-    sub ebp, CELLS
-    mov [ebp], esi          // save esi to return stack
-    add eax, CELLS          // eax points to the codeword field, skip this
-    mov esi, [eax]          // after the codeword there is the behavior pointer
-    add eax, CELLS          // after the behavior pointer there is the data field
-    push eax               
-    NEXT                    // jump to behavour
-```
-
 ### Other examples of create: does>
 
 ```forth
