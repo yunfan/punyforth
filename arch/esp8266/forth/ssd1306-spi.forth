@@ -80,7 +80,7 @@
 64  constant: DISPLAY_HEIGHT
 
 exception: ESSD1306
-exception: constant: ESSD1306_WRITE
+exception: ESSD1306_WRITE
 
 DISPLAY_WIDTH DISPLAY_HEIGHT * 8 / constant: BUFFER_SIZE
 
