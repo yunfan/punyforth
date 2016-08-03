@@ -318,9 +318,7 @@ exception: EZERODIV
 : test-div ( q d -- r )
   ['] div catch                     \ call div in a "catch block". If no exception was thrown, the error code is 0
     case
-      EZERODIV of
-        print: "Error: division by zero"
-      endof
+      EZERODIV of ex-type endof     \ print exception in case of zero division
       throw                         \ there was an other exception, rethrow it
     endcase ; 
 ```
