@@ -57,7 +57,7 @@ Connection: close\r\n
         print: "Client connected: " client @ . cr
         ['] serve-client catch dup 0<> if
             print: 'error while handling client: ' client @ .
-            print: ' exception: ' . cr
+            ex-type 
         else
             drop
         then

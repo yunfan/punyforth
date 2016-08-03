@@ -15,7 +15,7 @@ buffer-len buffer: buffer
         ECONVERT throw
     then ;
     
-2048 constant: EHTTP
+exception: EHTTP
     
 : read-http-code ( netconn -- http-code | throws:EHTTP )
     buffer-len buffer netcon-readln

@@ -3,7 +3,7 @@
 buffer-size buffer: line-buffer
 0 init-variable: irc-con
 
-6000 constant: IRC_ECLOSED
+exception: EIRC
 
 : connect ( -- )
     6667 str: "irc.freenode.net" TCP netcon-connect irc-con ! ;
@@ -21,7 +21,7 @@ buffer-size buffer: line-buffer
     
 : readln ( -- str )
     irc-con @ buffer-size line-buffer netcon-readln -1 = if
-        IRC_ECLOSED throw
+        EIRC throw
     then    
     line-buffer ;
         

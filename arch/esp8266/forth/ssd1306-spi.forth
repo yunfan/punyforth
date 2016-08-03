@@ -79,8 +79,8 @@
 128 constant: DISPLAY_WIDTH
 64  constant: DISPLAY_HEIGHT
 
-6000 constant: SSD1306_ERROR
-6001 constant: SSD1306_WRITE_ERROR
+exception: ESSD1306
+exception: constant: ESSD1306_WRITE
 
 DISPLAY_WIDTH DISPLAY_HEIGHT * 8 / constant: BUFFER_SIZE
 
@@ -100,17 +100,17 @@ BUFFER_SIZE byte-array: screen-output
     DC  GPIO_LOW gpio-write
     RST GPIO_LOW gpio-write ;
 
-: check-write-result ( code -- | SSD1306_WRITE_ERROR )
+: check-write-result ( code -- | ESSD1306_WRITE )
     255 <> if 
-        SSD1306_WRITE_ERROR throw 
+        ESSD1306_WRITE throw 
     then ;
 
-: write-command ( cmd -- | SSD1306_WRITE_ERROR ) 
+: write-command ( cmd -- | ESSD1306_WRITE ) 
     DC GPIO_LOW gpio-write
     BUS spi-send8 
     check-write-result ;
 
-: write-data ( data -- | SSD1306_WRITE_ERROR ) 
+: write-data ( data -- | ESSD1306_WRITE ) 
     DC GPIO_HIGH gpio-write
     BUS spi-send8 
     check-write-result ;
@@ -199,7 +199,7 @@ BUFFER_SIZE byte-array: screen-output
     0 screen1
     BUS 
     spi-send BUFFER_SIZE <> if
-        SSD1306_ERROR throw
+        ESSD1306 throw
     then ;
 
 : display-clear ( -- )
@@ -210,11 +210,11 @@ BUFFER_SIZE byte-array: screen-output
     swap 127 and 
     swap 63 and ;
 
-: display-init ( -- | SSD1306_ERROR )
+: display-init ( -- | ESSD1306 )
     display-setup-wiring
     TRUE SPI_BIG_ENDIAN TRUE SPI_FREQ_DIV_4M SPI_MODE0 BUS 
     spi-init 1 <> if
-        SSD1306_ERROR throw
+        ESSD1306 throw
     then
     display-on
     display-send-init-sequence

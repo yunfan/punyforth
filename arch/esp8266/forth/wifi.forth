@@ -11,7 +11,7 @@
 4 constant: AUTH_WPA_WPA2_PSK
 5 constant: AUTH_MAX
 
-5000 constant: EWIFI
+exception: EWIFI
 
 : >ipv4 ( octet1 octet2 octet3 octet4 -- n )
     255 and 24 lshift >r

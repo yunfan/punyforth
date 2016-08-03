@@ -118,13 +118,16 @@
 -1 constant: TRUE 
  0 constant: FALSE
 
-0  constant: EOK
-85 constant: EUNDERFLOW
-86 constant: EOVERFLOW
-65 constant: EASSERT
-40 constant: ENOTFOUND
-67 constant: ECONVERT
-69 constant: EESCAPE
+: exception: ( "name" -- ) ( -- xt )
+    create: lastword ,
+    does> @ ;
+
+exception: EUNDERFLOW
+exception: EOVERFLOW
+exception: EASSERT
+exception: ENOTFOUND
+exception: ECONVERT
+exception: EESCAPE
 
 : ['], ['] ['] , ;
 
@@ -144,14 +147,14 @@ defer: handler
 0 init-variable: var-handler            \ stores the address of the nearest exception handler
 : single-handler ( -- a ) var-handler ; \ single threaded global handler
 
-: catch ( xt -- errcode | 0 )
+: catch ( xt -- exception | 0 )
     sp@ >r handler @ >r          \ save current stack pointer and previous handler (RS: sp h)
     rp@ handler !                \ set the currend handler to this
     execute                      \ execute word that potentially throws exception
     r> handler !                 \ word returned without exception, restore previous handler
     r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
 
-: throw ( i*x errcode -- i*x errcode | 0 )
+: throw ( i*x exception -- i*x exception | 0 )
     dup 0= if drop exit then     \ 0 means no error, drop errorcode exit from execute
     handler @ 0= if              \ this was an uncaught exception
         unhandled
@@ -409,15 +412,22 @@ defer: r0 ' r0 is: _r0
 
 : stack-hide ( -- ) 0 prompt ! ;
 
-: heap? ( a -- bool ) heap-start over heap-end between? ;
+: heap? ( a -- bool ) heap-start swap heap-end between? ;
+
+: ex-type ( exception -- )
+    dup heap? if 
+        link-type 
+    else 
+        .
+    then ;
 
 : traceback ( code -- )
-    cr print: "Exeption: " .
+    cr print: "Exeption: " ex-type
     print: " rdepth: " rdepth . cr
     rdepth 3 do
         print: "  at "
         rp@ i cells + @                     \ i. return address
-        heap? if
+        dup heap? if
             cell - @                        \ instruction before the return address 
             lastword    
             begin

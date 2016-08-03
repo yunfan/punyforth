@@ -43,7 +43,7 @@ marker: -punit
             println: " FAIL" 
             1 failed c+!
         endof
-        print: " ERROR: " . cr
+        print: " ERROR: " ex-type cr
         1 errors c+!
     endcase ;
 
