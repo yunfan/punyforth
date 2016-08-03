@@ -314,13 +314,6 @@ exception: EZERODIV
     else 
       / 
     then ;
-    
-12 0 div
-
-Exeption: EZERODIV rdepth: 5
-  at unhandled (134525120)
-  at throw (134525312)
-(stack 12 0)
 ```
 
 ```forth
