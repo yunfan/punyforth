@@ -337,7 +337,7 @@ You can modify this behaviour by overriding the *unhandled* deferred word.
 
 ```forth
 : my-uncaught-exception-handler ( code -- )
-    cr print: "Uncaught exception: " . cr
+    cr print: "Uncaught exception: " ex-type
     abort ;
     
 ' unhandled is: my-uncaught-exception-handler
