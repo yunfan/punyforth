@@ -316,13 +316,13 @@ exception: EZERODIV
     then ;
 
 : test-div ( q d -- r )
-  ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
-      dup EZERODIV = if
+  ['] div catch                     \ call div in a "catch block". If no exception was thrown, the error code is 0
+    case
+      EZERODIV of
         print: "Error: division by zero"
-      else
-        throw                       \ there was an other error, rethrow it
-      then
-    then drop ; 
+      endof
+      throw                         \ there was an other exception, rethrow it
+    endcase ; 
 ```
 
 The word *catch* expects an execution token of a word that potentially throws an exception.
