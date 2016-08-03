@@ -314,7 +314,16 @@ exception: EZERODIV
     else 
       / 
     then ;
+    
+12 0 div
 
+Exeption: EZERODIV rdepth: 5
+  at unhandled (134525120)
+  at throw (134525312)
+(stack 12 0)
+```
+
+```forth
 : test-div ( q d -- r )
   ['] div catch                              \ call div in a "catch block". If no exception was thrown, the error code is 0
     case
