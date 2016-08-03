@@ -301,23 +301,23 @@ Control structres are compile time words with no interpretation semantics. They 
 
 ### Exception handling
 
-If a word faces an error condition it can *throw* an exception. Exceptions are represented as numbers in Punyforth. Your can provide exception handlers to *catch* exceptions. 
+If a word faces an error condition it can *throw* an exception. Your can provide exception handlers to *catch* exceptions. 
 
 For example:
 
 ```forth
-1099 constant: division_by_zero \ define a constant: for the exception
+exception: EZERODIV
 
-: div ( q d -- r | throws:division_by_zero ) \ this word throws an exception in case of division by zero
+: div ( q d -- r | throws:EZERODIV ) \ this word throws an exception in case of division by zero
     dup 0= if 
-      division_by_zero throw 
+      EZERODIV throw 
     else 
       / 
     then ;
 
 : test-div ( q d -- r )
   ['] div catch dup 0 <> if         \ call div in a "catch block". If no exception was thrown, the error code is 0
-      dup division_by_zero = if     \ error code is 1099 indicating division by zero
+      dup EZERODIV = if
         print: "Error: division by zero"
       else
         throw                       \ there was an other error, rethrow it
