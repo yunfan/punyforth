@@ -54,7 +54,7 @@ exception: EIRC
     begin    
         println: "Starting IRC bot"
         ['] run catch dup 0<> if            
-            print: 'Exception in ircbot: ' . cr
+            print: 'Exception in ircbot: ' ex-type cr
         else
             drop
         then

@@ -1,7 +1,7 @@
 import sys, os
 from compiler.ast import flatten
 
-FLASH_SPACE = 0x20000 - 0x18000 
+FLASH_SPACE = 180*1024
 
 available_modules = {
     'core' : '../../../generic/forth/core.forth',
