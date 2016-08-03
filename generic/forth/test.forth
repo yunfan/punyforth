@@ -1,8 +1,10 @@
 marker: -tests
 
-: factorial ( n -- n! | err:1024 )
+exception: EFAC
+
+: factorial ( n -- n! | throws:EFAC )
        dup 0< if
-           drop 1024 throw
+           drop EFAC throw
        then
        dup 0= if
            drop 1
@@ -202,7 +204,7 @@ defer: deferred-word
 
 : test:core-catch
    sp@ test_var1 !
-   ['] negative-factorial catch 1024 =assert
+   ['] negative-factorial catch EFAC =assert
    ['] 1nested-throw2 catch 30 =assert
    ['] 2nested-throw2 catch 20 =assert
    ['] 3nested-throw2 catch drop 42 =assert
