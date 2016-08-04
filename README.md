@@ -700,7 +700,7 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
 ##### Simple HTTP request
 
 ```forth
-1024 buffer: line
+128 buffer: line
 
 : fetch ( netcon -- )
   begin
