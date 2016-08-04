@@ -571,7 +571,7 @@ One of the simplest application of *create: does>* is the definition of a consta
 COLUMNS . \ prints out 80
 ```
 
-- First with push the value 80 to the data stack
+- First we push the value 80 to the data stack
 - Then we invoke the *constant:* word
 - The word *create:* reads the name of the constant (COLUMNS) from the input stream and creates a new dictionary header
 - The word *,* stores the value on the stack (80) in the body of the newly created dictionary entry
