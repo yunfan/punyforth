@@ -727,6 +727,8 @@ dup data 11 netcon-send-buf
 netcon-dispose
 ```
 
+###### Python test server
+
 ```python
 import select, socket
 
@@ -753,6 +755,8 @@ print: 'received bytes: ' . cr
 data type
 netcon-dispose
 ```
+
+###### Python test client
 
 ```python
 import socket
