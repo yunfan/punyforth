@@ -799,7 +799,7 @@ task: task-consumer
 
 \ this word is executed by the task
 : consumer ( task -- )
-    activate                            \ actiavte task
+    activate                            \ activate task
     begin    
         mailbox1 mailbox-receive .      \ receive and print one item from the mailbox
         println: "received by consumer"
