@@ -571,30 +571,24 @@ One of the simplest application of *create: does>* is the definition of a consta
 COLUMNS . \ prints out 80
 ```
 
-- First with put the value 80 to the data stack
+- First with push the value 80 to the data stack
 - Then we invoke the *constant:* word
 - The word *create:* reads the name of the constant (COLUMNS) from the input stream and creates a new dictionary header
-- The word *,* stores the value from the stack (80) in the body of the newly defines dictionary entry
+- The word *,* stores the value on the stack (80) in the body of the newly created dictionary entry
 - The *does>* sets the action to be the *@* (fetch) word which will read the constant value from the body
 
-### Other examples of create: does>
+#### Other examples of create: does>
 
 ```forth
 : array: ( size "name" -- ) ( index -- addr )
     create: cells allot
     does> swap cells + ;
     
-10 array: numbers
+10 array: numbers \ create an array with 10 elements
 
-: fill-numbers ( size )
-    0 do i i numbers ! loop ;
-    
-10 fill-numbers
+12 3 array !      \ store 12 in the 3rd element
+3 array @         \ fetch the 3rd element
 
-: print-numbers ( size )
-    0 do i numbers @ . cr loop ;
-    
-10 print-numbers    
 ```
 
 ```forth
