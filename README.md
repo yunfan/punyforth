@@ -792,7 +792,7 @@ Often tasks need to communicate with each other. A mailbox is a fixed size block
 
 ```forth
 \ create a mailbox with size 5
-5 mailbox: mailbox1
+5 mailbox-new: mailbox1
 
 \ create a task for the consumer
 task: task-consumer
@@ -801,16 +801,16 @@ task: task-consumer
 : consumer ( task -- )
     activate                            \ actiavte task
     begin    
-        mailbox1 receive .              \ receive and print one item from the mailbox
+        mailbox1 mailbox-receive .      \ receive and print one item from the mailbox
         println: "received by consumer"
         pause                           \ allow other tasks to run
     again
     deactivate ;                        \ deactivate task
 
-\ multi                                   \ switch to multitask mode
-\ task-consumer consumer                  \ run the consumer
-\ 123 mailbox1 send                       \ send some numbers to the consumer
-\ 456 mailbox1 send
+multi                                   \ switch to multitask mode
+task-consumer consumer                  \ run the consumer
+123 mailbox1 mailbox-send               \ send some numbers to the consumer
+456 mailbox1 mailbox-send
 ```
 
 ##### Examples
