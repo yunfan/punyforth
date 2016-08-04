@@ -700,11 +700,11 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
 ##### Simple HTTP request
 
 ```forth
-128 buffer: line
+512 buffer: line
 
 : fetch ( netcon -- )
   begin
-    dup 128 line netcon-readln 0<>
+    dup 512 line netcon-readln -1 <> 
   while
     line type cr
   repeat 
