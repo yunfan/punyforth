@@ -30,6 +30,9 @@
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
 
+: +! ( n var -- ) dup @ rot + swap ! ;
+: c+! ( n var -- ) dup c@ rot + swap c! ;
+
 : prepare-forward-ref ( -- a) here 0 , ;
 : resolve-forward-ref ( a -- ) dup here swap - cell - swap ! ;
 
@@ -53,6 +56,8 @@
 
 : ? ( a -- ) @ . ;
 
+: unloop r> r> r> 2drop >r ;
+
 : do immediate compile-time
     ['] swap , ['] >r , ['] >r ,
     here ; \ prepare backref
@@ -64,21 +69,18 @@
     ['] r> , ['] 1+ , ['] >r ,
     ['] r2dup , ['] r> , ['] r> ,
     ['] >= , ['] branch0 , backref,
-    ['] r> , ['] r> , ['] 2drop , ;
+    ['] unloop , ;
 
-: +loop-terminate? ( n limit i -- bool )
-    swap 1+
-    - dup rot + xor 0 < ;          \ (index-limit) and (index-limit+n) have different sign?
+: end? ( increment -- bool )
+    rp@ cell + @                   \ i+increment
+    rp@ 2 cells + @                \ limit
+    - dup rot - xor 0< ;           \ (index-limit) and (index-limit+increment) have different sign?
 
 : +loop immediate compile-time     
-    ['] dup ,
-    ['] r> , ['] + , ['] >r ,
-    ['] r2dup , ['] r> , ['] r> ,
-    ['] +loop-terminate? ,
-    ['] branch0 , backref,
-    ['] r> , ['] r> , ['] 2drop , ;
-
-: unloop r> r> r> 2drop >r ;
+    ['] dup ,                      \ increment
+    ['] rp@ , ['] +! ,    
+    ['] end? , ['] branch0 , backref,
+    ['] unloop , ;
 
 : while immediate compile-time
     ['] branch0 , prepare-forward-ref ;
@@ -130,9 +132,6 @@ exception: ECONVERT
 exception: EESCAPE
 
 : ['], ['] ['] , ;
-
-: +! ( n var -- ) dup @ rot + swap ! ;
-: c+! ( n var -- ) dup c@ rot + swap c! ;
 
 : xt>body ( xt -- a ) 2 cells + ;
 
