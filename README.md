@@ -646,14 +646,14 @@ A unit test can either pass/fail or raise an error. Failure means an assertion w
 
 ```forth
 : test:add 1 2 + 4 =assert ;
-: test:sub 123 throw ;
+: test:sub some-exception throw ;
 
 test
 ```
 ```text
 2 tests, 0 passed, 1 failed, 1 errors
 test:add(3 4 <>) FAIL
-test:sub ERROR: 123
+test:sub ERROR: some-exception
 There were failures
 ```
 
