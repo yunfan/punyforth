@@ -4,7 +4,7 @@ wifi-ip constant: HOST
 0 init-variable: client
 128 buffer: line 
     
-1 mailbox-new: connections
+1 mailbox: connections
 0 task: repl-server-task
 0 task: repl-worker-task
 

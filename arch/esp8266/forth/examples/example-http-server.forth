@@ -13,7 +13,7 @@ constant: WorkerSpace
 : line ( -- a ) user-space .line ;
 
 \ a mailbox used for communication between server and worker tasks
-4 mailbox-new: connections
+4 mailbox: connections
 \ server and worker task allocations
 0 task: server-task
 WorkerSpace task: worker-task1

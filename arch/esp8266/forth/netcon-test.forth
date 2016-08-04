@@ -9,7 +9,7 @@ constant: WorkerSpace
 : client ( -- a ) user-space .client ;
 : line ( -- a ) user-space .line ;
 
-4 mailbox-new: connections
+4 mailbox: connections
 0 task: echo-server-task
 WorkerSpace task: echo-worker-task1
 WorkerSpace task: echo-worker-task2

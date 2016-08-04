@@ -1,13 +1,13 @@
 marker: -ringbuf-test
 
 : test:ringbuf-initially-empty  
-    5 ringbuf-new
+    5 ringbuf
     dup ringbuf-size 0 =assert 
     dup ringbuf-full? invert assert
         ringbuf-empty? assert ;
 
 : test:ringbuf-ringbuf-size-increases-when-adding
-    5 ringbuf-new
+    5 ringbuf
     1 over ringbuf-enqueue
     dup ringbuf-size 1 =assert 
     2 over ringbuf-enqueue
@@ -16,7 +16,7 @@ marker: -ringbuf-test
         ringbuf-full? invert assert ;
 
 : test:ringbuf-ringbuf-size-decreases-when-removing
-    5 ringbuf-new
+    5 ringbuf
     1 over ringbuf-enqueue
     2 over ringbuf-enqueue
     dup ringbuf-dequeue drop
@@ -26,7 +26,7 @@ marker: -ringbuf-test
         ringbuf-empty? assert ;
 
 : test:ringbuf-becomes-empty-after-removing-when-full
-    2 ringbuf-new
+    2 ringbuf
     1 over ringbuf-enqueue
     2 over ringbuf-enqueue
     dup ringbuf-full? assert
@@ -37,7 +37,7 @@ marker: -ringbuf-test
         ringbuf-full? invert assert ;
 
 : test:ringbuf-has-circular-property
-    5 ringbuf-new
+    5 ringbuf
     1 over ringbuf-enqueue
     dup ringbuf-dequeue 1 =assert
     dup ringbuf-full? invert assert 
@@ -57,11 +57,11 @@ marker: -ringbuf-test
         ringbuf-empty? assert ;
 
 : test:ringbuf-underflow-when-removing-empty
-    { 8 ringbuf-new ringbuf-dequeue } catch EUNDERFLOW =assert ;    
+    { 8 ringbuf ringbuf-dequeue } catch EUNDERFLOW =assert ;    
 
 : test:ringbuf-overflow-when-adding-more-than-allowed
     {
-        2 ringbuf-new
+        2 ringbuf
         1 over ringbuf-enqueue
         2 over ringbuf-enqueue
         3 over ringbuf-enqueue

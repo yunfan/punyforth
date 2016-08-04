@@ -3,17 +3,17 @@ struct
     cell field: .j
     cell field: .capacity
     cell field: .size
-constant: RingBuffer
+constant: RingBuf
 
-: ringbuf-new ( capacity -- ringbuffer )
+: ringbuf ( capacity -- ringbuffer )
     here tuck
-    over cells RingBuffer + allot
+    over cells RingBuf + allot
     0 over .i !
     0 over .j !
     0 over .size !
     .capacity ! ;
 
-: ringbuf-new: ( capacity ) ( -- ringbuffer )
+: ringbuf: ( capacity ) ( -- ringbuffer )
     create: ringbuf-new drop
     does> ;
 
@@ -25,7 +25,7 @@ constant: RingBuffer
     { .size @ } { .capacity @ } bi = ;   
 
 : slot ( index ringbuffer -- adr )
-    RingBuffer + swap cells + ;
+    RingBuf + swap cells + ;
 
 : back-slot ( ringbuffer -- adr )
     dup .j @
