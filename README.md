@@ -792,7 +792,7 @@ Often tasks need to communicate with each other. A mailbox is a fixed size block
 
 ```forth
 \ create a mailbox with size 5
-5 mailbox-new: mailbox1
+5 mailbox: mailbox1
 
 \ create a task for the consumer
 task: task-consumer
