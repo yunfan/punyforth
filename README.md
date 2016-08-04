@@ -579,6 +579,8 @@ COLUMNS . \ prints out 80
 
 #### Other examples of create: does>
 
+##### Indexed array
+
 ```forth
 : array: ( size "name" -- ) ( index -- addr )
     create: cells allot
@@ -586,10 +588,12 @@ COLUMNS . \ prints out 80
     
 10 array: numbers \ create an array with 10 elements
 
-12 3 array !      \ store 12 in the 3rd element
-3 array @         \ fetch the 3rd element
+12 3 numbers !      \ store 12 in the 3rd element
+3 numbers @         \ fetch the 3rd element
 
 ```
+
+##### Structs
 
 ```forth
 : struct 0 ;
