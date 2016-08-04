@@ -598,20 +598,20 @@ COLUMNS . \ prints out 80
 ```forth
 : struct 0 ;
 
-: field 
+: field: 
   create: over , + 
   does> @ + ;
 
 struct 
-  cell field width 
-  cell field height
+  cell field: .width 
+  cell field: .height
 constant Rect
 
 : new-rect
   Rect create: allot does> ;
   
 : area ( rect -- area ) 
-  dup width @ swap height @ * ;  
+  dup .width @ swap .height @ * ;  
   
 new-rect r1
   
