@@ -571,11 +571,11 @@ One of the simplest application of *create: does>* is the definition of a consta
 COLUMNS . \ prints out 80
 ```
 
-# First with put the value 80 to the data stack
-# Then we invoke the *constant:* word
-# The word *create:* reads the name of the constant (COLUMNS) from the input stream and creates a new dictionary header
-# The word *,* stores the value from the stack (80) in the body of the newly defines dictionary entry
-# The *does>* sets the action to be the *@* (fetch) word which will read the constant value from the body
+- First with put the value 80 to the data stack
+- Then we invoke the *constant:* word
+- The word *create:* reads the name of the constant (COLUMNS) from the input stream and creates a new dictionary header
+- The word *,* stores the value from the stack (80) in the body of the newly defines dictionary entry
+- The *does>* sets the action to be the *@* (fetch) word which will read the constant value from the body
 
 ### Other examples of create: does>
 
