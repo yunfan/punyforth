@@ -553,7 +553,9 @@ Applies the quotation to x, then to y.
 
 ### The word *create: does>*
 
-TODO
+The words *create:* and *does>* lets you combine a data structure with an action. You can create multiple instances with different data content and with the same action.
+
+*create:* is a defining work like the *:*. It creates a new dictionary entry with the header but without the body. The name of the newly created definition comes from the input stream. Then you can lay out some data using the *,* (comma) word. The action which will operate on this date can be defined with the help of the *does>* word.
 
 ### About the implementation of *create: does>*
 
