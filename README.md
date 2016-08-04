@@ -557,9 +557,25 @@ The words *create:* and *does>* lets you combine a data structure with an action
 
 *create:* is a defining work like the *:* (colon). It creates a new dictionary entry with the header but without the body. The name of the newly created definition comes from the input stream. Then you can lay out some data using the *,* (comma) word. The action which will operate on this data is the sequence of words that coems after the *does>* part. The pointer to the data is pushed to the stack before invoking the action.
 
-### About the implementation of *create: does>*
+#### Examples
 
-TODO
+One of the simplest application of *create: does>* is the definition of a constant.
+
+``` forth
+: constant: 
+  create: , 
+  does> @ ;
+  
+80 constant: COLUMNS
+
+COLUMNS . \ prints out 80
+```
+
+# First with put the value 80 to the data stack
+# Then we invoke the *constant:* word
+# The word *create:* reads the name of the constant (COLUMNS) from the input stream and creates a new dictionary header
+# The word *,* stores the value from the stack (80) in the body of the newly defines dictionary entry
+# The *does>* sets the action to be the *@* (fetch) word which will read the constant value from the body
 
 ### Other examples of create: does>
 
