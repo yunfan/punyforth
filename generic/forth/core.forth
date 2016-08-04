@@ -67,7 +67,7 @@
 
 : loop immediate compile-time
     ['] r> , ['] 1+ , ['] >r ,
-    ['] r2dup , ['] r> , ['] r> ,
+    ['] i , ['] rp@ , ['] cell , ['] + , ['] @ , \ index limit
     ['] >= , ['] branch0 , backref,
     ['] unloop , ;
 

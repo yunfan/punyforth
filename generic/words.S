@@ -37,25 +37,6 @@ defword "tuck",4,tuck,REGULAR /* ( a b -- b a b ) */
     .int xt_swap, xt_over
     .int xt_exit
 
-defword "rdup",4,rdup,REGULAR
-    .int xt_rpop                                    // because this is a word there is a return address
-    .int xt_rpop, xt_dup, xt_rpush, xt_rpush
-    .int xt_rpush                                   // keep the return address
-    .int xt_exit
-
-defword "r2dup",5,r2dup,REGULAR
-    .int xt_rpop                                    // return address
-    .int xt_rpop, xt_rpop, xt_dup2
-    .int xt_rpush, xt_rpush, xt_rpush, xt_rpush
-    .int xt_rpush                                   // restore the return address
-    .int xt_exit
-
-defword "rswap",5,rswap,REGULAR                           
-    .int xt_rpop                                    // careful about the return address
-    .int xt_rpop, xt_rpop, xt_swap
-    .int xt_rpush, xt_rpush, xt_rpush
-    .int xt_exit
-
 defword "_s0",3,us0,REGULAR
     .int xt_btick, _M stack_top, xt_fetch
     .int xt_exit
@@ -351,7 +332,7 @@ tonum_loop:
     .int xt_rot                                                                   // ( a mul digit*mul res )
     .int xt_plus                                                                  // ( a mul res )
     .int xt_swap, xt_btick, 10, xt_multiply                                       // ( a res mul )
-    .int xt_rdup, xt_rpop, xt_branch0
+    .int xt_rpat, xt_fetch, xt_branch0
     lbl tonum_done
     .int xt_rpop, xt_dec, xt_rpush                                                // decrement length on return stack    
     .int xt_branch
