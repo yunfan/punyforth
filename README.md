@@ -103,7 +103,7 @@ See the chapter about quotations and combinators for more information.
 
 Punyforth is heavily inspired by the [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other Forth systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in Forth).
 
-### Some of the differences
+#### Some of the differences
 * Punyforth is case sensitive
 * Strings are null-terminated
 * Strings are created and printed differently (*str: "foobar"*, *print: "foobar"* instead of *s" foobar"*, *." foobar"*)
@@ -653,9 +653,9 @@ test:sub ERROR: some-exception
 There were failures
 ```
 
-### ESP8266 specific things
+## ESP8266 specific things
 
-#### WIFI
+### WIFI
 
 The ESP8266 has a built in Wi-Fi chip that can be used both in access point and station mode (wireless client).
 
@@ -675,9 +675,9 @@ In AP mode, the ESP8266 acts as an central connection point, which wireless clie
 
 The Wi-Fi settings are persistently stored by the ESP8266, there is no need to setup the Wi-Fi at every startup.
 
-#### GPIO
+### GPIO
 
-##### Examples
+#### Examples
 
 ```forth
 2 constant: PIN
@@ -689,11 +689,11 @@ PIN GPIO_LOW gpio-write
 
 See [Philips Hue lightswitch example](arch/esp8266/forth/examples/example-philips-hue-lightswitch.forth) for more information.
 
-#### Netconn
+### Netconn
 
 Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS] (https://en.wikipedia.org/wiki/FreeRTOS). Punyforth provides a wrapper around the Netconn API.
 
-##### Simple HTTP request
+#### Simple HTTP request
 
 ```forth
 512 buffer: line
@@ -712,7 +712,7 @@ socket fetch
 socket netcon-dispose
 ```
 
-##### UDP client
+#### UDP client
 
 ```forth
 str: "Lorem ipsum" constant: data
@@ -723,7 +723,7 @@ dup data 11 netcon-send-buf
 netcon-dispose
 ```
 
-###### Python test server
+##### Python test server
 
 ```python
 import select, socket
@@ -738,7 +738,7 @@ while True:
     print(msg.strip())
 ```
 
-##### UDP server
+#### UDP server
 
 ```forth
 str: "192.168.0.15" constant: HOST
@@ -752,7 +752,7 @@ data type
 netcon-dispose
 ```
 
-###### Python test client
+##### Python test client
 
 ```python
 import socket
@@ -762,7 +762,7 @@ s.sendto(b'hello\r\n', ('192.168.0.15',8000))
 
 See [Simple HTTP Server](arch/esp8266/forth/examples/example-http-server.forth) for more information.
 
-#### Tasks (experimental)
+### Tasks (experimental)
 
 Punyforth supports cooperative multitasking which enables users to run more than one task simultaneously. For example one task may wait for input on a socket, while another one receives commands through the serial port. Punyforth never initiates a context switch by its own. Instead, tasks voluntarily yield control periodically using the word *pause*. Tasks are executed in a round robin fashion.
 
@@ -784,13 +784,13 @@ multi
 my-word
 ```
 
-##### Locks
-##### semaphore 
-##### mutex
-##### wait
-##### signal
+#### Locks
+#### semaphore 
+#### mutex
+#### wait
+#### signal
 
-##### Mailboxes
+#### Mailboxes
 
 Often tasks need to communicate with each other. A mailbox is a fixed size blocking queue where messages can be left for a task. Receiving from an empty mailbox or sending to a full mailbox blocks the current task.
 
@@ -817,7 +817,7 @@ task-consumer consumer                  \ run the consumer
 456 mailbox1 mailbox-send
 ```
 
-##### Examples
+#### Examples
 
 ```forth
 \ create a task for the counter
@@ -836,7 +836,7 @@ multi                                     \ switch to multitask mode
 task-counter counter                      \ run the consumer
 ```
 
-#### Misc
+### Misc
 
 ```forth
 \ Returns the available free dictionary space.
