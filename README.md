@@ -848,9 +848,9 @@ osfreemem ( -- bytes )
 ```
 ```forth
 \ Blocks all running tasks for the specified number of millisecond.
-##### delay ( msec -- ) 
+delay ( msec -- ) 
 ```
 ```forth
 \ Sets the baud rate of the specied uart.
-##### uart-set-bps ( bps uart-number -- ) 
+art-set-bps ( bps uart-number -- ) 
 ```
