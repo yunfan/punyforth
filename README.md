@@ -852,5 +852,5 @@ delay ( msec -- )
 ```
 ```forth
 \ Sets the baud rate of the specied uart.
-art-set-bps ( bps uart-number -- ) 
+uart-set-bps ( bps uart-number -- ) 
 ```
