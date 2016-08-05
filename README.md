@@ -837,3 +837,8 @@ task-counter counter                      \ run the consumer
 ```
 
 #### Misc
+
+##### freemem ( -- bytes ) returns the available free dictionary space
+##### osfreemem ( -- bytes ) returns the available free memory
+##### delay ( msec -- ) blocks all running tasks for the specified number of millisecond
+##### uart-set-bps ( bps uart-number -- ) sets the baud rate of the specied uart
