@@ -787,8 +787,10 @@ my-word
 ```
 
 ##### Locks
-
-semaphore mutex wait signal
+##### semaphore 
+##### mutex
+##### wait
+##### signal
 
 ##### Mailboxes
 
