@@ -113,10 +113,12 @@ defword "1-",2,dec,REGULAR
     .int xt_exit
 .endif
 
+.ifndef xt_cells
 defword "cells",5,cells,REGULAR
     .int xt_cell, xt_multiply
     .int xt_exit
-   
+.endif
+
 defword "cell",4,cell,REGULAR
     .int xt_btick, CELLS
     .int xt_exit
