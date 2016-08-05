@@ -78,7 +78,7 @@ The interpreter pushes the number 1 then the number 2 onto the data stack. It ex
 The following code calculates *a * a + b * b*.
 
 ```forth
-2 3                  \ let's say a is 2 b is 3
+2 3                  \ let's say a is 2, b is 3
 dup * swap dup * + . \ prints out 13
 ```
 
