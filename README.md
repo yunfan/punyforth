@@ -841,16 +841,13 @@ task-counter counter                      \ run the consumer
 ```forth
 \ Returns the available free dictionary space.
 freemem ( -- bytes ) 
-```
-```forth
+
 \ Returns the available free memory.
 osfreemem ( -- bytes ) 
-```
-```forth
+
 \ Blocks all running tasks for the specified number of millisecond.
 delay ( msec -- ) 
-```
-```forth
+
 \ Sets the baud rate of the specied uart.
 uart-set-bps ( bps uart-number -- ) 
 ```
