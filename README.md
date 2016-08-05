@@ -851,3 +851,9 @@ delay ( msec -- )
 \ Sets the baud rate of the specied uart.
 uart-set-bps ( bps uart-number -- ) 
 ```
+
+## Contact
+
+Attila Magyar
+
+<a href="https://twitter.com/zeroflag" class="twitter-follow-button" data-show-count="false">Follow @zeroflag</a><script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
