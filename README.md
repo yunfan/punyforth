@@ -316,7 +316,10 @@ exception: EZERODIV
 : test-div ( q d -- r )
   ['] div catch
     case
-      EZERODIV of print: '/ by zero' endof   \ print exception in case of zero division
+      EZERODIV of 
+        print: '/ by zero'                   \ print exception in case of zero division
+        2drop                                \ drop q d
+      endof   
       throw                                  \ rethrow if it wasn't EZERODIV
     endcase ; 
 ```
