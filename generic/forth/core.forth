@@ -173,11 +173,10 @@ defer: handler
     resolve-forward-ref ;
 
 : ' ( -- xt | throws:ENOTFOUND ) \ find the xt of the next word in the inputstream
-    word find dup
-    0= if 
-        ENOTFOUND throw
-    else 
+    word find dup if 
         link>xt 
+    else 
+        ENOTFOUND throw
     then ;
 
 ' handler ' single-handler defer!
@@ -268,9 +267,9 @@ defer: handler
 : strlen ( str -- len )
     0 swap
     begin
-        dup c@ 0<>
+        dup c@
     while
-    ['] 1+ bi@
+        ['] 1+ bi@
     repeat 
     drop ;
 
@@ -392,7 +391,7 @@ defer: r0 ' r0 is: _r0
     0 depth 2 - 9 min \ maximalize depth to print
     do 
         sp@ i cells + @ .
-        i 0<> if space then
+        i if space then
         -1 
     +loop ;
 
@@ -404,7 +403,7 @@ defer: r0 ' r0 is: _r0
     {
         depth 0< if EUNDERFLOW throw then
         print: '\r\n(stack'
-        depth 0<> if space then
+        depth if space then
         stack-print
         [ char: ) ] literal emit space
     } prompt ! ;
