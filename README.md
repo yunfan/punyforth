@@ -320,7 +320,7 @@ exception: EZERODIV
         print: '/ by zero'                   \ print exception in case of zero division
         2drop                                \ drop q d
       endof   
-      throw                                  \ rethrow if it wasn't EZERODIV, or there were no exception (code=0)
+      throw                                  \ rethrow if it wasn't EZERODIV, or there was no exception (code=0)
     endcase ; 
 ```
 
