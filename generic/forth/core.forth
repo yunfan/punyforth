@@ -46,7 +46,7 @@
 : then immediate compile-time
     resolve-forward-ref ;
 
-: ?dup ( a -- a a | 0 ) dup 0<> if dup then ;
+: ?dup ( a -- a a | 0 ) dup if dup then ;
 
 : . ( n -- )
     dup 0< if 45 emit -1 * then
