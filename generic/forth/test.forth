@@ -1,6 +1,7 @@
 marker: -tests
 
 exception: EFAC
+exception: ETEST
 
 : factorial ( n -- n! | throws:EFAC )
        dup 0< if
@@ -205,6 +206,7 @@ defer: deferred-word
 : 3nested-throw2 3 nested-throw2 ;
 
 : simple-throw 123 throw ;
+: throw-if-42 42 = if ETEST throw then ;
 
 : test:core-catch
    sp@ test_var1 !
@@ -214,6 +216,8 @@ defer: deferred-word
    ['] 3nested-throw2 catch drop 42 =assert
    3 nested-throw2 42 =assert
    ['] simple-throw catch 123 =assert
+   24 ['] throw-if-42 catch 0= assert
+   42 ['] throw-if-42 catch ETEST =assert drop ( 42 )
    sp@ test_var2 !
    test_var1 @ test_var2 @ =assert ;
 
