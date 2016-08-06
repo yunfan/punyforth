@@ -317,7 +317,7 @@ exception: EZERODIV
   ['] div catch
     case
       EZERODIV of 
-        print: '/ by zero'                   \ print exception in case of zero division
+        println: '/ by zero'                   \ print exception in case of zero division
         2drop                                \ drop q d
       endof   
       throw                                  \ rethrow if it wasn't EZERODIV, or there was no exception (code=0)
