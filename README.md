@@ -489,12 +489,9 @@ At runtime the quotation pushes its execution token onto the stack, therefore it
 #### Quotations and exception handling
 
 ```forth
-   { str: 'AF01' hex>int } catch 
-   dup ECONVERT = if 
+   { str: 'AF01z' hex>int } catch if
       println: 'invalid hex number' 
       abort 
-   else 
-      throw 
    then
 ```
 
