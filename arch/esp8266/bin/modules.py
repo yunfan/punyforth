@@ -21,6 +21,7 @@ available_modules = {
     'example-ircbot' : '../forth/examples/example-ircbot.forth',
     'example-philips-hue' : '../forth/examples/example-philips-hue.forth',
     'example-philips-hue-lightswitch' : '../forth/examples/example-philips-hue-lightswitch.forth',
+    'example-philips-hue-pir' : '../forth/examples/example-philips-hue-pir.forth',
     'example-http-server' : '../forth/examples/example-http-server.forth',    
 }
 
@@ -42,6 +43,7 @@ dependencies = {
     'example-ircbot' : ['core', 'netcon', 'tasks', 'gpio'],
     'example-philips-hue' : ['core', 'netcon'],
     'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
+    'example-philips-hue-pir' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
     'example-http-server' : ['core', 'netcon', 'wifi']
 }
 

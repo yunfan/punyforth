@@ -51,17 +51,15 @@ exception: EIRC
 : bot-start ( -- )
     multi
     ircbot-task activate
-    begin    
+    begin
         println: "Starting IRC bot"
-        ['] run catch dup 0<> if            
+        ['] run catch ?dup if
             print: 'Exception in ircbot: ' ex-type cr
-        else
-            drop
         then
-        irc-con @ 0<> if
+        irc-con @ if
             irc-con @ netcon-dispose
             0 irc-con !
-        then        
+        then
         5000 delay
     again
     deactivate ;

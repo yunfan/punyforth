@@ -32,11 +32,9 @@ WorkerSpace task: echo-worker-task2
             client @ 128 line netcon-readln
             print: 'echoing back: ' line type print: ' len=' . cr
             client @ line netcon-writeln    
-        } catch dup 0<> if
+        } catch ?dup if
             print: 'error while echoing client: ' client @ .
-            print: ' exception: ' . cr
-        else
-            drop
+            print: ' exception: ' . cr        
         then
         client @ netcon-dispose
     again

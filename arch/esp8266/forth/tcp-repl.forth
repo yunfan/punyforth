@@ -62,12 +62,10 @@ wifi-ip constant: HOST
     activate
     begin
         connections mailbox-receive client !
-        print: "Client connected: " client @ . cr
-        ['] command-loop catch dup 0<> if
-            print: 'error while handling client: ' client @ .
-            ex-type
-        else
-            drop
+        print: "Client connected: " client ? cr
+        ['] command-loop catch ?dup if
+            print: 'error while handling client: ' client ? cr
+            ex-type        
         then
         client @ netcon-dispose
         0 client !

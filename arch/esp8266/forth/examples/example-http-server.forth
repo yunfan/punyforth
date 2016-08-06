@@ -54,12 +54,10 @@ Connection: close\r\n
     activate
     begin
         connections mailbox-receive client !       \ receive client connection from the server task
-        print: "Client connected: " client @ . cr
-        ['] serve-client catch dup 0<> if
-            print: 'error while handling client: ' client @ .
-            ex-type 
-        else
-            drop
+        print: "Client connected: " client ? cr
+        ['] serve-client catch ?dup if
+            print: 'error handling client: ' client ? cr
+            ex-type
         then
         client @ netcon-dispose
     again

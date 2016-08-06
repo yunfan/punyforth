@@ -74,7 +74,7 @@ exception: EHTTP
     dup str: "Connection: Close\r\n"              netcon-write
     drop ;
 
-: on ( bulb -- ) 
+: on ( bulb -- )
     bridge
         tuck request-change-state
         dup str: "Content-length: 22\r\n\r\n" netcon-write        
@@ -89,10 +89,12 @@ exception: EHTTP
         netcon-dispose ;
 
 : toggle ( bulb -- )
-    { dup on? if off else on then } catch 
-    case
-        0 of exit endof
-        ENETCON of println: "netconn error" endof
-        EHTTP of println: "http error" endof
-        throw
-    endcase ;
+    dup ['] on? catch ?dup if
+        print: 'Error checking light. ' ex-type cr
+        2drop
+        exit
+    then
+    { if off else on then } catch ?dup if
+        print: 'Error toggling light. ' ex-type cr
+        2drop
+    then ;

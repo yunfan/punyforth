@@ -26,11 +26,10 @@ exception: ENETCON
     RECV_TIMEOUT_MSEC over netcon-set-recvtimeout ;
 
 : check-error ( errcode --  | throws:ENETCON )
-    dup 0<> if
+    ?dup if
         print: "NETCON error: " . cr
         ENETCON throw 
-    then 
-    drop ;
+    then ;
 
 \ Connect to a remote port/ip. Must be used in both TCP and UDP case.
 : netcon-connect ( port host type -- netcon | throws:ENETCON ) override
