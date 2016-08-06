@@ -50,11 +50,8 @@
 
 : . ( n -- )
     dup 0< if 45 emit -1 * then
-    10 /mod dup 0= if
-        drop 48 + emit
-    else
-        . 48 + emit
-    then ;
+    10 /mod ?dup if . then
+    48 + emit ;
 
 : ? ( a -- ) @ . ;
 
@@ -384,19 +381,20 @@ defer: r0 ' r0 is: _r0
 : help ( -- )
     lastword
     begin
-        dup 0<>
+        ?dup
     while
         dup link-type cr @
-    repeat
-    drop ;
+    repeat ;
 
 : stack-print ( -- )
     depth 0= if exit then
     depth 10 > if print: ".. " then 
-    0 depth 2 - 9 min do \ maximalize depth to print
+    0 depth 2 - 9 min \ maximalize depth to print
+    do 
         sp@ i cells + @ .
         i 0<> if space then
-    -1 +loop ;
+        -1 
+    +loop ;
 
 : stack-clear ( i*x -- )
     depth 0= if exit then
@@ -432,16 +430,13 @@ defer: r0 ' r0 is: _r0
             cell - @                        \ instruction before the return address 
             lastword    
             begin
-                dup 0<>
+                ?dup
             while
                 2dup
                 link>xt = if dup link-type space then               
                 @
             repeat
-            [ char: ( ] literal emit
-            drop .
-            [ char: ) ] literal emit
-            cr
+            [ char: ( ] literal emit . [ char: ) ] literal emit cr
         else
             print: "??? (" . println: ")"     \ not valid return address, could be doloop var
         then            
