@@ -105,6 +105,10 @@ defer: deferred-word
 : test:core-bounds
     10000 5 bounds 10000 =assert 10005 =assert ;
 
+: test:core-?dup
+   42 0 ?dup 0 =assert 42 =assert
+   42 12 ?dup 12 =assert 12 =assert 42 =assert ;
+
 424242 constant: SENTINEL
 
 : test:core-doloop
