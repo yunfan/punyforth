@@ -860,3 +860,4 @@ Attila Magyar
 <a class="twitter-follow-button" href="https://twitter.com/zeroflag"> @zeroflag</a>
 
 
+[![Twitter URL](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&maxAge=2592000?style=flat-square)](https://twitter.com/zeroflag)
