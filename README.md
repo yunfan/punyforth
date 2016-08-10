@@ -857,8 +857,4 @@ uart-set-bps ( bps uart-number -- )
 
 Attila Magyar
 
-<a class="twitter-follow-button" href="https://twitter.com/zeroflag"> @zeroflag</a>
-
-
-
 [![Twitter Follow](https://img.shields.io/twitter/follow/shields_io.svg?style=social&label=%40zeroflag&maxAge=2592000?style=flat-square)](https://twitter.com/zeroflag)
