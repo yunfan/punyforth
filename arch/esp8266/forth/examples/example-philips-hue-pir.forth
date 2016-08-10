@@ -1,61 +1,63 @@
 4 constant: PIR_PIN         \ D2 leg
-Event buffer: event
+0 constant: MODE_MOTION
+1 constant: MODE_NOMOTION
+variable: mode
 0 task: detector-task
+Event buffer: event
 defer: motion-detected
 
-80 constant: DEBOUNCE_TIME \ 0.8 sec
-0 init-variable: last-event-time
+: detect-motion ( -- )
+    PIR_PIN GPIO_IN gpio-mode
+    PIR_PIN GPIO_INTTYPE_EDGE_POS gpio-set-interrupt 
+    MODE_MOTION mode ! ;
+
+: detect-nomotion ( -- )
+    PIR_PIN GPIO_IN gpio-mode
+    PIR_PIN GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt 
+    MODE_NOMOTION mode ! ;
 
 : pir-event? ( event -- bool )
     { .type @ EVT_GPIO = }
     { .payload @ PIR_PIN = } bi and ;
 
 : recent-event? ( event -- bool )
-    time swap .time @ - 100 < ;
+    time swap .time @ - 80 < ;
     
-: motion-detect ( task -- )
+: motion ( -- )
+    print: 'motion detected at ' event .time ? cr
+    detect-nomotion
+    ['] motion-detected catch ?dup if
+        ex-type cr
+    then ;
+
+: nomotion ( -- )
+    print: 'motion stopped at ' event .time ? cr
+    detect-motion ;
+
+: event-loop ( task -- )
     activate
     begin
-        println: 'waiting event'
-        event next-event
-        event pir-event?
-        event recent-event? and
-        if
-            print: 'motion detected at ' event .time ? cr
-            ['] motion-detected catch ?dup if
-                ex-type
-            then
-        else
-            println: 'event dropped'            
+        event next-event 
+        event pir-event? event recent-event? and if
+            mode @ 
+            case
+                MODE_MOTION of motion endof
+                MODE_NOMOTION of nomotion endof
+            endcase
         then
     again
     deactivate ;
 
 : lights-on ( -- )
-    time last-event-time @ - DEBOUNCE_TIME < if
-        println: 'skipping because of debounce'
-        exit
-    then
-    BEDROOM on? invert if
-        BEDROOM on
-    then 
-    time last-event-time ! ;
+    BEDROOM on? invert if BEDROOM on then ;
 
 : lights-off ( -- )
-    time last-event-time @ - DEBOUNCE_TIME < if
-        println: 'skipping because of debounce'
-        exit
-    then
-    BEDROOM on? if
-        BEDROOM off
-    then 
-    time last-event-time ! ;    
+    BEDROOM on? if BEDROOM off then ;
 
 : hue-motion-start ( -- )
     multi
-    PIR_PIN GPIO_IN gpio-mode
-    PIR_PIN GPIO_INTTYPE_EDGE_POS gpio-set-interrupt
+    detect-motion
     ['] motion-detected is: lights-on
-    detector-task motion-detect ;
+    detector-task event-loop ;
     
 hue-motion-start
