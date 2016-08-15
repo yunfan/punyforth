@@ -14,3 +14,7 @@ void forth_yield() {
 int forth_free_heap() {
     return (int)xPortGetFreeHeapSize();
 }
+
+unsigned int forth_time_us() {
+    return sdk_system_get_time();
+}
