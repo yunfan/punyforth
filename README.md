@@ -1,6 +1,4 @@
-[![Build Status](https://travis-ci.org/zeroflag/punyforth.svg?branch=master)](https://travis-ci.org/zeroflag/punyforth)
-
-[![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/punyforth)
+[![Build Status](https://travis-ci.org/zeroflag/punyforth.svg?branch=master)](https://travis-ci.org/zeroflag/punyforth) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/punyforth/Lobby)
 
 # Punyforth
 
