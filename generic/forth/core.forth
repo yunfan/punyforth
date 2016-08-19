@@ -109,11 +109,14 @@
 
 : override immediate ( -- ) lastword hide ;
 
-: create: createheader enterdoes , 0 , ;
+: xt>body ( xt -- a ) 2 cells + ;
+
+: bp @ ; ( default behaviour pointer for create: does> )
+: create: createheader enterdoes , ['] bp xt>body , ;
 : does> r> lastword link>body ! ;
 
 : constant: create: , does> @ ; 
-: init-variable: create: , does> ;
+: init-variable: create: , ;
 : variable: 0 init-variable: ; 
 
 -1 constant: TRUE 
@@ -131,8 +134,6 @@ exception: ECONVERT
 exception: EESCAPE
 
 : ['], ['] ['] , ;
-
-: xt>body ( xt -- a ) 2 cells + ;
 
 : defer: ( "name" -- )
     create: ['] abort ,
@@ -199,7 +200,7 @@ defer: handler
     does> swap + ;
     
 : buffer: ( size "name" -- ) ( -- addr )
-    create: allot does> ;
+    create: allot ;
     
 : struct 0 ;
 : field: create: over , + does> @ + ;
