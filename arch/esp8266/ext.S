@@ -406,3 +406,14 @@ defprimitive "osfreemem",9,osfreemem,REGULAR
     CCALL forth_free_heap
     DPUSH a2                   // free heap size in bytes
     NEXT
+
+defprimitive "time-us",7,timeus,REGULAR
+    CCALL forth_time_us
+    DPUSH a2 // clock time in us
+    NEXT
+
+defprimitive "delay-us",8,delayus,REGULAR
+    DPOP a2                     // us to wait
+    CCALL forth_delay_us
+    NEXT
+
