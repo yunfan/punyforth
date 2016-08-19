@@ -7,7 +7,7 @@ BUTTON_HALL GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 BUTTON_BEDROOM GPIO_IN gpio-mode
 BUTTON_BEDROOM GPIO_INTTYPE_EDGE_NEG gpio-set-interrupt
 
-80 constant: DEBOUNCE_TIME \ 0.8 sec
+800 constant: DEBOUNCE_TIME \ 0.8 sec
 0 init-variable: last-hall-event
 0 init-variable: last-bedroom-event
 
