@@ -110,7 +110,7 @@
 : override immediate ( -- ) lastword hide ;
 
 : nop ;
-: create: createheader enterdoes , ['] nop cell + , ;
+: create: createheader enterdoes , ['] nop cell + , ; \ default behaviour is nop, does> overwrites this
 : does> r> lastword link>body ! ;
 
 : constant: create: , does> @ ; 
