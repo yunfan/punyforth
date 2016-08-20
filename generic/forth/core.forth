@@ -133,13 +133,11 @@ exception: EESCAPE
 
 : ['], ['] ['] , ;
 
-: xt>body ( xt -- a ) 2 cells + ; \ XXX only for does>
-
 : defer: ( "name" -- )
     create: ['] abort ,
     does> @ execute ;
 
-: defer! ( dst-xt src-xt -- ) swap xt>body ! ;
+: defer! ( dst-xt src-xt -- ) swap 2 cells + ! ; \ store xt as body
 
 defer: unhandled
 defer: handler
