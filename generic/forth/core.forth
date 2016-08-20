@@ -109,8 +109,8 @@
 
 : override immediate ( -- ) lastword hide ;
 
-: pass ;
-: create: createheader enterdoes , ['] pass cell + , ;
+: nop ;
+: create: createheader enterdoes , ['] nop cell + , ;
 : does> r> lastword link>body ! ;
 
 : constant: create: , does> @ ; 
