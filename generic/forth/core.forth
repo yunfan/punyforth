@@ -109,10 +109,8 @@
 
 : override immediate ( -- ) lastword hide ;
 
-: xt>body ( xt -- a ) 2 cells + ;
-
-: bp @ ; ( default behaviour pointer for create: does> )
-: create: createheader enterdoes , ['] bp xt>body , ;
+: pass ;
+: create: createheader enterdoes , ['] pass cell + , ;
 : does> r> lastword link>body ! ;
 
 : constant: create: , does> @ ; 
@@ -134,6 +132,8 @@ exception: ECONVERT
 exception: EESCAPE
 
 : ['], ['] ['] , ;
+
+: xt>body ( xt -- a ) 2 cells + ; \ XXX only for does>
 
 : defer: ( "name" -- )
     create: ['] abort ,
