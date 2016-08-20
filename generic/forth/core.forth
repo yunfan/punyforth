@@ -134,7 +134,7 @@ exception: EESCAPE
 : ['], ['] ['] , ;
 
 : defer: ( "name" -- )
-    create: ['] abort ,
+    create: ['] nop ,
     does> @ execute ;
 
 : defer! ( dst-xt src-xt -- ) swap 2 cells + ! ; \ store xt as body
