@@ -1,5 +1,6 @@
 \ Detects motion using a PIR sensor and turns Philips Hue lights on/off
-\ I tested this with these mini IR PIR sensors http://www.banggood.com/3Pcs-Mini-IR-Infrared-Pyroelectric-PIR-Body-Motion-Human-Sensor-Detector-Module-p-1020422.html
+\ I tested this with these mini IR PIR sensors 
+\ http://www.banggood.com/3Pcs-Mini-IR-Infrared-Pyroelectric-PIR-Body-Motion-Human-Sensor-Detector-Module-p-1020422.html
 
 4 constant: PIR_PIN         \ D2 leg
 0 constant: MODE_MOTION
