@@ -24,17 +24,17 @@ defer: motion-detected
     { .payload @ PIR_PIN = } bi and ;
 
 : recent-event? ( event -- bool )
-    ms@ swap .time @ - 80 < ;
+    ms@ swap .ms @ - 800 < ;
     
 : motion ( -- )
-    print: 'motion detected at ' event .time ? cr
+    print: 'motion detected at ' event .ms ? cr
     detect-nomotion
     ['] motion-detected catch ?dup if
         ex-type cr
     then ;
 
 : nomotion ( -- )
-    print: 'motion stopped at ' event .time ? cr
+    print: 'motion stopped at ' event .ms ? cr
     detect-motion ;
 
 : event-loop ( task -- )
