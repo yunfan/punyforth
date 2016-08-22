@@ -401,10 +401,14 @@ defer: r0 ' r0 is: _r0
 : stack-show ( -- )
     {
         depth 0< if EUNDERFLOW throw then
-        print: '\r\n(stack'
-        depth if space then
-        stack-print
-        [ char: ) ] literal emit space
+        interpret? if        
+            print: '(stack'
+            depth if space then
+            stack-print
+            [ char: ) ] literal emit space
+        else
+            print: '.. '
+        then
     } prompt ! ;
 
 : stack-hide ( -- ) 0 prompt ! ;

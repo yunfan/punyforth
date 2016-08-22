@@ -479,12 +479,11 @@ defword "prompt",6,prompt,REGULAR
 defword "show_prompt",11,show_prompt,REGULAR
     .int xt_prompt, xt_fetch, xt_dup
     .int xt_branch0
-    lbl show_default_prompt
+    lbl show_prompt_no_prompt
     .int xt_execute
     .int xt_exit
-show_default_prompt:
+show_prompt_no_prompt:
     .int xt_drop
-    .int xt_btick, _M prompt_str, xt_type
     .int xt_exit
 
 defword "key",3,key,REGULAR

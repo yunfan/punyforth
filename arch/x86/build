@@ -1,11 +1,17 @@
 rm punyforth
 gcc -m32 -nostdlib -I. ../../main.S -o punyforth
 chmod +x punyforth
+
+mkfifo greet
+echo -e "stack-show println: 'Punyforth ready'" > greet
+
 cat ../../generic/forth/core.forth \
     ../../generic/forth/punit.forth \
     ../../generic/forth/ringbuf.forth \
     ../../generic/forth/ringbuf_test.forth \
-  ../../generic/forth/test.forth \
+    ../../generic/forth/test.forth \
+    greet \
     /dev/stdin \
     | ./punyforth
+     
 
