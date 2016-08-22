@@ -1,11 +1,15 @@
 rm punyforth
 gcc-4.8 -nostdlib -mcpu=cortex-a7 -I. ../../main.S -o punyforth
 chmod +x punyforth
+
+echo -e "stack-show println: 'Punyforth ready'" > greet
+
 cat ../../generic/forth/core.forth \
     ../../generic/forth/punit.forth \
     ../../generic/forth/ringbuf.forth \
     ../../generic/forth/ringbuf_test.forth \
-  ../../generic/forth/test.forth \
+    ../../generic/forth/test.forth \
+    greet \
     /dev/stdin \
     | ./punyforth
 
