@@ -19,7 +19,8 @@ int next_char_from_flash() { // read source stored code from flash memory
     char next = buffer[buffer_offset++];
     if (next == 0 || next == 0xFF) {
         _source_read_progress = false;
-        free(buffer);	
+        free(buffer);
+	printf("Punyforth done.\n");	
         return 10;
     }
     return next;
