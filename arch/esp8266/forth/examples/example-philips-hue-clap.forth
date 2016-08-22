@@ -8,10 +8,10 @@ variable: clap1
 variable: clap2
 variable: silence
 
-100 constant: SILENCE_LOW
-400 constant: SILENCE_HIGH
+200 constant: SILENCE_LOW
+450 constant: SILENCE_HIGH
 0   constant: CLAP_LOW
-160 constant: CLAP_HIGH
+150 constant: CLAP_HIGH
 
 defer: clap-detected
 Event buffer: event
@@ -39,7 +39,7 @@ Event buffer: event
         event next-event 
         event sound-event? event recent-event? and if
             event .ms @ last-sound @ - silence !
-            silence @ SILENCE_LOW > if
+            silence @ 60 > if
                 last-sound @ started @ - clap2 !
                 clap? if clap-detected then
                 clap2 @ clap1 !
