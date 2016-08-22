@@ -2,6 +2,8 @@ import sys, os
 from compiler.ast import flatten
 
 FLASH_SPACE = 180*1024
+UBER_NAME = 'uber.forth'
+MAX_LINE_LEN = 127
 
 available_modules = {
     'core' : '../../../generic/forth/core.forth',
@@ -90,15 +92,22 @@ def uber_module(modules):
     contents.append(chr(0))
     return '\n'.join(contents)
       
+def check_uber(uber):
+    if len(uber) > FLASH_SPACE:
+        print('Not enough space in flash')
+        sys.exit()
+    if any(len(line) >= MAX_LINE_LEN for line in uber.split('\n')):
+        print('Input overflow at line: "%s"' % [line for line in uber.split('\n') if len(line) >= MAX_LINE_LEN][0])
+        sys.exit()
+        
 if __name__ == '__main__':
-    if len(sys.argv) == 1: print_help()        
+    if os.path.isfile(UBER_NAME): os.remove(UBER_NAME)
+    if len(sys.argv) == 1: print_help()
     chosen_modules = sys.argv[1:]
     print('Chosen modules %s' % chosen_modules)
     if not set(chosen_modules).issubset(available_modules.keys()):
         print('No such module')
         print_help()
     uber = uber_module(collect_dependecies(chosen_modules))           
-    if len(uber) > FLASH_SPACE:
-        print('Not enough space in flash')
-        sys.exit()
-    with open('uber.forth', 'wt') as f: f.write(uber)
+    check_uber(uber)
+    with open(UBER_NAME, 'wt') as f: f.write(uber)

@@ -1,3 +1,5 @@
+\ simple clap sound detector demo that toggles philips hue lights
+
 4 constant: SOUND_PIN         \ D2 leg
 
 variable: last-sound
@@ -6,10 +8,10 @@ variable: clap1
 variable: clap2
 variable: silence
 
-50 constant: SILENCE_LOW
+100 constant: SILENCE_LOW
 400 constant: SILENCE_HIGH
 0   constant: CLAP_LOW
-150 constant: CLAP_HIGH
+160 constant: CLAP_HIGH
 
 defer: clap-detected
 Event buffer: event
