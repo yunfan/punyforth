@@ -2,16 +2,15 @@ rm punyforth
 gcc -m32 -nostdlib -I. ../../main.S -o punyforth
 chmod +x punyforth
 
-mkfifo greet
-echo -e "stack-show println: 'Punyforth ready'" > greet
+GREET=$(mktemp /tmp/pfg.XXXXXXXX)
+echo -e "stack-show println: 'Punyforth ready'" > $GREET
+trap "rm $GREET" EXIT
 
 cat ../../generic/forth/core.forth \
     ../../generic/forth/punit.forth \
     ../../generic/forth/ringbuf.forth \
     ../../generic/forth/ringbuf_test.forth \
     ../../generic/forth/test.forth \
-    greet \
+    $GREET \
     /dev/stdin \
     | ./punyforth
-     
-
