@@ -25,16 +25,17 @@ $ flash com3
 
 At first we select the modules to be installed using the *modules.py* python script. Then we install both Punyforth and the selected modules (this time only the core library) to the ESP8266 using the *flash* script. 
 
-Open a serial terminal on port COM3 then type:
+Open a serial terminal (default baud rate is 115200 bps) on port COM3 then type:
 
 ```forth
 println: "Hello world!"
 ```
 
-Now let's do some simple arithmetics. But first we change the prompt to the one that shows the content of the stack.
+<img src="screenshot/helloworld.png" align="center" height="338" width="649" >
+
+Now let's do some simple arithmetics.
 
 ```forth
-stack-show
 4
 dup
 +
