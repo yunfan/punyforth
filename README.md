@@ -31,7 +31,7 @@ Open a serial terminal on port COM3 then type:
 println: "Hello world!"
 ```
 
-![ScreenShot](https://raw.github.com/zeroflag/punyforth/master/screenshot/helloworld.png)
+![ScreenShot](screenshot/helloworld.png)
 
 Now let's do some simple arithmetics. But first we change the prompt to the one that shows the content of the stack.
 
