@@ -616,10 +616,8 @@ constant Rect
   dup .width @ swap .height @ * ;  
   
 new-rect: r1
-  
 3 r1 .width !
 5 r1 .height !  
-  
 r1 area .  
   
 ```
