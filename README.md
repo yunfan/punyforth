@@ -844,7 +844,10 @@ freemem ( -- bytes )
 osfreemem ( -- bytes ) 
 
 \ Blocks all running tasks for the specified number of millisecond.
-ms ( msec -- ) 
+ms ( msec -- )
+
+\ Blocks for the specified number of microsecond. This is implemented as busy loop. Use it if you need high precision delay.
+us ( usec -- ) 
 
 \ Sets the baud rate of the specied uart.
 uart-set-bps ( bps uart-number -- ) 
