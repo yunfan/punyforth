@@ -853,7 +853,7 @@ us ( usec -- )
 uart-set-bps ( bps uart-number -- ) 
 ```
 
-You can many example code under the [examples](arch\esp8266\forth\examples\) directory.
+You can many example code under the [examples](arch\esp8266\forth\examples) directory.
 
 ## Contact
 
