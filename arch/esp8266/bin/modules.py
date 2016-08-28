@@ -111,3 +111,4 @@ if __name__ == '__main__':
     uber = uber_module(collect_dependecies(chosen_modules))           
     check_uber(uber)
     with open(UBER_NAME, 'wt') as f: f.write(uber)
+    print('%s ready. Use flash <COMPORT> to install' % UBER_NAME)
