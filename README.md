@@ -2,6 +2,8 @@
 
 # Punyforth
 
+<img src="http://www.hobbyist.co.nz/sites/default/files/esp8266/esp8266_wi-fi_module_onCoin.jpg" align="left" height="177" width="180" >
+
 Punyforth is a simple, stack-based, [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language)) inspired programming language that primarily targets Internet of Things (IOT) devices, like the [ESP8266](https://en.wikipedia.org/wiki/ESP8266). The ESP8266 is a low-cost Wi-Fi capable chip with a 80 MHz Xtensa LX3 32 bit CPU, TCP/IP stack, GPIO pins and 512 KiB to 4 MiB flash memory. It is widely used in IoT applications and home automation projects.
 
 Punyforth also runs on x86 (Linux), ARM (Raspberry PI) but these are *not* the primary supported targets.
@@ -25,15 +27,17 @@ $ flash com3
 
 At first we select the modules to be installed using the *modules.py* python script. Then we install both Punyforth and the selected modules (this time only the core library) to the ESP8266 using the *flash* script. 
 
-Open a serial terminal (default baud rate is 115200 bps) on port COM3 then type:
+Open a serial terminal<sup>[1](#serial)</sup> on port COM3 then type:
 
 ```forth
 println: "Hello world!"
 ```
 
-<img src="screenshot/helloworld.png" align="center" height="338" width="649" >
+<img src="screenshot/helloworld.png" align="center" height="494" width="697" >
 
-Now let's do some simple arithmetics.
+<a name="serial">1</a>: Baud rate: 115200 bps. Local echo: on, line mode: enabled. You can find some free terminal emulators [here](https://learn.sparkfun.com/tutorials/terminal-basics/all).
+
+##### Now let's do some simple arithmetics.
 
 ```forth
 4
@@ -786,12 +790,6 @@ multi
 my-word
 ```
 
-#### Locks
-#### semaphore 
-#### mutex
-#### wait
-#### signal
-
 #### Mailboxes
 
 Often tasks need to communicate with each other. A mailbox is a fixed size blocking queue where messages can be left for a task. Receiving from an empty mailbox or sending to a full mailbox blocks the current task.
@@ -848,7 +846,10 @@ freemem ( -- bytes )
 osfreemem ( -- bytes ) 
 
 \ Blocks all running tasks for the specified number of millisecond.
-ms ( msec -- ) 
+ms ( msec -- )
+
+\ Blocks for the specified number of microsecond. This is implemented as busy loop. Use it if you need high precision delay.
+us ( usec -- ) 
 
 \ Sets the baud rate of the specied uart.
 uart-set-bps ( bps uart-number -- ) 
