@@ -33,10 +33,9 @@ println: "Hello world!"
 
 <img src="screenshot/helloworld.png" align="center" height="338" width="649" >
 
-Now let's do some simple arithmetics. But first we change the prompt to the one that shows the content of the stack.
+Now let's do some simple arithmetics.
 
 ```forth
-stack-show
 4
 dup
 +
