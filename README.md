@@ -31,7 +31,7 @@ Open a serial terminal on port COM3 then type:
 println: "Hello world!"
 ```
 
-![image](screenshot/helloworld.png = 649x338)
+<img src="screenshot/helloworld.png" align="left" height="649" width="338" >
 
 Now let's do some simple arithmetics. But first we change the prompt to the one that shows the content of the stack.
 
