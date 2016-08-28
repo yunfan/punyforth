@@ -31,7 +31,7 @@ Open a serial terminal (default baud rate is 115200 bps) on port COM3 then type:
 println: "Hello world!"
 ```
 
-<img src="screenshot/helloworld.png" align="center" height="338" width="649" >
+<img src="screenshot/helloworld.png" align="center" height="494" width="697" >
 
 Now let's do some simple arithmetics.
 
