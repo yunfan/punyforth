@@ -28,7 +28,7 @@ At first we select the modules to be installed using the *modules.py* python scr
 Open a serial terminal on port COM3 then type:
 
 ```forth
-print: "Hello world!"
+println: "Hello world!"
 ```
 
 Now let's do some simple arithmetics. But first we change the prompt to the one that shows the content of the stack.
