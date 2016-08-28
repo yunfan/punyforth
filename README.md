@@ -609,7 +609,8 @@ struct
   cell field: .height
 constant Rect
 
-: new-rect: ( "name" -- ) Rect create: allot ;
+: new-rect: ( "name" -- ) 
+  Rect create: allot ;
   
 : area ( rect -- area ) 
   dup .width @ swap .height @ * ;  
