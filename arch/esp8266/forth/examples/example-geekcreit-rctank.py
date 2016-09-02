@@ -8,7 +8,7 @@ class Tank:
         (0, 1)  : b'B',
         (-1, 0) : b'L',
         (1, 0)  : b'R',
-        (0,0)   : b'S'
+        (0, 0)   : b'S'
     }    
     def __init__(self, address):
         self.address = address
@@ -37,7 +37,7 @@ class Gamepad:
         print("Initializing joystick %s" % self.joystick.get_name())
         self.joystick.init()
         
-    def process_input(self, robot):
+    def control(self, robot):
         print('waiting for input')
         while True:
             for event in pygame.event.get():
@@ -47,4 +47,4 @@ class Gamepad:
                     robot.toggle_engine()
     
 gamepad = Gamepad(joystick=0, engine_button=0, horizontal_axis=0, vertical_axis=1)
-gamepad.process_input(Tank(('192.168.0.22', 8000)))    
+gamepad.control(Tank(('192.168.0.22', 8000)))    
