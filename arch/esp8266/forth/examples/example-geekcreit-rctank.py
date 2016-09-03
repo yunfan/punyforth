@@ -3,18 +3,6 @@
 # Tested with Python2.7 pygame-1.9.2a0 with a Genius Maxfire 12 usb gamepad
 
 import pygame, socket
-from contextlib import contextmanager
-import sys, os
-
-@contextmanager
-def suppress_stdout():
-    with open(os.devnull, "w") as devnull:
-        old_stdout = sys.stdout
-        sys.stdout = devnull
-        try:  
-            yield
-        finally:
-            sys.stdout = old_stdout
 
 class Tank:
     directions = {        
