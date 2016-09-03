@@ -17,10 +17,10 @@ create: PWM_PINS PIN_SPEED_1 c, PIN_SPEED_2 c,
 
 : engine-stop ( -- ) pwm-stop ;
 
-: forward ( -- ) GPIO_LOW  GPIO_LOW  ;
-: back    ( -- ) GPIO_HIGH GPIO_HIGH ;
-: left    ( -- ) GPIO_LOW  GPIO_HIGH ;
-: right   ( -- ) GPIO_HIGH GPIO_LOW  ;
+: forward ( -- v1 v2 ) GPIO_LOW  GPIO_LOW  ;
+: back    ( -- v1 v2 ) GPIO_HIGH GPIO_HIGH ;
+: left    ( -- v1 v2 ) GPIO_LOW  GPIO_HIGH ;
+: right   ( -- v1 v2 ) GPIO_HIGH GPIO_LOW  ;
 
 : direction ( v1 v2 -- )
     PIN_MOTOR_2 swap gpio-write
