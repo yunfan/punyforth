@@ -55,8 +55,7 @@ class Gamepad:
                 robot.slowdown()
 
     def _button_down(self, name):
-        with suppress_stdout():
-            return self.joystick.get_button(self.button_config[name]) == 1
+        return self.joystick.get_button(self.button_config[name]) == 1
     
 gamepad = Gamepad(joystick=0, horizontal_axis=0, vertical_axis=1, button_config={'engine': 0, 'speed+': 5, 'speed-': 7})
 gamepad.control(Tank(('192.168.0.22', 8000)))    
