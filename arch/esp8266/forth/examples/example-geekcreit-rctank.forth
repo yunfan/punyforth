@@ -80,12 +80,12 @@ PORT wifi-ip netcon-udp-server constant: server-socket
                 brake
             endof
             [ char: I ] literal of 
-               current-speed @ 1000 + full min
+               current-speed @ 10 + full min
                current-speed !
                current-speed @ speed
             endof
             [ char: D ] literal of 
-                current-speed @ 1000 - 0 max
+                current-speed @ 10 - 0 max
                 current-speed !
                 current-speed @ speed
             endof            
