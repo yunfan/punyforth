@@ -56,6 +56,7 @@ class Gamepad:
 
     def _button_down(self, name):
         return self.joystick.get_button(self.button_config[name]) == 1
-    
-gamepad = Gamepad(joystick=0, horizontal_axis=0, vertical_axis=1, button_config={'engine': 0, 'speed+': 5, 'speed-': 7})
-gamepad.control(Tank(('192.168.0.22', 8000)))    
+
+if __name__ == '__main__':
+    gamepad = Gamepad(joystick=0, horizontal_axis=0, vertical_axis=1, button_config={'engine': 0, 'speed+': 5, 'speed-': 7})
+    gamepad.control(Tank(('192.168.0.22', 8000)))

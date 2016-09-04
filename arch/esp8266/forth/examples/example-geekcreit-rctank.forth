@@ -82,10 +82,12 @@ PORT wifi-ip netcon-udp-server constant: server-socket
             [ char: I ] literal of 
                current-speed @ 1000 + full min
                current-speed !
+               current-speed @ speed
             endof
             [ char: D ] literal of 
                 current-speed @ 1000 - 0 max
                 current-speed !
+                current-speed @ speed
             endof            
             [ char: E ] literal of
                 engine-start
@@ -100,7 +102,8 @@ PORT wifi-ip netcon-udp-server constant: server-socket
 0 task: tank-task
 
 : tank-server-start ( -- )
-    multi    
+    multi
+    engine-start
     tank-task command-loop ;
 
 repl-start
