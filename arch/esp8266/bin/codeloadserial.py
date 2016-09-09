@@ -17,6 +17,7 @@ if len(sys.argv) < 2:
 def upload(path): 
     with open(path) as source:
         for line in source.readlines():
+            time.sleep(0.2)        
             line = line.strip()
             if not line: continue
             if len(line) > 128:
@@ -24,7 +25,6 @@ def upload(path):
             #print('sending: ' + line)
             port.write(line)        
             port.write('\n')
-            time.sleep(0.05)
             response_buffer = []        
             while port.inWaiting() > 0:
                 response_buffer.append(port.read(1))

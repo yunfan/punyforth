@@ -1,11 +1,15 @@
+\ gpio interrup types
 0 constant: GPIO_INTTYPE_NONE
 1 constant: GPIO_INTTYPE_EDGE_POS
 2 constant: GPIO_INTTYPE_EDGE_NEG
 3 constant: GPIO_INTTYPE_EDGE_ANY
 4 constant: GPIO_INTTYPE_LEVEL_LOW
 5 constant: GPIO_INTTYPE_LEVEL_HIGH
+\ gpio modes
 1 constant: GPIO_IN
 2 constant: GPIO_OUT
+3 constant: GPIO_OUT_OPEN_DRAIN
+\ gpio values
 1 constant: GPIO_HIGH
 0 constant: GPIO_LOW
 
