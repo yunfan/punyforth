@@ -56,7 +56,7 @@ dependencies = {
 }
 
 def print_help():
-    print('Usage: %s [modul1] [modul2] .. [modulN] ' % (os.path.basename(sys.argv[0])))
+    print('Usage: %s [--app /path/to/app.forth] [modul1] [modul2] .. [modulN] ' % (os.path.basename(sys.argv[0])))
     print('Available modules:')
     for each in available_modules.keys():
         print('    * ' + each)
@@ -88,8 +88,10 @@ def module_paths(modules):
         print('Module not found: ' + str(e))
         sys.exit()
       
-def uber_module(modules):
+def uber_module(modules, app=None):
     contents = [open(each).read() for each in module_paths(modules)]
+    if app:
+        with open(app) as f: contents.append(f.read())
     contents.append('\nstack-show ')
     contents.append(chr(0))
     return '\n'.join(contents)
@@ -105,12 +107,21 @@ def check_uber(uber):
 if __name__ == '__main__':
     if os.path.isfile(UBER_NAME): os.remove(UBER_NAME)
     if len(sys.argv) == 1: print_help()
-    chosen_modules = sys.argv[1:]
+    if sys.argv[1] == '--app':
+        app = sys.argv[2]        
+        if not os.path.isfile(app):
+            print('Application %s does not exist' % app)
+            print_help()
+        print("Application: %s" % app)            
+        chosen_modules = sys.argv[3:]
+    else:
+        app = None
+        chosen_modules = sys.argv[1:]
     print('Chosen modules %s' % chosen_modules)
     if not set(chosen_modules).issubset(available_modules.keys()):
         print('No such module')
         print_help()
-    uber = uber_module(collect_dependecies(chosen_modules))           
+    uber = uber_module(collect_dependecies(chosen_modules), app=app)
     check_uber(uber)
     with open(UBER_NAME, 'wt') as f: f.write(uber)
     print('%s ready. Use flash <COMPORT> to install' % UBER_NAME)
