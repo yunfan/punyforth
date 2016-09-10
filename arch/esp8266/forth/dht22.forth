@@ -1,7 +1,7 @@
 2 constant: PIN \ D4
 2 constant: DHT_TIMER_INTERVAL
 40 byte-array: bits
-5 byte-array: measurement
+5 byte-array: bytes
 
 exception: ETIMEOUT
 exception: ECHECKSUM
@@ -47,25 +47,24 @@ exception: ECHECKSUM
 : bit-at ( i -- bit )
     bits c@ if 1 else 0 then ;
     
-: measurement-clear ( -- )
+: bytes-clear ( -- )
     5 0 do 
-        0 i measurement c! 
+        0 i bytes c! 
     loop ;
     
 : dht-process ( -- )    
-    measurement-clear
+    bytes-clear
     40 0 do        
-        i 8 / measurement c@ 1 lshift
-        i 8 / measurement c!
-        
-        i 8 / measurement c@ i bit-at or
-        i 8 / measurement c!
+        i 3 rshift bytes c@ 1 lshift
+        i 3 rshift bytes c!        
+        i 3 rshift bytes c@ i bit-at or
+        i 3 rshift bytes c!
     loop 
-    0 measurement c@
-    1 measurement c@ +
-    2 measurement c@ +
-    3 measurement c@ + 255 and
-    4 measurement c@ <> if 
+    0 bytes c@
+    1 bytes c@ +
+    2 bytes c@ +
+    3 bytes c@ + 255 and
+    4 bytes c@ <> if 
         ECHECKSUM throw 
     then ;
     
@@ -82,9 +81,8 @@ exception: ECHECKSUM
     os-enter-critical
     { 
         dht-init 
-        dht-fetch
-        dht-process        
-        3 measurement c@ 2 measurement c@ dht-convert
-        1 measurement c@ 0 measurement c@ dht-convert
-    } catch ?dup 0<> if ex-type then    
-    os-exit-critical ;
+        dht-fetch        
+    } catch os-exit-critical throw
+    dht-process
+    3 bytes c@ 2 bytes c@ dht-convert
+    1 bytes c@ 0 bytes c@ dht-convert ;
