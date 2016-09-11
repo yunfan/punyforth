@@ -32,5 +32,5 @@ variable: server
 
 log-measurement
 5000 ms
-1200000000 deep-sleep 
+600000000 deep-sleep 
 5000 ms
