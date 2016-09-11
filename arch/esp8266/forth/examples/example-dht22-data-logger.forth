@@ -2,12 +2,12 @@ exception: EGAVEUP
 variable: data
 variable: server
 
-: measure ( -- temperature humidity | EGAVEUP )
-    5 0 do
+: measure ( -- temperature humidity | throws:EGAVEUP )
+    10 0 do
         ['] dht-measure catch ?dup 0<> 
         if
             ex-type cr
-            3000 ms
+            5000 ms
         else
             unloop exit
         then
