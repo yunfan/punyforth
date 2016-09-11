@@ -1,48 +1,53 @@
 2 constant: PIN \ D4
-2 constant: DHT_TIMER_INTERVAL
+2 constant: DHT_INTERVAL
 40 byte-array: bits
-5 byte-array: bytes
-
+5  byte-array: bytes
 exception: ETIMEOUT
 exception: ECHECKSUM
 
-: pin-state-duration ( pin-state timeout -- duration TRUE | FALSE )
+: pin-change ( pin-new-state timeout -- duration TRUE | FALSE )
     0 do
-        DHT_TIMER_INTERVAL us
+        DHT_INTERVAL us
         PIN gpio-read over = if
             drop i TRUE 
             unloop exit
         then
-        DHT_TIMER_INTERVAL 
-    +loop 
+        DHT_INTERVAL
+    +loop
     drop FALSE ;
 
-: pin-wait ( pin-state timeout -- | throws:ETIMEOUT )
-    pin-state-duration if
+: wait-for ( pin-state timeout -- | throws:ETIMEOUT )
+    pin-change if
         drop
     else
         ETIMEOUT throw
     then ;
     
 : duration ( pin-state timeout -- duration | throws:ETIMEOUT )
-    pin-state-duration invert if
+    pin-change invert if
         ETIMEOUT throw
     then ;
     
-: dht-init ( -- )    
+: init ( -- )
     PIN GPIO_LOW gpio-write
     20000 us
     PIN GPIO_HIGH gpio-write
-    GPIO_LOW 40 pin-wait
-    GPIO_HIGH 88 pin-wait
-    GPIO_LOW 88 pin-wait ;
+    GPIO_LOW 40 wait-for
+    GPIO_HIGH 88 wait-for
+    GPIO_LOW 88 wait-for ;
     
-: dht-fetch ( -- )    
+: fetch ( -- )    
     40 0 do
         GPIO_HIGH 65 duration 
         GPIO_LOW 70 duration
         < i bits c!
     loop ;
+
+: measure ( -- )
+    os-enter-critical
+    { init fetch } catch 
+    os-exit-critical 
+    throw ;    
 
 : bit-at ( i -- bit )
     bits c@ if 1 else 0 then ;
@@ -52,23 +57,27 @@ exception: ECHECKSUM
         0 i bytes c! 
     loop ;
     
-: dht-process ( -- )    
+: process ( -- )
     bytes-clear
     40 0 do        
         i 3 rshift bytes c@ 1 lshift
         i 3 rshift bytes c!        
         i 3 rshift bytes c@ i bit-at or
         i 3 rshift bytes c!
-    loop 
+    loop ;
+
+: checksum ( -- )    
     0 bytes c@
     1 bytes c@ +
     2 bytes c@ +
-    3 bytes c@ + 255 and
-    4 bytes c@ <> if 
+    3 bytes c@ + 255 and ;
+    
+: validate ( -- | throws:ECHECKSUM )
+    checksum 4 bytes c@ <> if 
         ECHECKSUM throw 
     then ;
-    
-: dht-convert ( lsb msb -- data )
+
+: convert ( lsb-byte msb-byte -- value )
     { hex: 7F and 8 lshift or } keep
     dup 128 and 0= if
         drop
@@ -76,13 +85,15 @@ exception: ECHECKSUM
         0 swap -
     then ;
     
-: dht-measure ( -- celsius-times-10 humidity%-times-10 )
+: humidity ( -- humidity%-x-10 ) 1 bytes c@ 0 bytes c@ convert ;
+: temperature ( -- celsius-x-10 ) 3 bytes c@ 2 bytes c@ convert ;
+    
+\ measures temperature and humidity using DHT22 sensor
+\ temperature and humidity values are multiplied with 10
+: dht-measure ( -- celsius-x-10 humidity%-x-10 )
     PIN GPIO_OUT_OPEN_DRAIN gpio-mode
-    os-enter-critical
-    { 
-        dht-init 
-        dht-fetch        
-    } catch os-exit-critical throw
-    dht-process
-    3 bytes c@ 2 bytes c@ dht-convert
-    1 bytes c@ 0 bytes c@ dht-convert ;
+    measure
+    process
+    validate
+    temperature humidity ;
+    
