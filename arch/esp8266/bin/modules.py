@@ -27,7 +27,8 @@ available_modules = {
     'example-philips-hue-pir' : '../forth/examples/example-philips-hue-pir.forth',
     'example-philips-hue-clap' : '../forth/examples/example-philips-hue-clap.forth',
     'example-geekcreit-rctank' : '../forth/examples/example-geekcreit-rctank.forth',
-    'example-http-server' : '../forth/examples/example-http-server.forth',    
+    'example-http-server' : '../forth/examples/example-http-server.forth',
+    'example-dht22-data-logger' : '../forth/examples/example-dht22-data-logger.forth',    
 }
 
 dependencies = {
@@ -52,7 +53,8 @@ dependencies = {
     'example-philips-hue-pir' : ['example-philips-hue', 'tasks', 'gpio', 'event'],    
     'example-philips-hue-clap' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
     'example-geekcreit-rctank' : ['core', 'tasks', 'gpio', 'event', 'wifi', 'netcon', 'tcp-repl'],
-    'example-http-server' : ['core', 'netcon', 'wifi']
+    'example-http-server' : ['core', 'netcon', 'wifi'],
+    'example-dht22-data-logger' : ['dht22', 'netcon']
 }
 
 def print_help():
