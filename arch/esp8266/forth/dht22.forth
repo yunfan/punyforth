@@ -1,5 +1,5 @@
 2 constant: PIN \ D4
-2 constant: DHT_INTERVAL
+1 constant: DHT_INTERVAL
 40 byte-array: bits
 5  byte-array: bytes
 exception: ETIMEOUT
@@ -39,7 +39,7 @@ exception: ECHECKSUM
 : fetch ( -- )    
     40 0 do
         GPIO_HIGH 65 duration 
-        GPIO_LOW 70 duration
+        GPIO_LOW 75 duration
         < i bits c!
     loop ;
 
