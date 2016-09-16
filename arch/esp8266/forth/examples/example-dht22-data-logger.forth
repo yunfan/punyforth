@@ -7,7 +7,7 @@ variable: server
         ['] dht-measure catch ?dup 0<> 
         if
             ex-type cr
-            5000 ms
+            4000 ms
         else
             unloop exit
         then
@@ -31,6 +31,6 @@ variable: server
     then ;
 
 log-measurement
-5000 ms
+6000 ms
 600000000 deep-sleep 
-5000 ms
+6000 ms
