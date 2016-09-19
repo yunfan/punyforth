@@ -79,9 +79,7 @@ exception: ECHECKSUM
 
 : convert ( lsb-byte msb-byte -- value )
     { hex: 7F and 8 lshift or } keep
-    dup 128 and 0= if
-        drop
-    else
+    128 and 0<> if
         0 swap -
     then ;
     

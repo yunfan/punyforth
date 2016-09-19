@@ -7,7 +7,7 @@ variable: server
         ['] dht-measure catch ?dup 0<> 
         if
             ex-type cr
-            4000 ms
+            5000 ms
         else
             unloop exit
         then
@@ -25,8 +25,11 @@ variable: server
     ['] send catch dispose throw ;
     
 : log-measurement ( -- )
-    { measure log } catch ?dup 0<> 
-    if
+    { 
+        measure 
+        2dup log 500 ms log 
+    } 
+    catch ?dup 0<> if
         ex-type cr
     then ;
 
