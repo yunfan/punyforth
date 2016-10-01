@@ -1,30 +1,36 @@
 2 constant: PIN \ D4
-1 constant: DHT_INTERVAL
 40 byte-array: bits
 5  byte-array: bytes
 exception: ETIMEOUT
 exception: ECHECKSUM
 
-: pin-change ( pin-new-state timeout -- duration TRUE | FALSE )
-    0 do
-        DHT_INTERVAL us
-        PIN gpio-read over = if
-            drop i TRUE 
+: _pulse-in ( gpio-state gpio-pin timeout-us -- bool )    
+    1 rshift 0 do
+        2 us
+        2dup gpio-read = if
+            2drop TRUE 
             unloop exit
         then
-        DHT_INTERVAL
-    +loop
-    drop FALSE ;
+    loop
+    2drop FALSE ;
+    
+: pulse-in ( gpio-state gpio-pin timeout-us -- duration TRUE | FALSE )
+    us@ ['] _pulse-in dip 
+    swap if
+        us@ swap - TRUE
+    else
+        drop FALSE
+    then ;
 
-: wait-for ( pin-state timeout -- | throws:ETIMEOUT )
-    pin-change if
+: wait-for ( gpio-state gpio-pin timeout-us -- | throws:ETIMEOUT )
+    pulse-in if
         drop
     else
         ETIMEOUT throw
     then ;
     
-: duration ( pin-state timeout -- duration | throws:ETIMEOUT )
-    pin-change invert if
+: duration ( gpio-state gpio-pin timeout-us -- duration | throws:ETIMEOUT )
+    pulse-in invert if
         ETIMEOUT throw
     then ;
     
@@ -32,14 +38,14 @@ exception: ECHECKSUM
     PIN GPIO_LOW gpio-write
     20000 us
     PIN GPIO_HIGH gpio-write
-    GPIO_LOW 40 wait-for
-    GPIO_HIGH 88 wait-for
-    GPIO_LOW 88 wait-for ;
+    GPIO_LOW  PIN 40 wait-for
+    GPIO_HIGH PIN 88 wait-for
+    GPIO_LOW  PIN 88 wait-for ;
     
 : fetch ( -- )    
     40 0 do
-        GPIO_HIGH 65 duration 
-        GPIO_LOW 75 duration
+        GPIO_HIGH PIN 65 duration 
+        GPIO_LOW  PIN 75 duration
         < i bits c!
     loop ;
 
