@@ -1,19 +1,16 @@
 2 constant: PIN \ D4
 40 byte-array: bits
 5  byte-array: bytes
-exception: ETIMEOUT
+
 exception: ECHECKSUM
 
 \ TODO pin param
 
-: pulse-len ( timeout-us gpio-state gpio-pin -- us | throws:TIMEOUT )
-    pulse-in ?dup 0= if ETIMEOUT throw then ;
-
 : init ( -- )
     PIN GPIO_LOW gpio-write
     20000 us
-    PIN GPIO_HIGH gpio-write    
-    200 GPIO_HIGH PIN pulse-len 
+    PIN GPIO_HIGH gpio-write
+    200 GPIO_HIGH PIN pulse-len
     drop ;
    
 \ high pulse for 26-28 us is bit0, high pulse for 70 us is bit1    
@@ -27,8 +24,8 @@ exception: ECHECKSUM
 : measure ( -- )
     os-enter-critical
     { init fetch } catch 
-    os-exit-critical 
-    throw ;    
+    os-exit-critical
+    throw ;
 
 : bit-at ( i -- bit )
     bits c@ if 1 else 0 then ;
