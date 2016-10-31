@@ -855,7 +855,7 @@ uart-set-bps ( bps uart-number -- )
 
 You can see some example code under the [examples](arch/esp8266/forth/examples) directory.
 
-Build instructions and further information is available at [punyforth wiki](punyforth/wiki).
+Build instructions and further information is available at [punyforth wiki](https://github.com/zeroflag/punyforth/wiki).
 
 ## Contact
 
