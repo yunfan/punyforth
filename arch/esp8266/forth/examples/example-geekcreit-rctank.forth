@@ -52,6 +52,8 @@ FALSE init-variable: lamp-active
 60000 constant: fast
 65535 constant: full
 
+medium init-variable: current-speed
+
 : speed ( n -- )
     case
         0 of
@@ -71,7 +73,40 @@ FALSE init-variable: lamp-active
 : brake ( -- ) 0 speed ;
 
 
-medium init-variable: current-speed
+\ Distance sensor setup
+13 constant: PIN_TRIGGER \ D7
+12 constant: PIN_ECHO    \ D6
+100 constant: MAX_CM
+20  constant: MIN_CM
+
+: distance ( -- cm | MAX_CM )
+    { PIN_ECHO MAX_CM timeout>cm PIN_TRIGGER ping range>cm }
+    catch dup ENOPULSE = if
+        drop MAX_CM
+    else
+        throw
+    then ;
+
+: obstacle? ( -- bool ) distance MIN_CM < ;
+
+: turn ( -- ) 
+    right direction current-speed @ speed
+    50 ms ;
+    
+: go ( -- ) 
+    forward direction current-speed @ speed
+    50 ms ;
+    
+: auto-pilot ( -- )
+    begin
+        begin
+            obstacle?
+        while
+            turn
+        repeat
+        go
+    again ;
+    
 8000 constant: PORT
 PORT wifi-ip netcon-udp-server constant: server-socket
 1 buffer: command
@@ -117,6 +152,9 @@ PORT wifi-ip netcon-udp-server constant: server-socket
             endof
             [ char: T ] literal of
                 lamp-toggle
+            endof
+            [ char: A ] literal of
+                auto-pilot
             endof
         endcase
     repeat 

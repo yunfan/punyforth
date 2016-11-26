@@ -54,7 +54,7 @@ dependencies = {
     'example-philips-hue-lightswitch' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
     'example-philips-hue-pir' : ['example-philips-hue', 'tasks', 'gpio', 'event'],    
     'example-philips-hue-clap' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
-    'example-geekcreit-rctank' : ['core', 'tasks', 'gpio', 'event', 'wifi', 'netcon', 'tcp-repl'],
+    'example-geekcreit-rctank' : ['core', 'tasks', 'gpio', 'event', 'wifi', 'netcon', 'tcp-repl', 'ping'],
     'example-http-server' : ['core', 'netcon', 'wifi'],
     'example-dht22-data-logger' : ['dht22', 'netcon']
 }
