@@ -80,7 +80,7 @@ medium init-variable: current-speed
 20  constant: MIN_CM
 
 : distance ( -- cm | MAX_CM )
-    { PIN_ECHO MAX_CM timeout>cm PIN_TRIGGER ping range>cm }
+    { PIN_ECHO MAX_CM cm>timeout PIN_TRIGGER ping pulse>cm }
     catch dup ENOPULSE = if
         drop MAX_CM
     else

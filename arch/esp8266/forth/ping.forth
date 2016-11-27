@@ -16,14 +16,14 @@
 \ (2) The Module automatically sends eight 40 kHz and detect whether there is a pulse signal back.
 \ (3) IF the signal back, time of high output IO duration is the time from sending ultrasonic to returning.
 \ Distance = (high level time×velocity of sound (340M/S) / 2, 
-\ Usage example: PIN_ECHO 100 timeout>cm PIN_TRIGGER ping range>cm
+\ Usage example: PIN_ECHO 100 cm>timeout PIN_TRIGGER ping pulse>cm
 : ping ( echo-pin timeout-us trigger-pin -- pulse-duration-us )
     os-enter-critical
     { emit-pulse listen-echo } catch
     os-exit-critical
     throw ;
 
-: timeout>cm ( us -- cm ) 60 * ;
-: timeout>inch ( us -- cm ) 150 * ;
-: range>cm ( us -- cm ) 58 / ;
-: range>inch ( us -- inch ) 148 / ;
+: cm>timeout ( cm -- us ) 60 * ;
+: inch>timeout ( inch -- us ) 150 * ;
+: pulse>cm ( us -- cm ) 58 / ;
+: pulse>inch ( us -- inch ) 148 / ;
