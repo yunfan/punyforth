@@ -24,6 +24,7 @@ class Tank:
     def speedup(self): self._command(b'I')
     def slowdown(self): self._command(b'D')
     def toggle_lamp(self): self._command(b'T')
+    def auto_pilot(self): self._command(b'A')
     
     def toggle_engine(self):
         self._command(b'H' if self.engine_started else b'E')
@@ -56,10 +57,22 @@ class Gamepad:
                 robot.speedup()
             elif self._button_down('speed-'):
                 robot.slowdown()
+            elif self._button_down('auto-pilot'):
+                robot.auto_pilot()
 
     def _button_down(self, name):
         return self.joystick.get_button(self.button_config[name]) == 1
 
 if __name__ == '__main__':
-    gamepad = Gamepad(joystick=0, horizontal_axis=0, vertical_axis=1, button_config={'engine': 0, 'speed+': 5, 'speed-': 7, 'lamp' : 4})
+    gamepad = Gamepad(
+        joystick=0, 
+        horizontal_axis=0, 
+        vertical_axis=1, 
+        button_config={
+            'engine': 0, 
+            'speed+': 5, 
+            'speed-': 7, 
+            'lamp' : 4,
+            'auto-pilot' : 3
+        })
     gamepad.control(Tank(('192.168.0.22', 8000)))
