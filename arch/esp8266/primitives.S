@@ -30,6 +30,10 @@
     l32i \reg, a15, 2*CELLS
 .endm
 
+.macro READTOS4 reg
+    l32i \reg, a15, 3*CELLS
+.endm
+
 .macro WRTETOS1 reg
     s32i \reg, a15, 0
 .endm
@@ -42,6 +46,9 @@
     s32i \reg, a15, 2*CELLS
 .endm
 
+.macro WRTETOS4 reg
+    s32i \reg, a15, 3*CELLS
+.endm
 
 defprimitive "nop",3,nop,REGULAR /* ( -- ) */
     NEXT
@@ -72,14 +79,14 @@ defprimitive "rot",3,rot,REGULAR /* ( a b c -- b c a ) */
     NEXT
 
 defprimitive "2swap",5,swap2,REGULAR /* ( a b c d -- c d a b ) */    
-    DPOP a8
-    DPOP a9
-    DPOP a10
-    DPOP a11
-    DPUSH a9
-    DPUSH a8
-    DPUSH a11
-    DPUSH a10
+    READTOS1 a8
+    READTOS2 a9
+    READTOS3 a10
+    READTOS4 a11
+    WRTETOS1 a10
+    WRTETOS2 a11
+    WRTETOS3 a8
+    WRTETOS4 a9
     NEXT
 
 defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */    
@@ -97,23 +104,23 @@ defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */
 
 defprimitive "+",1,plus,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     add a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "-",1,minus,REGULAR
     DPOP a9
-    DPOP a8
+    READTOS1 a8
     sub a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "*",1,multiply,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     mull a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 .literal_position
@@ -127,46 +134,46 @@ defprimitive "/mod",4,divmod,REGULAR /* ( n d -- m q ) */
 
 defprimitive "or",2,or,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     or a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "and",3,and,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     and a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "xor",3,xor,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     xor a8, a8, a9
-    DPUSH a8    
+    WRTETOS1 a8    
     NEXT
 
 defprimitive "invert",6,invert,REGULAR
-    DPOP a8
+    READTOS1 a8
     movi a9, TRUE
     xor a8, a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "lshift",6,lshift,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     ssl a8
     sll a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive "rshift",6,rshift,REGULAR
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     ssr a8
     srl a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 .literal_position
@@ -180,15 +187,15 @@ defprimitive "abort",5,abort,REGULAR
     NEXT
 
 defprimitive "@",1,fetch,REGULAR
-    DPOP a8
+    READTOS1 a8
     l32i a9, a8, 0
-    DPUSH a9
+    WRTETOS1 a9
     NEXT
 
 defprimitive "c@",2,fetchbyte,REGULAR
-    DPOP a8
+    READTOS1 a8
     l8ui a9, a8, 0
-    DPUSH a9
+    WRTETOS1 a9
     NEXT
 
 defprimitive "!",1,store,REGULAR
@@ -211,11 +218,11 @@ defprimitive "[']",3,btick,REGULAR    // compile only
 
 defprimitive "<",1,lt,REGULAR         // only need to define this, all other comparisions are implemented in terms of lt
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     movi a10, FALSE
     bge a9, a8, L4              // a9 >= a8 ?
     movi a10, TRUE
-L4: DPUSH a10
+L4: WRTETOS1 a10
     NEXT
 
 defprimitive "branch",6,branch,REGULAR

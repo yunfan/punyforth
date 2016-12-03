@@ -58,56 +58,56 @@ defprimitive "4drop",5,"drop4",REGULAR
     NEXT
 
 defprimitive "cells",5,cells,REGULAR
-    DPOP a9
+    READTOS1 a9
     movi a8, 2
     ssl a8
     sll a8, a9
-    DPUSH a8
+    WRTETOS1 a8
     NEXT
 
 defprimitive ">",1,gt,REGULAR 
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     movi a10, FALSE
     bge a8, a9, L5
     movi a10, TRUE
-L5: DPUSH a10
+L5: WRTETOS1 a10
     NEXT
 
 defprimitive "=",1,eq,REGULAR 
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     movi a10, FALSE
     bne a8, a9, L6
     movi a10, TRUE
-L6: DPUSH a10
+L6: WRTETOS1 a10
     NEXT
 
 defprimitive "<>",2,noteq,REGULAR 
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     movi a10, FALSE
     beq a8, a9, L7
     movi a10, TRUE
-L7: DPUSH a10
+L7: WRTETOS1 a10
     NEXT
 
 defprimitive "<=",2,lte,REGULAR 
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     movi a10, FALSE
     blt a8, a9, L8
     movi a10, TRUE
-L8: DPUSH a10
+L8: WRTETOS1 a10
     NEXT
 
 defprimitive ">=",2,gte,REGULAR 
     DPOP a8
-    DPOP a9
+    READTOS1 a9
     movi a10, FALSE
     blt a9, a8, L9
     movi a10, TRUE
-L9: DPUSH a10
+L9: WRTETOS1 a10
     NEXT
 
 defprimitive "1+",2,inc,REGULAR
@@ -123,11 +123,11 @@ defprimitive "1-",2,dec,REGULAR
     NEXT
 
 defprimitive "0=",2,eq0,REGULAR
-    DPOP a8
+    READTOS1 a8
     movi a9, FALSE
     movi a10, TRUE
     moveqz a9, a10, a8 // move a10 to a9 if a8 is zero
-    DPUSH a9
+    WRTETOS1 a9
     NEXT
 
 defprimitive "0<>",3,noteq0,REGULAR
