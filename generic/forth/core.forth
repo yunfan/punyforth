@@ -425,7 +425,7 @@ defer: r0 ' r0 is: _r0
 : traceback ( code -- )
     cr print: "Exeption: " ex-type
     print: " rdepth: " rdepth . cr
-    rdepth 3 do
+    rdepth 2 + 3 do                         \ include ret address in outer interpreter
         print: "  at "
         rp@ i cells + @                     \ i. return address
         dup heap? if
