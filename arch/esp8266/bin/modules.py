@@ -29,7 +29,9 @@ available_modules = {
     'example-philips-hue-clap' : '../forth/examples/example-philips-hue-clap.forth',
     'example-geekcreit-rctank' : '../forth/examples/example-geekcreit-rctank.forth',
     'example-http-server' : '../forth/examples/example-http-server.forth',
-    'example-dht22-data-logger' : '../forth/examples/example-dht22-data-logger.forth',    
+    'example-dht22-data-logger' : '../forth/examples/example-dht22-data-logger.forth',
+    'example-buzzer-mario' : '../forth/examples/example-buzzer-mario.forth',
+    'example-buzzer-starwars' : '../forth/examples/example-buzzer-starwars.forth',
 }
 
 dependencies = {
@@ -56,7 +58,9 @@ dependencies = {
     'example-philips-hue-clap' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
     'example-geekcreit-rctank' : ['core', 'tasks', 'gpio', 'event', 'wifi', 'netcon', 'tcp-repl', 'ping'],
     'example-http-server' : ['core', 'netcon', 'wifi'],
-    'example-dht22-data-logger' : ['dht22', 'netcon']
+    'example-dht22-data-logger' : ['dht22', 'netcon'],
+    'example-buzzer-mario' : ['gpio'],
+    'example-buzzer-starwars' : ['gpio'],
 }
 
 def print_help():
