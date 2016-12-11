@@ -425,23 +425,22 @@ defer: r0 ' r0 is: _r0
 : traceback ( code -- )
     cr print: "Exeption: " ex-type
     print: " rdepth: " rdepth . cr
-    rdepth 2 + 3 do                         \ include ret address in outer interpreter
+    rdepth 1 + 3 do                         \ include ret address in outer interpreter
         print: "  at "
         rp@ i cells + @                     \ i. return address
-        dup heap? if
-            cell - @                        \ instruction before the return address 
-            lastword    
-            begin
-                ?dup
-            while
-                2dup
-                link>xt = if dup link-type space then               
-                @
-            repeat
-            [ char: ( ] literal emit . [ char: ) ] literal emit cr
-        else
-            print: "??? (" . println: ")"     \ not valid return address, could be doloop var
-        then            
+        lastword    
+        begin
+            2dup < 
+            over 0<> and
+        while
+            @
+        repeat
+        ?dup 0<> if 
+            link-type space 
+        else 
+            print: '??? ' 
+        then
+        [ char: ( ] literal emit . [ char: ) ] literal emit cr
     loop
     depth 0> if
         print: '(stack ' 
