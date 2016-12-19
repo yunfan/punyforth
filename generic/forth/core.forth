@@ -180,7 +180,7 @@ defer: handler
 
 ' handler ' single-handler defer!
 
-: compile-imm: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
+: postpone: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 
 : is: immediate
     interpret? if
@@ -348,14 +348,14 @@ defer: handler
         repeat
         2drop           
     else
-        compile-imm: str: ['] type ,
+        postpone: str: ['] type ,
     then ;
   
 : println: ( "<separator>string<separator>" ) immediate
     interpret? if
         str: "print:" 6 find link>xt execute cr \ XXX
     else
-        compile-imm: str: ['] type , ['] cr ,
+        postpone: str: ['] type , ['] cr ,
     then ;
 
 defer: s0 ' s0 is: _s0
