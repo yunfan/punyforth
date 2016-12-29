@@ -10,7 +10,7 @@ exception: EBLOCK
 hex: 51000 init-variable: block0
 FALSE      init-variable: dirty
 SIZE       buffer:        buf
-variable:  addr
+variable:  offs
 
 : check-err ( code -- | EBLOCK )
     dup FLASH_OK <> if
@@ -23,15 +23,15 @@ variable:  addr
     
 : flush ( -- )
     dirty @ if
-        addr @ >sector erase-flash  check-err
-        SIZE buf addr @ write-flash check-err
+        offs @ >sector erase-flash  check-err
+        SIZE buf offs @ write-flash check-err
         FALSE dirty !
     then ;
     
 : block ( block# -- addr )
     flush
-    SIZE * block0 @ + addr !    
-    SIZE buf addr @ read-flash check-err
+    SIZE * block0 @ + offs !
+    SIZE buf offs @ read-flash check-err
     FALSE dirty !
     buf ;
     
@@ -53,12 +53,11 @@ variable:  addr
         i row COLS type-counted
     loop ;
 
-\ editor command: delete row by filling it with spaces
-: d ( y -- )
+\ editor command: blank row
+: b ( y -- )
     COLS 2 - 0 do 32 over i ch c! loop
     13 over COLS 2 - ch c!
-    10 over COLS 1-  ch c!
-    drop 
+    10 swap COLS 1-  ch c!
     update ;
     
 : copy-row ( dst-y src-y -- )
@@ -67,17 +66,17 @@ variable:  addr
     loop
     2drop ;
     
-\ editor command: kill row
-: k ( y -- )
+\ editor command: delete row
+: d ( y -- )
     ROWS 1- swap do i i 1+ copy-row loop
-    ROWS 1- d ;
+    ROWS 1- b ;
 
 \ editor command: clear screen    
-: c ( -- ) ROWS 0 do i d loop ;
+: c ( -- ) ROWS 0 do i b loop ;
         
 \ editor command: overwrite row    
 : r: ( y "line" -- )
-    dup d
+    dup b
     row
     begin
         key dup line-break? invert
@@ -91,4 +90,4 @@ variable:  addr
     dup ROWS 1- do
         i i 1- copy-row
     -1 +loop
-    d ;
+    b ;
