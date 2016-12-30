@@ -302,6 +302,19 @@ But this won't work with do loops. The reason for this is because do loops store
 
  An *unloop* is required for each nesting level before the definition may be *exited*.
 
+```forth
+: nested-exit ( -- )
+  5 0 do
+    5 i 1+ do
+      j i + 7 = if
+        i . space j . cr
+        unloop unloop               \ clear the return stack before exiting
+        exit
+      then
+    loop
+  loop ;
+```
+
 Control structres are compile time words with no interpretation semantics. They can be used only in compilation mode, that is inside a word definition.
 
 ### Exception handling
@@ -677,9 +690,11 @@ In AP mode, the ESP8266 acts as an central connection point, which wireless clie
 
 ```forth
 172 16 0 1 >ipv4 wifi-set-ip                                      \ AP ip is 172.16.0.1
-1 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
-4 172 16 0 2 >ipv4 dhcpd-start                                    \ dhcp lease time = 4, first client ip is 172.16.0.2
-```    
+4 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap  \ max connections = 4
+8 172 16 0 2 >ipv4 dhcpd-start                                    \ dhcp max_leases = 8, first client ip is 172.16.0.2
+```
+
+The dhcp max_leases parameter should not be smaller than the maximum allowed connections.
 
 The Wi-Fi settings are persistently stored by the ESP8266, there is no need to setup the Wi-Fi at every startup.
 
