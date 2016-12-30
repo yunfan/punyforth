@@ -298,6 +298,8 @@ But this won't work with do loops. The reason for this is because do loops store
   loop ;
 ```
 
+ An UNLOOP is required for each nesting level before the definition may be EXITed.
+
 Control structres are compile time words with no interpretation semantics. They can be used only in compilation mode, that is inside a word definition.
 
 ### Exception handling
