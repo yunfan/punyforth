@@ -303,7 +303,7 @@ But this won't work with do loops. The reason for this is because do loops store
  An *unloop* is required for each nesting level before the definition may be *exited*.
 
 ```forth
-: nested-exit
+: nested-exit ( -- )
   5 0 do
     5 i 1+ do
       j i + 7 = if
