@@ -217,6 +217,8 @@ The *limit* and *start* before the word *do* defines the number of times the loo
 
 *Do* loops iterate through integers by starting at *start* and incrementing until you reach the *limit*. The word *i* pushes the loop index onto the stack. In a nested loop, the inner loop may access the loop variable of the outer loop by using the word *j*.
 
+It is important to know that *Do* loops store the loop index on the return stack. You can break the semantics of *i* and *j* if you use the return stack to store temporary data. Also you can't simply *exit* a word from inside a do loop without clearing the return stack first. See *unloop* for more information.
+
 For example:
 ```forth
 5 0 do i . loop \ prints 01234
