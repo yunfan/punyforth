@@ -313,9 +313,7 @@ But this won't work with do loops. The reason for this is because do loops store
       then
     loop
   loop ;
-
 ```
-
 
 Control structres are compile time words with no interpretation semantics. They can be used only in compilation mode, that is inside a word definition.
 
