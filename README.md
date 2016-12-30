@@ -308,7 +308,7 @@ But this won't work with do loops. The reason for this is because do loops store
     5 i 1+ do
       j i + 7 = if
         i . space j . cr
- 	      unloop unloop               \ clear the return stack before exiting
+        unloop unloop               \ clear the return stack before exiting
         exit
       then
     loop
