@@ -309,7 +309,7 @@ defer: handler
         1+ swap
     again ;
 
-: abs ( n -- n ) dup 0< if -1 * then ;
+: abs ( n -- n ) dup 0< if invert 1+ then ;
 : max ( a b -- max ) 2dup < if nip else drop then ;
 : min ( a b -- min ) 2dup < if drop else nip then ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
@@ -414,6 +414,8 @@ defer: r0 ' r0 is: _r0
 : stack-hide ( -- ) 0 prompt ! ;
 
 : heap? ( a -- bool ) heap-start swap heap-end between? ;
+: freemem ( -- n ) heap-end dp - ;
+: usedmem ( -- n ) dp heap-start - ;
 
 : ex-type ( exception -- )
     dup heap? if 
