@@ -19,10 +19,6 @@ forth_start:
     movi a9, input_index
     s32i a8, a9, 0
 
-    movi a8, dictionary
-    movi a9, var_dp
-    s32i a8, a9, 0
-
     movi a15, stack
     movi a13, rstack_top
 
