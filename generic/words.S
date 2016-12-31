@@ -282,8 +282,8 @@ defword "allot",5,allot,REGULAR /* ( n -- ) */
     
 defword "createheader",12,createheader,REGULAR
     .int xt_word, xt_swap
-    .int xt_btick, _M LAST_WORD, xt_fetch, xt_comma                        // store link to previous word
-    .int xt_here, xt_cell, xt_minus, xt_btick, _M LAST_WORD, xt_store      // update last word
+    .int xt_btick, _M var_last_word, xt_fetch, xt_comma                        // store link to previous word
+    .int xt_here, xt_cell, xt_minus, xt_btick, _M var_last_word, xt_store      // update last word
     .int xt_swap, xt_dup, xt_btick, _M REGULAR, xt_or, xt_commabyte        // write length + flags
 create_write_next_char:    
     .int xt_dup, xt_branch0
@@ -521,7 +521,7 @@ cannot_interpret_compile_only_word:
     .int xt_exit
 
 defword "var-lastword",12,var_lastword,REGULAR
-    .int xt_btick, _M LAST_WORD
+    .int xt_btick, _M var_last_word
     .int xt_exit
 
 defword "lastword",8,lastword,REGULAR

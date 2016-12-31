@@ -16,17 +16,19 @@
 stack_top:    .int 0
 var0:         .int 0
 state_var:    .int STATE_INTERPRET
-LAST_WORD:    .int FINAL_WORD
-input_index:  .int 0
+input_index:  .int input_buffer
 input_buffer: .space INPUT_BUFFER_SIZE,' '
 .align 4,32
 input_size:   .int . - input_buffer
-var_dp:       .int 0                   // data pointer
-var_prompt_xt:.int 0
-var_pause_xt: .int 0
-var_emit_xt:  .int 0
-var_type_xt:  .int 0
-dictionary:   .space 24576
+dictionary:   
+    var_last_word:.int FINAL_WORD
+    var_prompt_xt:.int 0
+    var_pause_xt: .int 0
+    var_emit_xt:  .int 0
+    var_type_xt:  .int 0
+    var_dp:       .int heap
+heap:    
+    .space 24576
 end_dictionary:
 rstack_space: .space 320
 rstack_top:
