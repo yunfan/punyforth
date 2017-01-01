@@ -374,6 +374,13 @@ create: seq2 4 c, 5 c,
     here dup -2147483647 >str str: '-2147483647' =str assert
     here dup 0           >str str: '0'           =str assert ;
 
+str: "123"    constant: s1
+str: "abcdef" constant: s2
+: test:cmove
+    s1 s2 0 cmove s2 str: "abcdef" =str assert
+    s1 s2 1 cmove s2 str: "1bcdef" =str assert
+    s1 s2 3 cmove s2 str: "123def" =str assert ;
+
 variable: dp-before-mark dp dp-before-mark !
 marker: -test-mark
 : word-after-marker 1 2 3 ; 237 allot

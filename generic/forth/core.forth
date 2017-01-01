@@ -208,6 +208,14 @@ defer: handler
 : min ( a b -- min ) 2dup < if drop else nip then ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
 
+: cmove ( src-addr dst-addr count -- )
+    ?dup 0 <= if 2drop exit then
+    0 do
+        2dup { c@ } dip c!
+        { 1+ } bi@
+    loop
+    2drop ;
+
 : [str ( -- address-to-fill-in )
     ['], here 3 cells + ,           \ compile return value: address of string
     ['] branch ,                    \ compile branch that will skip the string
