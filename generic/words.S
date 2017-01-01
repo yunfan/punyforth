@@ -357,6 +357,50 @@ tonum_empty:
     .int xt_btick, FALSE
     .int xt_exit
 
+defword "'str",4,tkstr,REGULAR /* ( a len -- ? ) */
+    .int xt_btick, 10
+    .int xt_divmod
+    .int xt_dup
+    .int xt_branch0
+    lbl str_no_more_digit
+    .int xt_rot
+    .int xt_swap
+    .int xt_tkstr
+    .int xt_branch
+    lbl str_store_digit
+str_no_more_digit:
+    .int xt_drop
+str_store_digit:
+    .int xt_btick, 48
+    .int xt_plus
+    .int xt_over
+    .int xt_storebyte
+    .int xt_inc
+    .int xt_swap
+    .int xt_exit
+
+defword ">str",4,tostr,REGULAR /* ( a len -- addr ) */
+    .int xt_dup
+    .int xt_lt0
+    .int xt_branch0
+    lbl to_str_pos
+    .int xt_btick, -1
+    .int xt_multiply
+    .int xt_rpush
+    .int xt_btick, 45
+    .int xt_over
+    .int xt_storebyte
+    .int xt_inc
+    .int xt_rpop
+to_str_pos:
+    .int xt_here
+    .int xt_mrot
+    .int xt_tkstr
+    .int xt_btick, 0
+    .int xt_rot
+    .int xt_storebyte
+    .int xt_exit
+
 defword "word",4,word,REGULAR /* ( -- a len ) */
     .int xt_btick, 0
 word_trim:

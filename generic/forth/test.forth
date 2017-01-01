@@ -363,6 +363,17 @@ create: seq2 4 c, 5 c,
 : test:core-override
     to-override 45 =assert ;
 
+: test:>str
+    here 1234567     >str str: '1234567'     =str assert
+    here 1234        >str str: '1234'        =str assert
+    here -123        >str str: '-123'        =str assert
+    here -87654321   >str str: '-87654321'   =str assert
+    here 1           >str str: '1'           =str assert
+    here -1          >str str: '-1'          =str assert
+    here 2147483647  >str str: '2147483647'  =str assert
+    here -2147483647 >str str: '-2147483647' =str assert
+    here 0           >str str: '0'           =str assert ;
+
 variable: dp-before-mark dp dp-before-mark !
 marker: -test-mark
 : word-after-marker 1 2 3 ; 237 allot
