@@ -56,7 +56,7 @@ dependencies = {
     'example-philips-hue-clap' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
     'example-geekcreit-rctank' : ['core', 'tasks', 'gpio', 'event', 'wifi', 'netcon', 'tcp-repl', 'ping'],
     'example-http-server' : ['core', 'netcon', 'wifi'],
-    'example-dht22-data-logger' : ['dht22', 'netcon'],
+    'example-dht22-data-logger' : ['dht22', 'netcon', 'flash'],
     'example-buzzer-mario' : ['gpio'],
     'example-buzzer-starwars' : ['gpio'],
 }
