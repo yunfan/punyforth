@@ -203,6 +203,11 @@ defer: handler
 : struct 0 ;
 : field: create: over , + does> @ + ;
 
+: abs ( n -- n ) dup 0< if invert 1+ then ;
+: max ( a b -- max ) 2dup < if nip else drop then ;
+: min ( a b -- min ) 2dup < if drop else nip then ;
+: between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
+
 : [str ( -- address-to-fill-in )
     ['], here 3 cells + ,           \ compile return value: address of string
     ['] branch ,                    \ compile branch that will skip the string
@@ -309,10 +314,14 @@ defer: handler
         1+ swap
     again ;
 
-: abs ( n -- n ) dup 0< if invert 1+ then ;
-: max ( a b -- max ) 2dup < if nip else drop then ;
-: min ( a b -- min ) 2dup < if drop else nip then ;
-: between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
+: >s' ( ? addr n -- addr2 ? )
+    10 /mod ?dup if rot swap >s' then
+    48 + over c! 1+ swap ;
+
+: >str ( addr n -- )
+    dup 0< if abs >r 45 over c! 1+ r> then
+    0 -rot >s'
+    0 rot c! drop ;
 
 : hexchar>int ( char -- n | throws:ECONVERT )
     48 over 57 between? if 48 - exit then
