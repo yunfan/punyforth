@@ -10,6 +10,7 @@ available_modules = {
     'event' : '../forth/event.forth',
     'wifi' : '../forth/wifi.forth',
     'ssd1306-spi' : '../forth/ssd1306-spi.forth',
+    'font5x7' : '../forth/font5x7.forth',
     'netcon' : '../forth/netcon.forth',
     'netcon-test' : '../forth/netcon-test.forth',
     'tasks' : '../forth/tasks.forth',
@@ -40,6 +41,7 @@ dependencies = {
     'event' : ['core', 'tasks'],
     'wifi' : ['core'],
     'ssd1306-spi' : ['core', 'gpio'],
+    'font5x7' : ['core'],
     'netcon' : ['core', 'tasks'],
     'netcon-test' : ['netcon', 'punit', 'wifi'],
     'tasks' : ['core', 'ringbuf'],
@@ -58,7 +60,7 @@ dependencies = {
     'example-http-server' : ['core', 'netcon', 'wifi'],
     'example-dht22-data-logger' : ['dht22', 'netcon', 'flash'],
     'example-buzzer-mario' : ['gpio'],
-    'example-buzzer-starwars' : ['gpio'],
+    'example-buzzer-starwars' : ['gpio'],    
 }
 
 def collect_dependecies(modules):

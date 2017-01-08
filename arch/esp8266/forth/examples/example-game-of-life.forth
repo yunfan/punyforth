@@ -1,11 +1,20 @@
-: north      ( x y -- x' y' )  1- 63 and ;
-: north-east ( x y -- x' y' )  swap 1+ swap 1- truncate-xy ;
-: east       ( x y -- x' y' )  swap 1+ 127 and swap ;
-: south-east ( x y -- x' y' )  swap 1+ swap 1+ truncate-xy ;
-: south      ( x y -- x' y' )  1+ 63 and ;
-: south-west ( x y -- x' y' )  swap 1- swap 1+ truncate-xy ;
-: west       ( x y -- x' y' )  swap 1- 127 and swap ;
-: north-west ( x y -- x' y' )  swap 1- swap 1- truncate-xy ;
+BUFFER_SIZE buffer: screen2
+
+: xchg-screen ( -- )
+    screen screen1 = if
+        screen2 actual !
+    else
+        screen1 actual !
+    then ;    
+    
+: north      ( x y -- x' y' ) 1- 63 and ;
+: north-east ( x y -- x' y' ) swap 1+ swap 1- ;
+: east       ( x y -- x' y' ) swap 1+ 127 and swap ;
+: south-east ( x y -- x' y' ) swap 1+ swap 1+ ;
+: south      ( x y -- x' y' ) 1+ 63 and ;
+: south-west ( x y -- x' y' ) swap 1- swap 1+ ;
+: west       ( x y -- x' y' ) swap 1- 127 and swap ;
+: north-west ( x y -- x' y' ) swap 1- swap 1- ;
 
 : xyover ( x y n -- x y n x y ) >r 2dup r> -rot ;
 
@@ -41,7 +50,7 @@
     0 do 
         next-generation
         xchg-screen
-        show-screen-buffer
+        display
     loop ;
 
 : place-random-cell ( -- ) 

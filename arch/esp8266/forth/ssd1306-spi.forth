@@ -7,74 +7,38 @@
 0  constant: RST  \ RST D3 leg
 1  constant: BUS
 
-141 constant: SSD1306_CHARGE_PUMP_REGULATOR
-20  constant: SSD1306_CHARGE_PUMP_ON
-129 constant: SSD1306_SET_CONTRAST
-164 constant: SSD1306_RESUME_TO_RAM_CONTENT
-165 constant: SSD1306_IGNORE_RAM_CONTENT
-166 constant: SSD1306_DISP_NORMAL
-167 constant: SSD1306_DISP_INVERTED
-174 constant: SSD1306_DISP_SLEEP
-175 constant: SSD1306_DISP_ON
+( 129 constant: SSD1306_SET_CONTRAST )
+( 165 constant: SSD1306_IGNORE_RAM_CONTENT )
 
 \ Scroll commands
-38  constant: SSD1306_SCROLL_RIGHT
-39  constant: SSD1306_SCROLL_LEFT
-41  constant: SSD1306_SCROLL_VERTICAL_RIGHT
-42  constant: SSD1306_SCROLL_VERTICAL_LEFT
-46  constant: SSD1306_SCROLL_OFF
-47  constant: SSD1306_SCROLL_ON
-163 constant: SSD1306_VERT_SCROLL_AREA
+
+( 39  constant: SSD1306_SCROLL_LEFT )
+( 41  constant: SSD1306_SCROLL_VERTICAL_RIGHT )
+( 42  constant: SSD1306_SCROLL_VERTICAL_LEFT )
+( 163 constant: SSD1306_VERT_SCROLL_AREA )
 
 \ Address setting commands
-0   constant: SSD1306_SET_COL_LO_NIBBLE
-16  constant: SSD1306_SET_COL_HI_NIBBLE
-32  constant: SSD1306_MEM_ADDRESSING
-33  constant: SSD1306_SET_COL_ADDR
-34  constant: SSD1306_SET_PAGE_ADDR
-176 constant: SSD1306_SET_PAGE_START_ADDR
+( 0   constant: SSD1306_SET_COL_LO_NIBBLE )
+( 16  constant: SSD1306_SET_COL_HI_NIBBLE )
+( 33  constant: SSD1306_SET_COL_ADDR )
+( 34  constant: SSD1306_SET_PAGE_ADDR )
+( 176 constant: SSD1306_SET_PAGE_START_ADDR )
 
 \ Hardware configuration
-64  constant: SSD1306_SET_DISP_START_LINE
-160 constant: SSD1306_SET_SEG_REMAP_0
-161 constant: SSD1306_SET_SEG_REMAP_127
-168 constant: SSD1306_SET_MULTIPLEX_RATIO
-192 constant: SSD1306_SET_COM_SCAN_NORMAL
-200 constant: SSD1306_SET_COM_SCAN_INVERTED
-211 constant: SSD1306_SET_VERTICAL_OFFSET
-218 constant: SSD1306_SET_WIRING_SCHEME
-213 constant: SSD1306_SET_DISP_CLOCK
-217 constant: SSD1306_SET_PRECHARGE_PERIOD
-219 constant: SSD1306_SET_VCOM_DESELECT_LEVEL
-227 constant: SSD1306_NOP
+( 161 constant: SSD1306_SET_SEG_REMAP_127 )
+( 200 constant: SSD1306_SET_COM_SCAN_INVERTED )
+( 217 constant: SSD1306_SET_PRECHARGE_PERIOD )
+( 227 constant: SSD1306_NOP )
 
 0 constant: SPI_MODE0
-1 constant: SPI_MODE1
-2 constant: SPI_MODE2
-3 constant: SPI_MODE3
-
+1 constant: SPI_BIG_ENDIAN
 1 constant: SPI_WORD_SIZE_8BIT
 2 constant: SPI_WORD_SIZE_16BIT
 4 constant: SPI_WORD_SIZE_32BIT
 
-0 constant: SPI_LITTLE_ENDIAN
-1 constant: SPI_BIG_ENDIAN
-
 : spi-get-freq-div ( divider count -- freq ) 16 lshift swap 65535 and or ;
     
-64 10 spi-get-freq-div constant: SPI_FREQ_DIV_125K  \ < 125kHz
-32 10 spi-get-freq-div constant: SPI_FREQ_DIV_250K  \ < 250kHz
-16 10 spi-get-freq-div constant: SPI_FREQ_DIV_500K  \ < 500kHz
-8  10 spi-get-freq-div constant: SPI_FREQ_DIV_1M    \ < 1MHz
-4  10 spi-get-freq-div constant: SPI_FREQ_DIV_2M    \ < 2MHz
 2  10 spi-get-freq-div constant: SPI_FREQ_DIV_4M    \ < 4MHz
-5  2  spi-get-freq-div constant: SPI_FREQ_DIV_8M    \ < 8MHz
-4  2  spi-get-freq-div constant: SPI_FREQ_DIV_10M   \ < 10MHz
-2  2  spi-get-freq-div constant: SPI_FREQ_DIV_20M   \ < 20MHz
-1  2  spi-get-freq-div constant: SPI_FREQ_DIV_40M   \ < 40MHz
-1  1  spi-get-freq-div constant: SPI_FREQ_DIV_80M   \ < 80MHz
-
-127 constant: DEFAULT_CONTRAST
 
 128 constant: DISPLAY_WIDTH
 64  constant: DISPLAY_HEIGHT
@@ -84,15 +48,10 @@ exception: ESSD1306_WRITE
 
 DISPLAY_WIDTH DISPLAY_HEIGHT * 8 / constant: BUFFER_SIZE
 
-\ display buffers
-BUFFER_SIZE byte-array: screen-ary1
-BUFFER_SIZE byte-array: screen-ary2
-BUFFER_SIZE byte-array: screen-output
-
-' screen-ary1 init-variable: var-screen-ary1
-' screen-ary2 init-variable: var-screen-ary2
-: screen1 ( index -- addr ) var-screen-ary1 @ execute ;
-: screen2 ( index -- addr ) var-screen-ary2 @ execute ;
+BUFFER_SIZE buffer: screen1
+BUFFER_SIZE buffer: output
+screen1 init-variable: actual
+: screen ( -- buffer ) actual @ ;
 
 : display-setup-wiring
     DC GPIO_OUT gpio-mode
@@ -110,6 +69,25 @@ BUFFER_SIZE byte-array: screen-output
     BUS spi-send8 
     check-write-result ;
 
+: display-invert ( -- ) 167 write-command ;
+: display-normal ( -- ) 166 write-command ;
+
+38 constant: RIGHT
+39 constant: LEFT
+
+\ activate scroll. Display is 16 row tall
+: scroll-start ( stop-row start-row direction -- )
+        write-command ( direction )
+    0   write-command
+        write-command ( start )
+    0   write-command
+        write-command ( stop )
+    0   write-command
+    255 write-command
+    47  write-command ( SSD1306_SCROLL_ON ) ;
+
+: scroll-stop ( -- ) 46 write-command ;    
+    
 : write-data ( data -- | ESSD1306_WRITE ) 
     DC GPIO_HIGH gpio-write
     BUS spi-send8 
@@ -123,47 +101,45 @@ BUFFER_SIZE byte-array: screen-output
     RST GPIO_HIGH gpio-write ;
 
 : display-send-init-sequence ( -- )
-    SSD1306_DISP_SLEEP              write-command
-    SSD1306_SET_DISP_CLOCK          write-command
-    128                             write-command
-    SSD1306_SET_MULTIPLEX_RATIO     write-command
-    63                              write-command
-    SSD1306_SET_VERTICAL_OFFSET     write-command
-    0                               write-command
-    SSD1306_SET_DISP_START_LINE     write-command
-    SSD1306_CHARGE_PUMP_REGULATOR   write-command
-    SSD1306_CHARGE_PUMP_ON          write-command
-    SSD1306_MEM_ADDRESSING          write-command
-    0                               write-command
-    SSD1306_SET_SEG_REMAP_0         write-command
-    SSD1306_SET_COM_SCAN_NORMAL     write-command
-    SSD1306_SET_WIRING_SCHEME       write-command
-    18                              write-command
-    SSD1306_SET_VCOM_DESELECT_LEVEL write-command
-    64                              write-command
-    SSD1306_RESUME_TO_RAM_CONTENT   write-command
-    SSD1306_DISP_NORMAL             write-command
-    SSD1306_DISP_ON                 write-command ;
+    174 write-command ( SSD1306_DISP_SLEEP )
+    213 write-command ( SSD1306_SET_DISP_CLOCK )
+    128 write-command
+    168 write-command ( SSD1306_SET_MULTIPLEX_RATIO )
+    63  write-command
+    211 write-command ( SSD1306_SET_VERTICAL_OFFSET )
+    0   write-command
+    64  write-command ( SSD1306_SET_DISP_START_LINE )
+    141 write-command ( SSD1306_CHARGE_PUMP_REGULATOR )
+    20  write-command ( SSD1306_CHARGE_PUMP_ON )
+    32  write-command ( SSD1306_MEM_ADDRESSING )
+    0   write-command
+    160 write-command ( SSD1306_SET_SEG_REMAP_0 )
+    192 write-command ( SSD1306_SET_COM_SCAN_NORMAL )
+    218 write-command ( SSD1306_SET_WIRING_SCHEME )
+    18  write-command
+    219 write-command ( SSD1306_SET_VCOM_DESELECT_LEVEL )
+    64  write-command
+    164 write-command ( SSD1306_RESUME_TO_RAM_CONTENT )
+    display-normal
+    175 write-command ( SSD1306_DISP_ON ) ;
 
 : display-reset ( -- )
-    33 write-command
-    0 write-command
+    33  write-command
+    0   write-command
     127 write-command
-    34 write-command
-    0 write-command
-    7 write-command 
+    34  write-command
+    0   write-command
+    7   write-command 
     1025 0 do 0 write-data loop ;
-
-: xchg-screen ( -- ) 
-    var-screen-ary2 @
-    var-screen-ary1 @ var-screen-ary2 !
-    var-screen-ary1 ! ;    
 
 : y>bitmask ( y -- bit-index )
     7 and
     1 swap lshift ;
 
-: xy>buffer-pos ( x y -- bit-mask array-index )
+: xy-trunc ( x y -- x' y' ) swap 127 and swap 63 and ;
+    
+: xy>i ( x y -- bit-mask buffer-index )
+    xy-trunc
     dup 
     y>bitmask -rot
     3 rshift            \  8 /
@@ -176,39 +152,45 @@ BUFFER_SIZE byte-array: screen-output
     tuck c@ and swap c! ;
 
 : set-pixel ( x y -- )    
-    xy>buffer-pos screen1 or! ;
+    xy>i screen + or! ;
 
 : unset-pixel ( x y -- ) 
-    xy>buffer-pos screen1 
+    xy>i screen +
     swap invert swap and! ;
 
 : pixel-set? ( x y -- )
-    xy>buffer-pos screen1
+    xy>i screen +
     c@ and 0<> ;
 
-: fill-screen-buffer ( value -- ) 
+: hline ( x y width -- )
+    0 do
+        2dup set-pixel { 1+ } dip
+    loop
+    2drop ;
+
+: rect-fill ( x y width height -- )
+    0 do
+        3dup hline { 1+ } dip
+    loop
+    3drop ;
+    
+: fill-buffer ( value -- ) 
     BUFFER_SIZE 0 do 
-        dup i screen1 c! 
+        dup i screen + c! 
     loop 
     drop ;
 
-: show-screen-buffer ( -- )
+: display ( -- )
     SPI_WORD_SIZE_8BIT
     BUFFER_SIZE
-    0 screen-output
-    0 screen1
+    output
+    screen
     BUS 
     spi-send BUFFER_SIZE <> if
         ESSD1306 throw
     then ;
 
-: display-clear ( -- )
-    0 fill-screen-buffer
-    show-screen-buffer ;
-
-: truncate-xy ( x y -- x' y' )
-    swap 127 and 
-    swap 63 and ;
+: display-clear ( -- ) 0 fill-buffer display ;
 
 : display-init ( -- | ESSD1306 )
     display-setup-wiring
@@ -219,3 +201,55 @@ BUFFER_SIZE byte-array: screen-output
     display-on
     display-send-init-sequence
     display-reset ;
+
+0 init-variable: font
+0 init-variable: text-left
+0 init-variable: text-top
+1 init-variable: font-size
+
+: font-small  ( -- ) 1 font-size ! ;
+: font-medium ( -- ) 2 font-size ! ;
+: font-big    ( -- ) 3 font-size ! ;
+: font-xbig   ( -- ) 4 font-size ! ;
+
+: draw-lf ( -- ) 9 text-top +! ;
+: draw-cr ( -- ) 0 text-left ! ;
+
+: dot ( x y -- )
+    { font-size @ * } bi@
+    font-size @ dup rect-fill ;
+    
+: stripe ( bits -- )
+    8 0 do
+        dup 1 and 1= if
+            text-left @ text-top @ i + dot
+        then
+        1 rshift
+    loop
+    drop ;
+
+: draw-char ( char -- )
+    255 and 5 * font @ +
+    5 0 do
+        dup c@ stripe 1+
+        1 text-left +!
+    loop
+    1 text-left +!
+    drop ;
+    
+: draw-str ( str -- )
+    font @ 0= if 
+        println: 'Set a font like: "font5x7 font !"'
+        drop exit 
+    then
+    dup strlen 0 do
+        dup i + c@
+        case
+            10 of draw-lf endof
+            13 of draw-cr endof
+            draw-char
+        endcase
+    loop
+    drop ;
+    
+: str-width ( str -- ) strlen 8 * font-size @ * ;
