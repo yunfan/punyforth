@@ -233,6 +233,8 @@ defer: handler
             [ char: n ] literal of 10 endof
             [ char: t ] literal of 9  endof
             [ char: \ ] literal of 92 endof
+            [ char: " ] literal of 34 endof
+            [ char: ' ] literal of 39 endof
             EESCAPE throw
         endcase
     then ;

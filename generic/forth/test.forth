@@ -306,6 +306,8 @@ B
    str: '\\' c@ 92 =assert 
    str: '\\\\' strlen 2 =assert 
    str: '\t' c@ 9 =assert 
+   str: "\"" c@ 34 =assert 
+   str: "\'" c@ 39 =assert 
    str: 'abc\r\nd' strlen 6 =assert ;
 
 : test:core-untilloop
