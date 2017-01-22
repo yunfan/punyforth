@@ -94,7 +94,7 @@ Stack visualization:
      2         9
 </pre>
 
-*dup* and *swap* are [stack shuffle](http://wiki.laptop.org/go/Forth_stack_operators) words. Excessive use of words like them make the code hard to follow, so it is advisable to use them sparingly. There are many ways to reduce the number of stack shuffles, one of them is to use [quotations and combinators](http://elasticdog.com/2008/12/beginning-factor-shufflers-and-combinators/).
+*dup* and *swap* are [stack shuffle](http://wiki.laptop.org/go/Forth_stack_operators) words. Excessive use of words like them makes the code hard to follow, so it is advisable to use them sparingly. There are many ways to reduce the number of stack shuffles, one of them is to use [quotations and combinators](http://elasticdog.com/2008/12/beginning-factor-shufflers-and-combinators/).
 
 For example the above code could have been expressed the following way:
 
@@ -123,7 +123,7 @@ Punyforth supports exception handling, multitasking, socket and GPIO APIs and co
 
 During programming, the user uses the REPL to write and test small piece of codes or to extend the languge with new words (which are called subroutines or functions in other languages). 
 
-The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. In interpretation mode, it immediately executes the words that the user typed in. In compilation mode (when you start a new word definition), its action depends on the compilation semantic of the current word. In most cases it compiles the execution token (pointer to the word) into the word to be defined. However, if the current word is flagged as immediate, the compiler executes the word at compile time so the word can define its own compilation semantic. This is a bit similar than Lisp macros. Control structures are implemented as immediate words in Forth.
+The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. In interpretation mode, it immediately executes the words that the user typed in. In compilation mode (when you start a new word definition), its action depends on the compilation semantic of the current word. In most cases it compiles the execution token (pointer to the word) into the word to be defined. However, if the current word is flagged as immediate, the compiler executes the word at compile time so the word can define its own compilation semantic. This is a bit similar to Lisp macros. Control structures are implemented as immediate words in Forth.
 
 ### The syntax
 
@@ -414,7 +414,7 @@ The word *hex:* is an other example of a parsing word.
 hex: FF \ pushes 255 onto the stack
 ```
 
-This word interprets the input as a hexadecimal number then pushes it to the stack. Parsing words are similar than reader macros in Lips.
+This word interprets the input as a hexadecimal number then pushes it to the stack. Parsing words are similar to reader macros in Lisp.
 
 ### Deferred words
 
