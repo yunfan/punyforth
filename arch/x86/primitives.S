@@ -6,9 +6,9 @@ defprimitive "dup",3,dup,REGULAR /* ( a -- a a ) */
     mov eax, [esp]
     push eax
     NEXT
-    
+
 defprimitive "drop",4,drop,REGULAR /* ( a -- ) */
-    add esp, CELLS	
+    add esp, CELLS
     NEXT
 
 defprimitive "swap",4,swap,REGULAR /* ( a b -- b a ) */
@@ -42,7 +42,7 @@ defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */
     pop edx
     pop ecx
     pop ebx
-    pop eax    
+    pop eax
     push eax
     push ebx
     push ecx
@@ -54,13 +54,13 @@ defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */
 defprimitive "+",1,plus,REGULAR
     pop eax
     add [esp], eax
-    NEXT    
-    
+    NEXT
+
 defprimitive "-",1,minus,REGULAR
     pop eax
     sub [esp], eax
-    NEXT        
-    
+    NEXT
+
 defprimitive "*",1,multiply,REGULAR
     pop eax
     pop ebx
@@ -77,21 +77,21 @@ defprimitive "/mod",4,divmod,REGULAR /* ( n d -- m q ) */
     push edx
     push eax
     NEXT
-    
+
 defprimitive "or",2,or,REGULAR
     pop eax
     or [esp], eax
     NEXT
-    
+
 defprimitive "and",3,and,REGULAR
     pop eax
     and [esp], eax
-    NEXT    
+    NEXT
 
 defprimitive "xor",3,xor,REGULAR
     pop eax
     xor [esp], eax
-    NEXT    
+    NEXT
 
 defprimitive "lshift",6,lshift,REGULAR
     pop ecx
@@ -116,18 +116,18 @@ defprimitive "_emit",5,uemit,REGULAR
     mov eax, 4      // sys_write
     int 0x80
     NEXT
-    
+
 defprimitive "abort",5,abort,REGULAR
     mov esp, [stack_top]
     mov eax, 1
     int 0x80
-    
+
 defprimitive "@",1,fetch,REGULAR
     pop eax
     mov ebx, [eax]
     push ebx
     NEXT
-    
+
 defprimitive "!",1,store,REGULAR
     pop edi
     pop eax
@@ -139,12 +139,12 @@ defprimitive "c!",2,storebyte,REGULAR
     pop eax
     stosb
     NEXT
-        
+
 defprimitive "[']",3,btick,REGULAR    // compile only
     lodsd
     push eax
     NEXT
-   
+
 defprimitive "<",1,lt,REGULAR         // only need to define this, all other comparisions are implemented in terms of lt
     pop eax
     pop ebx
@@ -158,7 +158,7 @@ defprimitive "<",1,lt,REGULAR         // only need to define this, all other com
 defprimitive "invert",6,invert,REGULAR
     not dword ptr [esp]
     NEXT
-    
+
 defprimitive "branch",6,branch,REGULAR
     lodsd
     add esi, eax
@@ -178,17 +178,17 @@ defprimitive ">r",2,rpush,REGULAR
     sub ebp, CELLS
     mov [ebp], eax
     NEXT
-    
+
 defprimitive "r>",2,rpop,REGULAR
     mov eax, [ebp]
     add ebp, CELLS
     push eax
-    NEXT    
+    NEXT
 
 defprimitive "i",1,i,REGULAR
     mov eax, [ebp]
     push eax
-    NEXT    
+    NEXT
 
 defprimitive "j",1,j,REGULAR
     mov eax, [ebp + 2 * CELLS]
@@ -228,7 +228,7 @@ defprimitive "readchar",8,readchar,REGULAR
     mov edx, 1                                                          // read one character
     int 0x80                                                            // invoke system call to read from stdin
     cmp eax, 0                                                          // number bytes read
-    jbe code_abort 
+    jbe code_abort
     mov eax, [var0]
     push eax
     NEXT
@@ -248,5 +248,5 @@ ENTERDOES:
     add eax, CELLS          // eax points to the codeword field, skip tshi
     mov esi, [eax]          // after the codeword there is the behaviour pointer
     add eax, CELLS          // after the behaviour pointer there is the data field
-    push eax               
+    push eax
     NEXT                    // jump to behavour
