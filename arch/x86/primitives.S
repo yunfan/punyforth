@@ -108,13 +108,12 @@ defprimitive "rshift",6,rshift,REGULAR
     NEXT
 
 defprimitive "_emit",5,uemit,REGULAR
-    mov edx, 1     // length
-    pop eax
-    mov [var0], eax
-    mov ecx, OFFSET FLAT:var0
+    mov edx, 1      // length
+    mov ecx, esp    // emit right off the stack
     mov ebx, 1      // stdout
     mov eax, 4      // sys_write
     int 0x80
+    pop ebx
     NEXT
 
 defprimitive "abort",5,abort,REGULAR
