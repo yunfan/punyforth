@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/zeroflag/punyforth.svg?branch=master)](https://travis-ci.org/zeroflag/punyforth) 
+[![Build Status](https://travis-ci.org/zeroflag/punyforth.svg?branch=master)](https://travis-ci.org/zeroflag/punyforth)
 
 # Punyforth
 
@@ -11,7 +11,7 @@ Punyforth also runs on x86 (Linux), ARM (Raspberry PI) but these are *not* the p
 ## Design goals
 
 * Simple
-* Highly interactive 
+* Highly interactive
 * Extensible
 * Small memory footprint and resource efficiency
 
@@ -25,7 +25,7 @@ $ python modules.py core
 $ flash com3
 ```
 
-At first we select the modules to be installed using the *modules.py* python script. Then we install both Punyforth and the selected modules (this time only the core library) to the ESP8266 using the *flash* script. 
+At first we select the modules to be installed using the *modules.py* python script. Then we install both Punyforth and the selected modules (this time only the core library) to the ESP8266 using the *flash* script.
 
 Open a serial terminal<sup>[1](#serial)</sup> on port COM3 then type:
 
@@ -106,7 +106,7 @@ See the chapter about quotations and combinators for more information.
 
 ### Differences between Punyforth and other Forth systems
 
-Punyforth is heavily inspired by the [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc) as other Forth systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level  abstractions are built on top of the primitives therefore most of the system is written in itself (in Forth).
+Punyforth is heavily inspired by the [Forth](https://en.wikipedia.org/wiki/Forth_(programming_language)) programming language. It uses the same compilation model (outer interpreter, compiler, modes, dictionary, immediate words, etc.) as other Forth systems. Punyforth is [bootstrapped](http://www.lispcast.com/two-kinds-of-bootstrapping) from a small set of [primitives](arch/x86/primitives.S) written in assembly language. The compiler targets these primitives and compiles [indirect-threaded code](https://en.wikipedia.org/wiki/Threaded_code). Higher level abstractions are built on top of the primitives therefore most of the system is written in itself (in Forth).
 
 #### Some of the differences
 * Punyforth is case sensitive
@@ -121,7 +121,7 @@ Punyforth supports exception handling, multitasking, socket and GPIO APIs and co
 
 ### Programming
 
-During programming, the user uses the REPL to write and test small piece of codes or to extend the languge with new words (which are called subroutines or functions in other languages). 
+During programming, the user uses the REPL to write and test small piece of codes or to extend the languge with new words (which are called subroutines or functions in other languages).
 
 The REPL (also known as the Forth Outer/Text Interpreter) operates in 2 modes. In interpretation mode, it immediately executes the words that the user typed in. In compilation mode (when you start a new word definition), its action depends on the compilation semantic of the current word. In most cases it compiles the execution token (pointer to the word) into the word to be defined. However, if the current word is flagged as immediate, the compiler executes the word at compile time so the word can define its own compilation semantic. This is a bit similar to Lisp macros. Control structures are implemented as immediate words in Forth.
 
@@ -136,7 +136,7 @@ Forth has almost no syntax. It grabs tokens separated by whitespace, looks them 
 
 ### Extending the dictionary
 
-Words are stored in a *dictionary*. The dictionary maps words to executable code or data structures. 
+Words are stored in a *dictionary*. The dictionary maps words to executable code or data structures.
 
 You can use *defining words* to extend the dictionary with new definitions. The most basic defining words is the *:* (colon). This adds a new word to the dictionary with the behavior defined in terms of existing words. A colon definition begins with a colon and ends with a semicolon.
 
@@ -174,19 +174,19 @@ General form of *if else then*.
 
 For example:
 ```forth
-: max ( a b -- max ) 
+: max ( a b -- max )
   2dup < if nip else drop then ;
-  
+
 10 100 max . \ prints 100
 ```
 
 The else part can be omitted.
 
 ```forth
-: abs ( n -- absn ) 
+: abs ( n -- absn )
   dup 0< if -1 * then ;
-  
--10 abs . \ prints 10  
+
+-10 abs . \ prints 10
 ```
 
 #### Case statement
@@ -255,12 +255,12 @@ For example:
 
 ```forth
 : countdown ( n -- )
-  begin 
+  begin
     dup .
     1- dup
   0 < until
   drop ;
-  
+
 5 countdown \ prints 543210
 ```
 
@@ -284,18 +284,18 @@ For example:
     dup . 1-
   repeat
   drop ;
-  
+
 5 countdown \ prints 543210
 ```
 
 
-You can use the *exit* word to exit from the current word as well from the loop. 
+You can use the *exit* word to exit from the current word as well from the loop.
 
 But this won't work with do loops. The reason for this is because do loops store the loop index on the return stack. You can use the *unloop* word to clear the return stack before exiting a do loop.
 
 ```forth
 : some-word ( -- )
-  10 0 do 
+  10 0 do
     i 5 = if unloop exit then
   loop ;
 ```
@@ -319,7 +319,7 @@ Control structres are compile time words with no interpretation semantics. They 
 
 ### Exception handling
 
-If a word faces an error condition it can *throw* an exception. Your can provide exception handlers to *catch* exceptions. 
+If a word faces an error condition it can *throw* an exception. Your can provide exception handlers to *catch* exceptions.
 
 For example:
 
@@ -327,23 +327,23 @@ For example:
 exception: EZERODIV
 
 : div ( q d -- r | throws:EZERODIV ) \ this word throws an exception in case of division by zero
-    dup 0= if 
-      EZERODIV throw 
-    else 
-      / 
-    then ;
+  dup 0= if
+    EZERODIV throw
+  else
+    /
+  then ;
 ```
 
 ```forth
 : test-div ( q d -- r )
   ['] div catch
     case
-      EZERODIV of 
+      EZERODIV of
         println: '/ by zero'                 \ print exception in case of zero division
         2drop                                \ drop q d
-      endof   
+      endof
       throw                                  \ rethrow if it wasn't EZERODIV, or there was no exception (code=0)
-    endcase ; 
+    endcase ;
 ```
 
 The word *catch* expects an execution token of a word that potentially throws an exception.
@@ -358,26 +358,26 @@ You can modify this behaviour by overriding the *unhandled* deferred word.
 
 ```forth
 : my-uncaught-exception-handler ( code -- )
-    cr print: "Uncaught exception: " ex-type
-    abort ;
-    
+  cr print: "Uncaught exception: " ex-type
+  abort ;
+
 ' unhandled is: my-uncaught-exception-handler
-```    
+```
 
 The implementation of exceptions is based on the idea of [William Bradley](http://www.complang.tuwien.ac.at/anton/euroforth/ef98/milendorf98.pdf).
 
-### Immediate words 
+### Immediate words
 
 Immediate words are executed at compile time. Loops and control structures are implemented with immediate words that compile the required semantics.
 
 ```forth
 : begin
-    here                   \ saves the absolute address of the beginning of the loop to the stack
- ; immediate
- 
+  here                   \ saves the absolute address of the beginning of the loop to the stack
+; immediate
+
 : until
-    ['] branch0 ,          \ compiles a conditional branch
-    here - cell - ,        \ calculate then compile the relative address 
+  ['] branch0 ,          \ compiles a conditional branch
+  here - cell - ,        \ calculate then compile the relative address
 ; immediate
 ```
 
@@ -391,22 +391,22 @@ Parsing words can parse the input stream. One example of a parsing word is the c
 ```
 
 ```forth
-: (                                 \ comments start with ( character
-    begin                           \ consume the stream until ) character is found
-        key ')' = 
-    until 
- ; immediate
-``` 
+: (                                \ comments start with ( character
+  begin                            \ consume the stream until ) character is found
+    key ')' =
+  until
+; immediate
+```
 
 ```forth
-: \                                 \ single line comments start with \ character
-    begin                           
-        key dup 
-        'cr' = swap 
-        'lf' = or
-    until                           \ consume the stream until cr or lf character is found
- ; immediate
-``` 
+: \                                \ single line comments start with \ character
+  begin
+    key dup
+    'cr' = swap
+    'lf' = or
+  until                            \ consume the stream until cr or lf character is found
+; immediate
+```
 
 The word *hex:* is an other example of a parsing word.
 
@@ -423,15 +423,15 @@ This word interprets the input as a hexadecimal number then pushes it to the sta
 For example
 
 ```forth
-: myword1 ( -- ) 
+: myword1 ( -- )
   print: 'foo' ;
 
-: myword2 ( -- ) 
-  myword1 
+: myword2 ( -- )
+  myword1
   print: 'bar' ;
-    
+
 : myword1 ( -- ) \ redefining myword1 to print out baz instead of foo
-  print: 'baz' ; 
+  print: 'baz' ;
 
 myword2 \ myword2 will print out foobar, not bazbar
 ```
@@ -442,8 +442,8 @@ Redefinition has no effect on myword2. Let's try it again. This time using the *
 defer: myword1
 
 : myword2 ( -- )
-  myword1                       \ I can define myword2 in terms of the (yet undefined) myword1  
-  print: 'bar' ; 
+  myword1                       \ I can define myword2 in terms of the (yet undefined) myword1
+  print: 'bar' ;
 
 : printfoo ( -- ) print: 'foo' ;
 : printbaz ( -- ) print: 'baz' ;
@@ -457,32 +457,32 @@ myword2                         \ this prints out bazbar
 
 ### Override
 
-You might want to redefine a word in terms of it's older definition. 
+You might want to redefine a word in terms of it's older definition.
 
 For example:
 
 ```forth
-: myword ( -- ) 
+: myword ( -- )
   print: 'foo' ;
 
 : myword ( -- )
-  myword 
+  myword
   print: 'bar' ;
-  
+
 myword \ infinite recursion
 ```
 
 Unfortunately this won't work because the *myword* inside the second defintion will refer to the new word, resulting infinite recursion. You can avoid this by marking the word with *override*.
 
 ```forth
-: myword ( -- ) 
+: myword ( -- )
   print: 'foo' ;
 
 : myword ( -- ) override
-  myword 
+  myword
   print: 'bar' ;
-  
-myword \ prints out foobar  
+
+myword \ prints out foobar
 ```
 
 Because the usage of *override*, the *myword* in the second defintion will refer to the old *myword*. Therefore the execution of *myword* will print out foobar.
@@ -496,70 +496,69 @@ A quotation is an anonymous word inside an other word, similar than a lambda exp
   ( .. )
   { ( ..quotation body.. ) }
   ( .. ) ;
-```   
+```
 
 At runtime the quotation pushes its execution token onto the stack, therefore it can be used with execute, catch or combinators.
 
 ```forth
-: demo ( -- n ) 
+: demo ( -- n )
   3 { 1+ 5 * } execute ;
-   
+
 % demo
 (stack 20)
-```   
+```
 
 #### Quotations and exception handling
 
 ```forth
-   { str: 'AF01z' hex>int } catch
-   if
-      println: 'invalid hex number'
-      abort
-   then
+  { str: 'AF01z' hex>int } catch
+  if
+    println: 'invalid hex number'
+    abort
+  then
 ```
 
 #### Quotations and Factor style combinators
 
 Punyforth supports a few [Factor](https://factorcode.org/) style combinators.
 
-##### dip ( x quot -- x ) 
+##### dip ( x quot -- x )
 
 Calls a quotation while temporarily hiding the top item on the stack.
 
-```forth 
-  1 2 4 { + } dip   \ Same as: 1 2 4 >r + r> 
-  (stack 3 4) 
-``` 
- 
-##### keep ( x quot -- x ) 
+```forth
+  1 2 4 { + } dip    \ Same as: 1 2 4 >r + r>
+  (stack 3 4)
+```
+
+##### keep ( x quot -- x )
 
 Calls a quotation with an item on the stack, restoring that item after the quotation returns.
 
-```forth 
+```forth
   1 2 4 { + } keep    \ Same as: 1 2 4 dup >r + r>
   (stack 1 6 4)
-``` 
- 
-##### bi ( x p q -- ) 
+```
+
+##### bi ( x p q -- )
 
 Applies quotation p to x, then applies quotation q to x.
 
-```forth 
+```forth
   \ given a rectangle(width=3, height=4)
-  rectangle { .width @ } { .height @ } bi *   \ Same as: rectangle dup .width @ swap .height @ *
-  (stack 12) 
-``` 
-  
-##### bi* ( x y p q -- ) 
+  rectangle { .width @ } { .height @ } bi *    \ Same as: rectangle dup .width @ swap .height @ *
+  (stack 12)
+```
+
+##### bi* ( x y p q -- )
 
 Applies quotation p to x, then applies quotation q to y.
 
-```forth 
+```forth
   str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* =    \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
   (stack -1)
-  
-``` 
-  
+```
+
 ##### bi@ ( x y quot -- )
 
 Applies the quotation to x, then to y.
@@ -567,7 +566,6 @@ Applies the quotation to x, then to y.
  ```forth
   str: "john" str: ".doe" { strlen } bi@ =    \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
   (stack -1)
-  
 ```
 
 ### The word *create: does>*
@@ -581,10 +579,10 @@ The word *create:* and *does>* lets you combine a data structure with an action.
 One of the simplest application of *create: does>* is the definition of a constant.
 
 ``` forth
-: constant: 
-  create: , 
+: constant:
+  create: ,
   does> @ ;
-  
+
 80 constant: COLUMNS
 
 COLUMNS . \ prints out 80
@@ -602,9 +600,9 @@ COLUMNS . \ prints out 80
 
 ```forth
 : array: ( size "name" -- ) ( index -- addr )
-    create: cells allot
-    does> swap cells + ;
-    
+  create: cells allot
+  does> swap cells + ;
+
 10 array: numbers \ create an array with 10 elements
 
 12 3 numbers !      \ store 12 in the 3rd element
@@ -617,26 +615,25 @@ COLUMNS . \ prints out 80
 ```forth
 : struct 0 ;
 
-: field: 
-  create: over , + 
+: field:
+  create: over , +
   does> @ + ;
 
-struct 
-  cell field: .width 
+struct
+  cell field: .width
   cell field: .height
 constant Rect
 
-: new-rect: ( "name" -- ) 
+: new-rect: ( "name" -- )
   Rect create: allot ;
-  
-: area ( rect -- area ) 
-  dup .width @ swap .height @ * ;  
-  
+
+: area ( rect -- area )
+  dup .width @ swap .height @ * ;
+
 new-rect: r1
 3 r1 .width !
-5 r1 .height !  
-r1 area .  
-  
+5 r1 .height !
+r1 area .
 ```
 
 ### Unit testing
@@ -684,7 +681,7 @@ In station mode, the ESP8266 connects to an existing Wi-Fi access point.
 
 ```forth
 str: "password" str: "existing-ssid" wifi-connect
-```    
+```
 
 In AP mode, the ESP8266 acts as an central connection point, which wireless clients (smartphones, laptops) can connect to. In this mode you have to choose an IP address for the ESP and an IP range for the clients. Client IP addresses are assigned by the [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) server.
 
@@ -723,10 +720,10 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
 
 : fetch ( netcon -- )
   begin
-    dup 512 line netcon-readln -1 <> 
+    dup 512 line netcon-readln -1 <>
   while
     line type cr
-  repeat 
+  repeat
   drop ;
 
 80 str: "google.com" TCP netcon-connect constant: socket
@@ -803,7 +800,7 @@ task: mytask
 To start the task, first you have to switch to multi tasking mode first by executing the word *multi*. Then simply call the word that was associated to the task.
 
 ```forth
-multi 
+multi
 my-word
 ```
 
@@ -820,17 +817,17 @@ task: task-consumer
 
 \ this word is executed by the task
 : consumer ( task -- )
-    activate                            \ activate task
-    begin    
-        mailbox1 mailbox-receive .      \ receive and print one item from the mailbox
-        println: "received by consumer"
-        pause                           \ allow other tasks to run
-    again
-    deactivate ;                        \ deactivate task
+  activate                            \ activate task
+  begin
+    mailbox1 mailbox-receive .        \ receive and print one item from the mailbox
+    println: "received by consumer"
+    pause                             \ allow other tasks to run
+  again
+  deactivate ;                        \ deactivate task
 
-multi                                   \ switch to multitask mode
-task-consumer consumer                  \ run the consumer
-123 mailbox1 mailbox-send               \ send some numbers to the consumer
+multi                                 \ switch to multitask mode
+task-consumer consumer                \ run the consumer
+123 mailbox1 mailbox-send             \ send some numbers to the consumer
 456 mailbox1 mailbox-send
 ```
 
@@ -842,9 +839,9 @@ task: task-counter
 
 \ this word is executed by the task
 : counter ( task -- )
-    activate                              \ actiavte task
-    100 0 do 
-        i . cr 
+    activate                              \ activate task
+    100 0 do
+        i . cr
         500 ms
     loop
     deactivate ;                          \ deactivate task
@@ -857,19 +854,19 @@ task-counter counter                      \ run the consumer
 
 ```forth
 \ Returns the available free dictionary space.
-freemem ( -- bytes ) 
+freemem ( -- bytes )
 
 \ Returns the available free memory.
-osfreemem ( -- bytes ) 
+osfreemem ( -- bytes )
 
 \ Blocks all running tasks for the specified number of millisecond.
 ms ( msec -- )
 
 \ Blocks for the specified number of microsecond. This is implemented as busy loop. Use it if you need high precision delay.
-us ( usec -- ) 
+us ( usec -- )
 
 \ Sets the baud rate of the specied uart.
-uart-set-bps ( bps uart-number -- ) 
+uart-set-bps ( bps uart-number -- )
 ```
 
 You can see some example code under the [examples](arch/esp8266/forth/examples) directory.
@@ -881,4 +878,3 @@ Build instructions and further information is available at [punyforth wiki](http
 Attila Magyar
 
 [![Twitter Follow](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&label=%40zeroflag&maxAge=2592000?style=flat-square)](https://twitter.com/zeroflag) [![Gitter chat](https://badges.gitter.im/gitterHQ/gitter.png)](https://gitter.im/punyforth/Lobby)
-
