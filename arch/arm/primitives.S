@@ -110,15 +110,14 @@ defprimitive "rshift",6,rshift,REGULAR
     NEXT
 
 defprimitive "_emit",5,uemit,REGULAR
-    pop {r0}
-    push {r6, r7}
-    ldr r1, =var0
-    str r0, [r1]
+    mov r3, r7                      // save forth ip
+    mov r1, sp                      // char to print
     mov r0, #1                      // fd <- stdout
     mov r2, #1                      // length
     mov r7, #4                      // syscall <- sys_write
     swi 0                           // system call
-    pop {r6, r7}
+    mov r7, r3
+    pop {r0}                        // discard char
     NEXT    
 
 defprimitive "abort",5,abort,REGULAR
