@@ -95,8 +95,7 @@ defprimitive "over",4,over,REGULAR    // optional
 
 defprimitive "time",4,time,REGULAR /* ( -- unixtime ) */
     mov eax, 13
-    mov ebx, OFFSET FLAT:var0
-    int 0x80
-    mov eax, [var0]
     push eax
+    mov ebx, esp
+    int 0x80
     NEXT
