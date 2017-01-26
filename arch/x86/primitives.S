@@ -220,16 +220,14 @@ defprimitive "rp!",3,rpstore,REGULAR
     NEXT
 
 defprimitive "readchar",8,readchar,REGULAR
-    mov ecx, OFFSET FLAT:var0                                           // buffer for one character
     xor ebx, ebx                                                        // reads from stdin (FD 0)
-    mov [ecx], ebx
+    push ebx                                                            // make room for buffer
+    mov ecx, esp
     mov eax, 3                                                          // use syscall 3 (read) to read from stdin
     mov edx, 1                                                          // read one character
     int 0x80                                                            // invoke system call to read from stdin
     cmp eax, 0                                                          // number bytes read
     jbe code_abort
-    mov eax, [var0]
-    push eax
     NEXT
 
 // Different types of code words
