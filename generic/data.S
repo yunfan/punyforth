@@ -14,7 +14,6 @@
 .set MAX_WORD_LEN,63
 
 stack_top:    .int 0
-var0:         .int 0
 state_var:    .int STATE_INTERPRET
 input_index:  .int input_buffer
 input_buffer: .space INPUT_BUFFER_SIZE,' '
