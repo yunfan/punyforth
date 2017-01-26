@@ -224,8 +224,9 @@ defprimitive "rp!",3,rpstore,REGULAR
     NEXT
 
 defprimitive "readchar",8,readchar,REGULAR
-    push {r7}
-    ldr r1, =var0           // buffer for one character
+    mov r3, r7              // save forth ip
+    push {r0}               // make place for buffer
+    mov r1, sp              // buffer for one character
     mov r0, #0              // read system call
     str r0, [r1]
     mov r2, #1              // length
@@ -233,9 +234,8 @@ defprimitive "readchar",8,readchar,REGULAR
     swi 0
     cmp r0, #0
     ble code_abort
-    pop {r7}
+    mov r7, r3
     ldr r0, [r1]
-    push {r0}
     NEXT
 
 // Different types of code words
