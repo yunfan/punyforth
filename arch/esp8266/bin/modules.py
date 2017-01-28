@@ -1,5 +1,14 @@
 import sys, os
-from compiler.ast import flatten
+import collections
+
+def flatten(an_iterable):
+    result = []
+    for each in an_iterable:
+        if isinstance(each, collections.Iterable) and not isinstance(each, str):
+            result.extend(flatten(each))
+        else:
+            result.append(each)
+    return result
 
 available_modules = {
     'core' : '../../../generic/forth/core.forth',

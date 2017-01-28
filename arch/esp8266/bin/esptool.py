@@ -27,6 +27,10 @@ import subprocess
 import tempfile
 import inspect
 
+try:
+    xrange(1)
+except NameError:
+    xrange = range
 
 class ESPROM:
     # These are the currently known commands supported by the ROM
