@@ -87,3 +87,8 @@ defprimitive "over",4,over,REGULAR
 defprimitive "time",4,time,REGULAR /* ( -- unixtime ) */
     push {r0}
     NEXT
+
+defprimitive "r@",2,rfetch,REGULAR
+    ldr r0, [r6]
+    push {r0}
+    NEXT

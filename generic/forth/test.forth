@@ -391,6 +391,10 @@ marker: -test-mark
    -test-mark
    dp dp-before-mark @ =assert ;
 
+: test:r@
+   123 >r r@ 123 =assert r> drop
+   -34 >r r@ -34 =assert r> drop ;
+
 depth 0= assert
 test
 depth 0= assert
