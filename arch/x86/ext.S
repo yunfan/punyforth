@@ -99,3 +99,7 @@ defprimitive "time",4,time,REGULAR /* ( -- unixtime ) */
     mov ebx, esp
     int 0x80
     NEXT
+
+defprimitive "r@",2,rfetch,REGULAR
+    push [ebp]
+    NEXT
