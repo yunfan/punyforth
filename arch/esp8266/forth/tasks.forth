@@ -152,25 +152,7 @@ defer: pause
     
 : single ( -- ) \ switch to signle-task mode
     ['] handler is: single-handler \ use global handler
-    0 xpause ! 
-    ['] pause is: pause-single ;     
-    
-: mailbox: ( size ) ( -- mailbox ) ringbuf: ;
+    0 xpause !
+    ['] pause is: pause-single ;
 
-: mailbox-send ( message mailbox -- )
-    begin
-        dup ringbuf-full? 
-    while
-        pause 
-    repeat
-    ringbuf-enqueue ;
-
-: mailbox-receive ( mailbox -- message )
-    begin
-        dup ringbuf-empty?
-    while
-        pause
-    repeat
-    ringbuf-dequeue ;
-    
 single

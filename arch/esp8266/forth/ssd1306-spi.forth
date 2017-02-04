@@ -7,29 +7,6 @@
 0  constant: RST  \ RST D3 leg
 1  constant: BUS
 
-( 129 constant: SSD1306_SET_CONTRAST )
-( 165 constant: SSD1306_IGNORE_RAM_CONTENT )
-
-\ Scroll commands
-
-( 39  constant: SSD1306_SCROLL_LEFT )
-( 41  constant: SSD1306_SCROLL_VERTICAL_RIGHT )
-( 42  constant: SSD1306_SCROLL_VERTICAL_LEFT )
-( 163 constant: SSD1306_VERT_SCROLL_AREA )
-
-\ Address setting commands
-( 0   constant: SSD1306_SET_COL_LO_NIBBLE )
-( 16  constant: SSD1306_SET_COL_HI_NIBBLE )
-( 33  constant: SSD1306_SET_COL_ADDR )
-( 34  constant: SSD1306_SET_PAGE_ADDR )
-( 176 constant: SSD1306_SET_PAGE_START_ADDR )
-
-\ Hardware configuration
-( 161 constant: SSD1306_SET_SEG_REMAP_127 )
-( 200 constant: SSD1306_SET_COM_SCAN_INVERTED )
-( 217 constant: SSD1306_SET_PRECHARGE_PERIOD )
-( 227 constant: SSD1306_NOP )
-
 0 constant: SPI_MODE0
 1 constant: SPI_BIG_ENDIAN
 1 constant: SPI_WORD_SIZE_8BIT
