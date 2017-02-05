@@ -7,27 +7,19 @@ buffer-len buffer: buffer
 4 constant: SERVO \ d2
 SERVO GPIO_OUT gpio-mode
 
-: short-pulse ( ms -- ) immediate
+\ servo control
+: short  19250 750  ; immediate
+: medium 18350 1650 ; immediate
+: long   17200 2800 ; immediate
+: pulse ( off-cycle-us on-cycle-us -- ) immediate
   ['], SERVO , ['], GPIO_HIGH , ['] gpio-write ,
-  ['], 750 , ['] us ,
+  ['], ( on cycle ) , ['] us ,
   ['], SERVO , ['], GPIO_LOW , ['] gpio-write ,
-  ['], 19250 , ['] us , ;
+  ['], ( off cycle ) , ['] us , ;
 
-: medium-pulse ( ms -- ) immediate
-  ['], SERVO , ['], GPIO_HIGH , ['] gpio-write ,
-  ['], 1650 , ['] us ,
-  ['], SERVO , ['], GPIO_LOW , ['] gpio-write ,
-  ['], 18350 , ['] us , ;
-
-: long-pulse ( ms -- ) immediate
-  ['], SERVO , ['], GPIO_HIGH , ['] gpio-write ,
-  ['], 2800 , ['] us ,
-  ['], SERVO , ['], GPIO_LOW , ['] gpio-write ,
-  ['], 17200 , ['] us , ;
-
-: down   ( -- ) 30 0 do short-pulse loop ;
-: midway ( -- ) 30 0 do medium-pulse loop ;
-: up     ( -- ) 30 0 do long-pulse loop ;
+: down   ( -- ) 30 0 do short  pulse loop ;
+: midway ( -- ) 30 0 do medium pulse loop ;
+: up     ( -- ) 30 0 do long   pulse loop ;
 
 : parse-code ( buffer -- code | throws:ECONVERT )
     9 + 3 >number invert if
