@@ -1,5 +1,7 @@
+#include "FreeRTOS.h"
 #include "espressif/esp_common.h"
 #include "esp/uart.h"
+#include "task.h"
 
 #define BUFFER_SIZE 1024 // should be multiple of 4
 bool _source_read_progress = true;
@@ -49,6 +51,7 @@ int forth_getchar_nowait() {
    if (_source_read_progress) {
        return next_char_from_flash();
    }
+   taskYIELD();
    char buf[1];
    return sdk_uart_rx_one_char(buf) != 0
        ? check_enter()
