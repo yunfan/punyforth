@@ -60,7 +60,7 @@ exception: EHTTP
 : connect ( -- netconn ) 80 str: "finance.google.com" TCP netcon-connect ;
 \ : connect ( -- netconn ) 1701 str: "192.168.0.32" TCP netcon-connect ;
     
-: stock-fetch ( bulb -- bool )
+: stock-fetch ( -- )
     connect
     dup str: "GET /finance/info?client=ig&q=NASDAQ:HDP HTTP/1.0\r\n\r\n" netcon-write
     consume ;
