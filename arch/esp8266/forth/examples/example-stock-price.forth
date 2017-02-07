@@ -1,7 +1,7 @@
 \ stock price display with servo control
 \ see it in action: https://youtu.be/4ad7dZmnoH8
 
-464 constant: buffer-len
+640 constant: buffer-len
 buffer-len buffer: buffer
 
 4 constant: SERVO \ d2
