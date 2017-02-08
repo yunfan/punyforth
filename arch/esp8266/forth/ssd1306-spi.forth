@@ -26,7 +26,6 @@ exception: ESSD1306_WRITE
 DISPLAY_WIDTH DISPLAY_HEIGHT * 8 / constant: BUFFER_SIZE
 
 BUFFER_SIZE buffer: screen1
-BUFFER_SIZE buffer: output
 screen1 init-variable: actual
 : screen ( -- buffer ) actual @ ;
 
@@ -160,7 +159,7 @@ screen1 init-variable: actual
 : display ( -- )
     SPI_WORD_SIZE_8BIT
     BUFFER_SIZE
-    output
+    0 ( ignore output )
     screen
     BUS 
     spi-send BUFFER_SIZE <> if
