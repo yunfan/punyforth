@@ -8,14 +8,13 @@
 1  constant: BUS
 
 0 constant: SPI_MODE0
-1 constant: SPI_BIG_ENDIAN
 1 constant: SPI_WORD_SIZE_8BIT
 2 constant: SPI_WORD_SIZE_16BIT
 4 constant: SPI_WORD_SIZE_32BIT
 
 : spi-get-freq-div ( divider count -- freq ) 16 lshift swap 65535 and or ;
-    
-2  10 spi-get-freq-div constant: SPI_FREQ_DIV_4M    \ < 4MHz
+
+5  2  spi-get-freq-div constant:  SPI_FREQ_DIV_8M    \ < 8MHz
 
 128 constant: DISPLAY_WIDTH
 64  constant: DISPLAY_HEIGHT
@@ -170,7 +169,7 @@ screen1 init-variable: actual
 
 : display-init ( -- | ESSD1306 )
     display-setup-wiring
-    TRUE SPI_BIG_ENDIAN TRUE SPI_FREQ_DIV_4M SPI_MODE0 BUS 
+    TRUE 0 ( little endian ) TRUE SPI_FREQ_DIV_8M SPI_MODE0 BUS 
     spi-init 1 <> if
         ESSD1306 throw
     then
