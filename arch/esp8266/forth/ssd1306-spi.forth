@@ -14,7 +14,7 @@
 
 : spi-get-freq-div ( divider count -- freq ) 16 lshift swap 65535 and or ;
 
-5  2  spi-get-freq-div constant:  SPI_FREQ_DIV_8M    \ < 8MHz
+5 2 spi-get-freq-div constant: SPI_FREQ_DIV_8M    \ < 8MHz
 
 128 constant: DISPLAY_WIDTH
 64  constant: DISPLAY_HEIGHT
