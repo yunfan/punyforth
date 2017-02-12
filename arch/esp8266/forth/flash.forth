@@ -90,21 +90,3 @@ variable:  offs
         i i 1- copy-row
     -1 +loop
     b ;
-
-defer: boot    
-: dst ( -- n ) block0 @ SIZE + ;
-: heap-size ( -- n ) usedmem align ;
-: save-loader ( -- )
-    0 block drop c
-    0 row dup heap-size >str dup strlen +        
-    str: ' heap-start ' over 12 cmove
-    12 + dup dst >str dup strlen +        
-    str: ' read-flash drop boot' swap 22 cmove 
-    update flush ;
-        
-: turnkey ( -- )
-    heap-size SIZE / heap-size SIZE % 0> abs + 0 do
-        dst >sector i + erase-flash check-err
-    loop
-    heap-size heap-start dst write-flash check-err 
-    save-loader ;
