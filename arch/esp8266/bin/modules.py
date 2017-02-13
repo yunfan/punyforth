@@ -77,7 +77,7 @@ dependencies = {
     'example-dht22-data-logger' : ['dht22', 'netcon', 'turnkey'],
     'example-buzzer-mario' : ['gpio'],
     'example-buzzer-starwars' : ['gpio'],
-    'example-stock-price' : ['netcon', 'ssd1306-spi', 'font5x7', 'wifi', 'gpio'],
+    'example-stock-price' : ['netcon', 'ssd1306-spi', 'font5x7', 'wifi', 'gpio', 'turnkey'],
 }
 
 def collect_dependecies(modules):

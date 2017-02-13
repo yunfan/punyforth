@@ -147,7 +147,13 @@ exception: ESTOCK
         pause
     again ;
 
-font-medium
-font5x7 font !
-display-init
-multi stock-task stock-start
+: main ( -- )
+    stack-show
+    font-medium
+    font5x7 font !
+    display-init
+    multi 
+    stock-task stock-start ;
+
+' boot is: main
+turnkey
