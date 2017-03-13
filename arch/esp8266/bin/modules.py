@@ -26,6 +26,7 @@ available_modules = {
     'mailbox' : '../forth/mailbox.forth',
     'tcp-repl' : '../forth/tcp-repl.forth',
     'flash' : '../forth/flash.forth',
+    'turnkey' : '../forth/turnkey.forth',
     'dht22' : '../forth/dht22.forth',
     'ping' : '../forth/ping.forth',
     'sonoff' : '../forth/sonoff.forth',
@@ -41,6 +42,7 @@ available_modules = {
     'example-dht22-data-logger' : '../forth/examples/example-dht22-data-logger.forth',
     'example-buzzer-mario' : '../forth/examples/example-buzzer-mario.forth',
     'example-buzzer-starwars' : '../forth/examples/example-buzzer-starwars.forth',
+    'example-stock-price' : '../forth/examples/example-stock-price.forth',
 }
 
 dependencies = {
@@ -58,6 +60,7 @@ dependencies = {
     'tasks' : ['core'],
     'mailbox' : ['ringbuf'],
     'flash' : ['core'],
+    'turnkey' : ['core'],
     'dht22' : ['core', 'gpio'],
     'ping': ['core', 'gpio'],
     'sonoff': ['core', 'gpio'],
@@ -71,9 +74,10 @@ dependencies = {
     'example-philips-hue-clap' : ['example-philips-hue', 'tasks', 'gpio', 'event'],
     'example-geekcreit-rctank' : ['core', 'tasks', 'gpio', 'event', 'wifi', 'netcon', 'tcp-repl', 'ping'],
     'example-http-server' : ['core', 'netcon', 'wifi', 'mailbox'],
-    'example-dht22-data-logger' : ['dht22', 'netcon', 'flash'],
+    'example-dht22-data-logger' : ['dht22', 'netcon', 'turnkey'],
     'example-buzzer-mario' : ['gpio'],
-    'example-buzzer-starwars' : ['gpio'],    
+    'example-buzzer-starwars' : ['gpio'],
+    'example-stock-price' : ['netcon', 'ssd1306-spi', 'font5x7', 'wifi', 'gpio', 'turnkey'],
 }
 
 def collect_dependecies(modules):
