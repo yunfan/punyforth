@@ -52,12 +52,11 @@ void forth_wifi_set_ip(int ipv4) {
     sdk_wifi_set_ip_info(1, &ip);
 }
 
-void forth_wifi_get_ip_str(char * buffer, int size) {
+void forth_wifi_get_ip_str(int interface, char * buffer, int size) {
     struct ip_info wifi_info;
-    sdk_wifi_get_ip_info(0, &wifi_info);
+    sdk_wifi_get_ip_info(interface, &wifi_info);
     struct ip_addr ip = wifi_info.ip; 
     snprintf(buffer, size, IPSTR, IP2STR(&ip));
-
 }
 
 void forth_dhcpd_start(int first_client_ipv4, int max_leases) {

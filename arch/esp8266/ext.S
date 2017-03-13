@@ -434,8 +434,9 @@ defprimitive "wifi-set-ip",11,wifi_set_ip,REGULAR
     NEXT
 
 defprimitive "wifi-ip-str",11,wifi_ip_str,REGULAR
-    DPOP a2                    // buffer
-    DPOP a3                    // buffer size
+    DPOP a2                    // interface 0 = station, 1 = softap
+    DPOP a3                    // buffer
+    DPOP a4                    // buffer size
     CCALL forth_wifi_get_ip_str
     NEXT
 

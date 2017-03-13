@@ -43,5 +43,6 @@ exception: EWIFI
     wifi-set-softap-config check-status ;
     
 : wifi-ip ( -- str )
-    here 16 allot
-    16 over wifi-ip-str ;
+    here 16 over 0
+    16 allot
+    wifi-ip-str ;
