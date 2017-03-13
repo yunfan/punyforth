@@ -229,10 +229,25 @@ defprimitive "ms",2,ms,REGULAR
     CCALL forth_delay_ms
     NEXT
 
+// internal timeout
 defprimitive "netcon-set-recvtimeout",22,netcon_set_recvtimeout,REGULAR 
     DPOP a2                    // conn
     DPOP a3                    // recv timeout ms
     CCALL forth_netcon_set_recvtimeout
+    NEXT
+
+// get user defined socket read timeout
+defprimitive "netcon-read-timeout@",20,netcon_get_readtimeout,REGULAR
+    DPOP a2                   // netcon
+    CCALL forth_netcon_get_read_timeout
+    DPUSH a2                  // timeout_sec
+    NEXT
+
+// set user defined socket read timeout
+defprimitive "netcon-read-timeout!",20,netcon_set_readtimeout,REGULAR
+    DPOP a2                   // netcon
+    DPOP a3                   // timeout_sec
+    CCALL forth_netcon_set_read_timeout
     NEXT
 
 defprimitive "netcon-new",10,netcon_new,REGULAR

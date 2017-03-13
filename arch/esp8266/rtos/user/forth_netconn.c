@@ -8,6 +8,7 @@ struct forth_netconn {
     struct netconn* conn;
     struct netbuf* nbuf;
     int bufpos;
+    int read_timeout_sec;
 };
 
 struct forth_netconn* make_forth_netconn(struct netconn* conn) {
@@ -16,7 +17,16 @@ struct forth_netconn* make_forth_netconn(struct netconn* conn) {
     result->conn = conn;
     result->nbuf = NULL;
     result->bufpos = 0;
+    result->read_timeout_sec = -1;
     return result;
+}
+
+int forth_netcon_get_read_timeout(struct forth_netconn* conn) {
+    return conn->read_timeout_sec;
+}
+
+void forth_netcon_set_read_timeout(struct forth_netconn* conn, int seconds) {
+    conn->read_timeout_sec = seconds;
 }
 
 struct forth_netconn* forth_netcon_new(int type) {
