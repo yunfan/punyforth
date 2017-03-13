@@ -42,7 +42,13 @@ exception: EWIFI
     SOFTAP_MODE wifi-set-mode check-status
     wifi-set-softap-config check-status ;
     
-: wifi-ip ( -- str )
-    here 16 over 0
+: ip ( interface -- str )
+    { here 16 over } dip
     16 allot
     wifi-ip-str ;
+
+\ station ip    
+: wifi-ip ( -- str ) 0 ip ;
+
+\ soft-ap ip
+: ap-ip ( -- str ) 1 ip ;
