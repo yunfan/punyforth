@@ -49,6 +49,4 @@ exception: EWIFI
 
 \ station ip    
 : wifi-ip ( -- str ) 0 ip ;
-
-\ soft-ap ip
-: ap-ip ( -- str ) 1 ip ;
+: softap-ip ( -- str ) 1 ip ;
