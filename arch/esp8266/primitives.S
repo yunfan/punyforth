@@ -87,14 +87,8 @@ defprimitive "2swap",5,swap2,REGULAR /* ( a b c d -- c d a b ) */
     NEXT
 
 defprimitive "2over",5,over2,REGULAR /* ( a b c d -- a b c d a b ) */    
-    DPOP a8
-    DPOP a9
-    DPOP a10
-    DPOP a11    
-    DPUSH a11
-    DPUSH a10
-    DPUSH a9
-    DPUSH a8
+    READTOS3 a10
+    READTOS4 a11
     DPUSH a11
     DPUSH a10
     NEXT
