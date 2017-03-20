@@ -683,6 +683,8 @@ In station mode, the ESP8266 connects to an existing Wi-Fi access point.
 str: "password" str: "existing-ssid" wifi-connect
 ```
 
+The station mode Wi-Fi settings are persistently stored by the ESP8266, there is no need to setup the Wi-Fi at every startup.
+
 In AP mode, the ESP8266 acts as an central connection point, which wireless clients (smartphones, laptops) can connect to. In this mode you have to choose an IP address for the ESP and an IP range for the clients. Client IP addresses are assigned by the [DHCP](https://en.wikipedia.org/wiki/Dynamic_Host_Configuration_Protocol) server.
 
 ```forth
@@ -692,8 +694,6 @@ In AP mode, the ESP8266 acts as an central connection point, which wireless clie
 ```
 
 The dhcp max_leases parameter should not be smaller than the maximum allowed connections.
-
-The Wi-Fi settings are persistently stored by the ESP8266, there is no need to setup the Wi-Fi at every startup.
 
 ### GPIO
 
