@@ -2,7 +2,7 @@
 2 constant: TCP
 
 \ user defined read timeout, -1 means no timeout
--1 init-variable: READ_TIMEOUT_SEC
+-1 init-variable: read_timeout_sec
 
 \ internal timeout, used for yielding control to other tasks in  read loop
 70 constant: RECV_TIMEOUT_MSEC
@@ -96,8 +96,8 @@ exception: ERTIMEOUT ( indicates read timeout )
             pause
         then
         2drop ( count code )
-        READ_TIMEOUT_SEC @ 0> if
-            ms@ r@ - READ_TIMEOUT_SEC @ 1000 * > if 
+        read_timeout_sec @ 0> if
+            ms@ r@ - read_timeout_sec @ 1000 * > if
                 ERTIMEOUT throw
             then
         then
