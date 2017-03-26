@@ -1,7 +1,14 @@
 1 constant: UDP
 2 constant: TCP
-70 constant: RECV_TIMEOUT_MSEC 
-exception: ENETCON 
+
+\ user defined read timeout, -1 means no timeout
+-1 init-variable: READ_TIMEOUT_SEC
+
+\ internal timeout, used for yielding control to other tasks in  read loop
+70 constant: RECV_TIMEOUT_MSEC
+
+exception: ENETCON   ( indicates general netcon error )
+exception: ERTIMEOUT ( indicates read timeout )
 
 \ netcon errors. see: esp-open-rtos/lwip/lwip/src/include/lwip/err.h
  -3 constant:  NC_ERR_TIMEOUT     \ Timeout.
@@ -77,21 +84,28 @@ exception: ENETCON
     swap netcon-write 
     str: "\r\n" netcon-write ;
 
-: read-ungreedy ( size buffer netcon -- count code )
+: read-ungreedy ( size buffer netcon -- count code | throws:ERTIMEOUT )
+    ms@ >r
     begin
         3dup netcon-recvinto
         dup NC_ERR_TIMEOUT <> if            
             rot drop rot drop rot drop
+            r> drop ( start time )
             exit
         else
             pause
         then
-        2drop
+        2drop ( count code )
+        READ_TIMEOUT_SEC @ 0> if
+            ms@ r@ - READ_TIMEOUT_SEC @ 1000 * > if 
+                ERTIMEOUT throw
+            then
+        then
     again ;
 
 \ Read maximum `size` amount of bytes into the buffer.
 \ Leaves the amount of bytes read on the top of the stack, or -1 if the connection was closed.
-: netcon-read ( netcon size buffer -- count | -1 | throws:ENETCON )
+: netcon-read ( netcon size buffer -- count | -1 | throws:ENETCON/ERTIMEOUT )
     rot 
     read-ungreedy
     dup NC_ERR_CLSD = if 2drop -1 exit then
@@ -100,7 +114,7 @@ exception: ENETCON
 \ Read one line into the given buffer. The line terminator is CRLF.
 \ Leaves the length of the line on the top of the stack, or -1 if the connection was closed.
 \ If the given buffer is not large enough to hold EOVERFLOW is thrown.
-: netcon-readln ( netcon size buffer -- count | -1 | throws:ENETCON/EOVERFLOW )
+: netcon-readln ( netcon size buffer -- count | -1 | throws:ENETCON/EOVERFLOW/ERTIMEOUT )
     swap 0 do
         2dup
         1 swap i + netcon-read -1 = if
