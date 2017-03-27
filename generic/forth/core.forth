@@ -10,9 +10,7 @@
 : until immediate compile-time
     ['] branch0 , backref, ;
 
-: char: word drop c@ ;
-
-: ( begin key [ char: ) ] literal = until ; immediate
+: ( begin key 41 = until ; immediate
 : \ begin key dup 13 = swap 10 = or until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
@@ -133,6 +131,8 @@ exception: EESCAPE
 
 : ['], ['] ['] , ;
 
+: char: immediate word drop c@ interpret? invert if ['], , then ;
+
 : defer: ( "name" -- )
     create: ['] nop ,
     does> @ execute ;
@@ -227,14 +227,14 @@ defer: handler
     dup here swap - cell - swap ! ; \ calculate and store relative address    
 
 : eschr ( char -- char ) \ read next char from stdin
-    dup [ char: \ ] literal = if
+    dup char: \ = if
         drop key case
-            [ char: r ] literal of 13 endof
-            [ char: n ] literal of 10 endof
-            [ char: t ] literal of 9  endof
-            [ char: \ ] literal of 92 endof
-            [ char: " ] literal of 34 endof
-            [ char: ' ] literal of 39 endof
+            char: r of 13 endof
+            char: n of 10 endof
+            char: t of 9  endof
+            char: \ of 92 endof
+            char: " of 34 endof
+            char: ' of 39 endof
             EESCAPE throw
         endcase
     then ;
@@ -424,7 +424,7 @@ defer: r0 ' r0 is: _r0
             print: '(stack'
             depth if space then
             stack-print
-            [ char: ) ] literal emit space
+            char: ) emit space
         else
             print: '.. '
         then
@@ -461,12 +461,12 @@ defer: r0 ' r0 is: _r0
         else 
             print: '??? ' 
         then
-        [ char: ( ] literal emit . [ char: ) ] literal emit cr
+        char: ( emit . char: ) emit cr
     loop
     depth 0> if
         print: '(stack ' 
         stack-print 
-        [ char: ) ] literal emit
+        char: ) emit
         then
     abort ; 
 

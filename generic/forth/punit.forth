@@ -18,11 +18,11 @@ marker: -punit
         FALSE     
     else        
         TRUE
-        over 0 + c@ [ char: t ] literal = and
-        over 1 + c@ [ char: e ] literal = and
-        over 2 + c@ [ char: s ] literal = and
-        over 3 + c@ [ char: t ] literal = and
-        over 4 + c@ [ char: : ] literal = and
+        over 0 + c@ char: t = and
+        over 1 + c@ char: e = and
+        over 2 + c@ char: s = and
+        over 3 + c@ char: t = and
+        over 4 + c@ char: : = and
     then        
     nip ;   
 

@@ -89,12 +89,8 @@ exception: ESTOCK
 
 : trend ( str -- )
     c@ case
-        [ char: + ] literal of 
-            up 
-        endof
-        [ char: - ] literal of 
-            down 
-        endof
+        char: + of up   endof
+        char: - of down endof
         drop midway
     endcase ;
     
