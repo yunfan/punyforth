@@ -37,7 +37,7 @@ println: "Hello world!"
 
 <a name="serial">1</a>: Baud rate: 115200 bps. Local echo: on, line mode: enabled. You can find some free terminal emulators [here](https://learn.sparkfun.com/tutorials/terminal-basics/all).
 
-For a detailed getting started guide see [Developing Punyforth applications](Developing-Punyforth-applications).
+For a detailed getting started guide see [Developing Punyforth applications](https://github.com/zeroflag/punyforth/wiki/Developing-Punyforth-applications).
 
 ##### Now let's do some simple arithmetics.
 
