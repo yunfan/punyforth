@@ -151,5 +151,6 @@ exception: ESTOCK
     multi 
     stock-task stock-start ;
 
-' boot is: main
-turnkey
+\ ' boot is: main
+\ turnkey
+main
