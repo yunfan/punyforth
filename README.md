@@ -37,8 +37,6 @@ println: "Hello world!"
 
 <a name="serial">1</a>: Baud rate: 115200 bps. Local echo: on, line mode: enabled. You can find some free terminal emulators [here](https://learn.sparkfun.com/tutorials/terminal-basics/all).
 
-For a detailed getting started guide see [Developing Punyforth applications](https://github.com/zeroflag/punyforth/wiki/Developing-Punyforth-applications).
-
 ##### Now let's do some simple arithmetics.
 
 ```forth
@@ -59,6 +57,8 @@ This should give you the following output.
 8
 ```
 Congratulation, you've just doubled a number and printed out the result in the [REPL](https://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop).
+
+For a detailed getting started guide see [Developing and deploying Punyforth applications](https://github.com/zeroflag/punyforth/wiki/Developing-and-deploying-Punyforth-applications).
 
 ## About the language
 
