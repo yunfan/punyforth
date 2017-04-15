@@ -713,7 +713,7 @@ See [Philips Hue lightswitch example](arch/esp8266/forth/examples/example-philip
 
 ### Netconn
 
-Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS] (https://en.wikipedia.org/wiki/FreeRTOS). Punyforth provides a wrapper around the Netconn API.
+Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.wikipedia.org/wiki/LwIP) of [FreeRTOS](https://en.wikipedia.org/wiki/FreeRTOS). Punyforth provides a wrapper around the Netconn API.
 
 #### Simple HTTP request
 
