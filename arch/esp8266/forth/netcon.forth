@@ -1,9 +1,6 @@
 1 constant: UDP
 2 constant: TCP
 
-\ user defined read timeout, -1 means no timeout
--1 init-variable: read_timeout_sec
-
 \ internal timeout, used for yielding control to other tasks in  read loop
 70 constant: RECV_TIMEOUT_MSEC
 
@@ -96,8 +93,8 @@ exception: ERTIMEOUT ( indicates read timeout )
             pause
         then
         2drop ( count code )
-        read_timeout_sec @ 0> if
-            ms@ r@ - read_timeout_sec @ 1000 * > if
+        dup netcon-read-timeout@ 0> if
+            ms@ r@ - over netcon-read-timeout@ 1000 * > if
                 ERTIMEOUT throw
             then
         then
