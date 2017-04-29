@@ -869,6 +869,9 @@ us ( usec -- )
 
 \ Sets the baud rate of the specied uart.
 uart-set-bps ( bps uart-number -- )
+
+\ print out available words
+help ( -- )
 ```
 
 You can see some example code under the [examples](arch/esp8266/forth/examples) directory.
