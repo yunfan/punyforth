@@ -25,6 +25,8 @@ dictionary:
     var_pause_xt: .int 0
     var_emit_xt:  .int 0
     var_type_xt:  .int 0
+    var_undefi_xt:.int 0
+    var_undefc_xt:.int 0
     var_dp:       .int heap
 heap:    
     .space 24576
