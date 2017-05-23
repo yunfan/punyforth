@@ -384,13 +384,19 @@ word_too_long:
     .int xt_abort
 
 defword ":",1,colon,REGULAR
-    .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
     .int xt_createheader
     .int xt_btick, _M ENTERCOL, xt_comma                                         // codeword is ENTERCOL
+    .int xt_compiler
+    .int xt_exit
+
+defword "]",1,compiler,REGULAR
+    .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
 compile:
     .int xt_word                           // ( a len )
-    .int xt_dup2
-    .int xt_btick, 1, xt_eq, xt_swap, xt_fetchbyte, xt_btick, 59, xt_eq, xt_and
+    .int xt_dup2, xt_btick, 1, xt_eq, xt_swap, xt_fetchbyte, xt_btick, 91, xt_eq, xt_and, xt_invert // is [ ?
+    .int xt_branch0
+    lbl suspend_compile
+    .int xt_dup2, xt_btick, 1, xt_eq, xt_swap, xt_fetchbyte, xt_btick, 59, xt_eq, xt_and // is ; ?
     .int xt_branch0
     lbl no_end
     .int xt_drop2, xt_btick, xt_exit, xt_comma
@@ -425,6 +431,8 @@ undefword:
     .int xt_btick, 13, xt_emit
     .int xt_btick, 10, xt_emit
     .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
+suspend_compile:
+    .int xt_nip, xt_nip
     .int xt_btick, STATE_INTERPRET, xt_btick, state_var, xt_store
     .int xt_exit
 
