@@ -28,6 +28,5 @@ invalid_number:
     .int xt_btick, 13, xt_emit
     .int xt_btick, 10, xt_emit
     .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
-    .int xt_openbracket // switch back to interpret mode
     .int xt_branch
     lbl outer_interpreter

@@ -170,15 +170,7 @@ defword "tib",3,tib,REGULAR
 defword "state",5,state,REGULAR
     .int xt_btick, _M state_var
     .int xt_exit
-
-defword "[",1,openbracket,IMMEDIATE
-    .int xt_btick, STATE_INTERPRET, xt_btick, state_var, xt_store
-    .int xt_exit
     
-defword "]",1,closebracket,REGULAR
-    .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
-    .int xt_exit    
-
 defword "literal",7,literal,IMMEDIATE
     .int xt_btick, xt_btick, xt_comma
     .int xt_comma
@@ -392,7 +384,7 @@ word_too_long:
     .int xt_abort
 
 defword ":",1,colon,REGULAR
-    .int xt_closebracket 
+    .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
     .int xt_createheader
     .int xt_btick, _M ENTERCOL, xt_comma                                         // codeword is ENTERCOL
 compile:
@@ -401,7 +393,9 @@ compile:
     .int xt_btick, 1, xt_eq, xt_swap, xt_fetchbyte, xt_btick, 59, xt_eq, xt_and
     .int xt_branch0
     lbl no_end
-    .int xt_drop2, xt_btick, xt_exit, xt_comma, xt_openbracket, xt_lastword, xt_reveal, xt_exit
+    .int xt_drop2, xt_btick, xt_exit, xt_comma
+    .int xt_btick, STATE_INTERPRET, xt_btick, state_var, xt_store
+    .int xt_lastword, xt_reveal, xt_exit
 no_end:
     .int xt_dup2, xt_find, xt_dup // ( link | 0 )
     .int xt_branch0
@@ -431,7 +425,7 @@ undefword:
     .int xt_btick, 13, xt_emit
     .int xt_btick, 10, xt_emit
     .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
-    .int xt_openbracket 
+    .int xt_btick, STATE_INTERPRET, xt_btick, state_var, xt_store
     .int xt_exit
 
 defword "xemit",5,xemit,REGULAR

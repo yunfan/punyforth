@@ -471,3 +471,21 @@ defer: r0 ' r0 is: _r0
     abort ; 
 
 ' unhandled is: traceback
+
+: [ immediate compile-time ( DEPRECATED )
+  0 state !
+  begin
+    word ( addr len )
+    2dup 1 = swap c@ char: ] = and if 2drop 1 state ! exit then
+    2dup find ( link | 0 ) ?dup 0<> if
+      nip nip link>xt execute
+    else
+      2dup >number 0<> if
+        nip nip
+      else
+        println: 'Undefined word: ' type-counted cr 
+        tib #tib @ + >in ! 
+        1 state ! exit
+      then
+    then
+  again ;
