@@ -294,12 +294,6 @@ create_name_done:
     .int xt_here, xt_var_dp, xt_store                                      // align after name
     .int xt_exit
 
-defword ";",1,semicolon,IMMEDIATE
-    .int xt_openbracket
-    .int xt_btick, xt_exit, xt_comma
-    .int xt_lastword, xt_reveal
-    .int xt_exit
-
 defword ">number",7,tonumber,REGULAR /* ( a len -- num bool ) */
     .int xt_dup, xt_branch0
     lbl tonum_empty 
@@ -401,6 +395,43 @@ defword ":",1,colon,REGULAR
     .int xt_closebracket 
     .int xt_createheader
     .int xt_btick, _M ENTERCOL, xt_comma                                         // codeword is ENTERCOL
+compile:
+    .int xt_word                           // ( a len )
+    .int xt_dup2
+    .int xt_btick, 1, xt_eq, xt_swap, xt_fetchbyte, xt_btick, 59, xt_eq, xt_and
+    .int xt_branch0
+    lbl no_end
+    .int xt_drop2, xt_btick, xt_exit, xt_comma, xt_openbracket, xt_lastword, xt_reveal, xt_exit
+no_end:
+    .int xt_dup2, xt_find, xt_dup // ( link | 0 )
+    .int xt_branch0
+    lbl not_found_dict
+    .int xt_nip, xt_nip, xt_dup, xt_is_immediate
+    .int xt_branch0
+    lbl do_compile
+    .int xt_link2xt, xt_execute
+    .int xt_branch
+    lbl compile
+do_compile:
+    .int xt_link2xt, xt_comma
+    .int xt_branch
+    lbl compile
+not_found_dict:
+    .int xt_drop // 0
+    .int xt_dup2, xt_tonumber
+    .int xt_branch0
+    lbl undefword
+    .int xt_nip, xt_nip
+    .int xt_literal                        // we're in compile mode, compile a literal number
+    .int xt_branch
+    lbl compile
+undefword:
+    .int xt_btick, undef_word_error, xt_type
+    .int xt_typecounted
+    .int xt_btick, 13, xt_emit
+    .int xt_btick, 10, xt_emit
+    .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
+    .int xt_openbracket 
     .int xt_exit
 
 defword "xemit",5,xemit,REGULAR
