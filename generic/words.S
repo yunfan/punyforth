@@ -389,6 +389,14 @@ defword ":",1,colon,REGULAR
     .int xt_compiler
     .int xt_exit
 
+defword "eundef",6,eundef,REGULAR
+    .int xt_btick, undef_word_error, xt_type
+    .int xt_typecounted
+    .int xt_btick, 13, xt_emit
+    .int xt_btick, 10, xt_emit
+    .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
+    .int xt_exit
+
 defword "]",1,compiler,REGULAR
     .int xt_btick, STATE_COMPILE, xt_btick, state_var, xt_store
 compile:
@@ -426,30 +434,20 @@ not_found_dict:
     .int xt_branch
     lbl compile
 undefword:
-    .int xt_undefc, xt_fetch, xt_branch0
-     lbl default_undef
-    .int xt_undefc, xt_fetch, xt_execute
+    .int xt_eundefc, xt_fetch, xt_execute
     .int xt_branch
     lbl compile
-default_undef:
-    .int xt_btick, undef_word_error, xt_type
-    .int xt_typecounted
-    .int xt_btick, 13, xt_emit
-    .int xt_btick, 10, xt_emit
-    .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
-    .int xt_btick, STATE_INTERPRET, xt_btick, state_var, xt_store
-    .int xt_exit
 suspend_compile:
     .int xt_nip, xt_nip
     .int xt_btick, STATE_INTERPRET, xt_btick, state_var, xt_store
     .int xt_exit
 
-defword "undefi",6,unedfi,REGULAR
-    .int xt_btick, _M var_undefi_xt
+defword "eundefi",7,eundefi,REGULAR
+    .int xt_btick, _M var_eundefi_xt
     .int xt_exit
 
-defword "undefc",6,undefc,REGULAR
-    .int xt_btick, _M var_undefc_xt
+defword "eundefc",7,eundefc,REGULAR
+    .int xt_btick, _M var_eundefc_xt
     .int xt_exit
 
 defword "xemit",5,xemit,REGULAR

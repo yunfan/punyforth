@@ -23,10 +23,6 @@ not_found_in_dictionary:                   // word was not found in the dictiona
     .int xt_branch 
     lbl outer_interpreter
 invalid_number:
-    .int xt_btick, undef_word_error, xt_type
-    .int xt_typecounted
-    .int xt_btick, 13, xt_emit
-    .int xt_btick, 10, xt_emit
-    .int xt_tib, xt_inputlen, xt_fetch, xt_plus, xt_toin, xt_store // skip rest of the inputbuffer
+    .int xt_eundefi, xt_fetch, xt_execute
     .int xt_branch
     lbl outer_interpreter

@@ -471,3 +471,15 @@ defer: r0 ' r0 is: _r0
     abort ; 
 
 ' unhandled is: traceback
+
+: _ ( addr len -- ? )
+    \ try char
+    2dup 2 = swap c@ char: $ = and if drop ['], 1+ c@ , else eundef then ;
+
+' _ eundefc !
+
+: _ ( addr len -- ? )
+    \ try char
+    2dup 2 = swap c@ char: $ = and if drop 1+ c@ else eundef then ;
+
+' _ eundefi !

@@ -18,11 +18,11 @@ marker: -punit
         FALSE     
     else        
         TRUE
-        over 0 + c@ char: t = and
-        over 1 + c@ char: e = and
-        over 2 + c@ char: s = and
-        over 3 + c@ char: t = and
-        over 4 + c@ char: : = and
+        over 0 + c@ $t = and
+        over 1 + c@ $e = and
+        over 2 + c@ $s = and
+        over 3 + c@ $t = and
+        over 4 + c@ $: = and
     then        
     nip ;   
 
