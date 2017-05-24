@@ -286,56 +286,47 @@ create_name_done:
     .int xt_here, xt_var_dp, xt_store                                      // align after name
     .int xt_exit
 
-defword ">number",7,tonumber,REGULAR /* ( a len -- num bool ) */
+defword ">number",7,tonumber,REGULAR /* ( a len -- number TRUE | FALSE ) */
     .int xt_dup, xt_branch0
     lbl tonum_empty 
-    .int xt_swap, xt_dup, xt_fetchbyte, xt_btick, 45, xt_eq                       // check sign
+    .int xt_over, xt_fetchbyte, xt_btick, 45, xt_eq                       // check sign
     .int xt_branch0
     lbl tonum_positive
+    .int xt_dec //( len )
     .int xt_swap
-    .int xt_dec                                                                   // decrement length
-    .int xt_dup, xt_rpush                                                         // move length to return stack
-    .int xt_plus                                                                  // move to the last char of the number string
-    .int xt_btick, 0                                                                
-    .int xt_btick, -1                                                             // ( a res mul )
-    .int xt_rpop, xt_dec, xt_rpush                                                // decrement length once more because of the negative sign
+    .int xt_inc //( addr )
+    .int xt_swap
+    .int xt_btick, -1, xt_rpush                                                   // store sign on rstack
     .int xt_branch
-    lbl tonum_loop
+    lbl start_convert
 tonum_positive:
-    .int xt_swap
-    .int xt_dec                                                                   // decrement length
-    .int xt_dup, xt_rpush                                                         // move length to return stack
-    .int xt_plus                                                                  // move to the last char of the number string
-    .int xt_btick, 0                                                                
-    .int xt_btick, 1                                                              // ( a res mul )
+    .int xt_btick, 1, xt_rpush
+start_convert:
+    .int xt_btick, 0, xt_swap //( addr result len )
 tonum_loop:    
-    .int xt_rot                                                                   // ( res mul a ) 
-    .int xt_dup, xt_fetchbyte
+    .int xt_dup, xt_branch0
+    lbl tonum_done
+    .int xt_mrot
+    .int xt_btick, 10, xt_multiply
+    .int xt_over, xt_fetchbyte
     .int xt_dup, xt_btick, 47, xt_gt, xt_branch0                                  // check range
     lbl tonum_invalid_digit
     .int xt_dup, xt_btick, 58, xt_lt, xt_branch0
     lbl tonum_invalid_digit
-    .int xt_btick, 48, xt_minus                                                   // ( res mul a digit )
-    .int xt_swap, xt_dec, xt_swap                                                 // decrement a
-    .int xt_swap2                                                                 // ( a digit res mul )
-    .int xt_rot                                                                   // ( a res mul digit)
-    .int xt_over                                                                  // ( a res mul digit mul )
-    .int xt_multiply                                                              // ( a res mul digit*mul )
-    .int xt_rot                                                                   // ( a mul digit*mul res )
-    .int xt_plus                                                                  // ( a mul res )
-    .int xt_swap, xt_btick, 10, xt_multiply                                       // ( a res mul )
-    .int xt_rpat, xt_fetch, xt_branch0
-    lbl tonum_done
-    .int xt_rpop, xt_dec, xt_rpush                                                // decrement length on return stack    
+    .int xt_btick, 48, xt_minus, xt_plus
+    .int xt_swap, xt_inc, xt_swap
+    .int xt_rot, xt_dec // ( len )
     .int xt_branch
     lbl tonum_loop
 tonum_done:
-    .int xt_rpop, xt_drop
-    .int xt_drop, xt_nip
+    .int xt_drop //( len )
+    .int xt_rpop, xt_multiply //( * sign )
+    .int xt_nip //( addr )
     .int xt_btick, TRUE
     .int xt_exit
 tonum_invalid_digit:
-    .int xt_rpop, xt_drop4, xt_drop
+    .int xt_rpop, xt_drop //( sign )
+    .int xt_drop4
     .int xt_btick, FALSE
     .int xt_exit
 tonum_empty:
