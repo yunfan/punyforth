@@ -32,7 +32,7 @@
 : c+! ( n var -- ) dup c@ rot + swap c! ;
 
 : prepare-forward-ref ( -- a) here 0 , ;
-: resolve-forward-ref ( a -- ) dup here swap - cell - swap ! ;
+: resolve-forward-ref ( a -- ) here over - cell - swap ! ;
 
 : if immediate compile-time
     ['] branch0 , prepare-forward-ref ;
