@@ -218,11 +218,13 @@ L4: WRTETOS1 a10
 
 defprimitive "branch",6,branch,REGULAR
     l32i a8, a14, 0                 // read relative address as the next instruction
+    addi a14, a14, CELLS             // x86 uses lodsd that increments forth PC, consider changing this
     add a14, a14, a8                // advance forth PC
     NEXT
 
 defprimitive "branch0",7,branch0,REGULAR
     l32i a8, a14, 0                 // read relative address
+    addi a14, a14, CELLS
     DPOP a9
     bnez a9, nobranch0
     add a14, a14, a8

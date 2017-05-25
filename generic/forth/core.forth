@@ -1,9 +1,14 @@
 : interpret? state @ 0= ;
-: backref, here - , ;
+: backref, here - cell - , ;
 
-: begin immediate compile-time here ; 
-: again immediate compile-time ['] branch , backref, ;
-: until immediate compile-time ['] branch0 , backref, ;
+: begin immediate compile-time
+    here ; 
+
+: again immediate compile-time
+    ['] branch , backref, ;
+
+: until immediate compile-time
+    ['] branch0 , backref, ;
 
 : ( begin key 41 = until ; immediate
 : \ begin key dup 13 = swap 10 = or until ; immediate
@@ -27,15 +32,17 @@
 : c+! ( n var -- ) dup c@ rot + swap c! ;
 
 : prepare-forward-ref ( -- a) here 0 , ;
-: resolve-forward-ref ( a -- ) here over - swap ! ;
+: resolve-forward-ref ( a -- ) here over - cell - swap ! ;
 
-: if immediate compile-time ['] branch0 , prepare-forward-ref ;
+: if immediate compile-time
+    ['] branch0 , prepare-forward-ref ;
 
 : else immediate compile-time
     ['] branch , prepare-forward-ref swap
     resolve-forward-ref ;
 
-: then immediate compile-time resolve-forward-ref ;
+: then immediate compile-time
+    resolve-forward-ref ;
 
 : ?dup ( a -- a a | 0 ) dup if dup then ;
 
