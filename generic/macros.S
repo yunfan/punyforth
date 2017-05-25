@@ -33,5 +33,5 @@ xt_\label :
 .endm
 
 .macro lbl label
-    .int \label - . - CELLS
+    .int \label - . 
 .endm

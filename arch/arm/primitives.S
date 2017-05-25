@@ -161,13 +161,11 @@ defprimitive "<",1,lt,REGULAR         // only need to define this, all other com
 
 defprimitive "branch",6,branch,REGULAR
     ldr r0, [r7]
-    add r7, #CELLS
     add r7, r0
     NEXT
 
 defprimitive "branch0",7,branch0,REGULAR
     ldr r0, [r7]                              // load relative address to be jump
-    add r7, #CELLS
     pop {r1}                                  // check condition
     cmp r1, #0                                  
     addeq r7, r0                              // advance pc if condition was satisfied

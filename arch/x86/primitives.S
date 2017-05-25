@@ -159,17 +159,14 @@ defprimitive "invert",6,invert,REGULAR
     NEXT
 
 defprimitive "branch",6,branch,REGULAR
-    lodsd
-    add esi, eax
+    add esi, dword ptr [esi]
     NEXT
 
 defprimitive "branch0",7,branch0,REGULAR
-    lodsd
-    pop ebx
-    test ebx, ebx
-    jnz nobranch0
-    add esi, eax
-nobranch0:
+    pop eax
+    test eax, eax
+    jz code_branch
+    lodsd // skip the the offs
     NEXT
 
 defprimitive ">r",2,rpush,REGULAR
