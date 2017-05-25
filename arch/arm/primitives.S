@@ -165,10 +165,10 @@ defprimitive "branch",6,branch,REGULAR
     NEXT
 
 defprimitive "branch0",7,branch0,REGULAR
-    ldr r0, [r7]                              // load relative address to be jump
     pop {r1}                                  // check condition
-    cmp r1, #0                                  
-    addeq r7, r0                              // advance pc if condition was satisfied
+    cmp r1, #0
+    beq code_branch
+    add r7, #CELLS                            // skip address
     NEXT
 
 defprimitive ">r",2,rpush,REGULAR

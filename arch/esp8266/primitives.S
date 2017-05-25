@@ -222,11 +222,9 @@ defprimitive "branch",6,branch,REGULAR
     NEXT
 
 defprimitive "branch0",7,branch0,REGULAR
-    l32i a8, a14, 0                 // read relative address
     DPOP a9
-    bnez a9, nobranch0
-    add a14, a14, a8
-nobranch0:
+    beqz a9, code_branch
+    addi a14, a14, CELLS
     NEXT
 
 defprimitive ">r",2,rpush,REGULAR
