@@ -216,15 +216,15 @@ defer: handler
     loop
     2drop ;
 
-: store ( src-addr count -- )
-    dp over + var-dp !
-    here swap cmove ;
+: [str ( -- address-to-fill-in )
+    ['], here 3 cells + ,           \ compile return value: address of string
+    ['] branch ,                    \ compile branch that will skip the string
+    here                            \ address of the dummy address 
+    0 , ;                           \ dummy address
 
-: [str ( -- forward-ref )
-    ['], here 3 cells + , ( str pushes its own addr. at runtime )
-    ['] branch , prepare-forward-ref ;
-
-: str] ( forward-ref -- ) 0 c, resolve-forward-ref ;
+: str] ( address-to-fill-in -- )
+    0 c,                            \ terminate string
+    dup here swap - cell - swap ! ; \ calculate and store relative address    
 
 : eschr ( char -- char ) \ read next char from stdin
     dup char: \ = if
@@ -473,18 +473,8 @@ defer: r0 ' r0 is: _r0
 ' unhandled is: traceback
 
 : _ ( addr len -- ? )
-    \ recognize char
+    \ try char
     2dup 2 = swap c@ char: $ = and if drop ['], 1+ c@ , exit then
-    \ recognize str
-    ( TODO
-    2dup over c@ char: " = if
-        2dup + 1- c@ char: " = if
-            2 - [str >r store
-        else
-            1- [str >r store char: " c,-until
-        then
-        r> str] exit
-    then )
     eundef ;
 
 ' _ eundefc !
