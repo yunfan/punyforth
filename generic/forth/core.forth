@@ -197,8 +197,8 @@ defer: handler
 : field: create: over , + does> @ + ;
 
 : abs ( n -- n ) dup 0< if invert 1+ then ;
-: max ( a b -- max ) 2dup < if nip else drop then ;
-: min ( a b -- min ) 2dup < if drop else nip then ;
+: max ( n n -- n ) 2dup < if begin nip ;
+: min ( n n -- n ) 2dup < until then drop ;
 : between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
 
 : cmove ( src-addr dst-addr count -- )
@@ -256,12 +256,7 @@ defer: handler
     repeat        
     2drop ;                          \ drop last key and separator
 
-: separator ( -- char )
-    begin
-        key dup whitespace?        
-    while
-        drop
-    repeat ;
+: separator ( -- char ) begin key dup whitespace? while drop repeat ;
 
 : str: ( "<separator>string content<separator>" ) immediate
     separator
