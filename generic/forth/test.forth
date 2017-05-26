@@ -151,14 +151,14 @@ defer: deferred-word
    9 factorial 9 factorial3 =assert ;
 
 : test:core-hex
-   str: "aBcDeF" hex>int 11259375 =assert
-   str: "AbCdEf" hex>int 11259375 =assert
-   str: "12345678" hex>int 305419896 =assert
-   str: "a1" hex>int 161 =assert
-   str: "123abc" hex>int 1194684 =assert
-   { str: "" hex>int } catch ECONVERT =assert
-   { str: "123g4" hex>int } catch ECONVERT =assert
-   { str: "12G4" hex>int } catch ECONVERT =assert
+   "aBcDeF" hex>int 11259375 =assert
+   "AbCdEf" hex>int 11259375 =assert
+   "12345678" hex>int 305419896 =assert
+   "a1" hex>int 161 =assert
+   "123abc" hex>int 1194684 =assert
+   { "" hex>int } catch ECONVERT =assert
+   { "123g4" hex>int } catch ECONVERT =assert
+   { "12G4" hex>int } catch ECONVERT =assert
    hex: a0f 2575 =assert ;
 
 : test:core-case   
@@ -229,10 +229,10 @@ defer: deferred-word
    freemem 16 allot freemem - 16 =assert ;
 
 : test:core-str
-   str: "" strlen 0 =assert
-   str: "1" strlen 1 =assert
-   str: "12" strlen 2 =assert
-   str: "1234567" strlen 7 =assert
+   "" strlen 0 =assert
+   "1" strlen 1 =assert
+   "12" strlen 2 =assert
+   "1234567" strlen 7 =assert
    str: '""""' strlen 4 =assert
    str: 'anystring' 
    str: ''
@@ -240,46 +240,40 @@ defer: deferred-word
    str: ''
    str: ''
    str-starts? TRUE =assert
-   str: 'abc'
-   str: 'bc'
+   "abc"
+   "bc"
    str-starts? FALSE =assert
-   str: 'abc'
-   str: 'ab'
+   "abc"
+   "ab"
    str-starts? TRUE =assert
-   str: 'aabbc'
-   str: 'aabbc'
+   "aabbc"
+   "aabbc"
    str-starts? TRUE =assert
-   str: 'aabbc'
-   str: 'aabbcc'
+   "aabbc"
+   "aabbcc"
    str-starts? FALSE =assert
-   str: 'abcxxxx' 
-   str: 'abc' 
+   "abcxxxx" 
+   "abc" 
    str-in? TRUE =assert   
-   str: 'xxabcyy' 
-   str: 'abc' 
+   "xxabcyy"
+   "abc" 
    str-in? TRUE =assert   
-   str: 'xxabzyy' 
-   str: 'abc'
+   "xxabzyy" 
+   "abc"
    str-in? FALSE =assert
-   str: 'anystring' 
-   str: '' 
+   "anystring"
+   "" 
    str-in? assert   
-   str: 'xxx'
-   str: 'xxx' 
-   str-in? assert   
-   str: 'abcdef'
-   str: 'def' 
-   str-in? assert   
-   str: 'abcdef'
-   str: 'efg' 
-   str-in? FALSE =assert 
-   str: "" str: "" =str assert
-   str: "1" str: "12" =str invert assert
-   str: "" str: "12" =str invert assert
-   str: "1" str: "2" =str invert assert
-   str: "12" str: "13" =str invert assert
-   str: "abcd" str: "abcde" =str invert assert
-   str: "abcdef" str: "abcdeF" =str invert assert ;
+   "xxx" "xxx" str-in? assert   
+   "abcdef" "def" str-in? assert   
+   "abcdef" "efg" str-in? FALSE =assert 
+   "" "" =str assert
+   "1" "12" =str invert assert
+   "" "12" =str invert assert
+   "1" "2" =str invert assert
+   "12" "13" =str invert assert
+   "abcd" "abcde" =str invert assert
+   "abcdef" "abcdeF" =str invert assert ;
        
 : test:eval-whitespace
    32 whitespace? assert
@@ -289,7 +283,6 @@ defer: deferred-word
    65 whitespace? invert assert ;
 
 : test:core-multi-line-str
-str: 
 "
 A\n
 B
@@ -301,14 +294,14 @@ B
    drop ;
 
 : test:core-str-escape
-   str: 'a\nb' 1 + c@ 10 =assert 
-   str: '\rb' c@ 13 =assert 
-   str: '\\' c@ 92 =assert 
-   str: '\\\\' strlen 2 =assert 
-   str: '\t' c@ 9 =assert 
-   str: "\"" c@ 34 =assert 
-   str: "\'" c@ 39 =assert 
-   str: 'abc\r\nd' strlen 6 =assert ;
+   "a\nb" 1 + c@ 10 =assert 
+   "\rb" c@ 13 =assert 
+   "\\" c@ 92 =assert 
+   "\\\\" strlen 2 =assert 
+   "\t" c@ 9 =assert 
+   "\"" c@ 34 =assert 
+   "\'" c@ 39 =assert 
+   "abc\r\nd" strlen 6 =assert ;
 
 : test:core-untilloop
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 =assert ;
@@ -326,9 +319,9 @@ B
 : test:core-combinators
    1 2 4 { + } dip 4 =assert 3 =assert
    1 2 4 { + } keep 4 =assert 6 =assert 1 =assert
-   str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* =assert
-   str: "john" str: ".doe" { strlen } bi@ =assert
-   str: "john.doe" { strlen } { 1+ c@ 103 - } bi =assert ;
+   "john" ".doe" { 1+ c@ } { 2 + c@ } bi* =assert
+   "john" ".doe" { strlen } bi@ =assert
+   "john.doe" { strlen } { 1+ c@ 103 - } bi =assert ;
 
 : test:core-array   
    5 0 do i i test_numbers ! loop
@@ -366,22 +359,22 @@ create: seq2 4 c, 5 c,
     to-override 45 =assert ;
 
 : test:>str
-    here dup 1234567     >str str: '1234567'     =str assert
-    here dup 1234        >str str: '1234'        =str assert
-    here dup -123        >str str: '-123'        =str assert
-    here dup -87654321   >str str: '-87654321'   =str assert
-    here dup 1           >str str: '1'           =str assert
-    here dup -1          >str str: '-1'          =str assert
-    here dup 2147483647  >str str: '2147483647'  =str assert
-    here dup -2147483647 >str str: '-2147483647' =str assert
-    here dup 0           >str str: '0'           =str assert ;
+    here dup 1234567     >str "1234567"     =str assert
+    here dup 1234        >str "1234"        =str assert
+    here dup -123        >str "-123"        =str assert
+    here dup -87654321   >str "-87654321"   =str assert
+    here dup 1           >str "1"           =str assert
+    here dup -1          >str "-1"          =str assert
+    here dup 2147483647  >str "2147483647"  =str assert
+    here dup -2147483647 >str "-2147483647" =str assert
+    here dup 0           >str "0"           =str assert ;
 
-str: "123"    constant: s1
-str: "abcdef" constant: s2
+"123"    constant: s1
+"abcdef" constant: s2
 : test:cmove
-    s1 s2 0 cmove s2 str: "abcdef" =str assert
-    s1 s2 1 cmove s2 str: "1bcdef" =str assert
-    s1 s2 3 cmove s2 str: "123def" =str assert ;
+    s1 s2 0 cmove s2 "abcdef" =str assert
+    s1 s2 1 cmove s2 "1bcdef" =str assert
+    s1 s2 3 cmove s2 "123def" =str assert ;
 
 variable: dp-before-mark dp dp-before-mark !
 marker: -test-mark

@@ -124,7 +124,7 @@ exception: EESCAPE
 
 : ['], ['] ['] , ;
 
-: char: immediate word drop c@ interpret? invert if ['], , then ;
+: char: immediate word drop c@ interpret? invert if ['], , then ; ( deprecated )
 
 : defer: ( "name" -- )
     create: ['] nop ,
@@ -209,10 +209,6 @@ defer: handler
     loop
     2drop ;
 
-: store ( src-addr count -- )
-    dp over + var-dp !
-    here swap cmove ;
-
 : [str ( -- forward-ref )
     ['], here 3 cells + , ( str pushes its own addr. at runtime )
     ['] branch , prepare-forward-ref ;
@@ -256,12 +252,33 @@ defer: handler
     repeat        
     2drop ;                          \ drop last key and separator
 
+\ recognizers
+
+: str, ( len -- ) >in @ swap - >in ! char: " c,-until ;
+
+: _ ( addr len -- ? )
+    \ recognize char
+    2dup 2 = swap c@ char: $ = and if drop ['], 1+ c@ , exit then
+    \ recognize str
+    over c@ char: " = if nip [str >r str, r> str] exit then
+    eundef ;
+
+' _ eundefc !
+
+: _ ( addr len -- ? )
+    \ try char
+    2dup 2 = swap c@ char: $ = and if drop 1+ c@ exit then
+    over c@ char: " = if nip dp >r str, 0 c, r> exit then
+    eundef ;
+
+' _ eundefi !
+
 : separator ( -- char ) begin key dup whitespace? while drop repeat ;
 
-: str: ( "<separator>string content<separator>" ) immediate
+: str: ( "<separator>string content<separator>" ) immediate ( deprecated )
     separator
     interpret? if
-        align! here swap c,-until 0 c,
+        dp swap c,-until 0 c,
     else
         [str swap c,-until str]
     then ;
@@ -449,7 +466,7 @@ defer: r0 ' r0 is: _r0
         else 
             print: '??? ' 
         then
-        char: ( emit . char: ) emit cr
+        $( emit . $) emit cr
     loop
     depth 0> if
         print: '(stack ' 
@@ -460,26 +477,3 @@ defer: r0 ' r0 is: _r0
 
 ' unhandled is: traceback
 
-: _ ( addr len -- ? )
-    \ recognize char
-    2dup 2 = swap c@ char: $ = and if drop ['], 1+ c@ , exit then
-    \ recognize str
-    ( TODO
-    2dup over c@ char: " = if
-        2dup + 1- c@ char: " = if
-            2 - [str >r store
-        else
-            1- [str >r store char: " c,-until
-        then
-        r> str] exit
-    then )
-    eundef ;
-
-' _ eundefc !
-
-: _ ( addr len -- ? )
-    \ try char
-    2dup 2 = swap c@ char: $ = and if drop 1+ c@ exit then
-    eundef ;
-
-' _ eundefi !
