@@ -113,7 +113,7 @@ Punyforth is heavily inspired by the [Forth](https://en.wikipedia.org/wiki/Forth
 #### Some of the differences
 * Punyforth is case sensitive
 * Strings are null-terminated
-* String literal ("Hello World") and character literals ($A) are supported
+* String literals ("Hello World") and character literals ($A) are supported
 * Strings can be printed out differently (*print: "foobar"* instead of *." foobar"*)
 * Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
 * Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
