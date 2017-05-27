@@ -15,7 +15,7 @@ variable: server
     EGAVEUP throw ;
 
 : data! ( temperature humidity -- ) 16 lshift swap or data ! ;
-: connect ( -- ) 8007 str: "192.168.0.10" UDP netcon-connect server ! ;
+: connect ( -- ) 8007 "192.168.0.10" UDP netcon-connect server ! ;
 : dispose ( -- ) server @ netcon-dispose ;
 : send ( -- ) server @ data 4 netcon-send-buf ;
     

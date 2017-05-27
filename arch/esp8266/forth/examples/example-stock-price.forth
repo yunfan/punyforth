@@ -31,7 +31,7 @@ exception: EHTTP
 : read-code ( netconn -- http-code | throws:EHTTP )
     buffer-len buffer netcon-readln
     0 <= if EHTTP throw then
-    buffer str: "HTTP/" str-starts? if
+    buffer "HTTP/" str-starts? if
         buffer parse-code
     else
         EHTTP throw
@@ -57,12 +57,12 @@ exception: EHTTP
     swap netcon-dispose
     200 <> if EHTTP throw then ;
         
-: connect ( -- netconn ) 80 str: "finance.google.com" TCP netcon-connect ;
-\ : connect ( -- netconn ) 1701 str: "192.168.0.32" TCP netcon-connect ;
+: connect ( -- netconn ) 80 "finance.google.com" TCP netcon-connect ;
+\ : connect ( -- netconn ) 1701 "192.168.0.32" TCP netcon-connect ;
     
 : stock-fetch ( -- )
     connect
-    dup str: "GET /finance/info?client=ig&q=NASDAQ:HDP HTTP/1.0\r\n\r\n" netcon-write
+    dup "GET /finance/info?client=ig&q=NASDAQ:HDP HTTP/1.0\r\n\r\n" netcon-write
     consume ;
 
 : str-find ( str substr -- i | -1 )
@@ -84,13 +84,13 @@ exception: ESTOCK
 : find ( marker-str -- addr )
     buffer over marker-index
     swap strlen + buffer + ( begin addr )
-    dup str: '"' marker-index ( end addr )
+    dup "\"" marker-index ( end addr )
     over + 0 swap c! ;
 
 : trend ( str -- )
     c@ case
-        char: + of up   endof
-        char: - of down endof
+        $+ of up   endof
+        $- of down endof
         drop midway
     endcase ;
     
@@ -98,9 +98,9 @@ exception: ESTOCK
 : spacer ( -- ) draw-lf draw-cr 2 text-top +! ;
 : stock-draw ( -- )    
     stock-fetch
-    str: ',"c" : "' find \ change tag
+    ",\"c\" : \"" find \ change tag
     dup trend
-    str: ',"l" : "' find \ price tag
+    ",\"l\" : \"" find \ price tag
     dup center draw-str
     spacer
     dup center draw-str ;
@@ -108,12 +108,12 @@ exception: ESTOCK
 : error-draw ( exception -- )
     display-clear
     0 text-left ! 0 text-top !
-    str: "Err: " draw-str 
+    "Err: " draw-str 
     case
-        ENETCON of str: "NET"  draw-str endof
-        EHTTP   of str: "HTTP" draw-str endof
-        ESTOCK  of str: "API"  draw-str endof
-        str: "Other" draw-str
+        ENETCON of "NET"  draw-str endof
+        EHTTP   of "HTTP" draw-str endof
+        ESTOCK  of "API"  draw-str endof
+        "Other" draw-str
         ex-type        
     endcase 
     display ;

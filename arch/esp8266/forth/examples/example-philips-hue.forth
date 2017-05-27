@@ -1,11 +1,11 @@
 \ HUE Bridge local IP and port
-str: "192.168.0.12" constant: BRIDGE_IP 
+"192.168.0.12" constant: BRIDGE_IP 
 80 constant: BRIDGE_PORT
 \ Base URL containing the HUE API key
-str: "/api/<YOUR_HUE_API_KEY>/lights/" constant: BASE_URL
+"/api/<YOUR_HUE_API_KEY>/lights/" constant: BASE_URL
 \ Light bulb ids for each room
-str: "1" constant: HALL
-str: "2" constant: BEDROOM
+"1" constant: HALL
+"2" constant: BEDROOM
 
 1024 constant: buffer-len
 buffer-len buffer: buffer
@@ -20,7 +20,7 @@ exception: EHTTP
 : read-http-code ( netconn -- http-code | throws:EHTTP )
     buffer-len buffer netcon-readln
     0 <= if EHTTP throw then           
-    buffer str: "HTTP/" str-starts? if
+    buffer "HTTP/" str-starts? if
         buffer parse-http-code        
     else
         EHTTP throw
@@ -57,35 +57,35 @@ exception: EHTTP
 
 : on? ( bulb -- bool )
     bridge
-        dup str: "GET "     netcon-write
+        dup "GET "     netcon-write
         dup BASE_URL        netcon-write
         dup rot             netcon-write
-        dup str: "\r\n\r\n" netcon-write
+        dup "\r\n\r\n" netcon-write
         consume&dispose
-        buffer str: '"on":true' str-in? ;        
+        buffer "\"on\":true" str-in? ;        
     
 : request-change-state ( bulb netconn -- )
-    dup str: "PUT "                               netcon-write
+    dup "PUT "                               netcon-write
     dup BASE_URL                                  netcon-write
     dup rot                                       netcon-write
-    dup str: "/state HTTP/1.1\r\n"                netcon-write
-    dup str: "Content-Type: application/json\r\n" netcon-write
-    dup str: "Accept: */*\r\n"                    netcon-write
-    dup str: "Connection: Close\r\n"              netcon-write
+    dup "/state HTTP/1.1\r\n"                netcon-write
+    dup "Content-Type: application/json\r\n" netcon-write
+    dup "Accept: */*\r\n"                    netcon-write
+    dup "Connection: Close\r\n"              netcon-write
     drop ;
 
 : on ( bulb -- )
     bridge
         tuck request-change-state
-        dup str: "Content-length: 22\r\n\r\n" netcon-write        
-        dup str: '{"on":true,"bri": 255}\r\n' netcon-write
+        dup "Content-length: 22\r\n\r\n" netcon-write        
+        dup "{\"on\":true,\"bri\": 255}\r\n" netcon-write
         netcon-dispose ;
         
 : off ( bulb -- )
     bridge
         tuck request-change-state
-        dup str: "Content-length: 12\r\n\r\n" netcon-write        
-        dup str: '{"on":false}\r\n'           netcon-write
+        dup "Content-length: 12\r\n\r\n" netcon-write        
+        dup "{\"on\":false}\r\n"           netcon-write
         netcon-dispose ;
 
 : toggle ( bulb -- )

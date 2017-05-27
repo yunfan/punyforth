@@ -119,43 +119,25 @@ PORT wifi-ip netcon-udp-server constant: server-socket
     while
         command c@
         case
-            char: F of 
-                forward direction current-speed @ speed
-            endof
-            char: B of
-                back direction current-speed @ speed
-            endof
-            char: L of 
-                left direction current-speed @ speed
-            endof
-            char: R of 
-                right direction current-speed @ speed
-            endof
-            char: S of 
-                brake
-            endof
-            char: I of 
+            $F of forward direction current-speed @ speed endof
+            $B of back direction current-speed @ speed endof
+            $L of left direction current-speed @ speed endof
+            $R of right direction current-speed @ speed endof
+            $I of 
                current-speed @ 10 + full min
                current-speed !
                current-speed @ speed
             endof
-            char: D of 
+            $D of 
                 current-speed @ 10 - 0 max
                 current-speed !
                 current-speed @ speed
-            endof            
-            char: E of
-                engine-start
             endof
-            char: H of
-                engine-stop
-            endof
-            char: T of
-                lamp-toggle
-            endof
-            char: A of
-                auto-pilot
-            endof
+            $S of brake endof
+            $E of engine-start endof
+            $H of engine-stop endof
+            $T of lamp-toggle endof
+            $A of auto-pilot endof
         endcase
     repeat 
     deactivate ;

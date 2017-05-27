@@ -26,7 +26,7 @@ exception: EWIFI
     
 \ Connect to an existing Wi-Fi access point with the given ssid and password
 \ For example:
-\   str: "ap-pass" str: "ap-ssid" wifi-connect
+\   "ap-pass" "ap-ssid" wifi-connect
 : wifi-connect ( password ssid  -- | throws:EWIFI )
     STATION_MODE wifi-set-mode check-status
     wifi-set-station-config check-status
@@ -35,7 +35,7 @@ exception: EWIFI
 \ Creates an access point mode with the given properties
 \ For example:
 \   172 16 0 1 >ipv4 wifi-set-ip
-\   4 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap
+\   4 3 0 AUTH_WPA2_PSK "1234567890" "my-ssid" wifi-softap
 \   8 172 16 0 2 >ipv4 dhcpd-start
 \   max-connections should be <= max-leases
 : wifi-softap ( max-connections channels hidden authmode password ssid -- | throws:EWIFI )

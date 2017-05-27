@@ -17,7 +17,7 @@ defer: boot
     
 : save-loader ( -- )
     here dup
-    heap-size n, str: ' heap-start ' s, dst n, str: ' read-flash drop boot' s, 
+    heap-size n, " heap-start " s, dst n, " read-flash drop boot" s,
     0 swap c!
     BOOT_ADDR SIZE /    erase-flash check
     SIZE swap BOOT_ADDR write-flash check ;

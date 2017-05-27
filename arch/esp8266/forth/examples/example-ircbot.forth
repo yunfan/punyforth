@@ -6,18 +6,18 @@ buffer-size buffer: line-buffer
 exception: EIRC
 
 : connect ( -- )
-    6667 str: "irc.freenode.net" TCP netcon-connect irc-con ! ;
+    6667 "irc.freenode.net" TCP netcon-connect irc-con ! ;
 
 : send ( str -- )
     irc-con @ swap netcon-writeln ;
     
 : register ( -- )
-    str: "NICK hodor179" send
-    str: "USER hodor179 hodor179 bla :hodor179" send ;
+    "NICK hodor179" send
+    "USER hodor179 hodor179 bla :hodor179" send ;
     
-: join ( -- ) str: "JOIN #somechan" send ;
-: greet ( -- ) str: "PRIVMSG #somechan :Hooodoor!" send ;
-: quit ( -- ) str: "QUIT :hodor" send ;
+: join ( -- ) "JOIN #somechan" send ;
+: greet ( -- ) "PRIVMSG #somechan :Hooodoor!" send ;
+: quit ( -- ) "QUIT :hodor" send ;
     
 : readln ( -- str )
     irc-con @ buffer-size line-buffer netcon-readln -1 = if
@@ -27,13 +27,13 @@ exception: EIRC
         
 : processline ( str -- )
     dup type cr
-    dup str: "PING" str-starts? if
-        str: "PONG" send
+    dup "PING" str-starts? if
+        "PONG" send
         random 200 % 0= if
             greet
         then
     then
-    dup str: "PRIVMSG" str-in? if
+    dup "PRIVMSG" str-in? if
         LED blink
     then 
     drop ;
