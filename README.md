@@ -113,7 +113,8 @@ Punyforth is heavily inspired by the [Forth](https://en.wikipedia.org/wiki/Forth
 #### Some of the differences
 * Punyforth is case sensitive
 * Strings are null-terminated
-* Strings are created and printed differently (*str: "foobar"*, *print: "foobar"* instead of *s" foobar"*, *." foobar"*)
+* String literal ("Hello World") and character literals ($A) are supported
+* Strings can be printed out differently (*print: "foobar"* instead of *." foobar"*)
 * Parsing words are ended with a colon character by convention (including *variable:*, *constant:*, *create: does>*)
 * Defining a word in terms of itself results recursion by default (use the *override* word to alter this behaviour)
 * Curly brackets denote quotations instead of locals
@@ -513,7 +514,7 @@ At runtime the quotation pushes its execution token onto the stack, therefore it
 #### Quotations and exception handling
 
 ```forth
-  { str: 'AF01z' hex>int } catch
+  { "AF01z" hex>int } catch
   if
     println: 'invalid hex number'
     abort
@@ -557,7 +558,7 @@ Applies quotation p to x, then applies quotation q to x.
 Applies quotation p to x, then applies quotation q to y.
 
 ```forth
-  str: "john" str: ".doe" { 1+ c@ } { 2 + c@ } bi* =    \ Same as: str: "john" str: ".doe" swap 1+ c@ swap 2 + c@ =
+  "john" ".doe" { 1+ c@ } { 2 + c@ } bi* =    \ Same as: "john" ".doe" swap 1+ c@ swap 2 + c@ =
   (stack -1)
 ```
 
@@ -566,7 +567,7 @@ Applies quotation p to x, then applies quotation q to y.
 Applies the quotation to x, then to y.
 
  ```forth
-  str: "john" str: ".doe" { strlen } bi@ =    \ Same as: str: "john" str: ".doe" swap strlen swap strlen =
+  "john" ".doe" { strlen } bi@ =    \ Same as: "john" ".doe" swap strlen swap strlen =
   (stack -1)
 ```
 
@@ -682,7 +683,7 @@ The ESP8266 has a built in Wi-Fi chip that can be used both in access point and 
 In station mode, the ESP8266 connects to an existing Wi-Fi access point.
 
 ```forth
-str: "password" str: "existing-ssid" wifi-connect
+"password" "existing-ssid" wifi-connect
 ```
 
 The station mode Wi-Fi settings are persistently stored by the ESP8266, there is no need to setup the Wi-Fi at every startup.
@@ -691,7 +692,7 @@ In AP mode, the ESP8266 acts as an central connection point, which wireless clie
 
 ```forth
 172 16 0 1 >ipv4 wifi-set-ip                                      \ AP ip is 172.16.0.1
-4 3 0 AUTH_WPA2_PSK str: "1234567890" str: "my-ssid" wifi-softap  \ max connections = 4
+4 3 0 AUTH_WPA2_PSK "1234567890" "my-ssid" wifi-softap            \ max connections = 4
 8 172 16 0 2 >ipv4 dhcpd-start                                    \ dhcp max_leases = 8, first client ip is 172.16.0.2
 ```
 
@@ -728,8 +729,8 @@ Netconn is a sequential API on top of the [lightweight TCP/IP stack](https://en.
   repeat
   drop ;
 
-80 str: "google.com" TCP netcon-connect constant: socket
-socket str: "GET / HTTP/1.1\r\n\r\n" netcon-write
+80 "google.com" TCP netcon-connect constant: socket
+socket "GET / HTTP/1.1\r\n\r\n" netcon-write
 socket fetch
 socket netcon-dispose
 ```
@@ -737,8 +738,8 @@ socket netcon-dispose
 #### UDP client
 
 ```forth
-str: "Lorem ipsum" constant: data
-str: "192.168.0.3" constant: SERVER_IP
+"Lorem ipsum" constant: data
+"192.168.0.3" constant: SERVER_IP
 8005 constant: SERVER_PORT
 SERVER_PORT SERVER_IP UDP netcon-connect
 dup data 11 netcon-send-buf
@@ -763,7 +764,7 @@ while True:
 #### UDP server
 
 ```forth
-str: "192.168.0.15" constant: HOST
+"192.168.0.15" constant: HOST
 8000 constant: PORT
 128 buffer: data
 
