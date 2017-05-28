@@ -31,7 +31,7 @@ WorkerSpace task: worker-task2
     deactivate ;
     
 \ index page as a mult line string
-str: "
+"
 HTTP/1.0 200\r\n
 Content-Type: text/html\r\n
 Connection: close\r\n
@@ -45,7 +45,7 @@ Connection: close\r\n
 : serve-client ( -- )    
     client @ 128 line netcon-readln
     print: 'received: ' line type print: ' len=' . cr
-    line str: "GET /" str-starts? if
+    line "GET /" str-starts? if
         client @ HTML netcon-write
     then ;
     

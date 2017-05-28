@@ -79,7 +79,7 @@ exception: ERTIMEOUT ( indicates read timeout )
 : netcon-writeln ( netcon str -- | throws:ENETCON )
     over 
     swap netcon-write 
-    str: "\r\n" netcon-write ;
+    "\r\n" netcon-write ;
 
 : read-ungreedy ( size buffer netcon -- count code | throws:ERTIMEOUT )
     ms@ >r

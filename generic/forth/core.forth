@@ -259,8 +259,9 @@ defer: handler
 ' _ eundefc !
 
 : _ ( addr len -- ? )
-    \ try char
+    \ recognize char
     2dup 2 = swap c@ char: $ = and if drop 1+ c@ exit then
+    \ recognize str
     over c@ char: " = if nip dp >r str, 0 c, r> exit then
     eundef ;
 

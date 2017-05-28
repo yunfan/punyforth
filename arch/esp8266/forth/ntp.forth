@@ -1,6 +1,6 @@
 \ Network Time Protocol implementation, originally based on the work of Craig A. Lindley
 \ Usage example:
-\    123 str: "time.nist.gov" network-time
+\    123 "time.nist.gov" network-time
 
 exception: ENTP
 variable: con

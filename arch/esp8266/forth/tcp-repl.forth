@@ -47,11 +47,11 @@ wifi-ip constant: HOST
     deactivate ;
 
 : command-loop ( -- )   
-    client @ str: "PunyREPL ready. Type quit to exit.\r\n" netcon-write
+    client @ "PunyREPL ready. Type quit to exit.\r\n" netcon-write
     push-enter
     begin        
         client @ 128 line netcon-readln -1 <>
-        line str: "quit" =str invert and
+        line "quit" =str invert and
     while
         line strlen 0<> if
             line eval

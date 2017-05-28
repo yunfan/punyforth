@@ -46,7 +46,7 @@ WorkerSpace task: echo-worker-task2
     echo-worker-task1 echo-worker
     echo-worker-task2 echo-worker ;
 
-str: "Hahooo" constant: request
+"Hahooo" constant: request
 128 buffer: response
 
 : test:netcon-echo \ TODO netcon-connect is blocking -> cant connect to itself
