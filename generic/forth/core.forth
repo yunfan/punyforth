@@ -52,8 +52,7 @@
     ['] swap , ['] >r , ['] >r ,
     here ; \ prepare backref
 
-: bounds ( start len -- limit start )
-    over + swap ;
+: bounds ( start len -- limit start ) over + swap ;
 
 : loop immediate compile-time
     ['] r> , ['] 1+ , ['] >r ,
@@ -72,8 +71,7 @@
     ['] end? , ['] branch0 , backref,
     ['] unloop , ;
 
-: while immediate compile-time
-    ['] branch0 , prepare-forward-ref ;
+: while immediate compile-time ['] branch0 , prepare-forward-ref ;
 
 : repeat immediate compile-time
     swap
@@ -93,10 +91,7 @@
     resolve-forward-ref
     swap ;                                  \ keep branch counter at TOS
 
-: endcase ( #branches #branchesi*a -- ) immediate compile-time
-    0 do
-        resolve-forward-ref
-    loop ;
+: endcase ( #branches #branchesi*a -- ) immediate compile-time 0 do resolve-forward-ref loop ;
 
 : override immediate ( -- ) lastword hide ;
 
