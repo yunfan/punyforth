@@ -185,8 +185,7 @@ defer: handler
     create: allot
     does> swap + ;
     
-: buffer: ( size "name" -- ) ( -- addr )
-    create: allot ;
+: buffer: ( size "name" -- ) ( -- addr ) create: allot ;
     
 : struct 0 ;
 : field: create: over , + does> @ + ;
@@ -232,8 +231,7 @@ defer: handler
         drop FALSE     
     endcase ;
 
-: line-break? ( char -- bool )
-    dup 10 = swap 13 = or ;
+: line-break? ( char -- bool ) dup 10 = swap 13 = or ;
 
 : c,-until ( separator -- )
     begin
