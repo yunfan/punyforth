@@ -23,8 +23,8 @@
 : % ( n -- remainder ) /mod drop ; 
 : / ( n -- quotient ) /mod nip ;
 
-: +! ( n var -- ) dup @ rot + swap ! ;
-: c+! ( n var -- ) dup c@ rot + swap c! ;
+: +! ( n var -- ) tuck @ + swap ! ;
+: c+! ( n var -- ) tuck c@ + swap c! ;
 
 : prepare-forward-ref ( -- a) here 0 , ;
 : resolve-forward-ref ( a -- ) here over - swap ! ;
