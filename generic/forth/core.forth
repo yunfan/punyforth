@@ -283,9 +283,9 @@ defer: handler
     then ;
 
 : strlen ( str -- len )
-    0 swap
-    begin dup c@ while ['] 1+ bi@ repeat 
-    drop ;
+    dup
+    begin dup c@ while 1+ repeat 
+    swap - ;
 
 : =str ( str1 str2 -- bool )
     begin
