@@ -376,23 +376,16 @@ defer: r0 ' r0 is: _r0
     depth 10 > if print: ".. " then 
     0 depth 2 - 9 min \ maximalize depth to print
     do 
-        sp@ i cells + @ .
-        i if space then
-        -1 
-    +loop ;
+        space sp@ i cells + @ .
+    -1 +loop ;
 
-: stack-clear ( i*x -- )
-    depth 0= if exit then
-    depth 0 do drop loop ;
+: stack-clear ( i*x -- ) begin depth 0<> while drop repeat ;
 
 : stack-show ( -- )
     {
         depth 0< if EUNDERFLOW throw then
         interpret? if        
-            print: '(stack'
-            depth if space then
-            stack-print
-            $) emit space
+            print: '(stack' stack-print $) emit space
         else
             print: '.. '
         then
