@@ -66,4 +66,3 @@ marker: -ringbuf-test
         2 over ringbuf-enqueue
         3 over ringbuf-enqueue
     } catch EOVERFLOW =assert ;
-

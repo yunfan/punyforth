@@ -116,10 +116,6 @@ exception: ENOTFOUND
 exception: ECONVERT
 exception: EESCAPE
 
-: ['], ['] ['] , ;
-
-: char: immediate word drop c@ interpret? invert if ['], , then ; ( deprecated )
-
 : defer: ( "name" -- )
     create: ['] nop ,
     does> @ execute ;
@@ -149,6 +145,16 @@ defer: handler
     r> swap >r sp!          \ restore the data stack as it was before the most recent catch
     drop r> ;               \ return to the caller of most recent catch with the errcode
 
+: ' ( -- xt | throws:ENOTFOUND ) \ find the xt of the next word in the inputstream
+    word find dup if 
+        link>xt 
+    else 
+        ENOTFOUND throw
+    then ;
+
+: postpone: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
+: ['], ['] ['] , ;
+
 : { immediate compile-time
     ['], here 3 cells + ,
     ['] branch , prepare-forward-ref
@@ -158,16 +164,7 @@ defer: handler
     ['] exit , 
     resolve-forward-ref ;
 
-: ' ( -- xt | throws:ENOTFOUND ) \ find the xt of the next word in the inputstream
-    word find dup if 
-        link>xt 
-    else 
-        ENOTFOUND throw
-    then ;
-
 ' handler ' single-handler defer!
-
-: postpone: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 
 : is: immediate
     interpret? if
@@ -201,6 +198,8 @@ defer: handler
         { 1+ } bi@
     loop
     2drop ;
+
+: char: immediate word drop c@ interpret? invert if postpone: literal then ; ( deprecated )
 
 : [str ( -- forward-ref )
     ['], here 3 cells + , ( str pushes its own addr. at runtime )
@@ -246,24 +245,42 @@ defer: handler
 
 \ recognizers
 
+: hexchar>int ( char -- n | throws:ECONVERT )
+    48 over 57 between? if 48 - exit then
+    65 over 70 between? if 55 - exit then
+    97 over 102 between? if 87 - exit then
+    ECONVERT throw ;
+
+: hex>int' ( str len -- n | throws:ECONVERT )
+    dup 0= if ECONVERT throw then
+    dup 1- 2 lshift 0 swap
+    2swap 0 do
+        dup >r
+        c@ hexchar>int
+        over lshift rot +
+        swap 4 -
+        r> 1+
+    loop 
+    2drop ;
+
 : str, ( len -- ) >in -! char: " c,-until ;
 
+\ recognizers
+: chr? 2 = swap c@ char: $ = and ;
+: str? c@ char: " = ;
+: hex? 3 > over c@ char: 1 = and over 1+ c@ char: 6 = and swap 2 + c@ char: r = and ;
 : _ ( addr len -- ? )
-    \ recognize char
-    2dup 2 = swap c@ char: $ = and if drop ['], 1+ c@ , exit then
-    \ recognize str
-    over c@ char: " = if nip [str >r str, r> str] exit then
+    2dup chr? if drop ['], 1+ c@ , exit then
+    over str? if nip [str >r str, r> str] exit then
+    2dup hex? if 3 - swap 3 + swap hex>int' ['], , exit then
     eundef ;
-
 ' _ eundefc !
 
 : _ ( addr len -- ? )
-    \ recognize char
-    2dup 2 = swap c@ char: $ = and if drop 1+ c@ exit then
-    \ recognize str
-    over c@ char: " = if nip dp >r str, 0 c, r> exit then
+    2dup chr? if drop 1+ c@ exit then
+    over str? if nip dp >r str, 0 c, r> exit then   
+    2dup hex? if 3 - swap 3 + swap hex>int' exit then
     eundef ;
-
 ' _ eundefi !
 
 : separator ( -- char ) begin key dup whitespace? while drop repeat ;
@@ -331,29 +348,11 @@ defer: handler
     0 -rot >s'
     0 rot c! drop ;
 
-: hexchar>int ( char -- n | throws:ECONVERT )
-    48 over 57 between? if 48 - exit then
-    65 over 70 between? if 55 - exit then
-    97 over 102 between? if 87 - exit then
-    ECONVERT throw ;
-
-: hex>int' ( str len -- n | throws:ECONVERT )
-    dup 0= if ECONVERT throw then
-    dup 1- 2 lshift 0 swap
-    2swap 0 do
-        dup >r
-        c@ hexchar>int
-        over lshift rot +
-        swap 4 -
-        r> 1+
-    loop 
-    2drop ;
-
 : hex>int ( str -- n | throws:ECONVERT ) dup strlen hex>int' ;
 
-: hex: immediate
+: hex: immediate ( deprecated )
     word hex>int'
-    interpret? invert if ['], , then ;
+    interpret? invert if postpone: literal then ;
 
 : print: ( "<separator>string<separator>" ) immediate
     interpret? if

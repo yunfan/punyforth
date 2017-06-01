@@ -4,18 +4,18 @@ exception: EFAC
 exception: ETEST
 
 : factorial ( n -- n! | throws:EFAC )
-       dup 0< if
-           drop EFAC throw
-       then
-       dup 0= if
-           drop 1
-       else
-           dup 1= if
-               drop 1
-           else
-               dup 1- factorial *
-           then
-       then ;
+    dup 0< if
+        drop EFAC throw
+    then
+    dup 0= if
+        drop 1
+    else
+        dup 1= if
+            drop 1
+        else
+            dup 1- factorial *
+        then
+    then ;
 
 : factorial2 ( n -- n! )
     1 2 rot
@@ -52,7 +52,7 @@ variable: test_var2
 defer: deferred-word
 : use-deferred 2 3 deferred-word ;
 
-: test:core-arithmetic
+: test:arithmetic
    12 3 min 3 =assert
    -3 7 min -3 =assert
    -3 -7 min -7 =assert
@@ -92,22 +92,22 @@ defer: deferred-word
    12 3 /mod 4 =assert 0 =assert 12 4 / 3 =assert
    13 5 /mod 2 =assert 3 =assert 14 6 % 2 =assert ;
 
-: test:core-branch
+: test:branch
    TRUE if TRUE assert else FALSE assert then
    FALSE if FALSE assert else TRUE assert then
    2 TRUE if dup * then 4 =assert
    2 FALSE if dup * then 2 =assert ;
 
-: test:core-bounds
+: test:bounds
     10000 5 bounds 10000 =assert 10005 =assert ;
 
-: test:core-?dup
+: test:?dup
    42 0 ?dup 0 =assert 42 =assert
    42 12 ?dup 12 =assert 12 =assert 42 =assert ;
 
 424242 constant: SENTINEL
 
-: test:core-doloop
+: test:doloop
    SENTINEL 10000 5 bounds do i loop
    10004 =assert 10003 =assert 10002 =assert 10001 =assert 10000 =assert
    SENTINEL =assert
@@ -123,10 +123,10 @@ defer: deferred-word
    0 8 2 do 9 3 do i j + + loop loop 360 =assert ;
 
 : doloop-exit 10 0 do i 5 = if i unloop exit then loop ;
-: test:core-unloop
+: test:unloop
    doloop-exit 5 =assert ;
 
-: test:core-logic
+: test:logic
    1 0 or 1 =assert 0 1 or 1 =assert
    1 1 or 1 =assert 0 0 or 0 =assert
    1 0 and 0 =assert 0 1 and 0 =assert
@@ -137,7 +137,7 @@ defer: deferred-word
    3 10 < 3 11 > and if 1 else 0 then 0 =assert
    -98 45 < 33 11 > and if 1 else 0 then 1 =assert ;
 
-: test:core-between
+: test:between
    1 2 3 between? assert
    1 1 1 between? assert
    1 1 2 between? assert
@@ -145,23 +145,29 @@ defer: deferred-word
    3 2 4 between? invert assert
    1 3 2 between? invert assert ;
 
-: test:core-factorial
+: test:factorial
    9 factorial 362880 =assert
    8 factorial 8 factorial2 =assert
    9 factorial 9 factorial3 =assert ;
 
-: test:core-hex
+: test:hex
    "aBcDeF" hex>int 11259375 =assert
    "AbCdEf" hex>int 11259375 =assert
-   "12345678" hex>int 305419896 =assert
-   "a1" hex>int 161 =assert
    "123abc" hex>int 1194684 =assert
    { "" hex>int } catch ECONVERT =assert
    { "123g4" hex>int } catch ECONVERT =assert
    { "12G4" hex>int } catch ECONVERT =assert
    hex: a0f 2575 =assert ;
 
-: test:core-case   
+: test:hex-literal
+   16raBcDeF 11259375 =assert
+   16rAbCdEf 11259375 =assert
+   16r12345678 305419896 =assert
+   16ra1 161 =assert
+   16r123abc 1194684 =assert
+   16rA0F 2575 =assert ;
+
+: test:case   
    1 case
        1 of 10 endof
        2 of 20 endof
@@ -182,7 +188,7 @@ defer: deferred-word
        2 of 3 endof
    endcase 2 =assert ;
 
-: test:core-defer
+: test:defer
    ['] deferred-word is: +
    use-deferred 5 =assert
    ['] deferred-word is: *
@@ -203,7 +209,7 @@ defer: deferred-word
 : simple-throw 123 throw ;
 : throw-if-42 42 = if ETEST throw then ;
 
-: test:core-catch
+: test:catch
    sp@ test_var1 !
    ['] negative-factorial catch EFAC =assert
    ['] 1nested-throw2 catch 30 =assert
@@ -216,7 +222,7 @@ defer: deferred-word
    sp@ test_var2 !
    test_var1 @ test_var2 @ =assert ;
 
-: test:core-rdepth
+: test:rdepth
    rdepth
    1 >r 2 >r 3 >r
    dup 3 + rdepth =assert
@@ -225,10 +231,10 @@ defer: deferred-word
    r> drop
    rdepth =assert ;
 
-: test:core-alloc
+: test:alloc
    freemem 16 allot freemem - 16 =assert ;
 
-: test:core-str
+: test:str
    "" strlen 0 =assert
    "1" strlen 1 =assert
    "12" strlen 2 =assert
@@ -282,7 +288,7 @@ defer: deferred-word
    9 whitespace? assert
    65 whitespace? invert assert ;
 
-: test:core-multi-line-str
+: test:multi-line-str
 "
 A\n
 B
@@ -293,7 +299,7 @@ B
    dup 2 + c@ 66 = assert
    drop ;
 
-: test:core-str-escape
+: test:str-escape
    "a\nb" 1 + c@ 10 =assert 
    "\rb" c@ 13 =assert 
    "\\" c@ 92 =assert 
@@ -303,10 +309,10 @@ B
    "\'" c@ 39 =assert 
    "abc\r\nd" strlen 6 =assert ;
 
-: test:core-untilloop
+: test:untilloop
    2 10 begin 1- swap 2 * swap dup 0= until drop 2048 =assert ;
 
-: test:core-quotation
+: test:quotation
    10 { } execute 10 =assert
    6 { dup + } execute 12 =assert
    3 4 { 1+ swap 2 * swap } execute 5 =assert 6 =assert
@@ -316,20 +322,20 @@ B
    12 { 1+ { 1+ } execute } execute 14 =assert   
    10 { 1+ { 1+ { 1+ } execute } execute } execute 13 =assert ;
 
-: test:core-combinators
+: test:combinators
    1 2 4 { + } dip 4 =assert 3 =assert
    1 2 4 { + } keep 4 =assert 6 =assert 1 =assert
    "john" ".doe" { 1+ c@ } { 2 + c@ } bi* =assert
    "john" ".doe" { strlen } bi@ =assert
    "john.doe" { strlen } { 1+ c@ 103 - } bi =assert ;
 
-: test:core-array   
+: test:array   
    5 0 do i i test_numbers ! loop
    5 0 do i test_numbers @ i =assert loop ;
 
 create: seq1 1 , 2 , 3 ,
 create: seq2 4 c, 5 c,
-: test:core-create
+: test:create
     seq1 0 cells + @ 1 =assert
     seq1 1 cells + @ 2 =assert
     seq1 2 cells + @ 3 =assert
@@ -337,7 +343,7 @@ create: seq2 4 c, 5 c,
     seq2 1 + c@ 5 =assert ;
 
 3 buffer: buf1
-: test:core-buffer
+: test:buffer
    1 buf1 0 + c!
    2 buf1 1 + c!
    3 buf1 2 + c!
@@ -345,17 +351,17 @@ create: seq2 4 c, 5 c,
    buf1 1 + c@ 2 =assert
    buf1 2 + c@ 3 =assert ;
 
-: test:core-struct
+: test:struct
    3 r1 .width ! 5 r1 .height !
    r1 area 15 =assert ;
 
-: test:core-var
+: test:var
    12 test_var1 ! test_var1 @ 12 =assert
    3 test_var1 +! test_var1 @ 15 =assert ;
 
 : to-override 42 ;
 : to-override override to-override 3 + ;
-: test:core-override
+: test:override
     to-override 45 =assert ;
 
 : test:>str
@@ -380,7 +386,7 @@ variable: dp-before-mark dp dp-before-mark !
 marker: -test-mark
 : word-after-marker 1 2 3 ; 237 allot
 
-: test:core-marker
+: test:marker
    -test-mark
    dp dp-before-mark @ =assert ;
 
