@@ -56,7 +56,7 @@ exception: ECHECKSUM
     then ;
 
 : convert ( lsb-byte msb-byte -- value )
-    { hex: 7F and 8 lshift or } keep
+    { 16r7F and 8 lshift or } keep
     128 and 0<> if
         0 swap -
     then ;

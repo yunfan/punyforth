@@ -1,10 +1,10 @@
 4096       constant: SIZE
-hex: 51000 constant: BOOT_ADDR
+16r51000   constant: BOOT_ADDR
 
 exception: ETURNKEY
 defer: boot
 
-: dst ( -- n ) hex: 51000 SIZE + ;
+: dst ( -- n ) 16r51000 SIZE + ;
 : heap-size ( -- n ) usedmem align ;
 : check ( code -- | ETURNKEY )
     ?dup 0<> if

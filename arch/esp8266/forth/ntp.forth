@@ -9,13 +9,13 @@ SIZE byte-array: packet
 
 : request ( -- buffer )
     SIZE 0 do 0 i packet c! loop
-    hex: E3  0 packet c! \ LI, Version, Mode
-    hex: 06  2 packet c! \ Polling interval
-    hex: EC  3 packet c! \ Peer clock precision
-    hex: 31 12 packet c!
-    hex: 4E 13 packet c!
-    hex: 31 14 packet c!
-    hex: 34 15 packet c!
+    16rE3  0 packet c! \ LI, Version, Mode
+    16r06  2 packet c! \ Polling interval
+    16rEC  3 packet c! \ Peer clock precision
+    16r31 12 packet c!
+    16r4E 13 packet c!
+    16r31 14 packet c!
+    16r34 15 packet c!
     0 packet ;
 
 : connect ( port host -- ) UDP netcon-connect con ! ;

@@ -7,7 +7,7 @@
 
 exception: EBLOCK
 4096       constant:      SIZE
-hex: 51000 init-variable: block0
+16r51000   init-variable: block0
 FALSE      init-variable: dirty
 SIZE       buffer:        buf
 variable:  offs
