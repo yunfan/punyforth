@@ -24,9 +24,10 @@
 : / ( n -- quotient ) /mod nip ;
 
 : +! ( n var -- ) tuck @ + swap ! ;
+: -! ( n var -- ) tuck @ swap - swap ! ;
 : c+! ( n var -- ) tuck c@ + swap c! ;
 
-: prepare-forward-ref ( -- a) here 0 , ;
+: prepare-forward-ref ( -- a ) here 0 , ;
 : resolve-forward-ref ( a -- ) here over - swap ! ;
 
 : if immediate compile-time ['] branch0 , prepare-forward-ref ;
@@ -106,9 +107,7 @@
 -1 constant: TRUE 
  0 constant: FALSE
 
-: exception: ( "name" -- ) ( -- xt )
-    create: lastword ,
-    does> @ ;
+: exception: ( "name" -- ) ( -- xt ) create: lastword , does> @ ;
 
 exception: EUNDERFLOW
 exception: EOVERFLOW
@@ -247,7 +246,7 @@ defer: handler
 
 \ recognizers
 
-: str, ( len -- ) >in @ swap - >in ! char: " c,-until ;
+: str, ( len -- ) >in -! char: " c,-until ;
 
 : _ ( addr len -- ? )
     \ recognize char
@@ -386,13 +385,9 @@ defer: r0 ' r0 is: _r0
     create:
         lastword ,
     does>
-        @ dup 
-    @ var-lastword !
-    var-dp ! ;
+        @ dup @ var-lastword ! var-dp ! ;
 
-: link-type ( link -- )
-    ['] link>name ['] link>len bi
-    type-counted ;
+: link-type ( link -- ) ['] link>name ['] link>len bi type-counted ;
 
 : help ( -- )
     lastword
@@ -423,29 +418,24 @@ defer: r0 ' r0 is: _r0
             print: '(stack'
             depth if space then
             stack-print
-            char: ) emit space
+            $) emit space
         else
             print: '.. '
         then
     } prompt ! ;
 
-: stack-hide ( -- ) 0 prompt ! ;
+: stack-hide ( -- ) ['] exit prompt ! ;
 
 : heap? ( a -- bool ) heap-start swap heap-end between? ;
 : freemem ( -- n ) heap-end dp - ;
 : usedmem ( -- n ) dp heap-start - ;
 
-: ex-type ( exception -- )
-    dup heap? if 
-        link-type 
-    else 
-        .
-    then ;
+: ex-type ( exception -- ) dup heap? if link-type else .  then ;
 
 : traceback ( code -- )
     cr print: "Exeption: " ex-type
     print: " rdepth: " rdepth . cr
-    rdepth 1 + 3 do                         \ include ret address in outer interpreter
+    rdepth 1+ 3 do                         \ include ret address in outer interpreter
         print: "  at "
         rp@ i cells + @                     \ i. return address
         lastword    
@@ -463,11 +453,8 @@ defer: r0 ' r0 is: _r0
         $( emit . $) emit cr
     loop
     depth 0> if
-        print: '(stack ' 
-        stack-print 
-        char: ) emit
+        print: '(stack ' stack-print $) emit
         then
     abort ; 
 
 ' unhandled is: traceback
-

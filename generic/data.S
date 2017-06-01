@@ -21,10 +21,10 @@ input_buffer: .space INPUT_BUFFER_SIZE,' '
 input_size:   .int . - input_buffer
 dictionary:   
     var_last_word: .int FINAL_WORD
-    var_prompt_xt: .int 0
+    var_prompt_xt: .int xt_exit
     var_pause_xt:  .int 0
-    var_emit_xt:   .int 0
-    var_type_xt:   .int 0
+    var_emit_xt:   .int xt_uemit
+    var_type_xt:   .int xt_utype
     var_eundefi_xt:.int xt_eundef
     var_eundefc_xt:.int xt_eundef
     var_dp:        .int heap

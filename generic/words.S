@@ -1,4 +1,4 @@
-// Predefined words in binary (compiled) forth
+/_/ Predefined words in binary (compiled) forth
 
 defword "nip",3,nip,REGULAR /* ( a b -- b ) */
     .int xt_swap
@@ -446,12 +446,7 @@ defword "xemit",5,xemit,REGULAR
     .int xt_exit
 
 defword "emit",4,emit,REGULAR            // ( char -- )
-    .int xt_xemit, xt_fetch, xt_branch0
-    lbl emit_fallback
     .int xt_xemit, xt_fetch, xt_execute
-    .int xt_exit
-emit_fallback:
-    .int xt_uemit
     .int xt_exit
 
 defword "xtype",5,xtype,REGULAR
@@ -459,12 +454,7 @@ defword "xtype",5,xtype,REGULAR
     .int xt_exit
 
 defword "type",4,type,REGULAR            // ( asciiz -- )
-    .int xt_xtype, xt_fetch, xt_branch0
-    lbl type_fallback
-    .int xt_xtype, xt_fetch, xt_execute    
-    .int xt_exit
-type_fallback:
-    .int xt_utype
+    .int xt_xtype, xt_fetch, xt_execute
     .int xt_exit
 
 .ifndef xt_utype
@@ -519,13 +509,7 @@ defword "prompt",6,prompt,REGULAR
     .int xt_exit
 
 defword "show_prompt",11,show_prompt,REGULAR
-    .int xt_prompt, xt_fetch, xt_dup
-    .int xt_branch0
-    lbl show_prompt_no_prompt
-    .int xt_execute
-    .int xt_exit
-show_prompt_no_prompt:
-    .int xt_drop
+    .int xt_prompt, xt_fetch, xt_execute
     .int xt_exit
 
 defword "key",3,key,REGULAR
