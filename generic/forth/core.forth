@@ -5,8 +5,9 @@
 : again immediate compile-time ['] branch , backref, ;
 : until immediate compile-time ['] branch0 , backref, ;
 
+: line-break? dup 10 = swap 13 = or ;
 : ( begin key 41 = until ; immediate
-: \ begin key dup 13 = swap 10 = or until ; immediate
+: \ begin key line-break? until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
 : keep ( a xt -- xt.a a ) over >r execute r> ;
@@ -116,10 +117,7 @@ exception: ENOTFOUND
 exception: ECONVERT
 exception: EESCAPE
 
-: defer: ( "name" -- )
-    create: ['] nop ,
-    does> @ execute ;
-
+: defer: ( "name" -- ) create: ['] nop , does> @ execute ;
 : defer! ( dst-xt src-xt -- ) swap 2 cells + ! ; \ store xt as body
 
 defer: unhandled
@@ -229,8 +227,6 @@ defer: handler
         drop FALSE     
     endcase ;
 
-: line-break? ( char -- bool ) dup 10 = swap 13 = or ;
-
 : c,-until ( separator -- )
     begin
         key 2dup <>
@@ -263,9 +259,8 @@ defer: handler
     loop 
     2drop ;
 
-: str, ( len -- ) >in -! char: " c,-until ;
-
 \ recognizers
+: str, ( len -- ) >in -! char: " c,-until ;
 : chr? 2 = swap c@ char: $ = and ;
 : str? c@ char: " = ;
 : hex? 3 > over c@ char: 1 = and over 1+ c@ char: 6 = and swap 2 + c@ char: r = and ;
@@ -357,11 +352,7 @@ defer: handler
 : print: ( "<separator>string<separator>" ) immediate
     interpret? if
         separator
-        begin
-            key 2dup <>
-        while
-            eschr emit
-        repeat
+        begin key 2dup <> while eschr emit repeat
         2drop           
     else
         postpone: str: ['] type ,
@@ -369,7 +360,7 @@ defer: handler
   
 : println: ( "<separator>string<separator>" ) immediate
     interpret? if
-        str: "print:" 6 find link>xt execute cr \ XXX
+        postpone: print: cr
     else
         postpone: str: ['] type , ['] cr ,
     then ;
