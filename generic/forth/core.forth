@@ -133,8 +133,8 @@ defer: handler
     r> drop 0 ;                  \ drop the saved sp return 0 indicating no error
 
 : throw ( i*x exception -- i*x exception | 0 )
-    dup 0= if drop exit then     \ 0 means no error, drop errorcode exit from execute
-    handler @ 0= if              \ this was an uncaught exception
+    ?dup 0= if exit then    \ 0 means no error, drop errorcode exit from execute
+    handler @ 0= if         \ this was an uncaught exception
         unhandled
         exit
     then
@@ -144,11 +144,7 @@ defer: handler
     drop r> ;               \ return to the caller of most recent catch with the errcode
 
 : ' ( -- xt | throws:ENOTFOUND ) \ find the xt of the next word in the inputstream
-    word find dup if 
-        link>xt 
-    else 
-        ENOTFOUND throw
-    then ;
+    word find dup if link>xt else ENOTFOUND throw then ;
 
 : postpone: ( -- | throws:ENOTFOUND ) ' , ; immediate \ force compile semantics of an immediate word
 : ['], ['] ['] , ;
@@ -405,7 +401,7 @@ defer: r0 ' r0 is: _r0
     print: " rdepth: " rdepth . cr
     rdepth 1+ 3 do                         \ include ret address in outer interpreter
         print: "  at "
-        rp@ i cells + @                     \ i. return address
+        rp@ i cells + @                    \ i. return address
         lastword    
         begin 2dup < over 0<> and while @ repeat
         ?dup 0<> if 
