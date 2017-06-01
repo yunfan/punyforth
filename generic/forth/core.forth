@@ -122,7 +122,7 @@ exception: EESCAPE
 
 defer: unhandled
 defer: handler
-0 init-variable: var-handler            \ stores the address of the nearest exception handler
+variable: var-handler                   \ stores the address of the nearest exception handler
 : single-handler ( -- a ) var-handler ; \ single threaded global handler
 
 : catch ( xt -- exception | 0 )
@@ -411,9 +411,7 @@ defer: r0 ' r0 is: _r0
         then
         $( emit . $) emit cr
     loop
-    depth 0> if
-        print: '(stack ' stack-print $) emit
-        then
+    depth 0> if print: '(stack' stack-print $) emit then
     abort ; 
 
 ' unhandled is: traceback
