@@ -184,11 +184,12 @@ defer: handler
 : between? ( min-inclusive num max-inclusive -- bool ) over >= -rot <= and ;
 
 : cmove ( src-addr dst-addr count -- )
-    ?dup 0 <= if 2drop exit then
-    0 do
-        2dup { c@ } dip c!
-        { 1+ } bi@
-    loop
+    ?dup 0> if 
+        0 do
+            2dup { c@ } dip c!
+            { 1+ } bi@
+        loop
+    then
     2drop ;
 
 : char: immediate word drop c@ interpret? invert if postpone: literal then ; ( deprecated )
