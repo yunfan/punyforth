@@ -1,4 +1,4 @@
-/_/ Predefined words in binary (compiled) forth
+// Predefined words in binary (compiled) forth
 
 defword "nip",3,nip,REGULAR /* ( a b -- b ) */
     .int xt_swap
