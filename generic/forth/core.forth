@@ -171,14 +171,8 @@ defer: handler
         ['], ' , ['] defer! ,
     then ;
 
-: array: ( size "name" -- ) ( index -- addr )
-    create: cells allot
-    does> swap cells + ;
-
-: byte-array: ( size "name" -- ) ( index -- addr )
-    create: allot
-    does> swap + ;
-    
+: array: ( size "name" -- ) ( index -- addr ) create: cells allot does> swap cells + ;
+: byte-array: ( size "name" -- ) ( index -- addr ) create: allot does> swap + ;
 : buffer: ( size "name" -- ) ( -- addr ) create: allot ;
     
 : struct 0 ;
@@ -187,7 +181,7 @@ defer: handler
 : abs ( n -- n ) dup 0< if invert 1+ then ;
 : max ( n n -- n ) 2dup < if begin nip ;
 : min ( n n -- n ) 2dup < until then drop ;
-: between? ( min-inclusive num max-inclusive -- bool ) over >=  -rot <= and ;
+: between? ( min-inclusive num max-inclusive -- bool ) over >= -rot <= and ;
 
 : cmove ( src-addr dst-addr count -- )
     ?dup 0 <= if 2drop exit then
@@ -290,11 +284,7 @@ defer: handler
 
 : strlen ( str -- len )
     0 swap
-    begin
-        dup c@
-    while
-        ['] 1+ bi@
-    repeat 
+    begin dup c@ while ['] 1+ bi@ repeat 
     drop ;
 
 : =str ( str1 str2 -- bool )
@@ -372,20 +362,14 @@ defer: r0 ' r0 is: _r0
 : rdepth ( -- n ) r0 rp@ - cell / 1- ;
 
 : marker: ( "name" -- )
-    create:
-        lastword ,
-    does>
-        @ dup @ var-lastword ! var-dp ! ;
+    create: lastword ,
+    does> @ dup @ var-lastword ! var-dp ! ;
 
 : link-type ( link -- ) ['] link>name ['] link>len bi type-counted ;
 
 : help ( -- )
     lastword
-    begin
-        ?dup
-    while
-        dup link-type cr @
-    repeat ;
+    begin ?dup while dup link-type cr @ repeat ;
 
 : stack-print ( -- )
     depth 0= if exit then
@@ -420,7 +404,7 @@ defer: r0 ' r0 is: _r0
 : freemem ( -- n ) heap-end dp - ;
 : usedmem ( -- n ) dp heap-start - ;
 
-: ex-type ( exception -- ) dup heap? if link-type else .  then ;
+: ex-type ( exception -- ) dup heap? if link-type else . then ;
 
 : traceback ( code -- )
     cr print: "Exeption: " ex-type
@@ -429,12 +413,7 @@ defer: r0 ' r0 is: _r0
         print: "  at "
         rp@ i cells + @                     \ i. return address
         lastword    
-        begin
-            2dup < 
-            over 0<> and
-        while
-            @
-        repeat
+        begin 2dup < over 0<> and while @ repeat
         ?dup 0<> if 
             link-type space 
         else 
