@@ -128,7 +128,7 @@ exception: ESTOCK
 0 task: stock-task
 0 init-variable: last-refresh
 
-: expired? ( -- bool ) ms@ last-refresh @ - 3 60 1000 * * > ;
+: expired? ( -- bool ) ms@ last-refresh @ - 60 1000 * > ;
 
 : stock-start ( task -- )
     activate
