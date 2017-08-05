@@ -15,27 +15,12 @@ variable: server
     EGAVEUP throw ;
 
 : data! ( temperature humidity -- ) 16 lshift swap or data ! ;
-: connect ( -- ) 8007 "192.168.0.10" UDP netcon-connect server ! ;
+: connect ( -- ) 8007 "192.168.0.10" TCP netcon-connect server ! ;
 : dispose ( -- ) server @ netcon-dispose ;
-: send ( -- ) server @ data 4 netcon-send-buf ;
-    
-: log ( temperature humidity -- )
-    data! 
-    connect
-    ['] send catch dispose throw ;
-    
-: log-measurement ( -- )
-    { 
-        measure 
-        2dup log 500 ms log 
-    } 
-    catch ?dup 0<> if
-        ex-type cr
-    then ;
-
-: main ( -- )
-    log-measurement
-    600000000 deep-sleep ;
+: send ( -- ) server @ data 4 netcon-write-buf ;
+: log ( temperature humidity -- ) data! connect ['] send catch dispose throw ;
+: log-measurement ( -- ) { measure log } catch ?dup 0<> if ex-type cr then ;
+: main ( -- ) log-measurement 720000000 deep-sleep ;
     
 ' boot is: main
 turnkey abort
