@@ -138,7 +138,6 @@ exception: ESTOCK
             { show } catch ?dup 0<> if 
                 error-draw 
             then            
-            throw
         then
         pause
     again ;
