@@ -1,8 +1,10 @@
 \ stock price display with servo control
 \ see it in action: https://youtu.be/4ad7dZmnoH8
 
-640 constant: buffer-len
+256 constant: buffer-len
 buffer-len buffer: buffer
+variable: price
+variable: change
 
 4 constant: SERVO \ d2
 SERVO GPIO_OUT gpio-mode
@@ -56,36 +58,28 @@ exception: EHTTP
     dup read-resp log
     swap netcon-dispose
     200 <> if EHTTP throw then ;
-        
-: connect ( -- netconn ) 80 "finance.google.com" TCP netcon-connect ;
-\ : connect ( -- netconn ) 1701 "192.168.0.32" TCP netcon-connect ;
-    
+  
+: connect ( -- netconn ) 80 "download.finance.yahoo.com" TCP netcon-connect ;      
 : stock-fetch ( -- )
     connect
-    dup "GET /finance/info?client=ig&q=NASDAQ:HDP HTTP/1.0\r\n\r\n" netcon-write
+    dup "GET /d/quotes.csv?s=HDP&f=l1c1 HTTP/1.0\r\n" netcon-write
+    dup "Host: download.finance.yahoo.com\r\n\r\n"    netcon-write
     consume ;
 
-: str-find ( str substr -- i | -1 )
-    0 -rot
-    begin
-        2dup str-starts? if
-            2drop exit
-        then
-        swap dup c@ 0= if
-            3drop -1 exit 
-        then
-        1+ swap
-        rot 1+ -rot
-    again ;
-  
 exception: ESTOCK
 
-: marker-index ( str substr -- i | ESTOCK ) str-find dup -1 = if ESTOCK throw then ;
-: find ( marker-str -- addr )
-    buffer over marker-index
-    swap strlen + buffer + ( begin addr )
-    dup "\"" marker-index ( end addr )
-    over + 0 swap c! ;
+variable: idx
+: reset ( -- ) 0 idx ! ;
+: pos ( -- addr ) buffer idx @ + ;
+: peek ( -- chr ) pos c@ ;
+: next ( -- chr ) 1 idx +! idx @ buffer-len >= if ESTOCK throw then ; 
+: take ( chr -- ) begin dup peek <> while next repeat drop ;
+: 0! ( -- ) 0 pos c! ;
+: parse ( -- )
+    reset buffer price !
+    $, take 0!
+    next pos change !
+    10 take 0! ;
 
 : trend ( str -- )
     c@ case
@@ -97,13 +91,11 @@ exception: ESTOCK
 : center ( str -- ) DISPLAY_WIDTH swap str-width - 2 / font-size @ / text-left ! ;
 : spacer ( -- ) draw-lf draw-cr 2 text-top +! ;
 : stock-draw ( -- )    
-    stock-fetch
-    ",\"c\" : \"" find \ change tag
-    dup trend
-    ",\"l\" : \"" find \ price tag
-    dup center draw-str
+    stock-fetch parse
+    price @ center price @ draw-str
     spacer
-    dup center draw-str ;
+    change @ center change @ draw-str
+    change @ trend ;
 
 : error-draw ( exception -- )
     display-clear
