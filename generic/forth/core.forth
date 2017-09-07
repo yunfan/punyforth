@@ -32,11 +32,7 @@
 : resolve-forward-ref ( a -- ) here over - swap ! ;
 
 : if immediate compile-time ['] branch0 , prepare-forward-ref ;
-
-: else immediate compile-time
-    ['] branch , prepare-forward-ref swap
-    resolve-forward-ref ;
-
+: else immediate compile-time ['] branch , prepare-forward-ref swap resolve-forward-ref ;
 : then immediate compile-time resolve-forward-ref ;
 
 : ?dup ( a -- a a | 0 ) dup if dup then ;
@@ -49,10 +45,7 @@
 : ? ( a -- ) @ . ;
 
 : unloop r> r> r> 2drop >r ;
-
-: do immediate compile-time
-    ['] swap , ['] >r , ['] >r ,
-    here ; \ prepare backref
+: do immediate compile-time ['] swap , ['] >r , ['] >r , here ; \ prepare backref
 
 : bounds ( start len -- limit start ) over + swap ;
 
@@ -74,11 +67,7 @@
     ['] unloop , ;
 
 : while immediate compile-time ['] branch0 , prepare-forward-ref ;
-
-: repeat immediate compile-time
-    swap
-    ['] branch , backref, 
-    resolve-forward-ref ;
+: repeat immediate compile-time swap ['] branch , backref, resolve-forward-ref ;
 
 : case ( -- branch-counter ) immediate compile-time 0 ;
 
@@ -154,18 +143,11 @@ variable: var-handler                   \ stores the address of the nearest exce
     ['] branch , prepare-forward-ref
     entercol , ;
 
-: } immediate compile-time
-    ['] exit , 
-    resolve-forward-ref ;
+: } immediate compile-time ['] exit , resolve-forward-ref ;
 
 ' handler ' single-handler defer!
 
-: is: immediate
-    interpret? if
-        ' defer!
-    else        
-        ['], ' , ['] defer! ,
-    then ;
+: is: immediate interpret? if ' defer! else ['], ' , ['] defer! , then ;
 
 : array: ( size "name" -- ) ( index -- addr ) create: cells allot does> swap cells + ;
 : byte-array: ( size "name" -- ) ( index -- addr ) create: allot does> swap + ;
@@ -188,8 +170,6 @@ variable: var-handler                   \ stores the address of the nearest exce
     then
     2drop ;
 
-: char: immediate word drop c@ interpret? invert if postpone: literal then ; ( deprecated )
-
 : [str ( -- forward-ref )
     ['], here 3 cells + , ( str pushes its own addr. at runtime )
     ['] branch , prepare-forward-ref ;
@@ -197,14 +177,14 @@ variable: var-handler                   \ stores the address of the nearest exce
 : str] ( forward-ref -- ) 0 c, resolve-forward-ref ;
 
 : eschr ( char -- char ) \ read next char from stdin
-    dup char: \ = if
+    dup 92 ( \ ) = if
         drop key case
-            char: r of 13 endof
-            char: n of 10 endof
-            char: t of 9  endof
-            char: \ of 92 endof
-            char: " of 34 endof
-            char: ' of 39 endof
+            114 ( r ) of 13 endof
+            110 ( n ) of 10 endof
+            116 ( t ) of 9  endof
+            92  ( \ ) of 92 endof
+            34  ( " ) of 34 endof
+            39  ( ' ) of 39 endof
             EESCAPE throw
         endcase
     then ;
@@ -219,18 +199,8 @@ variable: var-handler                   \ stores the address of the nearest exce
     endcase ;
 
 : c,-until ( separator -- )
-    begin
-        key 2dup <>
-    while
-        dup crlf? if
-            drop
-        else
-            eschr c, 
-        then
-    repeat        
-    2drop ;                          \ drop last key and separator
-
-\ recognizers
+    begin key 2dup <> while dup crlf? if drop else eschr c, then repeat        
+    2drop ; \ last key and separator
 
 : hexchar>int ( char -- n | throws:ECONVERT )
     48 over 57 between? if 48 - exit then
@@ -251,10 +221,10 @@ variable: var-handler                   \ stores the address of the nearest exce
     2drop ;
 
 \ recognizers
-: str, ( len -- ) >in -! char: " c,-until ;
-: chr? 2 = swap c@ char: $ = and ;
-: str? c@ char: " = ;
-: hex? 3 > over c@ char: 1 = and over 1+ c@ char: 6 = and swap 2 + c@ char: r = and ;
+: str, ( len -- ) >in -! 34 ( " ) c,-until ;
+: chr? 2 = swap c@ 36 ( $ ) = and ;
+: str? c@ 34 ( " ) = ;
+: hex? 3 > over c@ 49 ( 1 ) = and over 1+ c@ 54 ( 6 ) = and swap 2 + c@ 114 ( r ) = and ;
 : _ ( addr len -- ? )
     2dup chr? if drop ['], 1+ c@ , exit then
     over str? if nip [str >r str, r> str] exit then
@@ -271,18 +241,7 @@ variable: var-handler                   \ stores the address of the nearest exce
 
 : separator ( -- char ) begin key dup whitespace? while drop repeat ;
 
-: str: ( "<separator>string content<separator>" ) immediate ( deprecated )
-    separator
-    interpret? if
-        dp swap c,-until 0 c,
-    else
-        [str swap c,-until str]
-    then ;
-
-: strlen ( str -- len )
-    dup
-    begin dup c@ while 1+ repeat 
-    swap - ;
+: strlen ( str -- len ) dup begin dup c@ while 1+ repeat swap - ;
 
 : =str ( str1 str2 -- bool )
     begin
@@ -332,25 +291,15 @@ variable: var-handler                   \ stores the address of the nearest exce
 
 : hex>int ( str -- n | throws:ECONVERT ) dup strlen hex>int' ;
 
-: hex: immediate ( deprecated )
-    word hex>int'
-    interpret? invert if postpone: literal then ;
-
 : print: ( "<separator>string<separator>" ) immediate
+    separator
     interpret? if
-        separator
-        begin key 2dup <> while eschr emit repeat
-        2drop           
+        begin key 2dup <> while eschr emit repeat 2drop           
     else
-        postpone: str: ['] type ,
+        [str swap c,-until str] ['] type ,
     then ;
-  
-: println: ( "<separator>string<separator>" ) immediate
-    interpret? if
-        postpone: print: cr
-    else
-        postpone: str: ['] type , ['] cr ,
-    then ;
+
+: println: ( "<separator>string<separator>" ) immediate postpone: print: interpret? if cr else ['] cr , then ;
 
 defer: s0 ' s0 is: _s0
 defer: r0 ' r0 is: _r0
@@ -364,9 +313,7 @@ defer: r0 ' r0 is: _r0
 
 : link-type ( link -- ) ['] link>name ['] link>len bi type-counted ;
 
-: help ( -- )
-    lastword
-    begin ?dup while dup link-type cr @ repeat ;
+: help ( -- ) lastword begin ?dup while dup link-type cr @ repeat ;
 
 : stack-print ( -- )
     depth 0= if exit then

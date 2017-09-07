@@ -12,6 +12,7 @@ def flatten(an_iterable):
 
 available_modules = {
     'core' : '../../../generic/forth/core.forth',
+    'deprecated' : '../../../generic/forth/deprecated.forth',
     'punit' : '../../../generic/forth/punit.forth',
     'test' : '../../../generic/forth/test.forth',
     'ringbuf' : '../../../generic/forth/ringbuf.forth',
@@ -48,6 +49,7 @@ available_modules = {
 
 dependencies = {
     'core' : [],
+    'deprecated' : ['core'],
     'punit' : ['core'],
     'test' : ['core', 'punit'],
     'ringbuf' : ['core'],
