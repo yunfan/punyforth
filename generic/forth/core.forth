@@ -5,9 +5,9 @@
 : again immediate compile-time ['] branch , backref, ;
 : until immediate compile-time ['] branch0 , backref, ;
 
-: line-break? dup 10 = swap 13 = or ;
+: crlf? dup 10 = swap 13 = or ;
 : ( begin key 41 = until ; immediate
-: \ begin key line-break? until ; immediate
+: \ begin key crlf? until ; immediate
 
 : dip ( a xt -- a ) swap >r execute r> ;
 : keep ( a xt -- xt.a a ) over >r execute r> ;
@@ -222,7 +222,7 @@ variable: var-handler                   \ stores the address of the nearest exce
     begin
         key 2dup <>
     while
-        dup line-break? if
+        dup crlf? if
             drop
         else
             eschr c, 
