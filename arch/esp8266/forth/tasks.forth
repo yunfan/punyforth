@@ -18,8 +18,8 @@ SKIPPED INTERPRETER .status !
 _s0 INTERPRETER .s0 !
 _r0 INTERPRETER .r0 !
 
-320 init-variable: var-task-stack-size
-320 init-variable: var-task-rstack-size
+80 init-variable: var-task-stack-size
+80 init-variable: var-task-rstack-size
 INTERPRETER init-variable: var-last-task
 INTERPRETER init-variable: var-current-task
 
