@@ -29,11 +29,11 @@ dictionary:
     var_eundefc_xt:.int xt_eundef
     var_dp:        .int heap
 heap:    
-    .space 24576
+    .space 25152
 end_dictionary:
-rstack_space: .space 320
+rstack_space: .space 112
 rstack_top:
-stack_space:  .space 480 // used only by ESP port
+stack_space:  .space 112 // used only by ESP port
 stack:
 compile_only_warning: .asciz "\nWord has no interpretation semantics\n"
 undef_word_error:     .asciz "\nUndefined word: "
