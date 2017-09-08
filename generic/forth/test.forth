@@ -156,8 +156,7 @@ defer: deferred-word
    "123abc" hex>int 1194684 =assert
    { "" hex>int } catch ECONVERT =assert
    { "123g4" hex>int } catch ECONVERT =assert
-   { "12G4" hex>int } catch ECONVERT =assert
-   hex: a0f 2575 =assert ;
+   { "12G4" hex>int } catch ECONVERT =assert ;
 
 : test:hex-literal
    16raBcDeF 11259375 =assert
@@ -239,13 +238,8 @@ defer: deferred-word
    "1" strlen 1 =assert
    "12" strlen 2 =assert
    "1234567" strlen 7 =assert
-   str: '""""' strlen 4 =assert
-   str: 'anystring' 
-   str: ''
-   str-starts? TRUE =assert
-   str: ''
-   str: ''
-   str-starts? TRUE =assert
+   "anystring" "" str-starts? TRUE =assert
+   "" "" str-starts? TRUE =assert
    "abc"
    "bc"
    str-starts? FALSE =assert

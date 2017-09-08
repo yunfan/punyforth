@@ -78,7 +78,7 @@ variable:  offs
 : r: ( y "line" -- )
     dup b row
     begin
-        key dup line-break? invert
+        key dup crlf? invert
     while
         over c! 1+
     repeat

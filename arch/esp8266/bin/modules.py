@@ -12,6 +12,7 @@ def flatten(an_iterable):
 
 available_modules = {
     'core' : '../../../generic/forth/core.forth',
+    'deprecated' : '../../../generic/forth/deprecated.forth',
     'punit' : '../../../generic/forth/punit.forth',
     'test' : '../../../generic/forth/test.forth',
     'ringbuf' : '../../../generic/forth/ringbuf.forth',
@@ -19,6 +20,7 @@ available_modules = {
     'event' : '../forth/event.forth',
     'wifi' : '../forth/wifi.forth',
     'ssd1306-spi' : '../forth/ssd1306-spi.forth',
+    'ssd1306-64x48-i2c' : '../forth/ssd1306-64x48-i2c.forth',
     'font5x7' : '../forth/font5x7.forth',
     'netcon' : '../forth/netcon.forth',
     'netcon-test' : '../forth/netcon-test.forth',
@@ -48,6 +50,7 @@ available_modules = {
 
 dependencies = {
     'core' : [],
+    'deprecated' : ['core'],
     'punit' : ['core'],
     'test' : ['core', 'punit'],
     'ringbuf' : ['core'],
@@ -55,6 +58,7 @@ dependencies = {
     'event' : ['core', 'tasks'],
     'wifi' : ['core'],
     'ssd1306-spi' : ['core', 'gpio'],
+    'ssd1306-64x48-i2c' : ['core', 'gpio'],
     'font5x7' : ['core'],
     'netcon' : ['core', 'tasks'],
     'netcon-test' : ['netcon', 'punit', 'wifi', 'mailbox'],
