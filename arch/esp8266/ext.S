@@ -419,6 +419,20 @@ defprimitive "spi-send",8,spi_send,REGULAR
     DPUSH a2
     NEXT
 
+defprimitive "wifi-stop",9,wifi_stop,REGULAR
+    CCALL forth_wifi_stop
+    NEXT
+
+defprimitive "wifi-softap-start",17,wifi_softap_start,REGULAR
+    CCALL sdk_wifi_softap_start
+    DPUSH a2                   // c bool
+    NEXT
+
+defprimitive "wifi-station-start",18,wifi_station_start,REGULAR
+    CCALL sdk_wifi_station_start
+    DPUSH a2                   // c bool
+    NEXT
+
 defprimitive "wifi-set-mode",13,wifi_set_mode,REGULAR
     DPOP a2                    // mode
     CCALL forth_wifi_set_opmode
@@ -564,4 +578,16 @@ defprimitive "cpufreq!",8,setcpufreq,REGULAR
 defprimitive "cpufreq@",8,getcpufreq,REGULAR
     CCALL sdk_system_get_cpu_freq
     DPUSH a2                   // C bool
+    NEXT
+
+defprimitive "ws2812rgb",9,ws2812rgb,REGULAR
+    DPOP a2                    // gpio num
+    DPOP a3                    // rgb
+    CCALL forth_ws2812_rgb
+    NEXT
+
+defprimitive "ws2812set",9,ws2812set,REGULAR
+    DPOP a2                    // gpio num
+    DPOP a3                    // rgb
+    CCALL forth_ws2812_set
     NEXT

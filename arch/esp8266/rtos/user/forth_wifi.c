@@ -68,3 +68,9 @@ void forth_dhcpd_start(int first_client_ipv4, int max_leases) {
 void forth_dhcpd_stop() {
     dhcpserver_stop();
 }
+
+void forth_wifi_stop() {
+    if (sdk_wifi_get_opmode() != 2) sdk_wifi_station_stop();
+    if (sdk_wifi_get_opmode() != 1) sdk_wifi_softap_stop();
+}
+
