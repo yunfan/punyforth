@@ -554,3 +554,14 @@ defprimitive "i2c-write-slave",15,i2c_write_slave,REGULAR
     CCALL i2c_slave_write
     DPUSH a2                   // bool
     NEXT
+
+defprimitive "cpufreq!",8,setcpufreq,REGULAR
+    DPOP a2                    // frequency in mhz (byte)
+    CCALL sdk_system_update_cpu_freq
+    DPUSH a2                   // C bool
+    NEXT
+
+defprimitive "cpufreq@",8,getcpufreq,REGULAR
+    CCALL sdk_system_get_cpu_freq
+    DPUSH a2                   // C bool
+    NEXT
