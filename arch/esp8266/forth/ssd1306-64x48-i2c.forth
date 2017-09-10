@@ -23,7 +23,7 @@ exception: EI2C
 \ i2c-write-slave in rtos uses uint8_t len parameter
 \ this version uses 32bit integer
 \ TODO: use updated version of RTOS and delete this word
-: i2c-write-slave ( len buffer slave-addr -- bool )
+: i2c-write-slave ( len buffer slave-addr -- cbool )
     i2c-start
     1 lshift i2c-write 1 <> if 2drop i2c-stop 0 exit then
     swap 0 do
