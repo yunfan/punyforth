@@ -3,8 +3,10 @@
 \ Usage:
 \  display-init
 \  font5x7 font !
-\  10 text-top ! 8 text-left ! "Hello" draw-str display
-\ display-clear
+\  10 text-top ! 8 text-left ! 
+\  "Hello" draw-str 
+\  display
+\  display-clear
 
 64 constant: WIDTH
 48 constant: HEIGHT
