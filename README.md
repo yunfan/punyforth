@@ -101,8 +101,10 @@ Stack visualization:
 For example the above code could have been expressed the following way:
 
 ```forth
-2 3 { dup * } bi@ +
+2 3 { square } bi@ +
 ```
+
+Where square is defined as _dup *_.
 
 See the chapter about quotations and combinators for more information.
 
