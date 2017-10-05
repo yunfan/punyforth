@@ -253,3 +253,14 @@ ENTERDOES:
     push {r0}               // invoke behaviour with data pointer on the stack
     NEXT
 
+ENTERCONST:
+    add r0, #CELLS
+    ldr r0, [r0]
+    push {r0}
+    NEXT
+
+ENTERVAR:
+    add r0, #CELLS
+    push {r0}
+    NEXT
+
