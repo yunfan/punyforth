@@ -90,8 +90,6 @@
 : create: createheader enterdoes , ['] nop cell + , ; \ default behaviour is nop, does> overwrites this
 : does> r> lastword link>body ! ;
 
-: constant: create: , does> @ ;
-: init-variable: create: , ;
 : variable: 0 init-variable: ; 
 
 -1 constant: TRUE 
