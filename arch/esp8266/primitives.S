@@ -293,3 +293,12 @@ ENTERDOES:
     DPUSH a8                    // invoke behavour with the data pointer on the stack
     NEXT
 
+ENTERCONST:
+    l32i a8, a8, CELLS
+    DPUSH a8
+    NEXT
+
+ENTERVAR:
+    addi a8, a8, CELLS
+    DPUSH a8
+    NEXT
