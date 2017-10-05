@@ -244,3 +244,13 @@ ENTERDOES:
     add eax, CELLS          // after the behaviour pointer there is the data field
     push eax
     NEXT                    // jump to behavour
+
+ENTERCONST:
+   mov eax, [eax + CELLS]
+   push eax
+   NEXT
+
+ENTERVAR:
+   add eax, CELLS
+   push eax
+   NEXT

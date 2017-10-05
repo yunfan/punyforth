@@ -546,6 +546,16 @@ defword "lastword",8,lastword,REGULAR
     .int xt_var_lastword, xt_fetch
     .int xt_exit
 
+defword "constant:",9,constant,REGULAR
+    .int xt_createheader
+    .int xt_btick, _M ENTERCONST, xt_comma, xt_comma
+    .int xt_exit
+
+defword "init-variable:",14,initvar,REGULAR
+    .int xt_createheader
+    .int xt_btick, _M ENTERVAR, xt_comma, xt_comma
+    .int xt_exit
+
 defword "enterdoes",9,enterdoes,REGULAR
     .int xt_btick, _M ENTERDOES 
     .int xt_exit
