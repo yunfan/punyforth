@@ -1,10 +1,11 @@
 \ stock price display with servo control
 \ see it in action: https://youtu.be/4ad7dZmnoH8
 
-256 constant: buffer-len
+1024 constant: buffer-len
 buffer-len buffer: buffer
 variable: price
 variable: change
+variable: open
 
 4 constant: SERVO \ d2
 SERVO GPIO_OUT gpio-mode
@@ -59,11 +60,10 @@ exception: EHTTP
     swap netcon-dispose
     200 <> if EHTTP throw then ;
   
-: connect ( -- netconn ) 80 "download.finance.yahoo.com" TCP netcon-connect ;      
+: connect ( -- netconn ) 8080 "139.59.208.164" TCP netcon-connect ;      
 : stock-fetch ( -- )
     connect
-    dup "GET /d/quotes.csv?s=HDP&f=l1c1 HTTP/1.0\r\n" netcon-write
-    dup "Host: download.finance.yahoo.com\r\n\r\n"    netcon-write
+    dup "GET /stock/HDP HTTP/1.0\r\n\r\n" netcon-write
     consume ;
 
 exception: ESTOCK
@@ -79,6 +79,8 @@ variable: idx
     reset buffer price !
     $, take 0!
     next pos change !
+    $, take 0!
+    next pos open !
     10 take 0! ;
 
 : trend ( str -- )
@@ -88,6 +90,8 @@ variable: idx
         drop midway
     endcase ;
     
+: open? ( -- bool ) open @ "1" =str ;
+
 : center ( str -- ) DISPLAY_WIDTH swap str-width - 2 / font-size @ / text-left ! ;
 : spacer ( -- ) draw-lf draw-cr 2 text-top +! ;
 : stock-draw ( -- )    
