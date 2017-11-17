@@ -46,6 +46,7 @@ available_modules = {
     'example-buzzer-mario' : '../forth/examples/example-buzzer-mario.forth',
     'example-buzzer-starwars' : '../forth/examples/example-buzzer-starwars.forth',
     'example-stock-price' : '../forth/examples/example-stock-price.forth',
+    'example-game-of-life-ws2812' : '../forth/examples/example-game-of-life-ws2812.forth',
 }
 
 dependencies = {
@@ -84,6 +85,7 @@ dependencies = {
     'example-buzzer-mario' : ['gpio'],
     'example-buzzer-starwars' : ['gpio'],
     'example-stock-price' : ['netcon', 'ssd1306-spi', 'font5x7', 'wifi', 'gpio', 'turnkey'],
+    'example-game-of-life-ws2812' : ['gpio']
 }
 
 def collect_dependecies(modules):
@@ -157,7 +159,7 @@ class Help:
     def show(self):
         print('Usage: modules.py [--block-format] [--app /path/to/app.forth] [modul1] [modul2] .. [modulN] ')
         print('Available modules:')
-        for each in self.available_modules.keys():
+        for each in sorted(self.available_modules.keys()):
             print('    * ' + each)
         sys.exit()
     
