@@ -22,12 +22,18 @@ The easiest way to try out Punyforth is to use a ESP8266 based development board
 ```bash
 $ cd arch/esp8266/bin
 $ python modules.py core
-$ flash com3
+$ flash /dev/ttyUSB0
 ```
 
 At first we select the modules to be installed using the *modules.py* python script. Then we install both Punyforth and the selected modules (this time only the core library) to the ESP8266 using the *flash* script.
 
 Open a serial terminal<sup>[1](#serial)</sup> on port COM3 then type:
+
+To use picocom you could type the command bellow
+
+```bash
+sudo picocom /dev/ttyUSB0 -b 115200 --omap crlf --echo
+```
 
 ```forth
 println: "Hello world!"
